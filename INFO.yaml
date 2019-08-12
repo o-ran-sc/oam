@@ -1,0 +1,43 @@
+---
+project: 'oam'
+project_creation_date: '2019-08-08'
+project_category: ''
+lifecycle_state: 'Incubation'
+project_lead: &oran_oam_ptl
+    name: 'Martin Skorupski'
+    email: 'martin.skorupski@highstreet-technologies.com'
+    id: ''
+    company: 'highstreet technologies GmbH'
+    timezone: 'Germany/Berlin'
+primary_contact: *oran_oam_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.o-ran-sc.org/projects/OAM'
+    key: 'OAM'
+mailing_list:
+    type: 'groups.io'
+    url: 'https://lists.o-ran-sc.org/g/main'
+    tag: '<[oam]>'
+realtime_discussion:
+    type: 'irc'
+    server: 'freenode.net'
+    channel: '#o-ran-sc'
+meetings:
+    - type: 'zoom'
+      agenda: ''
+      url: ''
+      server: 'n/a'
+      channel: 'n/a'
+      repeats: 'weekly'
+      time: 'Mondays, 13:00 UTC'
+repositories:
+    - 'oam'
+committers:
+    - <<: *oran_oam_ptl
+    - name: 'Herbert Eiselt'
+      email: 'herbert.eiselt@highstreet-technologies.com'
+      company: 'highstreet technologies GmbH'
+      id: ''
+      timezone: 'Germany/Berlin'
+tsc:
+    approval: 'https://wiki.o-ran-sc.org/display/TOC#O-RANSCTechnicalOversightCommittee(TOC)-20190807'
