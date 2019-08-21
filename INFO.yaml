@@ -6,7 +6,7 @@ lifecycle_state: 'Incubation'
 project_lead: &oran_oam_ptl
     name: 'Martin Skorupski'
     email: 'martin.skorupski@highstreet-technologies.com'
-    id: ''
+    id: 'demx8as6'
     company: 'highstreet technologies GmbH'
     timezone: 'Germany/Berlin'
 primary_contact: *oran_oam_ptl
@@ -37,7 +37,7 @@ committers:
     - name: 'Herbert Eiselt'
       email: 'herbert.eiselt@highstreet-technologies.com'
       company: 'highstreet technologies GmbH'
-      id: ''
+      id: 'highstreeherbert'
       timezone: 'Germany/Berlin'
 tsc:
     approval: 'https://wiki.o-ran-sc.org/display/TOC#O-RANSCTechnicalOversightCommittee(TOC)-20190807'
