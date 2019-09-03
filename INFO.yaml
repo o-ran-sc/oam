@@ -37,7 +37,7 @@ committers:
     - name: 'Herbert Eiselt'
       email: 'herbert.eiselt@highstreet-technologies.com'
       company: 'highstreet technologies GmbH'
-      id: 'highstreeherbert'
+      id: 'highstreetherbert'
       timezone: 'Germany/Berlin'
 tsc:
     # yamllint disable-line rule:line-length
