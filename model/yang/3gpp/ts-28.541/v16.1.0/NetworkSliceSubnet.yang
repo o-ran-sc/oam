@@ -1,0 +1,68 @@
+module NetworkSliceSubnet {
+    namespace "urn:3gpp:tsg:sa5:nrm:NetworkSliceSubnet";
+    prefix "nss";
+    
+    import SubNetwork { prefix subnet; revision-date "2018-07-31"; }
+    import nrm-types-3gpp { prefix nrm-type; revision-date "2018-07-31"; }
+    
+    include SliceProfile;
+    
+    description "";
+    
+
+    revision 2018-08-09 {
+        description "Initial revision";
+    }
+    
+    container NetworkSliceSubnet {
+    	uses subnet:SubNetwork;
+    	
+    	leaf-list mFId {
+    		min-elements  "0";
+            config "false";
+            description "";
+            type nrm-type:t_dn;
+        }
+    	
+        
+    	leaf-list constituentNSSIIdList {
+    		min-elements  "0";
+            config "false";
+            description "";
+            type nrm-type:t_dn;
+        }
+    	
+        leaf operationalState {
+            mandatory "true";
+            config "false";
+            description "";
+            type nrm-type:t_operationalState;
+        }
+    	
+        leaf administrativeState {
+            mandatory "true";
+            config "true";
+            description "";
+            type nrm-type:t_administrativeState;
+        }
+    	
+        leaf nsInfo {
+            mandatory "false";
+            config "false";
+            description "";
+            type nrm-type:t_dn;
+        }
+    	
+        list sliceProfile {
+        	min-elements  "1";
+            config "true";
+            description "";
+            key sliceProfileId;
+            uses SliceProfile;
+        }
+    	
+
+    	
+    }
+
+}

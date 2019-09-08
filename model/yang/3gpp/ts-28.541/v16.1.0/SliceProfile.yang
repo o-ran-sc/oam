@@ -1,0 +1,79 @@
+submodule SliceProfile {
+    
+	belongs-to NetworkSliceSubnet { prefix nss; }
+    
+    import nrm-types-3gpp { prefix nrm-type; revision-date "2018-07-31"; }
+    import perfReq { prefix perf; revision-date "2018-08-10"; }  
+
+
+    revision 2018-08-09 {
+        description "Initial revision";
+    }
+
+    grouping SliceProfile {
+    	
+        leaf sliceProfileId {
+            mandatory "true";
+            description "";
+            type nrm-type:t_dn;
+        }
+        
+        leaf-list s-NSSAI  {
+        	min-elements "1";
+            config "true";
+            description "";
+            type nrm-type:t_s-NSSAI;
+        }
+        
+        list pLMNId {
+            min-elements "1";
+            config "true";
+            key "MCC MNC";
+            uses nrm-type:pLMNId;
+        }
+
+        container perfReq {
+            config "true";
+            description "";
+            uses perf:perfReq;
+        }
+        
+        leaf maxNumberofUEs {
+            mandatory "false";
+            config "true";
+            description "";
+            type uint64;
+        }
+        
+        leaf-list coverageAreaTA {
+        	min-elements "1";
+            config "true";
+            description "";
+            type nrm-type:t_tAC;
+        }
+        
+        leaf latency {
+            mandatory "false";
+            config "true";
+            description "";
+            type uint16;
+        }
+        
+        leaf uEMobilityLevel {
+            mandatory "false";
+            config "true";
+            description "";
+            type nrm-type:t_uEMobilityLevel;
+        }
+        
+        leaf resourceSharingLevel {
+            mandatory "false";
+            config "true";
+            description "";
+            type nrm-type:t_resourceSharingLevel;
+        }
+        
+       
+     }
+
+}

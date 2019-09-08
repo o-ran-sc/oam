@@ -1,0 +1,47 @@
+module perfReq {
+    namespace "urn:3gpp:tsg:sa5:nrm:perfReq";
+    prefix "perf";
+
+    revision 2018-08-10 {
+        description "Initial revision";
+    }
+    
+
+    grouping perfReq {
+    	choice SST {
+    		case eMBB {
+    			leaf expDataRateDL { type uint16; }
+    			leaf expDataRateU {type uint16; }
+    			leaf areaTrafficCapDL { type uint16; }
+       			leaf areaTrafficCapUL { type uint16; }
+       			leaf userDensity { type uint16; }
+       			leaf activityFactor { type uint16; }
+       			leaf uESpeed { type uint16; }
+       			leaf coverage { type string; }
+    		}
+    		case uRLLC {
+    			leaf e2eLatency { type uint16; }
+    			leaf jitter {type uint16; }
+    			leaf survivalTime { type uint16; }
+       			leaf cSAvailability {
+       				type decimal64 { 
+       				    fraction-digits 4;
+       				    range 1..99.9999;
+       				}
+       			}
+       			leaf reliability { 
+       				type decimal64 { 
+       				    fraction-digits 4;
+       				    range 1..99.9999;
+       				}
+       			}
+       			leaf expDataRate { type uint16; }
+       			leaf payloadSize { type string; }
+       			leaf trafficDensity { type uint16; }
+       			leaf connDensity { type uint16; }
+       			leaf serviceAreaDimension { type string; }
+    		}
+    			
+    	}
+    }
+}
