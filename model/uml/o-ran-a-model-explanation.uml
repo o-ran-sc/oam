@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_uo1S0LUXEemSArf9Yd2dcg" name="o-ran-intelligent-controller-near-real-time">
+  <ownedComment xmi:type="uml:Comment" xmi:id="_VMja0LUZEemSArf9Yd2dcg">
+    <body>The 'O-RAN Intelligent Controller near reai-time' specific extensions to the o-ran-common-information-model.</body>
+  </ownedComment>
+  <packagedElement xmi:type="uml:Package" xmi:id="_y4sTkLUZEemSArf9Yd2dcg" name="Imports">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_Xtk4MLU8EemO9dGzz8xgow">
+      <importedPackage xmi:type="uml:Model" href="o-ran-common-information-model.uml#_uo1S0LUXEemSArf9Yd2dcg"/>
+    </packageImport>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_aQICYLUZEemSArf9Yd2dcg" name="TypeDefinitions"/>
+  <packagedElement xmi:type="uml:Package" xmi:id="_u7p2QLUZEemSArf9Yd2dcg" name="ObjectClasses"/>
+  <packagedElement xmi:type="uml:Package" xmi:id="_dTH5ULUZEemSArf9Yd2dcg" name="Diagrams"/>
+  <packagedElement xmi:type="uml:Package" xmi:id="_lB8mMLUZEemSArf9Yd2dcg" name="Assoziations"/>
+</uml:Model>

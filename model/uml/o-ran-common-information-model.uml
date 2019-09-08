@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_uo1S0LUXEemSArf9Yd2dcg" name="o-ran-common-information-model">
+  <ownedComment xmi:type="uml:Comment" xmi:id="_VMja0LUZEemSArf9Yd2dcg">
+    <body>The O-RAN (o-ran.org) common information model used to discribe all common funtions for O-RAN components.</body>
+  </ownedComment>
+  <packagedElement xmi:type="uml:Package" xmi:id="_y4sTkLUZEemSArf9Yd2dcg" name="Imports">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_fIelgLUmEemSArf9Yd2dcg">
+      <importedPackage xmi:type="uml:Package" href="../CoreModelForApi/CoreModelForApi.uml#_oGqilVLNEeO75dO39GbF8Q"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_T4hi8LUgEemSArf9Yd2dcg">
+      <importedPackage xmi:type="uml:Model" href="../YangUmlTools/ietf-yang-types.uml#d4e1"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_Z43UwLUgEemSArf9Yd2dcg">
+      <importedPackage xmi:type="uml:Model" href="../YangUmlTools/ietf-interfaces.uml#d5e1"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_Z4xOILUgEemSArf9Yd2dcg">
+      <importedPackage xmi:type="uml:Model" href="../YangUmlTools/ietf-inet-types.uml#d2e1"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_Z5FXMLUgEemSArf9Yd2dcg">
+      <importedPackage xmi:type="uml:Model" href="../YangUmlTools/YangBuildInTypes.uml#_Tc32QDpIEeiWZ5F-kAWNPQ"/>
+    </packageImport>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_d14ZYLUfEemSArf9Yd2dcg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_d5hjQLUfEemSArf9Yd2dcg" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_d5hjQbUfEemSArf9Yd2dcg" key="Version" value="0.0.10"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_d5hjQrUfEemSArf9Yd2dcg" key="Comment" value="Made OpenInterfaceModelClass stereotype obsolete.&#xD;&#xA;Made OpenInterfaceModelAttribute::attributeValueChangeNotification property obsolete.&#xD;&#xA;NotificationDefinition enumeration no longer used.&#xD;&#xA;BITS removed from Encoding enumeration.&#xD;&#xA;BitDefinition data type deleted.&#xD;&#xA;Optional Bit stereotype (extending the Property meta class) added.&#xD;&#xA;Optional Bits stereotype (extending the DataType meta class) added."/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_d5hjQ7UfEemSArf9Yd2dcg" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_d5hjRLUfEemSArf9Yd2dcg" key="Date" value="2018-09-17"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_d5hjRbUfEemSArf9Yd2dcg" key="Author" value=""/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_d161oLUfEemSArf9Yd2dcg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="../OpenInterfaceModelProfile/OpenInterfaceModel_Profile.profile.uml#_YFTFULptEeiytveF7IdLXg"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="../OpenInterfaceModelProfile/OpenInterfaceModel_Profile.profile.uml#_UbM6ILbyEeaufdfMFhfy_A"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_d5jYcLUfEemSArf9Yd2dcg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_d5kmkLUfEemSArf9Yd2dcg" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_d5kmkbUfEemSArf9Yd2dcg" key="Version" value="0.2.17"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_d5kmkrUfEemSArf9Yd2dcg" key="Comment" value="Editorial corrections in the description of OpenModelAttribute::partOfObjectKey and Reference."/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_d5kmk7UfEemSArf9Yd2dcg" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_d5kmlLUfEemSArf9Yd2dcg" key="Date" value="2018-12-12"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_d5kmlbUfEemSArf9Yd2dcg" key="Author" value=""/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_d5j_gLUfEemSArf9Yd2dcg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="../OpenModelProfile/OpenModel_Profile.profile.uml#_FV_e4P4LEeiJYfiYi3RAYQ"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="../OpenModelProfile/OpenModel_Profile.profile.uml#_m1xqsHBgEd6FKu9XX1078A"/>
+    </profileApplication>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_aQICYLUZEemSArf9Yd2dcg" name="TypeDefinitions"/>
+  <packagedElement xmi:type="uml:Package" xmi:id="_u7p2QLUZEemSArf9Yd2dcg" name="ObjectClasses">
+    <packagedElement xmi:type="uml:Class" xmi:id="_UEDxoLUtEemSArf9Yd2dcg" name="ManagedElement">
+      <generalization xmi:type="uml:Generalization" xmi:id="_wuNB4LUtEemSArf9Yd2dcg">
+        <general xmi:type="uml:Class" href="../CoreModelForApi/CoreModelForApi.uml#_Vuh_EJmhEeWTOvbfd7_4-A"/>
+      </generalization>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_k9ZtULUtEemSArf9Yd2dcg" name="_managedFunction" type="_jHNAsLUtEemSArf9Yd2dcg" aggregation="composite" association="_k9WC8LUtEemSArf9Yd2dcg">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_k9aUYLUtEemSArf9Yd2dcg"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_k9aUYbUtEemSArf9Yd2dcg" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_jHNAsLUtEemSArf9Yd2dcg" name="ManagedFunction">
+      <generalization xmi:type="uml:Generalization" xmi:id="_yNoNQLUtEemSArf9Yd2dcg">
+        <general xmi:type="uml:Class" href="../CoreModelForApi/CoreModelForApi.uml#_Vuh_EJmhEeWTOvbfd7_4-A"/>
+      </generalization>
+    </packagedElement>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_dTH5ULUZEemSArf9Yd2dcg" name="Diagrams"/>
+  <packagedElement xmi:type="uml:Package" xmi:id="_lB8mMLUZEemSArf9Yd2dcg" name="Assoziations">
+    <packagedElement xmi:type="uml:Association" xmi:id="_k9WC8LUtEemSArf9Yd2dcg" name="hasManagedFunction" memberEnd="_k9ZtULUtEemSArf9Yd2dcg _k9aUYrUtEemSArf9Yd2dcg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_k9YfMLUtEemSArf9Yd2dcg" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_k9ZGQLUtEemSArf9Yd2dcg" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_k9aUYrUtEemSArf9Yd2dcg" name="_managedElement" type="_UEDxoLUtEemSArf9Yd2dcg" association="_k9WC8LUtEemSArf9Yd2dcg"/>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>
