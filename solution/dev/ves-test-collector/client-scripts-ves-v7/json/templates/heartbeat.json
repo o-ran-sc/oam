@@ -1,0 +1,30 @@
+{
+  "event": {
+    "commonEventHeader": {
+      "domain": "@domain@",
+      "eventId": "@eventId@",
+      "eventName": "@domain@_@eventType@",
+      "eventType": "@eventType@",
+      "sequence": 0,
+      "priority": "Low",
+      "reportingEntityId": "",
+      "reportingEntityName": "@controllerName@",
+      "sourceId": "",
+      "sourceName": "@controllerName@",
+      "startEpochMicrosec": "@timestamp@",
+      "lastEpochMicrosec": "@timestamp@",
+      "nfNamingCode": "@type@",
+      "nfVendorName": "@vendor@",
+      "timeZoneOffset": "+00:00",
+      "version": "4.0.1",
+      "vesEventListenerVersion":"7.0.1"
+    },
+    "heartbeatFields": {
+      "heartbeatFieldsVersion": "3.0",
+      "heartbeatInterval": 20,
+      "additionalFields": {
+        "eventTime": "@eventTime@"
+      }
+    }
+  }
+}
