@@ -1,0 +1,46 @@
+{
+  "event": {
+    "commonEventHeader": {
+      "domain": "@domain@",
+      "eventId": "@eventId@",
+      "eventName": "@domain@_@eventType@_TCA_@alarm@",
+      "eventType": "@eventType@_TCA",
+      "sequence": 0,
+      "priority": "High",
+      "reportingEntityId": "",
+      "reportingEntityName": "@controllerName@",
+      "sourceId": "",
+      "sourceName": "@pnfId@",
+      "startEpochMicrosec": "@timestamp@",
+      "lastEpochMicrosec": "@timestamp@",
+      "nfNamingCode": "@type@",
+      "nfVendorName": "@vendor@",
+      "timeZoneOffset": "+00:00",
+      "version": "4.0.1",
+      "vesEventListenerVersion":"7.0.1"
+    },
+    "thresholdCrossingAlertFields": {
+      "thresholdCrossingFieldsVersion": "4.0",
+      "additionalParameters": [],
+      "alertAction": "@action@",
+      "alertDescription": "TCA",
+      "alertType":"INTERFACE-ANOMALY",
+      "alertValue":"@type@",
+      "associatedAlertIdList":[],
+      "collectionTimestamp": "@collectionTimestamp@",
+      "dataCollector":"",
+      "elementType": "@type@",
+      "eventSeverity":"@severity@",
+      "eventStartTimestamp":"@eventStartTimestamp@",
+      "interfaceName":"@interface@",
+      "networkService":"",
+      "possibleRootCause":"",
+      "additionalFields": {
+        "eventTime": "@eventTime@",
+        "equipType": "@type@",
+        "vendor":"@vendor@",
+        "model": "@model@"
+      }
+    }
+  }
+}
