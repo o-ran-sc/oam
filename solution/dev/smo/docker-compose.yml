@@ -1,0 +1,91 @@
+################################################################################
+# Copyright 2019 highstreet technologies and others
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+version: "3.3"
+
+services:
+  sdnr:
+    image: ${HT_DOCKER_REPO}${HT_DOCKER_IMAGE_NAME}:${HT_DOCKER_IMAGE_TAG}
+    container_name: sdnr-compose
+    ports:
+      - "${PORTPREFIX}8181:8181"
+      - "${PORTPREFIX}8101:8101"
+    environment:
+      - SDNC_CONFIG_DIR=/opt/onap/ccsdk/data/properties
+      - ENABLE_ODL_CLUSTER=${ENABLE_ODL_CLUSTER}
+      - CCSDK_REPLICAS=${REPLICAS}
+      - DOMAIN=""
+      - SDNRWT=true
+    volumes:
+     - ${LOCAL_SDNR_MOUNT}/sdnr/logs:${ODL_HOME}/data/log
+     - type: bind 
+       source: ./resources/devicemanager.properties
+       target: ${ODL_HOME}/etc/devicemanager.properties   
+     - type: bind
+       source: ./resources/org.ops4j.pax.logging.cfg
+       target: ${ODL_HOME}/etc/org.ops4j.pax.logging.cfg
+    logging:
+      driver:   "json-file"
+      options:
+        max-size: "30m"
+        max-file: "5"
+
+  ves-test-collector:
+    image: ${VES_DOCKER_REPO}${VES_TEST_COLLECTOR_IMAGE_NAME}:${VES_TEST_COLLECTOR_IMAGE_TAG}
+    container_name: ves-test-collector-v${VES_API}
+    ports:
+      - "${EXT_VES_PORT}${VES_API}:30000"
+    environment:
+      - VES_API=${VES_API}
+    volumes:
+     - ${LOCAL_VES_MOUNT}/ves-v${VES_API}/logs:/VES5.0/evel/evel-test-collector/logs
+     - type: bind
+       source: ./resources/${VES_FORMAT_FILE}
+       target: /VES5.0/evel/evel-test-collector/docs/att_interface_definition/event_format_updated.json
+     - type: bind
+       source: ./resources/go-collector.sh
+       target: /VES5.0/evel/evel-test-collector/scripts/linux/go-collector.sh
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "30m"
+        max-file: "5"
+
+  netconf-server-simulator:
+    image: ${HT_DOCKER_REPO}${NETCONF_SERVER_SIMULATOR_IMAGE_NAME}:${NETCONF_SERVER_SIMULATOR_IMAGE_TAG}
+    container_name: netconf-server-simulator
+    ports:
+      - "${EXT_SIM_PORT}:${INT_SIM_PORT}"
+      - "${EXT_SIM_SSH_PORT}:8000"
+    environment:
+      - PORT=${INT_SIM_PORT}
+      - XMLFILE=xmlNeModel/${SIM_MODEL}.xml
+      - SSHPORT=-sshport=8000
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "30m"
+        max-file: "5"
+
+  nts-device:
+    image: ${NTS_DOCKER_REPO}${NTS_IMAGE_NAME}:${NTS_IMAGE_TAG}
+    container_name: o-ran-sc-sim-device
+    ports:
+      - "${NTS_SIM_PORT}:830"
+    labels:
+      "NTS-device": ""
+    environment:
+      - BUILD_TYPE=device
+      - NOTIF_DELAY=60

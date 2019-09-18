@@ -1,0 +1,37 @@
+{
+  "event": {
+    "commonEventHeader": {
+      "domain": "@domain@",
+      "eventId": "@eventId@",
+      "eventName": "@domain@_@eventType@",
+      "eventType": "@eventType@",
+      "sequence": 0,
+      "priority": "Low",
+      "reportingEntityId": "",
+      "reportingEntityName": "@controllerName@",
+      "sourceId": "",
+      "sourceName": "@pnfId@",
+      "startEpochMicrosec": "@timestamp@",
+      "lastEpochMicrosec": "@timestamp@",
+      "nfNamingCode": "@type@",
+      "nfVendorName": "@vendor@",
+      "timeZoneOffset": "+00:00",
+      "version": "4.0.1",
+      "vesEventListenerVersion":"7.0.1"
+    },
+    "pnfRegistrationFields": {
+      "pnfRegistrationFieldsVersion": "2.0",
+      "lastServiceDate":"2019-08-16",
+      "macAddress":"@macAddress@",
+      "manufactureDate":"2019-08-16",
+      "modelNumber": "@model@",
+      "oamV4IpAddress": "@oamIp@",
+      "oamV6IpAddress": "@oamIpV6@",
+      "serialNumber": "@vendor@-@type@-@oamIp@-@model@",
+      "softwareVersion": "2.3.5",
+      "unitFamily": "@vendor@-@type@",
+      "unitType": "@type@",
+      "vendorName": "@vendor@"
+    }
+  }
+}
