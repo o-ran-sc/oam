@@ -45,3 +45,6 @@ release.properties
 # VES related
 */**/json/examples
 *.log
+
+# read the docs related
+developer_guide_template.rst
