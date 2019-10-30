@@ -1,5 +1,4 @@
 ##############################################################################
-#
 # Copyright 2019 highstreet technologies GmbH and others...
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +26,6 @@ buildNumber.properties
 
 # Maven
 target/
-*.tar.gz
 
 # Opendaylight yang-tools
 yang-gen-sal/
@@ -41,7 +39,3 @@ release.properties
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
-
-# VES related
-*/**/json/examples
-*.log

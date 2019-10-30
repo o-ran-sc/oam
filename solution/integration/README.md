@@ -1,1 +1,0 @@
-# Setups for integration test
