@@ -39,6 +39,11 @@ committers:
       company: 'highstreet technologies GmbH'
       id: 'highstreetherbert'
       timezone: 'Germany/Berlin'
+    - name: 'Sandeep Shah'
+      email: 'sandeep.shah@ibm.com'
+      company: 'IBM'
+      id: 'SandeepLinux'
+      timezone: 'US/Central'
 tsc:
     # yamllint disable-line rule:line-length
     approval: 'https://wiki.o-ran-sc.org/display/TOC#O-RANSCTechnicalOversightCommittee(TOC)-20190807'
