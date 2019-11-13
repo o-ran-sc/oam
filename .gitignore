@@ -45,3 +45,7 @@ release.properties
 # VES related
 */**/json/examples
 *.log
+
+# documentation
+.tox
+docs/_build/
