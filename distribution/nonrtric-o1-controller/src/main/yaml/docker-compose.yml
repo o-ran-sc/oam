@@ -1,0 +1,54 @@
+################################################################################
+# Copyright 2019 highstreet technologies and others
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+version: "3.3"
+
+services:
+  nonrt-o1:
+    image: ${NEXUS_DOCKER_REPO}${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+    depends_on:
+      - sdnctldb01
+    container_name: nonrt_o1_controller
+    ports:
+      - "${PORTPREFIX}8181:8181"
+    links:
+      - sdnctldb01:dbhost
+    environment:
+      - SDNC_CONFIG_DIR=/opt/onap/ccsdk/data/properties
+      - ENABLE_ODL_CLUSTER=${ENABLE_ODL_CLUSTER}
+      - CCSDK_REPLICAS=${REPLICAS}
+      - DOMAIN=""
+    volumes:
+     - ${LOCAL_NONRTRIC_MOUNT}/nrtric-o1/logs:${ODL_HOME}/data/log
+    logging:
+      driver:   "json-file"
+      options:
+        max-size: "30m"
+        max-file: "5"
+  
+  sdnctldb01:
+    image: mysql/mysql-server:5.6
+    container_name: nonrt_o1_db
+    ports:
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=openECOMP1.0
+      - MYSQL_ROOT_HOST=%
+    logging:       
+      driver:   "json-file"
+      options:  
+        max-size: "30m"
+        max-file: "5"
+        
