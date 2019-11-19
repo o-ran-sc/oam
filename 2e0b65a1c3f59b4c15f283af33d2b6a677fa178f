@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "118ea830_32e92848",
+        "filename": "distribution/nonrtric-o1-controller/src/main/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000124
+      },
+      "writtenOn": "2019-11-19T13:33:34Z",
+      "side": 1,
+      "message": "Not sure if O-RAN-SC Jenkins is can load these env variables, we need to test.",
+      "revId": "2e0b65a1c3f59b4c15f283af33d2b6a677fa178f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30722030_96752c94",
+        "filename": "distribution/nonrtric-o1-controller/src/main/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000124
+      },
+      "writtenOn": "2019-11-19T13:33:34Z",
+      "side": 1,
+      "message": "Not sure if this suffices for the Jenkins job build or anything else is needed.",
+      "revId": "2e0b65a1c3f59b4c15f283af33d2b6a677fa178f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
