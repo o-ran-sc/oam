@@ -118,3 +118,19 @@ This script send a VES message of domain "measurementsForVfScaling" to DCAE. The
 ```
 ./send15minPm.sh FYNG
 ```
+
+### sendEventList
+
+This script send a VES message of domain "fault" AND "heartbeat" as event list to DCAE. It requires three command line parameters:
+
+1. **equipmentType**: Valid equipment types for 1806 and 1810 are [1234, FYNG, R2D2, 7DEV, nSky, 1OSF] according to document "295672 SDN-R System Requirements".
+
+2. **alarmType**: or alarm name. Any string which references a supported alarm name of the equipment type.
+
+3. **severity**: The severity of tha alarm as defined by [VES schema](./json/schema/CommonEventFormat_30.1_ONAP.json). 
+
+The following example show the usage of this script. The alarm "lossOfSignal" for equipment type "nSky" with severtiy "CRITICAL" will be send.
+
+```
+./sendEventList.sh 1234 lossOfSignal CRITICAL
+```
