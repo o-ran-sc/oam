@@ -1,0 +1,16 @@
+target/
+target-ide/
+yang-gen-sal/
+.checkstyle
+.classpath
+.project
+.settings
+.factorypath
+.metadata
+*.swp
+dist/
+*/**/bin/
+etc/
+node_modules/
+.fbExcludeFilterFile
+*.md.html
