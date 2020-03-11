@@ -28,45 +28,26 @@
 
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
-        <artifactId>binding-parent</artifactId>
+        <artifactId>odlparent-lite</artifactId>
         <version>1.5.2-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
     <groupId>org.o-ran-sc.oam.features.devicemanager</groupId>
-    <artifactId>devicemanager-xran-ru-fh-model</artifactId>
+    <artifactId>devicemanager-oran-ru-fh-top</artifactId>
     <version>0.7.1-SNAPSHOT</version>
-    <packaging>bundle</packaging>
+    <packaging>pom</packaging>
 
     <name>o-ran-sc-features :: ${project.artifactId}</name>
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-        </license>
-    </licenses>
+
+    <modules>
+        <module>model</module>
+        <module>provider</module>
+        <module>feature</module>
+        <module>installer</module>
+    </modules>
 
     <properties>
-        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <feature-name>devicemanager-oran-ru-fh</feature-name>
     </properties>
-
-    <dependencies>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**/gen/**</exclude>
-                        <exclude>**/generated-sources/**</exclude>
-                        <exclude>**/yang-gen-sal/**</exclude>
-                        <exclude>**/pax/**</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

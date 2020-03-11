@@ -34,12 +34,11 @@
     </parent>
 
     <groupId>org.o-ran-sc.oam.features.devicemanager</groupId>
-    <artifactId>devicemanager-xran-ru-fh-provider</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
+    <artifactId>devicemanager-oran-ru-fh-provider</artifactId>
+     <version>0.7.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>o-ran-sc-features :: ${project.artifactId}</name>
-
+ 	<name>o-ran-sc-features :: ${project.artifactId}</name>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -66,8 +65,8 @@
         <!-- end for testing -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>devicemanager-xran-ru-fh-model</artifactId>
-            <version>${project.version}</version>
+           	<artifactId>devicemanager-oran-ru-fh-model</artifactId>
+    		<version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.onap.ccsdk.features.sdnr.wt</groupId>

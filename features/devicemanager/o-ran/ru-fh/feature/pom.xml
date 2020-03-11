@@ -28,45 +28,23 @@
 
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
-        <artifactId>binding-parent</artifactId>
+        <artifactId>single-feature-parent</artifactId>
         <version>1.5.2-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
     <groupId>org.o-ran-sc.oam.features.devicemanager</groupId>
-    <artifactId>devicemanager-xran-ru-fh-model</artifactId>
+    <artifactId>devicemanager-oran-ru-fh-feature</artifactId>
     <version>0.7.1-SNAPSHOT</version>
-    <packaging>bundle</packaging>
+    <packaging>feature</packaging>
 
-    <name>o-ran-sc-features :: ${project.artifactId}</name>
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-        </license>
-    </licenses>
-
-    <properties>
-        <maven.javadoc.skip>true</maven.javadoc.skip>
-    </properties>
+ 	<name>o-ran-sc-features :: ${project.artifactId}</name>
 
     <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>devicemanager-oran-ru-fh-provider</artifactId>
+    		<version>${project.version}</version>
+        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**/gen/**</exclude>
-                        <exclude>**/generated-sources/**</exclude>
-                        <exclude>**/yang-gen-sal/**</exclude>
-                        <exclude>**/pax/**</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

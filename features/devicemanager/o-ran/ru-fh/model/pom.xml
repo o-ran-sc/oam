@@ -3,7 +3,7 @@
   ~ ============LICENSE_START=======================================================
   ~ ONAP : ccsdk features
   ~ ================================================================================
-  ~ Copyright (C) 2020 highstreet technologies GmbH Intellectual Property.
+  ~ Copyright (C) 2018 highstreet technologies GmbH Intellectual Property.
   ~ All rights reserved.
   ~ ================================================================================
   ~ Update Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
@@ -34,12 +34,11 @@
     </parent>
 
     <groupId>org.o-ran-sc.oam.features.devicemanager</groupId>
-    <artifactId>devicemanager-xran-ru-fh-provider</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
+    <artifactId>devicemanager-oran-ru-fh-model</artifactId>
+     <version>0.7.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>o-ran-sc-features :: ${project.artifactId}</name>
-
+	<name>o-ran-sc-features :: ${project.artifactId}</name>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -48,58 +47,13 @@
     </licenses>
 
     <properties>
-        <checkstyle.skip>true</checkstyle.skip> <!-- POM configuration -->
         <maven.javadoc.skip>true</maven.javadoc.skip>
-        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
-        <buildtime>${maven.build.timestamp} UTC</buildtime>
-        <databaseport>49400</databaseport>
     </properties>
 
     <dependencies>
-        <!-- begin for testing -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- end for testing -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>devicemanager-xran-ru-fh-model</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.onap.ccsdk.features.sdnr.wt</groupId>
-            <artifactId>sdnr-wt-devicemanager-model</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.onap.ccsdk.features.sdnr.wt</groupId>
-            <artifactId>sdnr-wt-netconfnode-state-service-model</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.netconf</groupId>
-            <artifactId>sal-netconf-connector</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.mdsal</groupId>
-            <artifactId>mdsal-singleton-common-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.jacoco</groupId>
