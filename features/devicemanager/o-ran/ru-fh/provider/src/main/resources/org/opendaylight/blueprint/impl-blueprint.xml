@@ -3,7 +3,7 @@
   ~ ============LICENSE_START=======================================================
   ~ ONAP : ccsdk features
   ~ ================================================================================
-  ~ Copyright (C) 2018 highstreet technologies GmbH Intellectual Property.
+  ~ Copyright (C) 2019 highstreet technologies GmbH Intellectual Property.
   ~ All rights reserved.
   ~ ================================================================================
   ~ Update Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
@@ -23,28 +23,16 @@
   ~
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<blueprint xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" odl:use-default-for-reference-types="true">
 
-    <parent>
-        <groupId>org.onap.ccsdk.parent</groupId>
-        <artifactId>single-feature-parent</artifactId>
-        <version>1.5.2-SNAPSHOT</version>
-        <relativePath/>
-    </parent>
+    <reference id="netconfNetworkElementService"
+               availability="mandatory" activation="eager"
+               interface="org.onap.ccsdk.features.sdnr.wt.devicemanager.service.NetconfNetworkElementService"/>
 
-    <groupId>org.o-ran-sc.oam.features.devicemanager</groupId>
-    <artifactId>devicemanager-xran-ru-fh-feature</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
-    <packaging>feature</packaging>
-
-    <name>o-ran-sc-features :: ${project.artifactId}</name>
-
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>devicemanager-xran-ru-fh-provider</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-</project>
+    <bean id="provider"
+          class="org.oransc.features.devicemanager.oran.impl.DeviceManagerORanImpl"
+          init-method="init" destroy-method="close">
+        <property name="netconfNetworkElementService" ref="netconfNetworkElementService"/>
+    </bean>
+</blueprint>

@@ -33,12 +33,16 @@
         <relativePath/>
     </parent>
 
-    <groupId>org.onap.ccsdk.features.sdnr.wt</groupId>
-    <artifactId>sdnr-wt-devicemanager-xran-ru-fh-top</artifactId>
+    <groupId>org.o-ran-sc.oam.features.devicemanager</groupId>
+    <artifactId>devicemanager-xran-ru-fh-top</artifactId>
     <version>0.7.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>ccsdk-features :: ${project.artifactId}</name>
+    <name>o-ran-sc-features :: ${project.artifactId}</name>
+
+    <properties>
+        <feature-name>devicemanager-xran-ru-fh</feature-name>
+    </properties>
 
     <modules>
         <module>model</module>
@@ -47,7 +51,4 @@
         <module>installer</module>
     </modules>
 
-    <properties>
-        <feature-name>sdnr-wt-devicemanager-xran-ru-fh</feature-name>
-    </properties>
 </project>
