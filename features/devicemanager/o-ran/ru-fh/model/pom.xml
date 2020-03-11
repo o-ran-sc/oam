@@ -35,10 +35,10 @@
 
     <groupId>org.o-ran-sc.oam.features.devicemanager</groupId>
     <artifactId>devicemanager-oran-ru-fh-model</artifactId>
-     <version>0.7.1-SNAPSHOT</version>
+    <version>0.7.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-	<name>o-ran-sc-features :: ${project.artifactId}</name>
+    <name>o-ran-sc-features :: ${project.artifactId}</name>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>

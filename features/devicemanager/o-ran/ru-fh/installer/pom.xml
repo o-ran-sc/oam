@@ -35,10 +35,10 @@
 
     <groupId>org.o-ran-sc.oam.features.devicemanager</groupId>
     <artifactId>devicemanager-oran-ru-fh-installer</artifactId>
-     <version>0.7.1-SNAPSHOT</version>
+    <version>0.7.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-	<name>o-ran-sc-features :: ${project.artifactId}</name>
+    <name>o-ran-sc-features :: ${project.artifactId}</name>
 
     <properties>
         <application.name>devicemanager-oran-ru-fh</application.name>

@@ -38,13 +38,13 @@
     <version>0.7.1-SNAPSHOT</version>
     <packaging>feature</packaging>
 
- 	<name>o-ran-sc-features :: ${project.artifactId}</name>
+    <name>o-ran-sc-features :: ${project.artifactId}</name>
 
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>devicemanager-oran-ru-fh-provider</artifactId>
-    		<version>${project.version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

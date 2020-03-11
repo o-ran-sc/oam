@@ -40,10 +40,6 @@
 
     <name>o-ran-sc-features :: ${project.artifactId}</name>
 
-    <properties>
-        <feature-name>devicemanager-xran-ru-fh</feature-name>
-    </properties>
-
     <modules>
         <module>model</module>
         <module>provider</module>
@@ -51,4 +47,7 @@
         <module>installer</module>
     </modules>
 
+    <properties>
+        <feature-name>devicemanager-xran-ru-fh</feature-name>
+    </properties>
 </project>
