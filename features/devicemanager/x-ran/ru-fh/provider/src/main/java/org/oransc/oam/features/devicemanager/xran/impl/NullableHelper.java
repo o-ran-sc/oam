@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * ============LICENSE_START========================================================================
  * ONAP : ccsdk feature sdnr wt
  * =================================================================================================
@@ -14,22 +14,23 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  * ============LICENSE_END==========================================================================
- */
-package org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.impl;
+ ******************************************************************************/
+package org.oransc.oam.features.devicemanager.xran.impl;
 
-import org.opendaylight.yang.gen.v1.urn.xran.fm._1._0.rev180720.AlarmNotif;
-import org.opendaylight.yang.gen.v1.urn.xran.fm._1._0.rev180720.XranFmListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 
-public class XRanFaultNotificationListener implements XranFmListener {
+public class NullableHelper {
 
-    private static final Logger log = LoggerFactory.getLogger(XRanFaultNotificationListener.class);
+    private static final @NonNull Uuid DEFAULT_Uuid = new Uuid("ad3545a5-1dd0-4293-b2d9-90366357a032");
 
-    @Override
-    public void onAlarmNotif(AlarmNotif notification) {
+    public static @NonNull Uuid nnGetUuid(@Nullable Uuid x) {
+         return x == null ? DEFAULT_Uuid : x;
+    }
 
-        log.info("onAlarmNotif {}", notification);
+    public static @NonNull Integer nnGetInteger(@Nullable Integer x) {
+        return x == null ? -1 : x;
     }
 
 }

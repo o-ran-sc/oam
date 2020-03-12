@@ -16,7 +16,7 @@
  * ============LICENSE_END==========================================================================
  */
 
-package org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.impl;
+package org.oransc.oam.features.devicemanager.xran.impl;
 
 import java.util.Optional;
 import org.eclipse.jdt.annotation.NonNull;

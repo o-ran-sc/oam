@@ -34,8 +34,8 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.hardware.re
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
+import org.oransc.oam.features.devicemanager.xran.impl.XRanToInternalDataModel;
 import org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.TestHardwareClass;
-import org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.impl.XRanToInternalDataModel;
 
 public class TestXRanToInternalDataModel {
 

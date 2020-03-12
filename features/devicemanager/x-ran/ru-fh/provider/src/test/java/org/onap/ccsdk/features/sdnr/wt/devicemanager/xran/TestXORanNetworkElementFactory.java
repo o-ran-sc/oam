@@ -26,12 +26,12 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.ccsdk.features.sdnr.wt.devicemanager.service.DeviceManagerServiceProvider;
-import org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.impl.XRanNetworkElementFactory;
 import org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.mock.NetconfAccessorMock;
 import org.onap.ccsdk.features.sdnr.wt.netconfnodestateservice.Capabilities;
 import org.onap.ccsdk.features.sdnr.wt.netconfnodestateservice.NetconfAccessor;
 import org.opendaylight.yang.gen.v1.urn.xran.hardware._1._0.rev180720.XRANRADIO;
 import org.opendaylight.yangtools.yang.common.QName;
+import org.oransc.oam.features.devicemanager.xran.impl.XRanNetworkElementFactory;
 
 public class TestXORanNetworkElementFactory {
 

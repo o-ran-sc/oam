@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.impl.DeviceManagerXRanImpl;
+import org.oransc.oam.features.devicemanager.xran.impl.DeviceManagerXRanImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

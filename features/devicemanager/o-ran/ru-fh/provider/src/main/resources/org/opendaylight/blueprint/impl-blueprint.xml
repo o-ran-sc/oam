@@ -31,7 +31,7 @@
                interface="org.onap.ccsdk.features.sdnr.wt.devicemanager.service.NetconfNetworkElementService"/>
 
     <bean id="provider"
-          class="org.oransc.features.devicemanager.oran.impl.DeviceManagerORanImpl"
+          class="org.oransc.oam.features.devicemanager.oran.impl.DeviceManagerORanImpl"
           init-method="init" destroy-method="close">
         <property name="netconfNetworkElementService" ref="netconfNetworkElementService"/>
     </bean>

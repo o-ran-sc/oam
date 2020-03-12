@@ -18,7 +18,7 @@
 package org.onap.ccsdk.features.sdnr.wt.devicemanager.xran;
 
 import org.junit.Test;
-import org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.impl.XRanFaultNotificationListener;
+import org.oransc.oam.features.devicemanager.xran.impl.XRanFaultNotificationListener;
 
 public class TestXRanFaultNotificationListener {
 

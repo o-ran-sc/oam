@@ -9,4 +9,6 @@ USER root
 COPY system /tmp/system
 RUN rsync -a /tmp/system $ODL_HOME && rm -rf /tmp/system
 RUN chown -R odl:odl $ODL_HOME
+
+# Set user for ODL startup
 USER odl

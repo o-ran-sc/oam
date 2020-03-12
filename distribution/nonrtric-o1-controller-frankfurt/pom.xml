@@ -28,8 +28,10 @@
     <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
     <o-ran-sc.project.version>${project.version}</o-ran-sc.project.version>
     <o-ran-sc.features.version>0.7.1-SNAPSHOT</o-ran-sc.features.version>
-    <features.repo>mvn:org.o-ran-sc.oam.features.devicemanager/devicemanager-oran-ru-fh-feature/${o-ran-sc.features.version}/xml/features, mvn:org.o-ran-sc.oam.features.devicemanager/devicemanager-xran-ru-fh-feature/${o-ran-sc.features.version}/xml/features</features.repo>
-    <features.boot>sdnr-wt-feature-aggregator,devicemanager-oran-ru-fh-feature</features.boot>
+    <repo-oran>mvn:org.o-ran-sc.oam.features.devicemanager/devicemanager-oran-ru-fh-feature/${o-ran-sc.features.version}/xml/features</repo-oran>
+    <repo-xran>mvn:org.o-ran-sc.oam.features.devicemanager/devicemanager-xran-ru-fh-feature/${o-ran-sc.features.version}/xml/features</repo-xran>
+    <features.repo>${repo-oran},${repo-xran}</features.repo>
+    <features.boot>sdnr-wt-feature-aggregator,devicemanager-oran-ru-fh-feature,devicemanager-xran-ru-fh-feature</features.boot>
     <platform-logic-installer.version>${project.version}</platform-logic-installer.version>
     <docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>
     <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
@@ -43,6 +45,13 @@
     <dependency>
       <groupId>org.o-ran-sc.oam.features.devicemanager</groupId>
       <artifactId>devicemanager-oran-ru-fh-installer</artifactId>
+      <version>${o-ran-sc.features.version}</version>
+      <type>zip</type>
+      <classifier>repo</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.o-ran-sc.oam.features.devicemanager</groupId>
+      <artifactId>devicemanager-xran-ru-fh-installer</artifactId>
       <version>${o-ran-sc.features.version}</version>
       <type>zip</type>
       <classifier>repo</classifier>

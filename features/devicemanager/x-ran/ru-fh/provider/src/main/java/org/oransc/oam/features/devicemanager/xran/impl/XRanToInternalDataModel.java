@@ -15,7 +15,7 @@
  * the License.
  * ============LICENSE_END==========================================================================
  */
-package org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.impl;
+package org.oransc.oam.features.devicemanager.xran.impl;
 
 import java.util.ArrayList;
 import java.util.List;

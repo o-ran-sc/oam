@@ -38,7 +38,7 @@
     <version>0.7.1-SNAPSHOT</version>
     <packaging>feature</packaging>
 
-    <name>o-ran-sc-features :: ${project.artifactId}</name>
+    <name>x-ran-sc-features :: ${project.artifactId}</name>
 
     <dependencies>
         <dependency>
