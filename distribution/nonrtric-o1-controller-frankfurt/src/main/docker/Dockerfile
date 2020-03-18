@@ -1,7 +1,12 @@
 # Base odl alpine with added packages needed for
 FROM ${base.image.repo}
-ENV SDNR_ORAN_REPO ${features.repo}
-RUN sed -i -e "\|featuresRepositories|s|$|,${SDNR_ORAN_REPO}|"  $ODL_HOME/etc/org.apache.karaf.features.cfg
+
+# Image info
+ENV IMAGEPATH ${IMAGEPATH}//${image.name}
+ENV IMAGENAMES ${IMAGENAMES}//"ORAN nonrtric"
+
+# Adjust repo und feature boot info for karaf
+RUN sed -i -e "\|featuresRepositories|s|$|,${features.repo}|"  $ODL_HOME/etc/org.apache.karaf.features.cfg
 ENV SDNRWT_BOOTFEATURES ${features.boot}
 
 USER root

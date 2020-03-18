@@ -23,7 +23,8 @@
   </organization>
 
   <properties>
-    <base.image.repo>nexus3.onap.org:10001/onap/sdnc-image:1.8.0-STAGING-20200225T124813Z</base.image.repo>
+    <base.image.repo>hightec/sdnc-image-wt-patch:latest</base.image.repo>
+    <!--<base.image.repo>nexus3.onap.org:10001/onap/sdnc-image:1.8.0-STAGING-20200225T124813Z</base.image.repo>-->
     <image.name>o-ran-sc/${project.artifactId}</image.name>
     <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
     <o-ran-sc.project.version>${project.version}</o-ran-sc.project.version>
