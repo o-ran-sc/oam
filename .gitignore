@@ -49,3 +49,4 @@ release.properties
 # documentation
 .tox
 docs/_build/
+ci-management/
