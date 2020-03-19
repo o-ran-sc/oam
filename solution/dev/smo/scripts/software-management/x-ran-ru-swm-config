@@ -1,0 +1,56 @@
+################################################################################
+#
+# Copyright 2020 highstreet technologies GmbH and others
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+################################################################################
+# Configuration for Sotware management interface tests 
+
+# settings
+# protocol: http | http
+protocol=https
+
+# host: http | https
+host=sdn-r-dev.open5g-test.com
+
+# port: The SDN-R port number exposed by SDN-R docker      
+port=443
+
+# restconf: a static url path of SDN-R (currently not RFC8040)
+restconfConfig=restconf/config/network-topology:network-topology/topology/topology-netconf/node
+restconfOperations=restconf/operations/network-topology:network-topology/topology/topology-netconf/node
+
+# nodeId: The device (or NetConf server) identifier to be addressed
+nodeId=x-ran-RadioUnit-fronthaul-1
+
+# static: a static part of the url path required by ODL
+static=yang-ext:mount
+
+# objectId: The Object identifier as defined by YANG
+inventoryId=xran-software-management:software-inventory
+downloadId=xran-software-management:software-download
+installId=xran-software-management:software-install
+activateId=xran-software-management:software-activate
+
+# appUser, appPassword: App crendencials for authentiation
+appUser=admin
+appPassword=Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
+
+# Inherit or static curl/header parameters
+urlInventory=$protocol://$host/$restconfConfig/$nodeId/$static/$inventoryId
+ urlDownload=$protocol://$host/$restconfOperations/$nodeId/$static/$downloadId
+  urlInstall=$protocol://$host/$restconfOperations/$nodeId/$static/$installId
+ urlActivate=$protocol://$host/$restconfOperations/$nodeId/$static/$activateId
+        auth="-u $appUser:$appPassword"
