@@ -19,77 +19,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.onap.ccsdk.parent</groupId>
+    <artifactId>odlparent-lite</artifactId>
+    <version>1.5.2</version>
+    <relativePath />
+  </parent>
+
   <groupId>org.o-ran-sc.oam.features</groupId>
   <artifactId>features-top</artifactId>
   <version>0.7.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>o-ran-sc features</name>
-  <properties>
-        <!-- ONAP repositories -->
-        <onap.nexus.host>nexus.onap.org</onap.nexus.host>
-        <onap.nexus.port>443</onap.nexus.port>
-        <onap.nexus.protocol>https</onap.nexus.protocol>
-        <onap.nexus.public-url>https://nexus.onap.org/content/groups/public</onap.nexus.public-url>
-        <onap.nexus.staging-url>https://nexus.onap.org/content/groups/staging</onap.nexus.staging-url>
-        <onap.nexus.release-url>https://nexus.onap.org/content/repositories/releases</onap.nexus.release-url>
-        <onap.nexus.snapshot-url>https://nexus.onap.org/content/repositories/snapshots</onap.nexus.snapshot-url>
-  </properties>
 
   <modules>
     <module>devicemanager/o-ran/ru-fh</module>
     <module>devicemanager/x-ran/ru-fh</module>
     <module>devicemanager/3gpp/common</module>
   </modules>
-
-  <repositories>
-    <repository>
-      <id>onap-public</id>
-      <url>${onap.nexus.public-url}</url>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>onap-staging</id>
-      <url>${onap.nexus.staging-url}</url>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>ecomp-release</id>
-      <name>onap-repository-releases</name>
-      <url>${onap.nexus.release-url}</url>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>ecomp-snapshot</id>
-      <name>onap-repository-snapshots</name>
-      <url>${onap.nexus.snapshot-url}</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
 
 </project>
