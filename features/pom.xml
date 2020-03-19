@@ -39,6 +39,7 @@
   <modules>
     <module>devicemanager/o-ran/ru-fh</module>
     <module>devicemanager/x-ran/ru-fh</module>
+    <module>devicemanager/3gpp/common</module>
   </modules>
 
   <repositories>
