@@ -24,14 +24,14 @@
   <version>0.7.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>o-ran-sc features</name>
+  <name>o-ran-sc features top</name>
 
   <modules>
     <module>parent/binding-parent</module>
-    <module>parent/odlparent-lite</module>
+<!--    <module>parent/odlparent-lite</module>
     <module>parent/single-feature-parent</module>
     <module>devicemanager/o-ran/ru-fh</module>
-    <module>devicemanager/x-ran/ru-fh</module>
+    <module>devicemanager/x-ran/ru-fh</module> -->
   </modules>
 
 </project>
