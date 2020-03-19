@@ -19,13 +19,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.onap.ccsdk.parent</groupId>
-    <artifactId>odlparent-lite</artifactId>
-    <version>1.5.2</version>
-    <relativePath />
-  </parent>
-
   <groupId>org.o-ran-sc.oam.features</groupId>
   <artifactId>features-top</artifactId>
   <version>0.7.1-SNAPSHOT</version>
@@ -34,9 +27,11 @@
   <name>o-ran-sc features</name>
 
   <modules>
+    <module>parent/binding-parent</module>
+    <module>parent/odlparent-lite</module>
+    <module>parent/single-feature-parent</module>
     <module>devicemanager/o-ran/ru-fh</module>
     <module>devicemanager/x-ran/ru-fh</module>
-    <module>devicemanager/3gpp/common</module>
   </modules>
 
 </project>
