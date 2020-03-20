@@ -27,14 +27,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.o-ran-sc.oam.features.parent</groupId>
+       <groupId>org.onap.ccsdk.parent</groupId>
         <artifactId>odlparent-lite</artifactId>
-        <version>0.7.1-SNAPSHOT</version>
+        <version>1.5.2</version>
         <relativePath/>
     </parent>
 
     <groupId>org.o-ran-sc.oam.features.devicemanager</groupId>
     <artifactId>devicemanager-xran-ru-fh-installer</artifactId>
+    <version>0.7.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>o-ran-sc-features :: ${project.artifactId}</name>
@@ -123,4 +124,55 @@
             </plugin>
         </plugins>
     </build>
+
+  <repositories>
+    <repository>
+      <id>onap-public</id>
+      <url>https://nexus.onap.org/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>onap-staging</id>
+      <url>https://nexus.onap.org/content/groups/staging/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>ecomp-release</id>
+      <name>onap-repository-releases</name>
+      <url>https://nexus.onap.org/content/repositories/releases/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>ecomp-snapshot</id>
+      <name>onap-repository-snapshots</name>
+      <url>https://nexus.onap.org/content/repositories/snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
 </project>
