@@ -28,9 +28,9 @@
 
   <modules>
     <module>parent/binding-parent</module>
-<!--    <module>parent/odlparent-lite</module>
+    <module>parent/odlparent-lite</module>
     <module>parent/single-feature-parent</module>
-    <module>devicemanager/o-ran/ru-fh</module>
+<!--    <module>devicemanager/o-ran/ru-fh</module>
     <module>devicemanager/x-ran/ru-fh</module> -->
   </modules>
 
