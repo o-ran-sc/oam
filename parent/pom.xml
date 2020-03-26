@@ -21,7 +21,7 @@
 
   <groupId>org.o-ran-sc.oam.parent</groupId>
   <artifactId>parent-top</artifactId>
-  <version>0.7.1-SNAPSHOT</version>
+  <version>1.5.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>o-ran-sc parent top</name>

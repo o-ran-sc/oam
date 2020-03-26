@@ -28,7 +28,7 @@
 
   <groupId>org.o-ran-sc.oam.features.parent</groupId>
   <artifactId>single-feature-parent</artifactId>
-  <version>0.7.1-SNAPSHOT</version>
+  <version>1.5.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>o-ran-sc features single-feature-parent</name>
