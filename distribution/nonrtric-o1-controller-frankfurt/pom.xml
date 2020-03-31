@@ -127,6 +127,7 @@
         <version>0.28.0</version>
         <inherited>false</inherited>
         <configuration>
+          <pushRegistry>${env.CONTAINER_PUSH_REGISTRY}</pushRegistry>
           <images>
             <image>
               <name>${image.name}</name>
