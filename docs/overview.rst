@@ -16,20 +16,18 @@ O-RAN Working Group1.
 Project Resources
 -----------------
 
-The source code is available from the Linux Foundation Gerrit server:
+The project uses the following Linux Foundation resources:
 
+* The source code is maintained in this Gerrit:
     `<https://gerrit.o-ran-sc.org/r/admin/repos/oam>`_
 
-The build (CI) jobs are in the Linux Foundation Jenkins server:
-
+* The build (CI) jobs are in this Jenkins:
     `<https://jenkins.o-ran-sc.org/view/oam/>`_
 
-Issues are tracked in the Linux Foundation Jira server:
-
+* Issues are tracked in this Jira:
     `<https://jira.o-ran-sc.org/projects/OAM/>`_
 
-Project information is available in the Linux Foundation Wiki:
-
+* Project information is available in this Wiki:
     `<https://wiki.o-ran-sc.org/display/OAM/Operations+and+Maintenance>`_
 
 

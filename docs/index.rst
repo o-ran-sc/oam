@@ -15,6 +15,9 @@ OAM Operation and Maintenance
    :caption: Contents:
 
    overview.rst
+   config-deploy.rst
+   developer-guide.rst
+   user-guide.rst
    release-notes.rst
 
 * :ref:`search`
