@@ -5,12 +5,21 @@
 OAM Operation and Maintenance Overview
 ======================================
 
-The O-RAN SC OAM provides administrative and operator
+The O-RAN SC OAM project provides administrative and operator
 functions for O-RAN components, such as Near-Realtime-RAN-Inelegent-Controller,
 O-RAN Centralized Unit, O-RAN Distributed Unit and O-RAN Radio Unit. 
 
 The project follows the specifications for the O1 interface as provided by
 O-RAN Working Group1. 
+
+The O-RAN-SC OAM project adds features and functions to the OpenDaylight-based ONAP
+controller 'CCSDK/SDNC'. It is built on the Common Controller Framework
+to control and manage O-RAN managed elements and O-RAN managed functions. 
+
+.. figure:: ./_static/o-ran-architecture.png
+   :alt: SDN-R in ONAP
+
+   SDN-R in ONAP
 
 
 Project Resources

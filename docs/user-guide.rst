@@ -5,6 +5,13 @@
 OAM User Guide
 ==============
 
-This document provides a quickstart for users of the O-RAN SC O1 web application.
+This document provides a quickstart for users of the O-RAN SC OAM web application.
 
-Please see documentation of ODLUX Applications in ONAP: docs.onap.org/en/frankfurt/submodules/ccsdk/features.git/docs/guides/onap-user/applications.html
+.. toctree::
+   :maxdepth: 1
+
+   general
+   applications
+   installation
+   faq
+   abbreviations
