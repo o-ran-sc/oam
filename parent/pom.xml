@@ -21,12 +21,14 @@
 
   <groupId>org.o-ran-sc.oam.parent</groupId>
   <artifactId>parent-top</artifactId>
-  <version>1.5.2-SNAPSHOT</version>
+  <version>2.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>o-ran-sc parent top</name>
 
   <modules>
+    <module>installed-odl-bom</module>
+    <module>dependencies-odl-bom</module>
     <module>odlparent-lite</module>
     <module>binding-parent</module>
     <module>single-feature-parent</module>
