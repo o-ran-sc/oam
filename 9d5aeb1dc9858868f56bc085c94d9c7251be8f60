@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d093eb86_d0eb0102",
+        "filename": "parent/single-feature-parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000124
+      },
+      "writtenOn": "2020-07-20T08:38:04Z",
+      "side": 1,
+      "message": "Whitespace that should be removed.",
+      "revId": "9d5aeb1dc9858868f56bc085c94d9c7251be8f60",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20645fd0_2bfd15ed",
+        "filename": "parent/single-feature-parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1172,
+      "author": {
+        "id": 1000124
+      },
+      "writtenOn": "2020-07-20T08:38:04Z",
+      "side": 1,
+      "message": "Whitespace that should be removed.",
+      "revId": "9d5aeb1dc9858868f56bc085c94d9c7251be8f60",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
