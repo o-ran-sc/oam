@@ -29,6 +29,7 @@
   <modules>
     <module>devicemanager/o-ran/ru-fh</module>
     <module>devicemanager/x-ran/ru-fh</module>
+    <module>devicemanager/tr069/ru-fh</module>
   </modules>
 
 </project>
