@@ -15,7 +15,7 @@
  * the License.
  * ============LICENSE_END==========================================================================
  */
-package org.onap.ccsdk.features.sdnr.wt.devicemanager.xran;
+package org.oransc.oam.features.devicemanager.xran.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -35,7 +35,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.oransc.oam.features.devicemanager.xran.impl.XRanToInternalDataModel;
-import org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.TestHardwareClass;
+import org.oransc.oam.features.devicemanager.xran.test.TestHardwareClass;
 
 public class TestXRanToInternalDataModel {
 
