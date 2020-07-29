@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 ################################################################################
-# Copyright 2019 highstreet technologies and others
+# Copyright 2020 highstreet technologies and others
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 
   <groupId>org.o-ran-sc.oam.features</groupId>
   <artifactId>features-top</artifactId>
-  <version>0.7.1-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>o-ran-sc features top</name>
@@ -29,6 +29,7 @@
   <modules>
     <module>devicemanager/o-ran/ru-fh</module>
     <module>devicemanager/x-ran/ru-fh</module>
+    <module>devicemanager/g-ran/ru-fh</module>
   </modules>
 
 </project>
