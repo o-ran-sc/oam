@@ -16,7 +16,7 @@
  * ============LICENSE_END==========================================================================
  */
 
-package org.onap.ccsdk.features.sdnr.wt.devicemanager.xran;
+package org.oransc.oam.features.devicemanager.xran.test;
 
 import static org.mockito.Mockito.*;
 

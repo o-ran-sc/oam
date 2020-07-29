@@ -15,48 +15,33 @@
  * the License.
  * ============LICENSE_END==========================================================================
  */
-package org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.mock;
+package org.oransc.oam.features.devicemanager.xran.test.mock;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.notifications.rev120206.NetconfConfigChange;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.notifications.rev120206.changed.by.parms.ChangedBy;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.notifications.rev120206.netconf.config.change.Edit;
-import org.opendaylight.yangtools.yang.binding.Augmentation;
-import org.opendaylight.yangtools.yang.binding.DataContainer;
+import org.onap.ccsdk.features.sdnr.wt.netconfnodestateservice.TransactionUtils;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.yangtools.yang.binding.DataObject;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-public class NetconfConfigChangeMock implements NetconfConfigChange {
+public class TransactionUtilsMock implements TransactionUtils {
 
 	@Override
-	public Class<? extends DataContainer> getImplementedInterface() {
+	public <T extends DataObject> @Nullable T readData(DataBroker dataBroker, LogicalDatastoreType dataStoreType,
+			InstanceIdentifier<T> iid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <E$$ extends Augmentation<NetconfConfigChange>> @Nullable E$$ augmentation(Class<E$$> augmentationType) {
+	public <T extends DataObject> @Nullable T readDataOptionalWithStatus(DataBroker dataBroker,
+			LogicalDatastoreType dataStoreType, InstanceIdentifier<T> iid, AtomicBoolean noErrorIndication,
+			AtomicReference<String> statusIndicator) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public @Nullable ChangedBy getChangedBy() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public @Nullable Datastore getDatastore() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public @Nullable List<Edit> getEdit() {
-		List<Edit> list = new ArrayList<Edit>();
-		return list;
 	}
 
 }

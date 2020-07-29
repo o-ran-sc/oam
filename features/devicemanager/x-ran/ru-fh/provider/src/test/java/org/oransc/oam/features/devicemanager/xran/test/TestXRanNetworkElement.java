@@ -15,7 +15,7 @@
  * the License.
  * ============LICENSE_END==========================================================================
  */
-package org.onap.ccsdk.features.sdnr.wt.devicemanager.xran;
+package org.oransc.oam.features.devicemanager.xran.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,9 +34,9 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.xran.hardware._1._0.rev180720.XRANRADIO;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.oransc.oam.features.devicemanager.xran.impl.XRanNetworkElementFactory;
+import org.oransc.oam.features.devicemanager.xran.test.mock.NetconfAccessorMock;
+import org.oransc.oam.features.devicemanager.xran.test.mock.TransactionUtilsMock;
 import org.onap.ccsdk.features.sdnr.wt.devicemanager.service.DeviceManagerServiceProvider;
-import org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.mock.NetconfAccessorMock;
-import org.onap.ccsdk.features.sdnr.wt.devicemanager.xran.mock.TransactionUtilsMock;
 import org.onap.ccsdk.features.sdnr.wt.netconfnodestateservice.Capabilities;
 
 public class TestXRanNetworkElement {
