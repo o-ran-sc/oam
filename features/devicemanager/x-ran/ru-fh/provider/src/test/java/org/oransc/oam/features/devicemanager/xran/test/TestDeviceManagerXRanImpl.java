@@ -1,4 +1,4 @@
-package org.onap.ccsdk.features.sdnr.wt.devicemanager.xran;
+package org.oransc.oam.features.devicemanager.xran.test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
