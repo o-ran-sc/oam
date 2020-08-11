@@ -15,7 +15,7 @@
  * the License.
  * ============LICENSE_END==========================================================================
  */
-package org.onap.ccsdk.features.sdnr.wt.devicemanager.oran.test;
+package org.oransc.oam.features.devicemanager.oran.test;
 
 import org.junit.Test;
 import org.oransc.oam.features.devicemanager.oran.impl.ORanFaultNotificationListener;

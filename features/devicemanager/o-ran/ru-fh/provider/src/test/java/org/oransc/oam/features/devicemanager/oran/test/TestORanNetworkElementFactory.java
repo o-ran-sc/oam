@@ -15,7 +15,7 @@
  * the License.
  * ============LICENSE_END==========================================================================
  */
-package org.onap.ccsdk.features.sdnr.wt.devicemanager.oran.test;
+package org.oransc.oam.features.devicemanager.oran.test;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -26,13 +26,13 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.ccsdk.features.sdnr.wt.devicemanager.service.DeviceManagerServiceProvider;
-import org.onap.ccsdk.features.sdnr.wt.devicemanager.oran.test.mock.NetconfAccessorMock;
 import org.onap.ccsdk.features.sdnr.wt.netconfnodestateservice.Capabilities;
 import org.onap.ccsdk.features.sdnr.wt.netconfnodestateservice.NetconfAccessor;
 import org.opendaylight.yang.gen.v1.urn.o.ran.hardware._1._0.rev190328.ORANHWCOMPONENT;
 import org.opendaylight.yang.gen.v1.urn.onf.params.xml.ns.yang.network.topology.simulator.rev191025.SimulatorStatus;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.oransc.oam.features.devicemanager.oran.impl.ORanNetworkElementFactory;
+import org.oransc.oam.features.devicemanager.oran.test.mock.NetconfAccessorMock;
 
 public class TestORanNetworkElementFactory {
 
