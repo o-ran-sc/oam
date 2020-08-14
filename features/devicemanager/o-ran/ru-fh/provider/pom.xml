@@ -64,8 +64,8 @@
 
         <!-- end for testing -->
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>devicemanager-oran-ru-fh-model</artifactId>
+            <groupId>org.o-ran-sc.scp-oam-modeling.features</groupId>
+            <artifactId>o-ran-ru-fh-model</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
