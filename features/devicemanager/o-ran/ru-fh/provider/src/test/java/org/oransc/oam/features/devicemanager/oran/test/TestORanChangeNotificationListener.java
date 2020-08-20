@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START========================================================================
- * ONAP : ccsdk feature sdnr wt
+ * O-RAN-SC : oam/ccsdk feature sdnr wt
  * =================================================================================================
  * Copyright (C) 2020 highstreet technologies GmbH Intellectual Property. All rights reserved.
  * =================================================================================================
@@ -18,11 +18,11 @@
 
 package org.oransc.oam.features.devicemanager.oran.test;
 
-import static org.mockito.Mockito.*;
-
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
 import org.onap.ccsdk.features.sdnr.wt.dataprovider.model.DataProvider;
@@ -41,47 +41,47 @@ import org.oransc.oam.features.devicemanager.oran.impl.ORanChangeNotificationLis
 
 public class TestORanChangeNotificationListener {
 
-	private static final String NODEID = "node1";
+    private static final String NODEID = "node1";
 
-	@Test
-	public void test() {
+    @Test
+    public void test() {
 
-		NetconfAccessor netconfAccessor = mock(NetconfAccessor.class);
-		DataProvider databaseService = mock(DataProvider.class);
-		ORanChangeNotificationListener notifListener = new ORanChangeNotificationListener(netconfAccessor,
-				databaseService);
-		when(netconfAccessor.getNodeId()).thenReturn(new NodeId(NODEID));
-		Iterable<? extends PathArgument> pathArguments = Arrays.asList(new PathArgument() {
+        NetconfAccessor netconfAccessor = mock(NetconfAccessor.class);
+        DataProvider databaseService = mock(DataProvider.class);
+        ORanChangeNotificationListener notifListener =
+                new ORanChangeNotificationListener(netconfAccessor, databaseService);
+        when(netconfAccessor.getNodeId()).thenReturn(new NodeId(NODEID));
+        Iterable<? extends PathArgument> pathArguments = Arrays.asList(new PathArgument() {
 
-			@Override
-			public int compareTo(PathArgument arg0) {
-				return 0;
-			}
+            @Override
+            public int compareTo(PathArgument arg0) {
+                return 0;
+            }
 
-			@Override
-			public Class<? extends DataObject> getType() {
-				return DataObject.class;
-			}
-		});
-		InstanceIdentifier<?> target = InstanceIdentifier.create(pathArguments);
+            @Override
+            public Class<? extends DataObject> getType() {
+                return DataObject.class;
+            }
+        });
+        InstanceIdentifier<?> target = InstanceIdentifier.create(pathArguments);
 
-		notifListener.onNetconfConfigChange(createNotification(EditOperationType.Create,target));
-		EventlogEntity event = new EventlogBuilder().setNodeId(NODEID)
-				.setNewValue(String.valueOf(EditOperationType.Create)).setObjectId(target.toString()).build();
-		verify(databaseService).writeEventLog(event);
+        notifListener.onNetconfConfigChange(createNotification(EditOperationType.Create, target));
+        EventlogEntity event = new EventlogBuilder().setNodeId(NODEID)
+                .setNewValue(String.valueOf(EditOperationType.Create)).setObjectId(target.toString()).build();
+        verify(databaseService).writeEventLog(event);
 
-	}
+    }
 
-	/**
-	 * @param type 
-	 * @return
-	 */
-	private static NetconfConfigChange createNotification(EditOperationType type,InstanceIdentifier<?> target) {
-		NetconfConfigChange change = mock(NetconfConfigChange.class);
-		
-		@SuppressWarnings("null")
-		final @NonNull List<Edit> edits = Arrays.asList(new EditBuilder().setOperation(type).setTarget(target).build());
-		when(change.nonnullEdit()).thenReturn(edits);
-		return change;
-	}
+    /**
+     * @param type
+     * @return
+     */
+    private static NetconfConfigChange createNotification(EditOperationType type, InstanceIdentifier<?> target) {
+        NetconfConfigChange change = mock(NetconfConfigChange.class);
+
+        @SuppressWarnings("null")
+        final @NonNull List<Edit> edits = Arrays.asList(new EditBuilder().setOperation(type).setTarget(target).build());
+        when(change.nonnullEdit()).thenReturn(edits);
+        return change;
+    }
 }

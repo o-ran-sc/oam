@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START========================================================================
- * ONAP : ccsdk feature sdnr wt
+ * O-RAN-SC : oam/ccsdk feature sdnr wt
  * =================================================================================================
  * Copyright (C) 2020 highstreet technologies GmbH Intellectual Property. All rights reserved.
  * =================================================================================================
@@ -20,16 +20,17 @@ package org.oransc.oam.features.devicemanager.oran.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.*;
-
-import java.util.Optional;
 import java.io.IOException;
+import java.util.Optional;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.ccsdk.features.sdnr.wt.dataprovider.model.DataProvider;
 import org.onap.ccsdk.features.sdnr.wt.devicemanager.ne.service.NetworkElement;
+import org.onap.ccsdk.features.sdnr.wt.devicemanager.service.DeviceManagerServiceProvider;
+import org.onap.ccsdk.features.sdnr.wt.netconfnodestateservice.Capabilities;
 import org.opendaylight.yang.gen.v1.urn.o.ran.hardware._1._0.rev190328.ORANHWCOMPONENT;
 import org.opendaylight.yang.gen.v1.urn.onf.params.xml.ns.yang.network.topology.simulator.rev191025.SimulatorStatus;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
@@ -37,8 +38,6 @@ import org.opendaylight.yangtools.yang.common.QName;
 import org.oransc.oam.features.devicemanager.oran.impl.ORanNetworkElementFactory;
 import org.oransc.oam.features.devicemanager.oran.test.mock.NetconfAccessorMock;
 import org.oransc.oam.features.devicemanager.oran.test.mock.TransactionUtilsMock;
-import org.onap.ccsdk.features.sdnr.wt.devicemanager.service.DeviceManagerServiceProvider;
-import org.onap.ccsdk.features.sdnr.wt.netconfnodestateservice.Capabilities;
 
 public class TestORanNetworkElement {
 

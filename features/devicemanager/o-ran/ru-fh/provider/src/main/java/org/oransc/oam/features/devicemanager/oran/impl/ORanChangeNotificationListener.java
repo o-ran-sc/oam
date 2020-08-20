@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START========================================================================
- * ONAP : ccsdk feature sdnr wt
+ * O-RAN-SC : oam/ccsdk feature sdnr wt
  * =================================================================================================
- * Copyright (C) 2019 highstreet technologies GmbH Intellectual Property. All rights reserved.
+ * Copyright (C) 2020 highstreet technologies GmbH Intellectual Property. All rights reserved.
  * =================================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Listener for change notifications
  */
-public class ORanChangeNotificationListener  implements IetfNetconfNotificationsListener {
+public class ORanChangeNotificationListener implements IetfNetconfNotificationsListener {
 
     private static final Logger log = LoggerFactory.getLogger(ORanChangeNotificationListener.class);
 

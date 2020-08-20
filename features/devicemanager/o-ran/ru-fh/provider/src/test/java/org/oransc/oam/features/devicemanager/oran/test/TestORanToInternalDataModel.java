@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START========================================================================
- * ONAP : ccsdk feature sdnr wt
+ * O-RAN-SC : oam/ccsdk feature sdnr wt
  * =================================================================================================
  * Copyright (C) 2020 highstreet technologies GmbH Intellectual Property. All rights reserved.
  * =================================================================================================
@@ -20,13 +20,9 @@ package org.oransc.oam.features.devicemanager.oran.test;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import org.eclipse.jdt.annotation.Nullable;
+import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,50 +33,49 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.oransc.oam.features.devicemanager.oran.impl.ORanToInternalDataModel;
-import org.oransc.oam.features.devicemanager.oran.test.TestHardwareClass;
 
 public class TestORanToInternalDataModel {
 
-	NodeId nodeId;
-	Component component;
+    NodeId nodeId;
+    Component component;
 
-	@SuppressWarnings("unchecked")
-	@Before
-	public void init() throws InterruptedException, IOException {
-		nodeId = mock(NodeId.class);
-		component = mock(Component.class);
+    @SuppressWarnings("unchecked")
+    @Before
+    public void init() throws InterruptedException, IOException {
+        nodeId = mock(NodeId.class);
+        component = mock(Component.class);
 
-		when(nodeId.getValue()).thenReturn("ORan-1000");
-		when(component.getParent()).thenReturn("Shelf");
-		when(component.getParentRelPos()).thenReturn(0);
-		when(component.getUuid()).thenReturn(new Uuid("0Aabcdef-0abc-0cfD-0abC-0123456789AB"));
+        when(nodeId.getValue()).thenReturn("ORan-1000");
+        when(component.getParent()).thenReturn("Shelf");
+        when(component.getParentRelPos()).thenReturn(0);
+        when(component.getUuid()).thenReturn(new Uuid("0Aabcdef-0abc-0cfD-0abC-0123456789AB"));
 
-		List<String> list = new ArrayList<String>();
-		list.add("Card-01A");
-		list.add("Card-01B");
+        List<String> list = new ArrayList<String>();
+        list.add("Card-01A");
+        list.add("Card-01B");
 
-		when (component.getContainsChild()).thenReturn(list);
-		when (component.getName()).thenReturn("Nokia");
-		when (component.getDescription()).thenReturn("ORAN Network Element NO-456");
-		Class<? extends HardwareClass> hwClass = TestHardwareClass.class;
-		Mockito.<Class<? extends HardwareClass>>when(component.getXmlClass()).thenReturn(hwClass);
-		
-		DateAndTime dt = new DateAndTime("2020-02-05T12:30:45.283Z");
-		when (component.getMfgDate()).thenReturn(dt);
-		
-	}
+        when(component.getContainsChild()).thenReturn(list);
+        when(component.getName()).thenReturn("Nokia");
+        when(component.getDescription()).thenReturn("ORAN Network Element NO-456");
+        Class<? extends HardwareClass> hwClass = TestHardwareClass.class;
+        Mockito.<Class<? extends HardwareClass>>when(component.getXmlClass()).thenReturn(hwClass);
 
-	@Test
-	public void test() throws Exception {
-		ORanToInternalDataModel model = new ORanToInternalDataModel();
-		model.getInternalEquipment(nodeId, component);
-		assertEquals(component.getUuid().getValue(), "0Aabcdef-0abc-0cfD-0abC-0123456789AB");
-		assertEquals(component.getMfgDate().getValue(), "2020-02-05T12:30:45.283Z");
+        DateAndTime dt = new DateAndTime("2020-02-05T12:30:45.283Z");
+        when(component.getMfgDate()).thenReturn(dt);
 
-	}
+    }
 
-	@After
-	public void cleanUp() throws Exception {
+    @Test
+    public void test() throws Exception {
+        ORanToInternalDataModel model = new ORanToInternalDataModel();
+        model.getInternalEquipment(nodeId, component);
+        assertEquals(component.getUuid().getValue(), "0Aabcdef-0abc-0cfD-0abC-0123456789AB");
+        assertEquals(component.getMfgDate().getValue(), "2020-02-05T12:30:45.283Z");
 
-	}
+    }
+
+    @After
+    public void cleanUp() throws Exception {
+
+    }
 }

@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START========================================================================
- * ONAP : ccsdk feature sdnr wt
+ * O-RAN-SC : oam/ccsdk feature sdnr wt
  * =================================================================================================
- * Copyright (C) 2019 highstreet technologies GmbH Intellectual Property. All rights reserved.
+ * Copyright (C) 2020 highstreet technologies GmbH Intellectual Property. All rights reserved.
  * =================================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -53,7 +53,7 @@ public class ORanNetworkElement implements NetworkElement {
     private @NonNull final ORanFaultNotificationListener oRanFaultListener;
 
     ORanNetworkElement(NetconfAccessor netconfAccess, DataProvider databaseService) {
-        log.info("Create {}",ORanNetworkElement.class.getSimpleName());
+        log.info("Create {}", ORanNetworkElement.class.getSimpleName());
         this.netconfAccessor = netconfAccess;
         this.databaseService = databaseService;
 
@@ -73,7 +73,8 @@ public class ORanNetworkElement implements NetworkElement {
             List<Component> componentList = hardware.getComponent();
             if (componentList != null) {
                 for (Component component : componentList) {
-                    databaseService.writeInventory( oRanMapper.getInternalEquipment(netconfAccessor.getNodeId(), component));
+                    databaseService
+                            .writeInventory(oRanMapper.getInternalEquipment(netconfAccessor.getNodeId(), component));
                 }
             }
         }
@@ -91,11 +92,10 @@ public class ORanNetworkElement implements NetworkElement {
         log.info("DBRead Get equipment for class {} from mountpoint {} for uuid {}", clazzPac.getSimpleName(),
                 accessData.getNodeId().getValue());
 
-        InstanceIdentifier<Hardware> hardwareIID =
-                InstanceIdentifier.builder(clazzPac).build();
+        InstanceIdentifier<Hardware> hardwareIID = InstanceIdentifier.builder(clazzPac).build();
 
-        Hardware res = accessData.getTransactionUtils().readData(accessData.getDataBroker(), LogicalDatastoreType.OPERATIONAL,
-                hardwareIID);
+        Hardware res = accessData.getTransactionUtils().readData(accessData.getDataBroker(),
+                LogicalDatastoreType.OPERATIONAL, hardwareIID);
 
         return res;
     }
@@ -120,7 +120,7 @@ public class ORanNetworkElement implements NetworkElement {
         }
         if (oRanFaultListenerRegistrationResult != null) {
             this.oRanFaultListenerRegistrationResult.close();
-        };
+        } ;
     }
 
 
@@ -135,8 +135,7 @@ public class ORanNetworkElement implements NetworkElement {
     }
 
     @Override
-    public void warmstart() {
-    }
+    public void warmstart() {}
 
     @Override
     public Optional<NetconfAccessor> getAcessor() {

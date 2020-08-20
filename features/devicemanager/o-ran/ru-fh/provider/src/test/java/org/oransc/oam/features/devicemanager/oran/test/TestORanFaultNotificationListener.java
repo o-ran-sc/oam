@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START========================================================================
- * ONAP : ccsdk feature sdnr wt
+ * O-RAN-SC : oam/ccsdk feature sdnr wt
  * =================================================================================================
  * Copyright (C) 2020 highstreet technologies GmbH Intellectual Property. All rights reserved.
  * =================================================================================================
@@ -22,9 +22,9 @@ import org.oransc.oam.features.devicemanager.oran.impl.ORanFaultNotificationList
 
 public class TestORanFaultNotificationListener {
 
-	@Test
-	public void test() {
-		ORanFaultNotificationListener faultListener = new ORanFaultNotificationListener();
-		faultListener.onAlarmNotif(null);
-	}
+    @Test
+    public void test() {
+        ORanFaultNotificationListener faultListener = new ORanFaultNotificationListener();
+        faultListener.onAlarmNotif(null);
+    }
 }

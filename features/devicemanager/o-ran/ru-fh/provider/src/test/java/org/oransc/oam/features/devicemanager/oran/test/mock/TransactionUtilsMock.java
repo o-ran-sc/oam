@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START========================================================================
- * ONAP : ccsdk feature sdnr wt
+ * O-RAN-SC : oam/ccsdk feature sdnr wt
  * =================================================================================================
  * Copyright (C) 2020 highstreet technologies GmbH Intellectual Property. All rights reserved.
  * =================================================================================================
@@ -19,7 +19,6 @@ package org.oransc.oam.features.devicemanager.oran.test.mock;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-
 import org.eclipse.jdt.annotation.Nullable;
 import org.onap.ccsdk.features.sdnr.wt.netconfnodestateservice.TransactionUtils;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -29,19 +28,19 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 public class TransactionUtilsMock implements TransactionUtils {
 
-	@Override
-	public <T extends DataObject> @Nullable T readData(DataBroker dataBroker, LogicalDatastoreType dataStoreType,
-			InstanceIdentifier<T> iid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public <T extends DataObject> @Nullable T readData(DataBroker dataBroker, LogicalDatastoreType dataStoreType,
+            InstanceIdentifier<T> iid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public <T extends DataObject> @Nullable T readDataOptionalWithStatus(DataBroker dataBroker,
-			LogicalDatastoreType dataStoreType, InstanceIdentifier<T> iid, AtomicBoolean noErrorIndication,
-			AtomicReference<String> statusIndicator) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public <T extends DataObject> @Nullable T readDataOptionalWithStatus(DataBroker dataBroker,
+            LogicalDatastoreType dataStoreType, InstanceIdentifier<T> iid, AtomicBoolean noErrorIndication,
+            AtomicReference<String> statusIndicator) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
