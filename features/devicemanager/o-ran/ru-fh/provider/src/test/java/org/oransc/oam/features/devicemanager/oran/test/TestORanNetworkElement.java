@@ -32,7 +32,6 @@ import org.onap.ccsdk.features.sdnr.wt.devicemanager.ne.service.NetworkElement;
 import org.onap.ccsdk.features.sdnr.wt.devicemanager.service.DeviceManagerServiceProvider;
 import org.onap.ccsdk.features.sdnr.wt.netconfnodestateservice.Capabilities;
 import org.opendaylight.yang.gen.v1.urn.o.ran.hardware._1._0.rev190328.ORANHWCOMPONENT;
-import org.opendaylight.yang.gen.v1.urn.onf.params.xml.ns.yang.network.topology.simulator.rev191025.SimulatorStatus;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.oransc.oam.features.devicemanager.oran.impl.ORanNetworkElementFactory;
@@ -66,7 +65,6 @@ public class TestORanNetworkElement {
     public void test() {
         Optional<NetworkElement> oRanNe;
         when(accessor.getCapabilites().isSupportingNamespace(ORANHWCOMPONENT.QNAME)).thenReturn(true);
-        when(accessor.getCapabilites().isSupportingNamespace(SimulatorStatus.QNAME)).thenReturn(false);
         ORanNetworkElementFactory factory = new ORanNetworkElementFactory();
         oRanNe = factory.create(accessor, serviceProvider);
         assertTrue(factory.create(accessor, serviceProvider).isPresent());
