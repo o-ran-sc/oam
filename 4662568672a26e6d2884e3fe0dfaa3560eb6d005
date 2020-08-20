@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "821108e9_5500f2cc",
+        "filename": "features/devicemanager/o-ran/ru-fh/provider/src/main/java/org/oransc/oam/features/devicemanager/oran/impl/ORanNetworkElementFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000115
+      },
+      "writtenOn": "2020-08-20T11:02:35Z",
+      "side": 1,
+      "message": "Could you please change this to O-RAN-SC: oam/ccsdk feature sdnr wt",
+      "range": {
+        "startLine": 3,
+        "startChar": 3,
+        "endLine": 3,
+        "endChar": 31
+      },
+      "revId": "4662568672a26e6d2884e3fe0dfaa3560eb6d005",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2caf3f59_b61d4b05",
+        "filename": "features/devicemanager/o-ran/ru-fh/provider/src/main/java/org/oransc/oam/features/devicemanager/oran/impl/ORanNetworkElementFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000115
+      },
+      "writtenOn": "2020-08-20T11:02:35Z",
+      "side": 1,
+      "message": "Please use 2020",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 21
+      },
+      "revId": "4662568672a26e6d2884e3fe0dfaa3560eb6d005",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6b0a7ef_56ee366c",
+        "filename": "features/devicemanager/o-ran/ru-fh/provider/src/test/java/org/oransc/oam/features/devicemanager/oran/test/TestDeviceManagerORanImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000115
+      },
+      "writtenOn": "2020-08-20T11:02:35Z",
+      "side": 1,
+      "message": "Please add copyright",
+      "revId": "4662568672a26e6d2884e3fe0dfaa3560eb6d005",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61447704_7e34dca9",
+        "filename": "features/devicemanager/o-ran/ru-fh/provider/src/test/java/org/oransc/oam/features/devicemanager/oran/test/TestORanNetworkElementFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000115
+      },
+      "writtenOn": "2020-08-20T11:02:35Z",
+      "side": 1,
+      "message": "Change also",
+      "range": {
+        "startLine": 3,
+        "startChar": 3,
+        "endLine": 3,
+        "endChar": 15
+      },
+      "revId": "4662568672a26e6d2884e3fe0dfaa3560eb6d005",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5438b716_3f812063",
+        "filename": "features/devicemanager/o-ran/ru-fh/provider/src/test/java/org/oransc/oam/features/devicemanager/oran/test/TestORanNetworkElementFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000115
+      },
+      "writtenOn": "2020-08-20T11:02:35Z",
+      "side": 1,
+      "message": "Please use ONAP format without Tabs",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 1
+      },
+      "revId": "4662568672a26e6d2884e3fe0dfaa3560eb6d005",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
