@@ -5,10 +5,13 @@
 Mediator
 ========
 
-Some device vendors (Altiostar, CommScope, Dragonwave-X) use the
+A 'Mediator' provides an external -  to the physical network function - 
+OAM interface.
+
+Some physical network function manufactures use the
 `generic mediator
 framework <https://github.com/Melacon/NetConf2SNMP>`__. Such mediators
-offer an API to create, delete, start and stop mediator instances.
+offer a management API to control mediator function.
 
 New mediator servers can be added via the '+' button. Afterward, a
 server can be selected to view all available mediator instances.

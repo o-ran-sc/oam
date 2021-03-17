@@ -183,13 +183,13 @@ Kubernetes deployment resources is beyond the scope of this document.
 
   helm -n dev-smo local/onap -f ~/workspace/smo/deploy_smo_bronce.yaml --namespace onap --timeout 900
 
-* verifiy deployment
+* verify deployment
 
 .. code-block:: RST
   :linenos:
 
   helm ls
 
-* verifiy pnf-registration, fault notification use case
+* verify pnf-registration, fault notification use case
 
 Please open the O1 Dashboard: http://localhost:8181/odlux/index.html

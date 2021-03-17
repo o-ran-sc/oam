@@ -18,7 +18,7 @@ Version 2.0.4, 2020-06-13
 * Documentation updated
 * Develop reusable OAM API such that the first consumer being a VTH can query, subscribe or publish on a DMAAP topic	Story
 * Create helm deployment for SMO
-* Featuresplit for starting devicemanages
+* Feature split for starting devicemanagers
 * Seed coder for an YANG linter
 * Please see also Release Notes of `ONAP SDNC <https://onap-doc.readthedocs.io/projects/onap-sdnc-oam/en/frankfurt/release-notes.html#release-notes>`_ and `ONAP OOM <https://onap-doc.readthedocs.io/projects/onap-oom/en/frankfurt/release-notes.html#release-notes>`_
 
@@ -26,7 +26,7 @@ Version 2.0.3, 2020-04-08
 -------------------------
 
 * What is an SMO?
-* Provide xRAN datamodels
+* Provide xRAN data models
 * Provide curl bash scripts for Software Management
 * Add jenkins jobs for oam
 * Add parents to model artifacts

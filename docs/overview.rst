@@ -6,15 +6,15 @@ OAM Operation and Maintenance Overview
 ======================================
 
 The O-RAN SC OAM project provides administrative and operator
-functions for O-RAN components, such as Near-Realtime-RAN-Inelegent-Controller,
+functions for O-RAN components, such as Near-Realtime-RAN-Inelegant-Controller,
 O-RAN Centralized Unit, O-RAN Distributed Unit and O-RAN Radio Unit. 
 
-The project follows the specifications for the O1 interface as provided by
-O-RAN Working Group1. 
+The project follows the specifications for the `O1 interface <https://www.o-ran.org/specifications>`_ 
+as provided by O-RAN Working Group 1 (new 10).
 
 The O-RAN-SC OAM project adds features and functions to the OpenDaylight-based ONAP
 controller 'CCSDK/SDNC'. It is built on the Common Controller Framework
-to control and manage O-RAN managed elements and O-RAN managed functions. 
+to control and to manage O-RAN ManagedElements and O-RAN ManagedFunctions. 
 
 .. figure:: ./_static/o-ran-architecture.png
    :alt: SDN-R in ONAP
@@ -24,7 +24,6 @@ to control and manage O-RAN managed elements and O-RAN managed functions.
 
 Project Resources
 -----------------
-
 The project uses the following Linux Foundation resources:
 
 * The source code is maintained in this Gerrit:
@@ -43,21 +42,21 @@ The project uses the following Linux Foundation resources:
 Scope
 -----
 
-According to the O-RAN-SC-OAM-Architecture document all ManagedElements 
-(near-real-time-RIC, O-CU-CP, O-CU-UP, O-DU and O-RU) implement the 
-O1-interface.
+According to the `O-RAN-OAM-Architecture document <https://www.o-ran.org/specifications>`_ 
+all ManagedElements (ME) (near-real-time-RIC, O-CU-CP, O-CU-UP, O-DU and O-RU) 
+implement the O1-interface.
 
 The O-RAN-OAM-interface specification defines
 
 - a NetConf-Server for Configuration Management (CM) and
-- a http-client for Fault Managment (FM), Performance Management (PM) and other 
+- a http-client for Fault Management (FM), Performance Management (PM) and other 
   events on each Management-Service-Provider (MnS-Provider) running on the 
-  ManagedElement (ME).
+  ManagedElement.
 
 THe O-RAN-SC-OAM project provides reference implementation according to the 
-O-RAN OAM (WG1) documents. In addition we provide a common MnS-Consumer for 
-development and module test purposes.  The assumption is that the projects 
+O-RAN OAM documents. In addition it provides a lightweight MnS-Consumer for 
+development and module test purposes. The assumption is that the projects 
 for the ManagedElements can concentrate on the more important user-plane.
 
-Of cause each project needs its own OAM repo to address the specific needs 
-of the ManagedElement.
+Each project requires its own OAM repository to address the specific needs 
+of the ManagedFunction.
