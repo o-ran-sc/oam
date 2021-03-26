@@ -1,6 +1,5 @@
 ################################################################################
-#
-# Copyright 2019 highstreet technologies GmbH and others
+# Copyright 2021 highstreet technologies GmbH and others
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,8 +19,8 @@
 
 ################################################################################
 # DCAE VES Collector communication end point 
-urlVes=http://localhost:30007/eventListener/v7
-basicAuthVes=will:pill
+urlVes=https://localhost:8443/eventListener/v7
+basicAuthVes=sample1:sample1
 
 ################################################################################
 # common generated event settings, please dont touch

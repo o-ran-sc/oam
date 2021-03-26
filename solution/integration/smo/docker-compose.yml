@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2020 highstreet technologies and others
+# Copyright 2021 highstreet technologies and others
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ services:
     ports:
       - "8181:8181"
       - "8101:8101"
-#entrypoint: ["/bin/bash", "/opt/onap/sdnc/bin/startODL.oom.sh"]
     environment:
       - SDNC_CONFIG_DIR=/opt/onap/ccsdk/data/properties
       - ODL_CERT_DIR=${ODL_CERT_DIR}
@@ -42,6 +41,8 @@ services:
       - SDNRINIT=true
       - SDNRONLY=true
       - SDNRDBURL=http://sdnrdb:9200
+      - ODL_ADMIN_PASSWORD=${ODL_ADMIN_PASSWORD}
+      - JAVA_OPTS=-Xms256m -Xmx2g
     volumes:
       - ./sdnr/mountpoint-registrar.properties:/opt/opendaylight/etc/mountpoint-registrar.properties
       - ./sdnr/certs/certs.properties:${ODL_CERT_DIR}/certs.properties
