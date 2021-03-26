@@ -24,9 +24,9 @@ basicAuthVes=sample1:sample1
 
 ################################################################################
 # common generated event settings, please dont touch
-timestamp=$(date -u +%s%3N)
-timeInS=${timestamp:0:$((${#timestamp}-3))}
-timeMs=${timestamp:(-3)}
+timestamp=$(date -u +%s%6N)
+timeInS=${timestamp:0:$((${#timestamp}-6))}
+timeMs=${timestamp:(-6)}
 eventTime=$(date -u -d @$timeInS +'%Y-%m-%dT%H:%M:%S').$timeMs"Z"
 eventType="O_RAN_COMPONENT"
 
