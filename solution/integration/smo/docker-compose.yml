@@ -22,7 +22,8 @@ services:
       - discovery.type=single-node
     networks:
       integration:
-        ipv4_address: ${ESDB_IP}
+        ipv4_address: ${IPv4_SDNRDB}
+        ipv6_address: ${IPv6_SDNRDB}
 
   sdnr:
     image: ${SDNC_IMAGE}
@@ -49,7 +50,8 @@ services:
       - ./sdnr/certs/keys0.zip:${ODL_CERT_DIR}/keys0.zip
     networks:
       integration:
-        ipv4_address: ${SDNR_IP}
+        ipv4_address: ${IPv4_SDNC}
+        ipv6_address: ${IPv6_SDNC}
     logging:
       driver:   "json-file"
       options:
@@ -77,7 +79,8 @@ services:
       integration:
         aliases:
         - zookeeper
-        ipv4_address: ${ZOOKEEPER_IP}
+        ipv4_address: ${IPv4_ZOOKEEPER}
+        ipv6_address: ${IPv6_ZOOKEEPER}
   kafka:
     image: ${KAFKA_IMAGE}
     container_name: kafka
@@ -104,12 +107,13 @@ services:
       integration:
         aliases:
         - kafka
-        ipv4_address: ${KAFKA_IP}
+        ipv4_address: ${IPv4_KAFKA}
+        ipv6_address: ${IPv6_KAFKA}
 
     depends_on:
      - zookeeper
-  onap-dmaap:
-    container_name: onap-dmaap
+  dmaap:
+    container_name: dmaap
     image: ${DMAAP_IMAGE}
     ports:
       - "3904:3904"
@@ -117,20 +121,21 @@ services:
     environment:
       enableCadi: 'false'
     volumes:
-      - ./mr/MsgRtrApi.properties:/appl/dmaapMR1/bundleconfig/etc/appprops/MsgRtrApi.properties
-      - ./mr/logback.xml:/appl/dmaapMR1/bundleconfig/etc/logback.xml
-      - ./mr/cadi.properties:/appl/dmaapMR1/etc/cadi.properties
+      - ./dmaap/MsgRtrApi.properties:/appl/dmaapMR1/bundleconfig/etc/appprops/MsgRtrApi.properties
+      - ./dmaap/logback.xml:/appl/dmaapMR1/bundleconfig/etc/logback.xml
+      - ./dmaap/cadi.properties:/appl/dmaapMR1/etc/cadi.properties
     networks:
       integration:
         aliases:
         - dmaap
-        ipv4_address: ${DMAAP_IP}
+        ipv4_address: ${IPv4_DMAAP}
+        ipv6_address: ${IPv6_DMAAP}
 
     depends_on:
       - zookeeper
       - kafka
-  vesc:
-    image: ${VESC_IMAGE}
+  vescollector:
+    image: ${VESCOLLECTOR_IMAGE}
     container_name: vescollector
     environment:
       DMAAPHOST: "dmaap"
@@ -138,15 +143,19 @@ services:
       - "8080:8080"
       - "8443:8443"
     volumes:
-      - ./vesc/collector.properties:/opt/app/VESCollector/etc/collector.properties
+      - ./vescollector/collector.properties:/opt/app/VESCollector/etc/collector.properties
     networks:
       integration:
-        ipv4_address: ${VESCOLLECTOR_IP}
+        ipv4_address: ${IPv4_VESCOLLECTOR}
+        ipv6_address: ${IPv6_VESCOLLECTOR}
 networks:
   integration:
     driver: bridge
+    enable_ipv6: true
     ipam:
       driver: default
       config:
-      - subnet: ${NETWORK_SUBNET}
-        gateway: ${GATEWAY_IP}
+      - subnet: ${IPv4_NETWORK_SUBNET}
+        gateway: ${IPv4_GATEWAY}
+      - subnet: ${IPv6_NETWORK_SUBNET}
+        gateway: ${IPv6_GATEWAY}
