@@ -145,8 +145,12 @@ services:
 networks:
   integration:
     driver: bridge
+    enable_ipv6: true
     ipam:
       driver: default
       config:
       - subnet: ${NETWORK_SUBNET}
         gateway: ${GATEWAY_IP}
+      - subnet: 2001:db8:1:1::/64
+        gateway: 2001:db8:1:1::1
+
