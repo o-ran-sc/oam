@@ -1,71 +1,70 @@
 {
-  "event": {
-    "commonEventHeader": {
-      "domain": "@domain@",
-      "eventId": "@eventId@",
-      "eventName": "@domain@_@eventType@_@granularity@",
-      "eventType": "@eventType@_@granularity@",
-      "sequence": 0,
-      "priority": "Low",
-      "reportingEntityId": "",
-      "reportingEntityName": "@controllerName@",
-      "sourceId": "",
-      "sourceName": "@pnfId@",
-      "startEpochMicrosec": "@collectionStartTime@",
-      "lastEpochMicrosec": "@collectionEndTime@",
-      "internalHeaderFields": {
-        "intervalStartTime": "@intervalStartTime@",
-        "intervalEndTime": "@intervalEndTime@"
-      },
-      "version": "4.0.1",
-      "vesEventListenerVersion": "7.0.1"
-    },
-    "measurementFields": {
-      "additionalFields": {},
-      "additionalMeasurements": [
-        {
-          "name": "@interface@-1",
-          "hashMap": {
-            "es": "0",
-            "ses": "1",
-            "cses": "0",
-            "unavailability": "0"
-          }
+    "event": {
+        "commonEventHeader": {
+            "domain": "@domain@",
+            "eventId": "@eventId@",
+            "eventName": "@domain@_@eventType@_@granularity@",
+            "eventType": "@eventType@_@granularity@",
+            "sequence": 0,
+            "priority": "Low",
+            "reportingEntityId": "",
+            "reportingEntityName": "@controllerName@",
+            "sourceId": "",
+            "sourceName": "@pnfId@",
+            "startEpochMicrosec": "@collectionStartTime@",
+            "lastEpochMicrosec": "@collectionEndTime@",
+            "internalHeaderFields": {
+                "intervalStartTime": "@intervalStartTime@",
+                "intervalEndTime": "@intervalEndTime@"
+            },
+            "version": "4.1",
+            "vesEventListenerVersion": "7.2.1"
         },
-        {
-          "name": "@interface@-2",
-          "hashMap": {
-            "es": "0",
-            "ses": "1",
-            "cses": "0",
-            "unavailability": "0"
-          }
+        "measurementFields": {
+            "additionalFields": {},
+            "additionalMeasurements": [{
+                    "name": "@interface@-1",
+                    "hashMap": {
+                        "es": "0",
+                        "ses": "1",
+                        "cses": "0",
+                        "unavailability": "0"
+                    }
+                },
+                {
+                    "name": "@interface@-2",
+                    "hashMap": {
+                        "es": "0",
+                        "ses": "1",
+                        "cses": "0",
+                        "unavailability": "0"
+                    }
+                }
+            ],
+            "additionalObjects": [],
+            "codecUsageArray": [],
+            "concurrentSessions": 2,
+            "configuredEntities": 2,
+            "cpuUsageArray": [],
+            "diskUsageArray": [],
+            "featureUsageArray": {
+                "https://www.itu.int/rec/T-REC-G.841": "true"
+            },
+            "filesystemUsageArray": [],
+            "hugePagesArray": [],
+            "ipmi": {},
+            "latencyDistribution": [],
+            "loadArray": [],
+            "machineCheckExceptionArray": [],
+            "meanRequestLatency": 1000,
+            "measurementInterval": 234,
+            "measurementFieldsVersion": "4.0",
+            "memoryUsageArray": [],
+            "numberOfMediaPortsInUse": 234,
+            "requestRate": 23,
+            "nfcScalingMetric": 3,
+            "nicPerformanceArray": [],
+            "processStatsArray": []
         }
-      ],
-      "additionalObjects": [],
-      "codecUsageArray": [],
-      "concurrentSessions": 2,
-      "configuredEntities": 2,
-      "cpuUsageArray": [],
-      "diskUsageArray": [],
-      "featureUsageArray": {
-        "https://www.itu.int/rec/T-REC-G.841":"true"
-      },
-      "filesystemUsageArray": [],
-      "hugePagesArray": [],
-      "ipmi": {},
-      "latencyDistribution": [],
-      "loadArray": [],
-      "machineCheckExceptionArray": [],
-      "meanRequestLatency": 1000,
-      "measurementInterval": 234,
-      "measurementFieldsVersion": "4.0",
-      "memoryUsageArray": [],
-      "numberOfMediaPortsInUse": 234,
-      "requestRate": 23,
-      "nfcScalingMetric": 3,
-      "nicPerformanceArray": [],
-      "processStatsArray": []
     }
-  }
 }
