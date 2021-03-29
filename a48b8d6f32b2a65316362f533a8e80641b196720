@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9793a80_895512ad",
+        "filename": "solution/dev/ves-test-collector/client-scripts-ves-v7/json/templates/event-list.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000124
+      },
+      "writtenOn": "2021-03-29T13:58:32Z",
+      "side": 1,
+      "message": "Is this intended here?",
+      "revId": "a48b8d6f32b2a65316362f533a8e80641b196720",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
