@@ -1,0 +1,78 @@
+# VES Events
+
+VES: Virtual Event Streaming (HTTP1.1/json-schema)
+
+This document describes sending of VES events according to 
+[VES 7.2.1](https://gerrit.onap.org/r/gitweb?p=dcaegen2/collectors/ves.git;a=blob;f=etc/CommonEventFormat_30.2.1_ONAP.json) 
+as expected by O-RAN Operation and Maintenance Interface Specification. 
+
+## Prerequisites
+
+Python3 is expected to run the scripts.
+
+```
+pip3 install requests
+```
+
+## VES Domains
+
+The syntax of a single VES event is devices into a common header and an event
+specific body.
+
+The event specific bodies are are identified by the VES domain.
+
+### VES Domain "fault"
+
+tbd.
+
+### VES Domain "heartbeat",
+
+tbd.
+
+### VES Domain "measurement",
+
+tbd.
+
+### VES Domain "mobileFlow",
+
+tbd.
+
+### VES Domain "notification",
+
+tbd.
+
+### VES Domain "other",
+
+tbd.
+
+### VES Domain "perf3gpp",
+
+tbd.
+
+### VES Domain "pnfRegistration",
+
+tbd.
+
+### VES Domain "sipSignaling",
+
+tbd.
+
+### VES Domain "stateChange",
+
+tbd.
+
+### VES Domain "stndDefined",
+
+tbd.
+
+### VES Domain "syslog",
+
+tbd.
+
+### VES Domain "thresholdCrossingAlert",
+
+tbd.
+
+### VES Domain "voiceQuality"
+
+tbd.
