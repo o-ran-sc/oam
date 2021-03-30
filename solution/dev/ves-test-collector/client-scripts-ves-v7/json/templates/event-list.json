@@ -10,7 +10,7 @@
             "reportingEntityId": "",
             "reportingEntityName": "@controllerName@",
             "sourceId": "",
-            "sourceName": "martindev",
+            "sourceName": "@controllerName@",
             "startEpochMicrosec": "@timestamp@",
             "lastEpochMicrosec": "@timestamp@",
             "nfNamingCode": "@type@",

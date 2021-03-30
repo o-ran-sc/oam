@@ -42,6 +42,7 @@ services:
       - SDNRINIT=true
       - SDNRONLY=true
       - SDNRDBURL=http://sdnrdb:9200
+      - A1_ADAPTER_NORTHBOUND=false
       - ODL_ADMIN_PASSWORD=${ODL_ADMIN_PASSWORD}
       - JAVA_OPTS=-Xms256m -Xmx2g
     volumes:
