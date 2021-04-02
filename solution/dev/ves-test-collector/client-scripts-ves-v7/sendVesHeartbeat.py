@@ -21,7 +21,7 @@
 # importing the datetime, json, requests, os socket and yaml library
 import json
 import requests
-from globalVesEventEmitter import getInitData
+from globalVesEventEmitter import getInitData, saveExample
 
 # Globals
 domain = 'heartbeat'
@@ -45,9 +45,7 @@ initData['body']['event']['commonEventHeader']['nfVendorName'] = 'O-RAN-SC OAM'
 initData['body']['event']['heartbeatFields']['additionalFields']['eventTime'] = initData['eventTime']
 
 # Save example body
-outputFileName = initData['directory'] + '/json/examples/' + domain + '.json'
-with open(outputFileName, 'w') as f:
-    json.dump(initData['body'], f, indent=2, sort_keys=True)
+saveExample(initData)
 
 # Send VES Event
 url = initData['config']['vesEndpoint']['url']

@@ -29,7 +29,7 @@ from pathlib import Path
 
 # Globals
 dir = os.path.dirname(os.path.realpath(__file__))
-domain = "heartbeat"
+domain = "notification"
 fqdn = socket.getfqdn()
 
 # time formats

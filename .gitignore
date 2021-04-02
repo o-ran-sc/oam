@@ -47,9 +47,11 @@ release.properties
 
 # VES related
 */**/json/examples
+*/**/__pycache__
 *.log
 
 # documentation
+
 .tox
 docs/_build/
 ci-management/

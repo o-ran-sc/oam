@@ -52,3 +52,12 @@ def getInitData(domain):
   
   Path(result["outdir"]).mkdir(parents=True, exist_ok=True)
   return result
+
+def saveExample(data):
+  if 'directory' in data and 'domain' in data and 'body' in data:
+    outputFileName = data['directory'] + '/json/examples/' + data['domain'] + '.json'
+    with open(outputFileName, 'w') as f:
+      json.dump(data['body'], f, indent=2, sort_keys=True)
+  else:
+    print("Example could not been saved:\n" + json.dump(data, f, indent=2, sort_keys=True)) 
+  
