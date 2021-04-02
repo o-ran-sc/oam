@@ -27,7 +27,13 @@ tbd.
 
 ### VES Domain "heartbeat",
 
-tbd.
+The script simulates a VES event of domain "heartbeat" from SDN-R to DCAE VES-Collector.
+
+The following example show the usage of this script:
+
+```
+python3 sendVesHeartbeat.py
+```
 
 ### VES Domain "measurement",
 
@@ -39,7 +45,14 @@ tbd.
 
 ### VES Domain "notification",
 
-tbd.
+The script simulates a VES event of domain "notification" from a physical 
+network-function to DCAE VES-Collector.
+
+The following example show the usage of this script:
+
+```
+python3 sendVesNotification.py --pnfId nSky
+```
 
 ### VES Domain "other",
 
