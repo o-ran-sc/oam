@@ -36,6 +36,7 @@ def getInitData(domain):
   result['fqdn']= socket.getfqdn()
   result['timestamp']= int(currentTime.timestamp()*1000000)
   result['eventTime']= currentTime.isoformat() + 'Z'
+  result['interface']= "urn:ietf:params:xml:ns:yang:ietf-interfaces:interfaces/interface/name='O-RAN-SC-OAM'"
 
   # Read config
   with open('config.yml', 'r') as stream:
@@ -55,7 +56,9 @@ def getInitData(domain):
 
 def saveExample(data):
   if 'directory' in data and 'domain' in data and 'body' in data:
-    outputFileName = data['directory'] + '/json/examples/' + data['domain'] + '.json'
+    name = data['domain']
+    if 'pnfId' in data: name = '-'.join( (data['pnfId'], data['domain']) )
+    outputFileName = data['directory'] + '/json/examples/' + name + '.json'
     with open(outputFileName, 'w') as f:
       json.dump(data['body'], f, indent=2, sort_keys=True)
   else:
