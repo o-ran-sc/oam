@@ -72,7 +72,14 @@ tbd.
 
 ### VES Domain "stateChange",
 
-tbd.
+The script simulates a VES event of domain "stateChange" from a physical 
+network-function to DCAE VES-Collector.
+
+The following example show the usage of this script:
+
+```
+python3 sendVesStateChange.py --pnfId nSky
+```
 
 ### VES Domain "stndDefined",
 
