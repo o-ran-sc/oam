@@ -39,7 +39,7 @@ yang-gen-sal/
 .settings/
 target-ide/
 release.properties
-.vsCode
+.vscode
 
 # data models in scp/oam/modeling
 *.yang
