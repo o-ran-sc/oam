@@ -46,7 +46,7 @@ Different SDN-R services are using different parameter to be installed.
 |                  |                     |                                                                                                                         |
 |                  |                     | Devicemanager configuration is provided via *$ODL\_HOME/etc/devicemanager.properties*                                   |
 |                  |                     |                                                                                                                         |
-|                  |                     | See  `SDN-R WT Service Configuration parameters <sdnr_WT_Service_Configuration_parameters.html>`__			   |
+|                  |                     | See  `SDN-R WT Service Configuration parameters <sdnr_WT_Service_Configuration_parameters.rst>`__			   |
 +------------------+---------------------+-------------------------------------------------------------------------------------------------------------------------+
 | SDNRNORTHBOUND   | true\|\ **false**   | Set true to activate sdnr oofpci service.                                                                               |
 +------------------+---------------------+-------------------------------------------------------------------------------------------------------------------------+

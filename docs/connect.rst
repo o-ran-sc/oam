@@ -34,8 +34,8 @@ required, it will be deleted once disconnected.
 By right-clicking on an element, an action menu opens. The menu allows
 to mount, unmount, view the details, edit and remove the element.
 Additionally, it links to several applications like
-`Fault <../pnfFault/README.md>`__ and
-`Configure <../pnfConfig/README.md>`__, which will be filtered to
+`Fault <fault.rst>`__ and
+`Configure <config.rst>`__, which will be filtered to
 display information relevant to the selected element.
 
 Connection Status Log
