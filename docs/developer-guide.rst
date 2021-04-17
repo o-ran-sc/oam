@@ -7,5 +7,5 @@ OAM Developer Guide
 
 This document provides a quickstart for developers of the O-RAN SC OAM components.
 
-All informations fo development are documented in coorespondding O-RAN-SC wiki:
+All information of development are documented in corresponding O-RAN-SC wiki:
 https://wiki.o-ran-sc.org/display/OAM/Operations+and+Maintenance

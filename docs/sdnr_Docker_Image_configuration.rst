@@ -14,10 +14,10 @@ ONAP SDN-R is running in a docker container using ONAP/SDN-C image
 The container is available as Alpine and Ubuntu version. The description
 uses examples for the Alpine version.
 
-The alpine based sdnc docker imanges are stored in \ `ONAP Nexus sdnc
+The alpine based sdnc docker images are stored in \ `ONAP Nexus sdnc
 image <https://nexus3.onap.org:10001/v2/onap/sdnc-image/tags/list>`__.
 
-The docker image contains a Opendaylight distribution in a standard
+The docker image contains a OpenDaylight distribution in a standard
 configuration and ONAP/SDN-R specific microservices.
 
 The Root location of ODL Karaf directory structure

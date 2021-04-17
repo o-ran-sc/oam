@@ -22,6 +22,7 @@ pom.xml.next
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+*.pyc
 
 */**/bin/
 
@@ -32,12 +33,13 @@ target/
 # Opendaylight yang-tools
 yang-gen-sal/
 
-# Eclipse related
+# IDE (Eclipse, vsCode) related
 .project
 .classpath
 .settings/
 target-ide/
 release.properties
+.vsCode
 
 # data models in scp/oam/modeling
 *.yang
