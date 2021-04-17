@@ -21,12 +21,11 @@
 # importing the datetime, json, requests, os socket and yaml library
 import json
 import requests
-from globalVesEventEmitter import getInitData, saveExample
+from globalVesEventEmitter import getInitData, saveExample, sendVesEvent
 
 # Globals
 domain = 'heartbeat'
 initData = getInitData(domain)
-
 print('################################################################################')
 print('# send SDN-Controller ' + domain)
 
@@ -48,9 +47,4 @@ initData['body']['event']['heartbeatFields']['additionalFields']['eventTime'] = 
 saveExample(initData)
 
 # Send VES Event
-url = initData['config']['vesEndpoint']['url']
-username = initData['config']['vesEndpoint']['username']
-password = initData['config']['vesEndpoint']['password']
-verify = initData['config']['vesEndpoint']['verify']
-response = requests.post(url, json=initData['body'], auth=(username, password), verify=verify)
-print(response)
+sendVesEvent(initData)
