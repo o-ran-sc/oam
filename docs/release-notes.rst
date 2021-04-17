@@ -6,11 +6,51 @@
 Operation and Maintenance Release Notes
 =======================================
 
-This document provides the release notes for O-RAN-SC D-Release of the Operation and Maintenance (OAM) project. 
+This document provides the release notes for O-RAN-SC D-Release of the Operation and Maintenance (OAM) project.
 
 .. contents::
    :depth: 3
    :local:
+
+Version 4.0.2, 2021-04-02
+--------------------------
+
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| Issue                                                              | Summary                                                                 |
++====================================================================+=========================================================================+
+| `OAM-180     <https://jira.o-ran-sc.org/browse/OAM-180>`__         | Wrong time format in VES client scripts                                 |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `OAM-176     <https://jira.o-ran-sc.org/browse/OAM-176>`__         | Support of IPv6 by docker-compose                                       |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `OAM-175     <https://jira.o-ran-sc.org/browse/OAM-175>`__         | Update docker-compose and its configurations                            |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `OAM-174     <https://jira.o-ran-sc.org/browse/OAM-174>`__         | Update VES Client scripts supporting VES 7.2                            |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `OAM-173     <https://jira.o-ran-sc.org/browse/OAM-173>`__         | Update VES client scripts supporting https                              |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `OAM-170     <https://jira.o-ran-sc.org/browse/OAM-170>`__         | Delete folder 'model' from OAM repo'                                    |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `OAM-169     <https://jira.o-ran-sc.org/browse/OAM-169>`__         | Use case driven yang for O-DU                                           |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `OAM-168     <https://jira.o-ran-sc.org/browse/OAM-168>`__         | Update namespace definitions in prototype yangs of O-RAN-SC             |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `OAM-164     <https://jira.o-ran-sc.org/browse/OAM-164>`__         | Add WG4 november train yangs modules                                    |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `SDNC-1480   <https://jira.onap.org/browse/SDNC-1480>`__           | O-RAN (FrontHaul) deviceManager: support of GuiCutThrough               |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `CCSDK-3161  <https://jira.onap.org/browse/CCSDK-3161>`__          | O-RAN (FrontHaul) deviceManager: o-ran-fm.yang/alarm-notif to VES:fault |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `CCSDK-3160  <https://jira.onap.org/browse/CCSDK-3160>`__          | CallHome to VES:pnfRegistration                                         |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `NETCONF-766 <https://jira.opendaylight.org/browse/NETCONF-766>`__ | Logging al RESTCONF requests and responses [1]_                         |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `NETCONF-744 <https://jira.opendaylight.org/browse/NETCONF-744>`__ | Read whole leaf-list using get/get-config RPC [1]_                      |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+| `NETCONF-735 <https://jira.opendaylight.org/browse/NETCONF-735>`__ | Support NETCONF get/get-config with multiple selected subtrees [1]_     |
++--------------------------------------------------------------------+-------------------------------------------------------------------------+
+
+.. [1] Patched via MAVEN repo into CCSDK as long as code is not merged into OpenDaylight master branch
+
 
 Version 4.0.1, 2021-03-12
 --------------------------
@@ -18,25 +58,20 @@ Version 4.0.1, 2021-03-12
 +--------------------------------------------------------+-------------------------------------------------------------+
 | Issue                                                  | Summary                                                     |
 +========================================================+=============================================================+
-| `OAM-180 <https://jira.o-ran-sc.org/browse/OAM-180>`__ | Wrong time format in VES client scripts                     |  
+| `OAM-166 <https://jira.o-ran-sc.org/browse/OAM-166>`__ | Add WG4 July 2020 yang modules                              |
 +--------------------------------------------------------+-------------------------------------------------------------+
-| `OAM-176 <https://jira.o-ran-sc.org/browse/OAM-176>`__ | Support of IPv6 by docker-compose                           |  
+| `OAM-163 <https://jira.o-ran-sc.org/browse/OAM-163>`__ | Rename yang filename to <module>@<revision> format          |
 +--------------------------------------------------------+-------------------------------------------------------------+
-| `OAM-175 <https://jira.o-ran-sc.org/browse/OAM-175>`__ | Update docker-compose and its configurations                | 
+| `OAM-160 <https://jira.o-ran-sc.org/browse/OAM-160>`__ | Modeling Repo: SIM directory not longer required            |
 +--------------------------------------------------------+-------------------------------------------------------------+
-| `OAM-174 <https://jira.o-ran-sc.org/browse/OAM-174>`__ | Update VES Client scripts supporting VES 7.2                |    
+| `OAM-159 <https://jira.o-ran-sc.org/browse/OAM-159>`__ | Remove yang models from Repo                                |
 +--------------------------------------------------------+-------------------------------------------------------------+
-| `OAM-173 <https://jira.o-ran-sc.org/browse/OAM-173>`__ | Update VES client scripts supporting https                  |   
+| `OAM-154 <https://jira.o-ran-sc.org/browse/OAM-154>`__ | OAM tr069: Changing .gitignore for IntelliJ related files   |
 +--------------------------------------------------------+-------------------------------------------------------------+
-| `OAM-170 <https://jira.o-ran-sc.org/browse/OAM-170>`__ | Delete folder 'model' from OAM repo'                        |    
+| `OAM-121 <https://jira.o-ran-sc.org/browse/OAM-121>`__ | Request to modify SMO deployment SOP                        |
 +--------------------------------------------------------+-------------------------------------------------------------+
-| `OAM-169 <https://jira.o-ran-sc.org/browse/OAM-169>`__ | Use case driven yang for O-DU                               | 
+| `OAM-120 <https://jira.o-ran-sc.org/browse/OAM-120>`__ | Release dashboard image at version 2.0.3                    |
 +--------------------------------------------------------+-------------------------------------------------------------+
-| `OAM-168 <https://jira.o-ran-sc.org/browse/OAM-168>`__ | Update namespace definitions in prototype yangs of O-RAN-SC |
-+--------------------------------------------------------+-------------------------------------------------------------+
-| `OAM-164 <https://jira.o-ran-sc.org/browse/OAM-164>`__ | Add WG4 november train yangs modules                        |
-+--------------------------------------------------------+-------------------------------------------------------------+
-
 
 Version 2.0.4, 2020-06-13
 --------------------------
