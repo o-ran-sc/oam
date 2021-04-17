@@ -20,12 +20,13 @@
 
 import datetime
 import json
+import requests
 import os
 import socket
 import yaml
 from pathlib import Path
 
-def getInitData(domain):
+def getInitData(domain, stndBody):
   currentTime = datetime.datetime.utcnow()
   dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -46,9 +47,13 @@ def getInitData(domain):
         print(exc)
 
   # Read template body
-  templateFileName = dir + '/json/templates/' + domain + '.json'
-  with open(templateFileName) as f:
-    result['body']= json.load(f)
+  if domain == 'stndDefined':
+    response = requests.get('https://raw.githubusercontent.com/onap/testsuite/master/robot/assets/dcae/ves_stdnDefined_' + stndBody + '.json')
+    result['body']= response.json()
+  else:
+    templateFileName = dir + '/json/templates/' + domain + '.json'
+    with open(templateFileName) as f:
+      result['body']= json.load(f)
 
   
   Path(result["outdir"]).mkdir(parents=True, exist_ok=True)
