@@ -16,6 +16,24 @@
       "revId": "a8bd4a471eee0de6c884dee9fdec4cb2fa4db432",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fba4a4e1_706ec7a6",
+        "filename": "solution/dev/ves-test-collector/client-scripts-ves-v7/globalVesEventEmitter.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2021-04-20T09:37:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f391e073_eb21dfe6",
+      "revId": "a8bd4a471eee0de6c884dee9fdec4cb2fa4db432",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
