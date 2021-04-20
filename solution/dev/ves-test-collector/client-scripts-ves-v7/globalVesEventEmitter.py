@@ -20,12 +20,52 @@
 
 import datetime
 import json
+import requests
 import os
 import socket
+import sys
 import yaml
 from pathlib import Path
 
-def getInitData(domain):
+def sendVesEvent(data):
+    url = data['config']['vesEndpoint']['url']
+    username = data['config']['vesEndpoint']['username']
+    password = data['config']['vesEndpoint']['password']
+    headers = {'content-type': 'application/json'}
+    verify = data['config']['vesEndpoint']['verify']
+    try:
+      response = requests.post(url, json=data['body'], auth=(
+          username, password), headers=headers, verify=verify)
+    except requests.exceptions.Timeout:
+      sys.exit('HTTP request failed, please check you internet connection.')
+    except requests.exceptions.TooManyRedirects:
+      sys.exit('HTTP request failed, please check your proxy settings.')
+    except requests.exceptions.RequestException as e:
+      # catastrophic error. bail.
+      raise SystemExit(e)
+        
+    if response.status_code >= 200 and response.status_code < 300:
+      print(response)
+    else:
+      sys.exit('Reading VES "stndDefined" message template failed.')
+
+def sendHttpGet(url):
+    try:
+      response = requests.get(url)
+    except requests.exceptions.Timeout:
+      sys.exit('HTTP request failed, please check you internet connection.')
+    except requests.exceptions.TooManyRedirects:
+      sys.exit('HTTP request failed, please check your proxy settings.')
+    except requests.exceptions.RequestException as e:
+      # catastrophic error. bail.
+      raise SystemExit(e)
+        
+    if response.status_code >= 200 and response.status_code < 300:
+      return response.json()
+    else:
+      sys.exit('Reading VES "stndDefined" message template failed.')
+
+def getInitData(domain, stndBody=''):
   currentTime = datetime.datetime.utcnow()
   dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -46,10 +86,13 @@ def getInitData(domain):
         print(exc)
 
   # Read template body
-  templateFileName = dir + '/json/templates/' + domain + '.json'
-  with open(templateFileName) as f:
-    result['body']= json.load(f)
-
+  if domain == 'stndDefined':
+    url = 'https://raw.githubusercontent.com/onap/testsuite/master/robot/assets/dcae/ves_stdnDefined_' + stndBody + '.json'
+    result['body']= sendHttpGet(url)
+  else:
+    templateFileName = dir + '/json/templates/' + domain + '.json'
+    with open(templateFileName) as f:
+      result['body']= json.load(f)
   
   Path(result["outdir"]).mkdir(parents=True, exist_ok=True)
   return result

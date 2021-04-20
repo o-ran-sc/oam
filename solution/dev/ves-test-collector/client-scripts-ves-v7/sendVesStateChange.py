@@ -23,7 +23,7 @@ import sys
 import getopt
 import json
 import requests
-from globalVesEventEmitter import getInitData, saveExample
+from globalVesEventEmitter import getInitData, saveExample, sendVesEvent
 
 # Construct VES body and send
 def performJob(domain, pnfId):
@@ -54,17 +54,10 @@ def performJob(domain, pnfId):
     saveExample(initData)
 
     # Send VES Event
-    url = initData['config']['vesEndpoint']['url']
-    username = initData['config']['vesEndpoint']['username']
-    password = initData['config']['vesEndpoint']['password']
-    verify = initData['config']['vesEndpoint']['verify']
-    response = requests.post(url, json=initData['body'], auth=(
-        username, password), verify=verify)
-    print(response)
+    sendVesEvent(initData)
+
 
 # Analysing command line parameters
-
-
 def main(argv):
     domain = 'stateChange'
     usage = 'sendVesStateChange.py --pnfId <physical-network-function-nwuid>'
