@@ -42,7 +42,7 @@ Setup
    # HEAD is now at 275f7de9 [SDNC] oom for clustered disaggregated SDN-R
    sudo cp -R ~/workspace/oom_smo/kubernetes/helm/plugins/ ~/.helm
 
-* verifiy if local helm repo is available, otherwise follow intructions in onap setup
+* verify if local helm repo is available, otherwise follow instructions in onap setup
 
 .. code-block:: RST
   :linenos:

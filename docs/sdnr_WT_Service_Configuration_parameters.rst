@@ -1,3 +1,7 @@
+.. This work is licensed under a Creative Commons Attribution 4.0 International License.
+.. SPDX-License-Identifier: CC-BY-4.0
+.. Copyright (C) 2020 highstreet technologies and others
+
 .. contents::
    :depth: 3
 ..
@@ -32,13 +36,15 @@ If SDN-R WT is starting
 
 Below an example of the content.
 
-- Example 
-  ::
+- Example
+- 
+  .. code-block:: javascript
+    :linenos:
 
     [toggleAlarmFilter]
     taEnabled=true
     taDelay=3000
- 
+   
     [es]
     esCluster=sdnr
     esArchiveCheckIntervalSeconds=0
@@ -102,17 +108,14 @@ Syntax: Parameter=Value
 Example: SeverityconnectionLossOAM=Major
 
 +----------------------------------+-----------------------------------------------+---------------+------------+--------------------------------------------------------------+
-|                                  | **Values**                                    | **Default**   | **Unit**   | **Description**                                              |
+| Alarm                            | **Values**                                    | **Default**   | **Unit**   | **Description**                                              |
 +==================================+===============================================+===============+============+==============================================================+
 | SeverityconnectionLossOAM        | NonAlarmed, Warning, Minor, Major, Critical   | Major         |            | SDN-Controller <> Mediator                                   |
-|                                  |                                               |               |            |                                                              |
 |                                  |                                               |               |            | Mountpoint monitoring. Indicates a not connected mounpoint   |
 +----------------------------------+-----------------------------------------------+---------------+------------+--------------------------------------------------------------+
 | SeverityconnectionLossMediator   | NonAlarmed, Warning, Minor, Major, Critical   | Major         |            | SDN-Controller <> NetworkElement                             |
-|                                  |                                               |               |            |                                                              |
 |                                  |                                               |               |            | Device monitoring. No LTPs provided                          |
 +----------------------------------+-----------------------------------------------+---------------+------------+--------------------------------------------------------------+
 | SeverityconnectionLossNeOAM      | NonAlarmed, Warning, Minor, Major, Critical   | Major         |            | SDN-Controller <> NetworkElement                             |
-|                                  |                                               |               |            |                                                              |
 |                                  |                                               |               |            | Device monitoring. SSH Connetion, Core model not answering   |
 +----------------------------------+-----------------------------------------------+---------------+------------+--------------------------------------------------------------+

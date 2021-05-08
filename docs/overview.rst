@@ -60,3 +60,25 @@ for the ManagedElements can concentrate on the more important user-plane.
 
 Each project requires its own OAM repository to address the specific needs 
 of the ManagedFunction.
+
+The following O-RAN specifications are considered during implementations:
+
++------------------------------------------+---------------------------------------------------------+----------------------+
+| Workgroup                                | Specification                                           | Version              |
++==========================================+=========================================================+======================+
+| WG1 - Use Cases and Overall Architecture | O-RAN Architecture Description                          | 3.0 - November 2020  |
++                                          +---------------------------------------------------------+----------------------+
+|                                          | O-RAN Operations and Maintenance Architecture           | 4.0 - November 2020  |
++                                          +---------------------------------------------------------+----------------------+
+|                                          | O-RAN Operations and Maintenance Interface              | 4.0 - November 2020  |
++                                          +---------------------------------------------------------+----------------------+
+|                                          | O-RAN Information Model and Data Models Specification   | November 2020        |
++------------------------------------------+---------------------------------------------------------+----------------------+
+| WG4 - The Open Fronthaul Interfaces      | O-RAN Open Fronthaul Conformance Test Specification     | 2.00 - November 2020 |
++                                          +---------------------------------------------------------+----------------------+
+|                                          | O-RAN Management Plane Specification                    | 5.0 - November 2020  |
++                                          +---------------------------------------------------------+----------------------+
+|                                          | O-RAN Management Plane Specification - YANG Models      | 5.0 - November 2020  |
++------------------------------------------+---------------------------------------------------------+----------------------+
+| TIFG - Test & Integration Focus Group    | O-RAN End-to-End System Testing Framework Specification | 1.0 - July 2020      |
++------------------------------------------+---------------------------------------------------------+----------------------+

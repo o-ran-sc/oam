@@ -1,3 +1,7 @@
+.. This work is licensed under a Creative Commons Attribution 4.0 International License.
+.. SPDX-License-Identifier: CC-BY-4.0
+.. Copyright (C) 2020 highstreet technologies and others
+
 .. contents::
    :depth: 3
 ..
@@ -39,14 +43,17 @@ The SDN-R specific configurations are provided during container start. 
 
 Different SDN-R services are using different parameter to be installed.
 
-+------------------+---------------------+-------------------------------------------------------------------------------------------------------------------------+
-| **Parameter**    | **Content**         | **Description**                                                                                                         |
-+==================+=====================+=========================================================================================================================+
-| SDNRWT           | true\|\ **false**   | Set true to activate sdnr wt featureset. Set this during container start.                                               |
-|                  |                     |                                                                                                                         |
-|                  |                     | Devicemanager configuration is provided via *$ODL\_HOME/etc/devicemanager.properties*                                   |
-|                  |                     |                                                                                                                         |
-|                  |                     | See  `SDN-R WT Service Configuration parameters <sdnr_WT_Service_Configuration_parameters.rst>`__			   |
-+------------------+---------------------+-------------------------------------------------------------------------------------------------------------------------+
-| SDNRNORTHBOUND   | true\|\ **false**   | Set true to activate sdnr oofpci service.                                                                               |
-+------------------+---------------------+-------------------------------------------------------------------------------------------------------------------------+
++----------------+-------------------+-----------------------------------------------------------------------------------------------------+
+| Parameter      | Content           | Description                                                                                         |
++================+===================+=====================================================================================================+
+| SDNRWT         | true or **false** | Set true to activate sdnr wt feature set. Set this during container start.                          |
++                +                   +-----------------------------------------------------------------------------------------------------+
+|                |                   | Devicemanager configuration is provided via *$ODL_HOME/etc/devicemanager.properties*                |
++                +                   +-----------------------------------------------------------------------------------------------------+
+|                |                   | See  :doc:`SDN-R WT Service Configuration parameters <../sdnr_WT_Service_Configuration_parameters>` |
++----------------+-------------------+-----------------------------------------------------------------------------------------------------+
+| SDNRNORTHBOUND | true or **false** | Set true to activate sdnr oofpci service.                                                           |
++----------------+-------------------+-----------------------------------------------------------------------------------------------------+
+
+
+
