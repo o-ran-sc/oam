@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c5c6e9b_262653e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2021-05-08T14:02:40Z",
+      "side": 1,
+      "message": "local tox check:\n\ndemx8as6 @ martindev ~/workspace/o-ran-sc/oam (OAM-177)\n└─ $ ▶ tox -e docs,docs-linkcheck\n\n[...]\n\n  docs: commands succeeded\n  docs-linkcheck: commands succeeded\n  congratulations :)\ndemx8as6 @ martindev ~/workspace/o-ran-sc/oam (OAM-177)\n\n",
+      "revId": "aca16f72ab8e1dfa3ef53c213e453d654c15c0ad",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
