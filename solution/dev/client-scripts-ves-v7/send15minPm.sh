@@ -7,7 +7,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,46 +17,42 @@
 
 ################################################################################
 # Script to send an VES Message Event to DCAE
-
+   
 . config;
-      pnfType=${1,,};
-    alarmType=$2;
-     severity=$3;
-       domain="fault";
-echo $pnfType;
-
-# exception for controller alarms
-if [ "${pnfType^^}" == "SDNR" ]
-  then
-    eventType="ONAP_SDNR_Controller";
-fi
-
+             pnfType=${1,,};
+              domain="measurement";
+   collectionEndTime=$(( $timeInS - $(($timeInS % 900))));
+ collectionStartTime=$(( collectionEndTime - 900 ));
+         granularity="PM15min";
+ 
 declare -A mapping=(
     [domain]=$domain
     [controllerName]=$(hostname --fqdn)
     [pnfId]=${pnfIdByType[$pnfType]}
-    [eventId]="${pnfIdByType[$pnfType]}_${interfaceByType[$pnfType]}_${alarmType}"
+    [granularity]=$granularity
+    [eventId]="${pnfIdByType[$pnfType]}_${collectionEndTime}_${granularity}"
     [eventType]=${eventType}
     [type]=${pnfType^^}
     [interface]=${interfaceByType[$pnfType]}
-    [alarm]=${alarmType}
-    [severity]=${severity}
     [timestamp]=${timestamp}
     [eventTime]=${eventTime}
+    [collectionStartTime]=${collectionStartTime}000
+    [collectionEndTime]=${collectionEndTime}000
+    [intervalStartTime]=$(date -u -R -d @$collectionStartTime )
+    [intervalEndTime]=$(date -u -R -d @$collectionEndTime )
     [vendor]=${vendorsByType[$pnfType]^^}
     [model]=${modelByType[$pnfType]}
 )
 
 echo "################################################################################";
-echo "# send fault";
-echo;
+echo "# send 15min performance values";
+echo
 for key in "${!mapping[@]}"
 do
-  #label=${${"$spaces$i"}:(-14)};
   label=$spaces$key;
-  label=${label:(-16)};
+  label=${label:(-20)};
   echo "$label: ${mapping[$key]}";
-  if [ $key = "timestamp" ]; then
+  if [ $key = "collectionStartTime" ] || [ $key = "collectionEndTime" ]; then
       sequence="$sequence s/\"@$key@\"/${mapping[$key]}/g; "
   else
       sequence="$sequence s/@$key@/${mapping[$key]}/g; "
@@ -64,7 +60,7 @@ do
 done
 echo;
 
-body="./json/examples/${pnfType^^}-${alarmType}-${severity}-${domain}.json"
-sed -e "$sequence" ./json/templates/$domain.json > $body;
+body=./json/examples/${pnfType^^}-${domain}.json
+sed -e "$sequence" ./json/templates/$domain.json > $body
 
-curl -i -k -u $basicAuthVes -X POST -d @${body} --header "Content-Type: application/json" $urlVes
+curl -i -k -u $basicAuthVes -X POST -d  @${body} --header "Content-Type: application/json" $urlVes

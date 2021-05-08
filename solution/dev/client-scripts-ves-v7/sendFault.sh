@@ -7,7 +7,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,29 +20,35 @@
 
 . config;
       pnfType=${1,,};
-      domain="pnfRegistration";
+    alarmType=$2;
+     severity=$3;
+       domain="fault";
+echo $pnfType;
+
+# exception for controller alarms
+if [ "${pnfType^^}" == "SDNR" ]
+  then
+    eventType="ONAP_SDNR_Controller";
+fi
 
 declare -A mapping=(
-    [controllerName]=$(hostname --fqdn)
     [domain]=$domain
-    [eventId]="${pnfIdByType[$pnfType]}_${modelByType[$pnfType]}"
-    [eventTime]=${eventTime}
-    [eventType]=EventType5G
+    [controllerName]=$(hostname --fqdn)
     [pnfId]=${pnfIdByType[$pnfType]}
+    [eventId]="${pnfIdByType[$pnfType]}_${interfaceByType[$pnfType]}_${alarmType}"
+    [eventType]=${eventType}
     [type]=${pnfType^^}
-    [model]=${modelByType[$pnfType]}
-    [oamIp]=${oamIpByType[$pnfType]}
-    [macAddress]=02:42:f7:d4:62:ce
-    [oamIpV6]=0:0:0:0:0:ffff:a0a:0${oamIpByType[$pnfType]:(-2)}
-    [vendor]=${vendorsByType[$pnfType]^^}
+    [interface]=${interfaceByType[$pnfType]}
+    [alarm]=${alarmType}
+    [severity]=${severity}
     [timestamp]=${timestamp}
-    [eventId]="${pnfIdByType[$pnfType]}_${modelByType[$pnfType]}"
     [eventTime]=${eventTime}
-    [eventType]=EventType5G
+    [vendor]=${vendorsByType[$pnfType]^^}
+    [model]=${modelByType[$pnfType]}
 )
 
 echo "################################################################################";
-echo "# send PNF registration";
+echo "# send fault";
 echo;
 for key in "${!mapping[@]}"
 do
@@ -58,7 +64,7 @@ do
 done
 echo;
 
-body="./json/examples/${pnfType^^}-${domain}.json"
+body="./json/examples/${pnfType^^}-${alarmType}-${severity}-${domain}.json"
 sed -e "$sequence" ./json/templates/$domain.json > $body;
 
 curl -i -k -u $basicAuthVes -X POST -d @${body} --header "Content-Type: application/json" $urlVes
