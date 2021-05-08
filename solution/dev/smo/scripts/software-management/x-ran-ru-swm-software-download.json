@@ -1,8 +1,0 @@
-{
-  "xran-software-management:input": {
-      "xran-software-management:remote-file-path": "sftp://admin@sim.o-ran-sc.org:22/images/WHB-odu#123.ext",
-      "xran-software-management:password": {
-        "xran-software-management:password": "test"
-      }
-    }
-}

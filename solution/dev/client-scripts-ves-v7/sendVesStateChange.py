@@ -6,7 +6,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an 'AS IS' BASIS,
@@ -16,7 +16,7 @@
 #
 
 ################################################################################
-# Send a VES event for domain 'notification'
+# Send a VES event for domain 'stateChange'
 
 # importing the sys, json, requests library
 import sys
@@ -47,10 +47,8 @@ def performJob(domain, pnfId):
     initData['body']['event']['commonEventHeader']['nfNamingCode'] = initData['pnfId']
     initData['body']['event']['commonEventHeader']['nfVendorName'] = 'O-RAN-SC OAM'
 
-    initData['body']['event']['notificationFields']['additionalFields']['eventTime'] = initData['eventTime']
-    initData['body']['event']['notificationFields']['changeContact'] = initData['fqdn']
-    initData['body']['event']['notificationFields']['changeIdentifier'] = initData['pnfId']
-    initData['body']['event']['notificationFields']['stateInterface'] = initData['interface']
+    initData['body']['event']['stateChangeFields']['additionalFields']['eventTime'] = initData['eventTime']
+    initData['body']['event']['stateChangeFields']['stateInterface'] = initData['interface']
 
     # Save example body
     saveExample(initData)
@@ -61,8 +59,8 @@ def performJob(domain, pnfId):
 
 # Analysing command line parameters
 def main(argv):
-    domain = 'notification'
-    usage = 'sendVesNotification.py --pnfId <physical-network-function-nwuid>'
+    domain = 'stateChange'
+    usage = 'sendVesStateChange.py --pnfId <physical-network-function-nwuid>'
     pnfId = ''
     try:
         opts, args = getopt.getopt(argv, "hi:o:", ["pnfId="])

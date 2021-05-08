@@ -1,13 +1,13 @@
 #!/bin/bash
 ################################################################################
 #
-# Copyright 2020 highstreet technologies GmbH and others
+# Copyright 2019 highstreet technologies GmbH and others
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # 
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 # 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,20 +16,23 @@
 # limitations under the License.
 
 ################################################################################
-# Script to send a VES Message EventList to DCAE
+# Script to send an VES Message Event to DCAE
 
 . config;
-      pnfType=${1,,};
-    alarmType=$2;
-     severity=$3;
-       domain="fault";
-echo $pnfType;
+            pnfType=${1,,};
+          alarmType=$2;
+             action=$3;
+             domain=thresholdCrossingAlert;
+collectionTimestamp=$(date -u -R -d @$timeInS );:
+          time15min=$(( $timeInS - $(($timeInS % 900))));
+eventStartTimestamp=$(date -u -R -d @$time15min );
 
-# exception for controller alarms
-if [ "${pnfType^^}" == "SDNR" ]
-  then
-    eventType="ONAP_SDNR_Controller";
-fi
+declare -A severities=(
+    [clear]=NORMAL
+    [cont]=WARNING
+    [set]=WARNING
+)
+         severity=${severities[${3,,}]};
 
 declare -A mapping=(
     [domain]=$domain
@@ -40,21 +43,23 @@ declare -A mapping=(
     [type]=${pnfType^^}
     [interface]=${interfaceByType[$pnfType]}
     [alarm]=${alarmType}
+    [action]=${action}
     [severity]=${severity}
     [timestamp]=${timestamp}
     [eventTime]=${eventTime}
+    [collectionTimestamp]=${collectionTimestamp}
+    [eventStartTimestamp]=${eventStartTimestamp}
     [vendor]=${vendorsByType[$pnfType]^^}
     [model]=${modelByType[$pnfType]}
 )
 
 echo "################################################################################";
-echo "# send EventList wiht heartbeat and fault";
-echo;
+echo "# send threshold crossed alert";
+echo
 for key in "${!mapping[@]}"
 do
-  #label=${${"$spaces$i"}:(-14)};
   label=$spaces$key;
-  label=${label:(-16)};
+  label=${label:(-20)};
   echo "$label: ${mapping[$key]}";
   if [ $key = "timestamp" ]; then
       sequence="$sequence s/\"@$key@\"/${mapping[$key]}/g; "
@@ -64,7 +69,7 @@ do
 done
 echo;
 
-body="./json/examples/${pnfType^^}-${alarmType}-${severity}-event-list.json"
-sed -e "$sequence" ./json/templates/event-list.json > $body;
+body=./json/examples/${pnfType^^}-${alarmType}-${action}-${domain}.json;
+sed -e "$sequence" ./json/templates/$domain.json > $body;
 
-curl -i -k -u $basicAuthVes -X POST -d @${body} --header "Content-Type: application/json" $urlVes
+curl -i -k -u $basicAuthVes -X POST -d  @${body} --header "Content-Type: application/json" $urlVes
