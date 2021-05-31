@@ -1,0 +1,94 @@
+#  Copyright (C) 2021 Nordix Foundation. All rights reserved.
+#  ========================================================================
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  ============LICENSE_END=================================================
+#
+version: '3'
+
+networks:
+  default:
+    driver: bridge
+
+services:
+  mariadb:
+    image: nexus3.onap.org:10001/mariadb:10.1.11
+    ports:
+      - "3306:3306"
+    container_name: mariadb
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    hostname:
+      mariadb.so.testlab.onap.org
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "30m"
+        max-file: "5"
+
+  sdnc:
+    image: onap/sdnc-image:2.1.2
+    container_name: sdnc
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./sdnc/config:/opt/opendaylight/current/certs
+    entrypoint: ["/opt/onap/sdnc/bin/startODL.sh"]
+    ports:
+      - "8282:8181"
+    hostname:
+      sdnc
+    links:
+      - mariadb:dbhost
+      - mariadb:sdnctldb01
+      - mariadb:sdnctldb02
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - SDNC_CONFIG_DIR=/opt/onap/sdnc/data/properties
+      - SDNC_BIN=/opt/onap/sdnc/bin
+      - ODL_CERT_DIR=/tmp
+      - ODL_ADMIN_USERNAME=${ODL_USER}
+      - ODL_ADMIN_PASSWORD=${ODL_PASSWORD}
+      - ODL_USER=${ODL_USER}
+      - ODL_PASSWORD=${ODL_PASSWORD}
+      - ODL_CERT_DIR=/opt/opendaylight/current/certs
+      - SDNC_DB_INIT=true  
+      - HONEYCOMB_USER=${HONEYCOMB_USER}
+      - HONEYCOMB_PASSWORD=${HONEYCOMB_PASSWORD}
+      - TRUSTSTORE_PASSWORD=${TRUSTSTORE_PASSWORD}
+      - KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
+      - SO_USER=${SO_USER}
+      - SO_PASSWORD=${SO_PASSWORD}
+      - NENG_USER=${NENG_USER}
+      - NENG_PASSWORD=${NENG_PASSWORD}
+      - CDS_USER=${CDS_USER}
+      - CDS_PASSWORD=${CDS_PASSWORD}
+      - ANSIBLE_USER=${ANSIBLE_USER}
+      - ANSIBLE_PASSWORD=${ANSIBLE_PASSWORD}
+      - SQL_CRYPTKEY=${SQL_CRYPTKEY}
+      - A1_TRUSTSTORE_PASSWORD=a1adapter
+    depends_on:
+      - mariadb
+    dns:
+      - ${DNS_IP_ADDR-10.0.100.1}
+    logging:
+      driver:   "json-file"
+      options:
+        max-size: "30m"
+        max-file: "5"
