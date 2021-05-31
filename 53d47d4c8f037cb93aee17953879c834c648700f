@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "893c3490_aa37b8b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2021-05-31T10:49:37Z",
+      "side": 1,
+      "message": "@Lasse: this is the version you already used in your deployment from some weeks ago.\nIt finally made it into O-RAN-SC OAM repo.",
+      "revId": "53d47d4c8f037cb93aee17953879c834c648700f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
