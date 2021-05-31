@@ -1,0 +1,194 @@
+################################################################################
+# Copyright 2021 highstreet technologies GmbH
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+version: '3.8'
+services:
+  persistence:
+    image: ${PERSISTENCE_IMAGE}
+    container_name: persistence
+    environment:
+      - discovery.type=single-node
+    networks:
+      oam:
+        ipv4_address: ${PERSISTENCE_IP}
+
+  sdnr:
+    image: ${SDNC_IMAGE}
+    container_name: sdnr
+    ports:
+      - ${SDNC_REST_PORT}:8181
+      - 8101:8101
+    environment:
+      - SDNC_CONFIG_DIR=/opt/onap/ccsdk/data/properties
+      - ODL_CERT_DIR=${SDNC_CERT_DIR}
+      - ENABLE_ODL_CLUSTER=false
+      - SDNC_REPLICAS=0
+      - CCSDK_REPLICAS=0
+      - DOMAIN=""
+      - SDNRWT=true
+      - SDNRINIT=true
+      - SDNRONLY=true
+      - SDNRDBURL=http://persistence:9200
+      - A1_ADAPTER_NORTHBOUND=false
+      - ODL_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - JAVA_OPTS=-Xms256m -Xmx4g
+    volumes:
+      - ./sdnr/mountpoint-registrar.properties:/opt/opendaylight/etc/mountpoint-registrar.properties
+      - ./sdnr/certs/certs.properties:${SDNC_CERT_DIR}/certs.properties
+      - ./sdnr/certs/keys0.zip:${SDNC_CERT_DIR}/keys0.zip
+    networks:
+      oam:
+        ipv4_address: ${SDNC_IP}
+    depends_on:
+      - persistence
+    
+  zookeeper:
+    image: ${ZOOKEEPER_IMAGE}
+    container_name: zookeeper
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_REPLICAS: 1
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 5
+      ZOOKEEPER_INIT_LIMIT: 10
+      ZOOKEEPER_MAX_CLIENT_CNXNS: 200
+      ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT: 3
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: 24
+      ZOOKEEPER_CLIENT_PORT: 2181
+      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/zookeeper/secrets/jaas/zk_server_jaas.conf -Dzookeeper.kerberos.removeHostFromPrincipal=true -Dzookeeper.kerberos.removeRealmFromPrincipal=true -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider -Dzookeeper.requireClientAuthScheme=sasl
+      ZOOKEEPER_SERVER_ID:
+    volumes:
+      -  ./zookeeper/zk_server_jaas.conf:/etc/zookeeper/secrets/jaas/zk_server_jaas.conf
+    networks:
+      oam:
+        aliases:
+        - zookeeper
+        ipv4_address: ${ZOOKEEPER_IP}
+
+  kafka:
+    image: ${KAFKA_IMAGE}
+    container_name: kafka
+    ports:
+     - 9092:9092
+    environment:
+      enableCadi: 'false'
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS: 40000
+      KAFKA_ZOOKEEPER_SESSION_TIMEOUT_MS: 40000
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL_PLAINTEXT:PLAINTEXT,EXTERNAL_PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL_PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: INTERNAL_PLAINTEXT://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL_PLAINTEXT
+      KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/jaas/zk_client_jaas.conf
+      KAFKA_ZOOKEEPER_SET_ACL: 'true'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      # Reduced the number of partitions only to avoid the timeout error for the first subscribe call in slow environment
+      KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS: 1
+    volumes:
+      -  ./kafka/zk_client_jaas.conf:/etc/kafka/secrets/jaas/zk_client_jaas.conf
+    networks:
+      oam:
+        aliases:
+        - kafka
+        ipv4_address: ${KAFKA_IP}
+    depends_on:
+     - zookeeper
+
+  dmaap:
+    container_name: onap-dmaap
+    image: ${DMAAP_IMAGE}
+    ports:
+      - 3904:3904
+      - 3905:3905
+    environment:
+      enableCadi: 'false'
+    volumes:
+      - ./dmaap/MsgRtrApi.properties:/appl/dmaapMR1/bundleconfig/etc/appprops/MsgRtrApi.properties
+      - ./dmaap/logback.xml:/appl/dmaapMR1/bundleconfig/etc/logback.xml
+      - ./dmaap/cadi.properties:/appl/dmaapMR1/etc/cadi.properties
+    networks:
+      oam:
+        aliases:
+        - dmaap
+        ipv4_address: ${DMAAP_IP}
+    depends_on:
+      - zookeeper
+      - kafka
+
+  ves-collector:
+    image: ${VES_COLLECTOR_IMAGE}
+    container_name: ves-collector
+    environment:
+      DMAAPHOST: onap-dmaap
+    ports:
+      - 8080:8080
+      - 8443:8443
+    volumes:
+      - ./ves-collector/collector.properties:/opt/app/VESCollector/etc/collector.properties
+    networks:
+      oam:
+        ipv4_address: ${VES_COLLECTOR_IP}
+
+  ntsim-ng-o-du-1122:
+    image: "${DOCKER_REPO}nts-ng-o-ran-du:${NTS_BUILD_VERSION}"
+    container_name: ntsim-ng-o-du-1122
+    hostname: "highstreet-O-DU-1122"
+    cap_add:
+      - SYS_ADMIN
+    stop_grace_period: 5m
+    environment:
+      NTS_NF_STANDALONE_START_FEATURES: "datastore-populate ves-heartbeat ves-file-ready ves-pnf-registration web-cut-through"
+      NTS_NF_MOUNT_POINT_ADDRESSING_METHOD: ${NTS_NF_MOUNT_POINT_ADDRESSING_METHOD}
+      NTS_HOST_IP: ${NTS_HOST_IP}
+      NTS_HOST_BASE_PORT: ${NTS_HOST_BASE_PORT}
+      NTS_HOST_NETCONF_SSH_BASE_PORT: ${NTS_HOST_NETCONF_SSH_BASE_PORT}
+      NTS_HOST_NETCONF_TLS_BASE_PORT: ${NTS_HOST_NETCONF_TLS_BASE_PORT}
+      NTS_HOST_TRANSFER_FTP_BASE_PORT: ${NTS_HOST_TRANSFER_FTP_BASE_PORT}
+      NTS_HOST_TRANSFER_SFTP_BASE_PORT: ${NTS_HOST_TRANSFER_SFTP_BASE_PORT}
+      NTS_BUILD_DATE: ${NTS_BUILD_DATE}
+  
+      SDN_CONTROLLER_PROTOCOL: ${SDN_CONTROLLER_PROTOCOL}
+      SDN_CONTROLLER_IP: ${SDNC_IP}
+      SDN_CONTROLLER_PORT: ${SDNC_REST_PORT}
+      SDN_CONTROLLER_USERNAME: ${ADMIN_USERNAME}
+      SDN_CONTROLLER_PASSWORD: ${ADMIN_PASSWORD}
+  
+      VES_COMMON_HEADER_VERSION: ${VES_COMMON_HEADER_VERSION}
+      VES_ENDPOINT_PROTOCOL: ${VES_ENDPOINT_PROTOCOL}
+      VES_ENDPOINT_IP: ${VES_COLLECTOR_IP}
+      VES_ENDPOINT_PORT: ${VES_ENDPOINT_PORT}
+      VES_ENDPOINT_AUTH_METHOD: ${VES_ENDPOINT_AUTH_METHOD}
+      VES_ENDPOINT_USERNAME: ${VES_ENDPOINT_USERNAME}
+      VES_ENDPOINT_PASSWORD: ${VES_ENDPOINT_PASSWORD}
+    volumes:
+      - ./ntsim-ng-o-du/config.json:/opt/dev/ntsim-ng/config/config.json
+      - ./ntsim-ng-o-du/o-ran-sc-du-hello-world-operational.xml:/opt/dev/deploy/data/o-ran-sc-du-hello-world-operational.xml
+      - ./ntsim-ng-o-du/o-ran-sc-du-hello-world-running.xml:/opt/dev/deploy/data/o-ran-sc-du-hello-world-running.xml
+    depends_on:
+      - sdnr
+      - ves-collector
+    networks:
+      oam:
+  
+networks:
+  oam:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: ${NETWORK_SUBNET_IP}
+        gateway: ${NETWORK_GATEWAY_IP}
