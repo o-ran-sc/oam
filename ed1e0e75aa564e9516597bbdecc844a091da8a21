@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "084243f1_991892a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2021-06-06T14:21:15Z",
+      "side": 1,
+      "message": "Hi John, hi Chengkai,hi Muahmad,\n\neven the docker image references needs to be updated into a public available docker repo, I like to share the latest version for integration of NON-RT-RIC and OAM into y running SMO solution. \n\nBased on your comments we removed all static IPs from DMZ and SMO network 😊\n\nI gave a -1 as trigger to update the docker image references.\n\nNext step:\n- merge htof tps://gerrit.o-ran-sc.org/r/c/oam/+/6234 \n\nThanks a lot,\nMartin",
+      "revId": "ed1e0e75aa564e9516597bbdecc844a091da8a21",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
