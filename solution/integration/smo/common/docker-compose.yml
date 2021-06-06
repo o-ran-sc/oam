@@ -1,11 +1,11 @@
 ################################################################################
-# Copyright 2021 highstreet technologies and others
+# Copyright 2021 highstreet technologies GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     https://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,56 +13,43 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-version: "2.2"
+version: '3.8'
 services:
-  sdnrdb:
-    image: ${SDNRDB_IMAGE}
-    container_name: sdnrdb
+  identity:
+    image: ${IDENTITY_IMAGE}
+    container_name: identity
+    ports: 
+      - ${IDENTITY_PORT}:${IDENTITY_PORT}
+    environment: 
+      - KEYCLOAK_USER=${ADMIN_USERNAME}
+      - KEYCLOAK_PASSWORD=${ADMIN_PASSWORD}
+      - JAVA_OPTS=-Djboss.http.port=${IDENTITY_PORT}
+    networks:
+      dmz:
+              
+  topology:
+    image: ${TOPOLOGY_IMAGE}
+    container_name: topology
+    ports:
+      - 3001:3001
+    environment:
+      - AUTH_ENABLED=true
+      - AUTH_HOST_URL=${IDENTITY_PROVIDER_URL}
+      # - AUTH_CONFIG_FILE 
+      - PROVIDERS=${TOPOLOGY_PROVIDERS}
+      - LOAD_PACKAGES=com.highstreet
+ 
+  persistence:
+    image: ${PERSISTENCE_IMAGE}
+    container_name: persistence
     environment:
       - discovery.type=single-node
-    networks:
-      integration:
-        ipv4_address: ${IPv4_SDNRDB}
-        ipv6_address: ${IPv6_SDNRDB}
 
-  sdnr:
-    image: ${SDNC_IMAGE}
-    container_name: sdnr
-    ports:
-      - "8181:8181"
-      - "8101:8101"
-    environment:
-      - SDNC_CONFIG_DIR=/opt/onap/ccsdk/data/properties
-      - ODL_CERT_DIR=${ODL_CERT_DIR}
-      - ENABLE_ODL_CLUSTER=false
-      - SDNC_REPLICAS=0
-      - CCSDK_REPLICAS=0
-      - DOMAIN=""
-      - SDNRWT=true
-      - SDNRINIT=true
-      - SDNRONLY=true
-      - SDNRDBURL=http://sdnrdb:9200
-      - A1_ADAPTER_NORTHBOUND=false
-      - ODL_ADMIN_PASSWORD=${ODL_ADMIN_PASSWORD}
-      - JAVA_OPTS=-Xms256m -Xmx2g
-    volumes:
-      - ./sdnr/mountpoint-registrar.properties:/opt/opendaylight/etc/mountpoint-registrar.properties
-      - ./sdnr/certs/certs.properties:${ODL_CERT_DIR}/certs.properties
-      - ./sdnr/certs/keys0.zip:${ODL_CERT_DIR}/keys0.zip
-    networks:
-      integration:
-        ipv4_address: ${IPv4_SDNC}
-        ipv6_address: ${IPv6_SDNC}
-    logging:
-      driver:   "json-file"
-      options:
-        max-size: "30m"
-        max-file: "5"
   zookeeper:
     image: ${ZOOKEEPER_IMAGE}
     container_name: zookeeper
     ports:
-      - "2181:2181"
+      - 2181:2181
     environment:
       ZOOKEEPER_REPLICAS: 1
       ZOOKEEPER_TICK_TIME: 2000
@@ -75,18 +62,13 @@ services:
       KAFKA_OPTS: -Djava.security.auth.login.config=/etc/zookeeper/secrets/jaas/zk_server_jaas.conf -Dzookeeper.kerberos.removeHostFromPrincipal=true -Dzookeeper.kerberos.removeRealmFromPrincipal=true -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider -Dzookeeper.requireClientAuthScheme=sasl
       ZOOKEEPER_SERVER_ID:
     volumes:
-      -  ./zk/zk_server_jaas.conf:/etc/zookeeper/secrets/jaas/zk_server_jaas.conf
-    networks:
-      integration:
-        aliases:
-        - zookeeper
-        ipv4_address: ${IPv4_ZOOKEEPER}
-        ipv6_address: ${IPv6_ZOOKEEPER}
+      -  ./zookeeper/zk_server_jaas.conf:/etc/zookeeper/secrets/jaas/zk_server_jaas.conf
+
   kafka:
     image: ${KAFKA_IMAGE}
     container_name: kafka
     ports:
-     - "9092:9092"
+     - 9092:9092
     environment:
       enableCadi: 'false'
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -104,58 +86,36 @@ services:
       KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS: 1
     volumes:
       -  ./kafka/zk_client_jaas.conf:/etc/kafka/secrets/jaas/zk_client_jaas.conf
-    networks:
-      integration:
-        aliases:
-        - kafka
-        ipv4_address: ${IPv4_KAFKA}
-        ipv6_address: ${IPv6_KAFKA}
     depends_on:
      - zookeeper
+
   dmaap:
     container_name: onap-dmaap
     image: ${DMAAP_IMAGE}
     ports:
-      - "3904:3904"
-      - "3905:3905"
+      - 3904:3904
+      - 3905:3905
     environment:
       enableCadi: 'false'
     volumes:
       - ./dmaap/MsgRtrApi.properties:/appl/dmaapMR1/bundleconfig/etc/appprops/MsgRtrApi.properties
       - ./dmaap/logback.xml:/appl/dmaapMR1/bundleconfig/etc/logback.xml
       - ./dmaap/cadi.properties:/appl/dmaapMR1/etc/cadi.properties
-    networks:
-      integration:
-        aliases:
-        - dmaap
-        ipv4_address: ${IPv4_DMAAP}
-        ipv6_address: ${IPv6_DMAAP}
-
     depends_on:
       - zookeeper
       - kafka
-  vescollector:
-    image: ${VESCOLLECTOR_IMAGE}
-    container_name: vescollector
-    environment:
-      DMAAPHOST: "onap-dmaap"
-    ports:
-      - "8080:8080"
-      - "8443:8443"
-    volumes:
-      - ./vescollector/collector.properties:/opt/app/VESCollector/etc/collector.properties
-    networks:
-      integration:
-        ipv4_address: ${IPv4_VESCOLLECTOR}
-        ipv6_address: ${IPv6_VESCOLLECTOR}
+
 networks:
-  integration:
+  dmz:
     driver: bridge
+    name: dmz
+    enable_ipv6: false
+  default:
+    driver: bridge
+    name: smo
     enable_ipv6: true
     ipam:
       driver: default
       config:
-      - subnet: ${IPv4_NETWORK_SUBNET}
-        gateway: ${IPv4_GATEWAY}
-      - subnet: ${IPv6_NETWORK_SUBNET}
-        gateway: ${IPv6_GATEWAY}
+      - subnet:  ${NETWORK_SUBNET_SMO}
+        gateway: ${NETWORK_GATEWAY_SMO}

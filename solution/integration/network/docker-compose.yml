@@ -1,0 +1,137 @@
+################################################################################
+# Copyright 2021 highstreet technologies GmbH
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+version: '3.8'
+
+x-common_env: &common_env
+    IPv6_ENABLED: ${IPv6_ENABLED}
+    SSH_CONNECTIONS: ${SSH_CONNECTIONS}
+    TLS_CONNECTIONS: ${TLS_CONNECTIONS}    
+    NTS_NF_MOUNT_POINT_ADDRESSING_METHOD: ${NTS_NF_MOUNT_POINT_ADDRESSING_METHOD}
+    
+    NTS_HOST_IP: ${NTS_HOST_IP}
+    NTS_HOST_BASE_PORT: ${NTS_HOST_BASE_PORT}
+    NTS_HOST_NETCONF_SSH_BASE_PORT: ${NTS_HOST_NETCONF_SSH_BASE_PORT}
+    NTS_HOST_NETCONF_TLS_BASE_PORT: ${NTS_HOST_NETCONF_TLS_BASE_PORT}
+    NTS_HOST_TRANSFER_FTP_BASE_PORT: ${NTS_HOST_TRANSFER_FTP_BASE_PORT}
+    NTS_HOST_TRANSFER_SFTP_BASE_PORT: ${NTS_HOST_TRANSFER_SFTP_BASE_PORT}
+    
+    SDN_CONTROLLER_PROTOCOL: ${SDN_CONTROLLER_PROTOCOL}
+    SDN_CONTROLLER_IP: ${SDNC_OAM_IPv6}
+    SDN_CONTROLLER_PORT: ${SDNC_REST_PORT}
+    SDN_CONTROLLER_CALLHOME_PORT: ${SDN_CONTROLLER_CALLHOME_PORT}
+    SDN_CONTROLLER_USERNAME: ${ADMIN_USERNAME}
+    SDN_CONTROLLER_PASSWORD: ${ADMIN_PASSWORD}
+    
+    VES_COMMON_HEADER_VERSION: ${VES_COMMON_HEADER_VERSION}
+    VES_ENDPOINT_PROTOCOL: ${VES_ENDPOINT_PROTOCOL}
+    VES_ENDPOINT_IP: ${VES_COLLECTOR_OAM_IPv6}
+    VES_ENDPOINT_PORT: ${VES_ENDPOINT_PORT}
+    VES_ENDPOINT_AUTH_METHOD: ${VES_ENDPOINT_AUTH_METHOD}
+    VES_ENDPOINT_USERNAME: ${VES_ENDPOINT_USERNAME}
+    VES_ENDPOINT_PASSWORD: ${VES_ENDPOINT_PASSWORD}
+
+x-du_env: &du_env
+    NTS_NF_STANDALONE_START_FEATURES: "datastore-populate ves-heartbeat ves-file-ready ves-pnf-registration web-cut-through"
+
+x-ru-env: &ru_env
+    NTS_NF_STANDALONE_START_FEATURES: "datastore-populate netconf-call-home web-cut-through"
+
+x-topo-env: &topo_env
+    NTS_NF_STANDALONE_START_FEATURES: "datastore-populate netconf-call-home web-cut-through"
+
+x-nf: &common_nf
+    stop_grace_period: 5m
+    cap_add:
+    - SYS_ADMIN
+    - SYS_PTRACE
+
+services:
+  ntsim-ng-o-du-1122:
+    <<: *common_nf
+    image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-du:${NTS_BUILD_VERSION}"
+    container_name: ntsim-ng-o-du-1122
+    hostname: highstreet-O-DU-1122
+    volumes:
+        - ./ntsim-ng-o-du/config.json:/opt/dev/ntsim-ng/config/config.json
+        - ./ntsim-ng-o-du/o-ran-sc-du-hello-world-running.xml:/opt/dev/deploy/data/o-ran-sc-du-hello-world-running.xml
+        - ./ntsim-ng-o-du/o-ran-sc-du-hello-world-operational.xml:/opt/dev/deploy/data/o-ran-sc-du-hello-world-operational.xml
+    environment:
+        <<: *common_env
+        <<: *du_env
+
+  ntsim-ng-o-ru-fh-11221:
+    <<: *common_nf
+    image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-ru-fh:${NTS_BUILD_VERSION}"
+    container_name: ntsim-ng-o-ru-fh-11221
+    hostname: highstreet-O-RU-11221
+    volumes:
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/config.json:/opt/dev/ntsim-ng/config/config.json
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/ietf-hardware-running.json:/opt/dev/deploy/data/ietf-hardware-running.json
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
+    environment:
+        <<: *common_env
+        <<: *ru_env
+
+  ntsim-ng-o-ru-fh-11222:
+    <<: *common_nf
+    image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-ru-fh:${NTS_BUILD_VERSION}"
+    container_name: ntsim-ng-o-ru-fh-11222
+    hostname: highstreet-O-RU-11222
+    volumes:
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/config.json:/opt/dev/ntsim-ng/config/config.json
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/ietf-hardware-running.json:/opt/dev/deploy/data/ietf-hardware-running.json
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
+    environment:
+        <<: *common_env
+        <<: *ru_env
+
+  ntsim-ng-o-ru-fh-11223:
+    <<: *common_nf
+    image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-ru-fh:${NTS_BUILD_VERSION}"
+    container_name: ntsim-ng-o-ru-fh-11223
+    hostname: highstreet-O-RU-11223
+    volumes:
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/config.json:/opt/dev/ntsim-ng/config/config.json
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/ietf-hardware-running.json:/opt/dev/deploy/data/ietf-hardware-running.json
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
+        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
+    environment:
+        <<: *common_env
+        <<: *ru_env
+
+  ntsim-ng-topology-server:
+    <<: *common_nf
+    image: "${HIGHSTREET_DOCKER_REPO}nts-ng-topology-server:${NTS_BUILD_VERSION}"
+    container_name: ntsim-ng-topology-server
+    hostname: highstreet-TAPI-topology-server
+    volumes:
+        - ./ntsim-ng-topology-server/config.json:/opt/dev/ntsim-ng/config/config.json
+        - ./ntsim-ng-topology-server/tapi-common-operational.xml:/opt/dev/deploy/data/tapi-common-operational.xml
+        - ./ntsim-ng-topology-server/tapi-common-running.xml:/opt/dev/deploy/data/tapi-common-running.xml
+    environment:
+        <<: *common_env
+        <<: *topo_env
+        SSH_CONNECTIONS: 1
+        TLS_CONNECTIONS: 0    
+networks:
+    default:
+        external:
+            name: oam
