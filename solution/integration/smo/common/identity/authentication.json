@@ -1,0 +1,116 @@
+{
+  "roles": {
+    "administration": [
+      {
+        "id": "66f90a7a-3766-4f69-989d-c94910e0bad6",
+        "name": "administration"
+      }
+    ],
+    "provision": [
+      {
+        "id": "7c6d7309-c7c1-4a51-8a85-bd6713af5ca7",
+        "name": "provision"
+      }
+    ],
+    "supervision": [
+      {
+        "id": "d2594199-99c2-4e0c-9b33-94b0a84b569a",
+        "name": "supervision"
+      }
+    ]
+  },
+  "users": [
+    {
+      "firstName": "Leia",
+      "lastName": "Organa",
+      "email": "leia.organa@sdnr.onap.org",
+      "enabled": "true",
+      "username": "leia.organa",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Default4SDN!",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "firstName": "R2",
+      "lastName": "D2",
+      "email": "r2.d2@sdnr.onap.org",
+      "enabled": "true",
+      "username": "r2.d2",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Default4SDN!",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "firstName": "Luke",
+      "lastName": "Skywalker",
+      "email": "luke.skywalker@sdnr.onap.org",
+      "enabled": "true",
+      "username": "luke.skywalker",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Default4SDN!",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "firstName": "Jargo",
+      "lastName": "Fett",
+      "email": "jargo.fett@sdnr.onap.org",
+      "enabled": "true",
+      "username": "jargo.fett",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Default4SDN!",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "firstName": "Martin",
+      "lastName": "Skorupski",
+      "email": "martin.skorupski@sdnr.onap.org",
+      "enabled": "true",
+      "username": "martin.skorupski",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U",
+          "temporary": false
+        }
+      ]
+    }
+  ],
+  "grants": [
+    {
+      "username":"leia.organa",
+      "role":"administration"
+    },
+    {
+      "username":"r2.d2",
+      "role":"administration"
+    },
+    {
+      "username":"luke.skywalker",
+      "role":"provision"
+    },
+    {
+      "username":"jargo.fett",
+      "role":"supervision"
+    },
+    {
+      "username":"martin.skorupski",
+      "role":"administration"
+    }
+  ]
+}
