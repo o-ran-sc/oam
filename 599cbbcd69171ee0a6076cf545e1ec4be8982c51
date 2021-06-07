@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f028a750_e1459ef5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2021-06-07T08:26:03Z",
+      "side": 1,
+      "message": "Thanks Chengkai, thank Muhammad,\n\nwe take it as as is and may do some adaptations later.\nI think \"onap-policy\" should be moved under a \"non-rt-ric\" folder or renamed to \"non-rt-ric\"...\n\nThanks again,\nMartin",
+      "revId": "599cbbcd69171ee0a6076cf545e1ec4be8982c51",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
