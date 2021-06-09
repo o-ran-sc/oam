@@ -22,7 +22,7 @@ networks:
   nonrtric:
     driver: bridge
     name: nonrtric
-  smo_integration:
+  smo:
     external: true
 
 services:
@@ -82,7 +82,7 @@ services:
         ]
       networks:
        - nonrtric
-       - smo_integration
+       - smo
    xacml-pdp:
       image: nexus3.onap.org:10001/onap/policy-xacml-pdp:2.4.2
       container_name: policy-xacml-pdp
@@ -105,7 +105,7 @@ services:
         ]
       networks:
        - nonrtric
-       - smo_integration
+       - smo
    drools:
       image: nexus3.onap.org:10001/onap/policy-drools:1.8.2
       container_name: drools
@@ -129,7 +129,7 @@ services:
         ]
       networks:
        - nonrtric
-       - smo_integration
+       - smo
    drools-apps:
       image: nexus3.onap.org:10001/onap/policy-pdpd-cl:1.8.2
       container_name: drools-apps
@@ -158,9 +158,9 @@ services:
         ]
       networks:
        - nonrtric
-       - smo_integration
+       - smo
    apex-pdp:
-      image: onap/policy-apex-pdp:latest
+      image: nexus3.onap.org:10001/onap/policy-apex-pdp:latest
       container_name: policy-apex-pdp
       depends_on:
        - mariadb
@@ -182,7 +182,7 @@ services:
         ]
       networks:
        - nonrtric
-       - smo_integration
+       - smo
    distribution:
       image: nexus3.onap.org:10001/onap/policy-distribution:2.5.2
       container_name: policy-distribution
@@ -207,4 +207,4 @@ services:
         ]
       networks:
        - nonrtric
-       - smo_integration
+       - smo
