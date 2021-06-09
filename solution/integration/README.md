@@ -23,18 +23,18 @@ The setup contains an OpenDaylight based NetConf client and a VES Collector.
 
 ## Overview
 
-This docker-compose file starts a pre-configured, self-contained SDN-R solution 
+This docker-compose file starts a pre-configured, self-contained SDN-R solution
 for developer test or demo purposes
 
   * **Identity**
-    ... representing an KeyCloak based identity service for centralized user 
-    management. Please note that the implementation does not support IPv6. 
+    ... representing an KeyCloak based identity service for centralized user
+    management. Please note that the implementation does not support IPv6.
     Therefore, its own network is required called 'DMZ'.
 
   * **SDN-R** single node instance
 
-    ... representing the NetConf consumer on the Service Management and 
-    Orchestration framework (SMO) for the O1 interface based on 
+    ... representing the NetConf consumer on the Service Management and
+    Orchestration framework (SMO) for the O1 interface based on
     ODL-Silicon/ONAP-Istanbul
 
   * **VES collector**
@@ -48,6 +48,10 @@ for developer test or demo purposes
     ... representing all the components of ONAP policy framework, in particular
     the policy-apex-pdp which executes the apex policies deployed in the framework
     when a certain event occurs.
+
+  * **Non-RT-RIC**
+    ... representing all the components of Non-RT-RIC, includes A1 Policy Management Services,
+    Enrichment Data Coordinator, R-APP Host & SMO Application Coordinator etc.
 
 ## Prerequisites
 
@@ -105,10 +109,11 @@ $ cat /etc/hosts
     │   ├── kafka
     │   └── zookeeper
     ├── non-rt-ric
-    │   ├── .env
     │   ├── docker-compose.yml
     │   │
-    │   └── <config-folders>
+    │   ├── test
+    │   ├── data
+    │   └── config
     ├── oam
     │   ├── docker-compose.yml
     │   │
@@ -143,17 +148,17 @@ before starting further docker images.
 The several docker-compose yml files must be started in the right order as listed below:
 
 ```
-docker-compose -f smo/common/docker-compose.yml up -d 
-python smo/common/identity/config.py 
+docker-compose -f smo/common/docker-compose.yml up -d
+python smo/common/identity/config.py
 ```
 
 The python script configure the users within the identity service (keycloak).
 A system user (%USER) is also created with administration rights.
 
 ```
-docker-compose -f smo/non-rt-ric/docker-compose.yml up -d
 docker-compose -f smo/onap-policy/docker-compose.yml up -d
-docker-compose -f smo/oam/docker-compose.yml up -d 
+docker-compose -f smo/oam/docker-compose.yml up -d
+docker-compose -f smo/non-rt-ric/docker-compose.yml up -d
 ```
 
 In order to create/deploy the apex policy for O-RU closed loop recovery usecase,
@@ -171,15 +176,44 @@ https://wiki.o-ran-sc.org/pages/viewpage.action?pageId=35881325
 Please wait about 2min until all the service are up and running.
 If you see the login page (https://sdnc-web:8453) you are good to go and can start the (simulated) network.
 
+### populate data into Non-RT-RIC
+
+Full instrucion on how to run Non-RT-RIC can be found in this page:
+<https://wiki.o-ran-sc.org/display/RICNR/Release+D>
+
+When containers in Non-RT-RIC are all up, by default, there is no data running inside. Folder `non-rt-ric/data/` contains serveral scripts to populate data into Non-RT-RIC for test & demo purpose.
+
 ```
-docker-compose -f network/docker-compose.yml up -d 
+bash prepareDmaapMsg.sh
+```
+
+script `prepareDmaapMsg.sh` sends messages to dmaap message router, then Non-RT-RIC policy-agent service polls messages from dmaap, and creates policy instances accordingly.
+
+```
+bash preparePmsData.sh
+```
+
+script `preparePmsData.sh` sends http requests to policy-agent service, and creates policy instances accordingly.
+
+```
+bash prepareEcsData.sh
+```
+
+script `prepareEcsData.sh` sends http requests to ecs service, and creates data accordingly.
+
+Afterwards, open webpage:
+<http://localhost:8182/>
+Now we should see some data in the page.
+
+```
+docker-compose -f network/docker-compose.yml up -d
 ```
 
 Usually the first ves:event gets lost. Please restart the O-DU docker container(s) to send a second ves:pnfRegistration.
 
 ```
 docker-compose -f network/docker-compose.yml restart ntsim-ng-o-du-1122
-python network/config.py 
+python network/config.py
 ```
 
 The python script configures the simulated O-DU and O-RU according to O-RAN hybrid architecture.
@@ -191,9 +225,9 @@ O-RU - ves:pnfRegistration and ves:fault, ves:heartbeat
 ![ves:pnfRegistration in ODLUX](docs/nstim-ng-connected-after-ves-pnf-registration-in-odlux.png "ves:pnfRegistration in ODLUX")
 
 'True' indicated that the settings through SDN-R to the NETCONF server were
-successful. 
+successful.
 
-SDN-R reads the fault events from DMaaP and processes them. 
+SDN-R reads the fault events from DMaaP and processes them.
 Finally the fault events are visible in ODLUX.
 
 ![ves:fault in ODLUX](docs/ves-fault-in-odlux.png "ves:fault in ODLUX")
@@ -225,6 +259,14 @@ docker logs -f ves-collector
 docker logs policy-apex-pdp
 ```
 
+#### Non-RT-RIC logs
+
+```
+docker logs policy-agent
+docker logs oru-app
+docker logs ecs
+```
+
 ### Customizing Solution
 
 '.env' file contains customizing parameters
@@ -238,7 +280,7 @@ docker logs policy-apex-pdp
     https://sdnc-web:8453
 
     User: admin // see .env file
-    
+
     Password: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
 
 In case of trouble, please update the commands with your customized '.env' file.
@@ -248,11 +290,11 @@ In case of trouble, please update the commands with your customized '.env' file.
 To stop all container please respect the following order
 
 ```
-docker-compose -f network/docker-compose.yml down 
+docker-compose -f network/docker-compose.yml down
 docker-compose -f smo/oam/docker-compose.yml down
-docker-compose -f smo/onap-policy/docker-compose.yml down 
-docker-compose -f smo/non-rt-ric/docker-compose.yml down 
-docker-compose -f smo/common/docker-compose.yml down 
+docker-compose -f smo/onap-policy/docker-compose.yml down
+docker-compose -f smo/non-rt-ric/docker-compose.yml down
+docker-compose -f smo/common/docker-compose.yml down
 ```
 
 ### Cleanup
