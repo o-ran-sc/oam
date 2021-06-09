@@ -146,7 +146,7 @@ services:
       - MR-PORT=3904
 
   oru-app:
-    image: quay.io/yanhuanwang/oru-app
+    image: nexus3.o-ran-sc.org:10004/o-ran-sc/nonrtric-o-ru-closed-loop-recovery:1.0.0
     container_name: oru-app
     networks:
       - default
