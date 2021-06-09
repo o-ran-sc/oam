@@ -44,6 +44,11 @@ for developer test or demo purposes
   * **DMaaP**
     ... representing SMO DMaaP component, includes message-router
 
+  * **ONAP-Policy**
+    ... representing all the components of ONAP policy framework, in particular
+    the policy-apex-pdp which executes the apex policies deployed in the framework
+    when a certain event occurs.
+
 ## Prerequisites
 
 ```
@@ -104,12 +109,17 @@ $ cat /etc/hosts
     │   ├── docker-compose.yml
     │   │
     │   └── <config-folders>
-    └── oam
+    ├── oam
+    │   ├── docker-compose.yml
+    │   │
+    │   ├── sdnc-web
+    │   ├── sdnr
+    │   └── ves-collector
+    └── onap-policy
         ├── docker-compose.yml
         │
-        ├── sdnc-web
-        ├── sdnr
-        └── ves-collector
+        ├── config
+        └── wait_for_port.sh
 ```
 
 ## Usage
@@ -141,9 +151,22 @@ The python script configure the users within the identity service (keycloak).
 A system user (%USER) is also created with administration rights.
 
 ```
-docker-compose -f smo/non-rt-ric/docker-compose.yml up -d 
+docker-compose -f smo/non-rt-ric/docker-compose.yml up -d
+docker-compose -f smo/onap-policy/docker-compose.yml up -d
 docker-compose -f smo/oam/docker-compose.yml up -d 
 ```
+
+In order to create/deploy the apex policy for O-RU closed loop recovery usecase,
+refer to the section named "Create/Deploy apex policy for O-RU & O-DU use case" in
+this page:
+https://wiki.o-ran-sc.org/pages/viewpage.action?pageId=35881325
+
+Please note that the above instructions assume that the ToscaPolicy.json file
+with default config needs to be deployed. However, when there is a need to update
+the config (for example, to change the O-RU to O-DU mapping), a new ToscaPolicy.json
+file needs to be created. Refer to the section named "Workflow for updating the policy config"
+in this page:
+https://wiki.o-ran-sc.org/pages/viewpage.action?pageId=35881325
 
 Please wait about 2min until all the service are up and running.
 If you see the login page (https://sdnc-web:8453) you are good to go and can start the (simulated) network.
@@ -196,6 +219,12 @@ ssh karaf@localhost -p 8101
 docker logs -f ves-collector
 ```
 
+#### onap-policy apex logs
+
+```
+docker logs policy-apex-pdp
+```
+
 ### Customizing Solution
 
 '.env' file contains customizing parameters
@@ -220,7 +249,8 @@ To stop all container please respect the following order
 
 ```
 docker-compose -f network/docker-compose.yml down 
-docker-compose -f smo/oam/docker-compose.yml down 
+docker-compose -f smo/oam/docker-compose.yml down
+docker-compose -f smo/onap-policy/docker-compose.yml down 
 docker-compose -f smo/non-rt-ric/docker-compose.yml down 
 docker-compose -f smo/common/docker-compose.yml down 
 ```
