@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2280515_14e27c70",
+        "filename": "solution/integration/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2021-06-10T13:44:16Z",
+      "side": 1,
+      "message": "Just wondering which components you are referring to with these two?",
+      "range": {
+        "startLine": 54,
+        "startChar": 33,
+        "endLine": 54,
+        "endChar": 73
+      },
+      "revId": "3381c795b68a20c9faa2609dd730f8028c63ba73",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
