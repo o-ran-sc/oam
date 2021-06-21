@@ -1,0 +1,11 @@
+{
+    "highstreet-O-RU-11221": "highstreet-O-DU-1122",
+    "highstreet-O-RU-11222": "highstreet-O-DU-1122",
+    "highstreet-O-RU-11223": "highstreet-O-DU-1122",
+    "ERICSSON-O-RU-11221": "HCL-O-DU-1122",
+    "ERICSSON-O-RU-11222": "HCL-O-DU-1122",
+    "ERICSSON-O-RU-11223": "HCL-O-DU-1122",
+    "HIGHSTREET-O-RU-12121": "ERICSSON-O-DU-1212",
+    "HIGHSTREET-O-RU-12122": "ERICSSON-O-DU-1212",
+    "HIGHSTREET-O-RU-12123": "ERICSSON-O-DU-1212" 
+}
