@@ -134,17 +134,6 @@ services:
     ports:
       - 8088:80
 
-  message-generator:
-    image: quay.io/yanhuanwang/message-generator
-    container_name: message-generator
-    networks:
-      - default
-      - smo
-      - oam
-    environment:
-      - MR-HOST=http://onap-dmaap
-      - MR-PORT=3904
-
   oru-app:
     image: nexus3.o-ran-sc.org:10004/o-ran-sc/nonrtric-o-ru-closed-loop-recovery:1.0.0
     container_name: oru-app
@@ -158,6 +147,8 @@ services:
       - SDNR-HOST=http://sdnr
       - SDNR-PORT=8181
       - VERBOSE=on
+    volumes:
+      - ./config/oru-app/o-ru-to-o-du-map.txt:/usr/src/app/o-ru-to-o-du-map.txt:ro
 
   db:
     image: mysql/mysql-server:5.6
