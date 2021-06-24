@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8725f6a_2706033a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2021-06-24T12:07:50Z",
+      "side": 1,
+      "message": "$ docker pull registry.nordix.org/onap/policy-apex-pdp:2.6.0-SNAPSHOT\n2.6.0-SNAPSHOT: Pulling from onap/policy-apex-pdp\ndf20fa9351a1: Pull complete \n7627cbf3db32: Pull complete \nbde2e724d713: Pull complete \naa2cce497ca5: Pull complete \n344c6202570b: Pull complete \nDigest: sha256:c96f1da2d32e3f9a4d3ccdb5332801b4334f81c0b17979f06b728820f07dbaad\nStatus: Downloaded newer image for registry.nordix.org/onap/policy-apex-pdp:2.6.0-SNAPSHOT\nregistry.nordix.org/onap/policy-apex-pdp:2.6.0-SNAPSHOT\n$",
+      "revId": "d330c766a402c7b85f41137d4ad4f39b41d40410",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
