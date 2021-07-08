@@ -26,6 +26,7 @@ import socket
 import sys
 import yaml
 from pathlib import Path
+from _datetime import timezone
 
 def sendVesEvent(data):
     url = data['config']['vesEndpoint']['url']
@@ -66,7 +67,7 @@ def sendHttpGet(url):
       sys.exit('Reading VES "stndDefined" message template failed.')
 
 def getInitData(domain, stndBody=''):
-  currentTime = datetime.datetime.utcnow()
+  currentTime = datetime.datetime.now(tz=timezone.utc)
   dir = os.path.dirname(os.path.realpath(__file__))
 
   result = {}
