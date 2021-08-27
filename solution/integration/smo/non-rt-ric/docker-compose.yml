@@ -25,7 +25,7 @@ networks:
 
 services:
   policy-agent:
-    image: nexus3.o-ran-sc.org:10002/o-ran-sc/nonrtric-policy-agent:2.2.0
+    image: "${PMS_IMAGE_BASE}:${PMS_IMAGE_TAG}"
     container_name: policy-agent
     networks:
       - default
@@ -43,7 +43,7 @@ services:
     #  - ./config/pms/application-policyagent.yaml:/opt/app/policy-agent/config/application.yaml:ro
 
   a1-sim-OSC:
-    image: nexus3.o-ran-sc.org:10002/o-ran-sc/a1-simulator:2.1.0
+    image: "${A1_SIM_IMAGE_BASE}:${A1_SIM_IMAGE_TAG}"
     container_name: a1-sim-OSC
     networks:
       - default
@@ -58,7 +58,7 @@ services:
       - ALLOW_HTTP=true
 
   a1-sim-STD:
-    image: nexus3.o-ran-sc.org:10002/o-ran-sc/a1-simulator:2.1.0
+    image: "${A1_SIM_IMAGE_BASE}:${A1_SIM_IMAGE_TAG}"
     container_name: a1-sim-STD
     networks:
       - default
@@ -73,7 +73,7 @@ services:
       - ALLOW_HTTP=true
 
   a1-sim-STD-v2:
-    image: nexus3.o-ran-sc.org:10002/o-ran-sc/a1-simulator:2.1.0
+    image: "${A1_SIM_IMAGE_BASE}:${A1_SIM_IMAGE_TAG}"
     container_name: a1-sim-STD-v2
     networks:
       - default
@@ -88,7 +88,7 @@ services:
       - ALLOW_HTTP=true
 
   r-app:
-    image: nexus3.o-ran-sc.org:10002/o-ran-sc/nonrtric-r-app-catalogue:1.1.0
+    image: "${RAPP_IMAGE_BASE}:${RAPP_IMAGE_TAG}"
     container_name: r-app
     networks:
       - default
@@ -97,7 +97,7 @@ services:
       - 8633:8633
 
   policy-control-panel:
-    image: nexus3.o-ran-sc.org:10002/o-ran-sc/nonrtric-controlpanel:2.2.0
+    image: "${CONTROL_PANEL_IMAGE_BASE}:${CONTROL_PANEL_IMAGE_TAG}"
     container_name: policy-control-panel
     networks:
       - default
@@ -108,7 +108,7 @@ services:
       - ./config/control-panel/nginx.conf:/etc/nginx/nginx.conf:ro
 
   nonrtric-gateway:
-    image: nexus3.o-ran-sc.org:10002/o-ran-sc/nonrtric-gateway:1.0.0
+    image: "${NONRTRIC_GATEWAY_IMAGE_BASE}:${NONRTRIC_GATEWAY_IMAGE_TAG}"
     container_name: nonrtric-gateway
     networks:
       - default
@@ -118,7 +118,7 @@ services:
       - ./config/nonrtric-gateway/application-nonrtricgateway.yaml:/opt/app/nonrtric-gateway/config/application.yaml:ro
 
   ecs:
-    image: nexus3.o-ran-sc.org:10002/o-ran-sc/nonrtric-enrichment-coordinator-service:1.1.0
+    image: "${ECS_IMAGE_BASE}:${ECS_IMAGE_TAG}"
     container_name: ecs
     networks:
       - default
@@ -127,7 +127,7 @@ services:
       - 8434:8434
 
   producer:
-    image: eexit/mirror-http-server
+    image: "${PRODUCER_IMAGE_BASE}:${PRODUCER_IMAGE_TAG}"
     container_name: producer
     networks:
       - default
@@ -135,7 +135,7 @@ services:
       - 8088:80
 
   oru-app:
-    image: nexus3.o-ran-sc.org:10002/o-ran-sc/nonrtric-o-ru-closed-loop-recovery:1.0.0
+    image: "${ORU_APP_IMAGE_BASE}:${ORU_APP_IMAGE_TAG}"
     container_name: oru-app
     networks:
       - default
@@ -151,7 +151,7 @@ services:
       - ./config/oru-app/o-ru-to-o-du-map.txt:/usr/src/app/o-ru-to-o-du-map.txt:ro
 
   db:
-    image: mysql/mysql-server:5.6
+    image: "${DB_IMAGE_BASE}:${DB_IMAGE_TAG}"
     container_name: sdncdb
     networks:
       - default
@@ -170,7 +170,7 @@ services:
         max-file: "5"
 
   a1controller:
-    image: nexus3.onap.org:10002/onap/sdnc-image:2.1.2
+    image: "${A1CONTROLLER_IMAGE_BASE}:${A1CONTROLLER_IMAGE_TAG}"
     depends_on :
       - db
     container_name: a1controller
