@@ -8,7 +8,45 @@ Operation and Maintenance Release Notes
 
 This document provides the release notes for O-RAN-SC D-Release of the Operation and Maintenance (OAM) project.
 
-A collection of release notes for used projects is available in `O-RAN-SC OAM wiki release notes <https://wiki.o-ran-sc.org/display/OAM/D-Release+Notes>`__.
+A collection of release notes for used projects is available in `O-RAN-SC OAM wiki release notes <https://wiki.o-ran-sc.org/display/OAM/E-Release+Notes>`__.
+
+Version 5.0.0, 2021-11-29 
+-------------------------
+
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| Issue                                                   | Summary                                                                         |
++=========================================================+=================================================================================+
+| `OAM-221  <https://jira.o-ran-sc.org/browse/OAM-221>`__ | Wrong value format in measurement ves example                                   |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-222  <https://jira.o-ran-sc.org/browse/OAM-222>`__ | OAM Deployment enhancements                                                     |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-223  <https://jira.o-ran-sc.org/browse/OAM-223>`__ | update from stating to released                                                 |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-226  <https://jira.o-ran-sc.org/browse/OAM-226>`__ | Create yang model for CM according to the requirements by O-DU and the use case |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-227  <https://jira.o-ran-sc.org/browse/OAM-227>`__ | Create VES stndDefined extension for PM-streaming                               |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-228  <https://jira.o-ran-sc.org/browse/OAM-228>`__ | Update O-RAN-SC-Du Hello-world yang for CM                                      |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-229  <https://jira.o-ran-sc.org/browse/OAM-229>`__ | Update header of o-ran-sc-du-hello-world                                        |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-230  <https://jira.o-ran-sc.org/browse/OAM-230>`__ | Consider CM in o-ran-sc-du-hello-world.yang                                     |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-231  <https://jira.o-ran-sc.org/browse/OAM-231>`__ | Add slice management to o-ran-sc-du-hello-world.yang                            |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-232  <https://jira.o-ran-sc.org/browse/OAM-232>`__ | Add performance measurement job management to o-ran-sc-du-hello-world.yang      |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-233  <https://jira.o-ran-sc.org/browse/OAM-233>`__ | Add subscription management to o-ran-sc-du-hello-world.yang                     |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-234  <https://jira.o-ran-sc.org/browse/OAM-234>`__ | Create VES stndDefined PM streaming OpenAPI                                     |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-235  <https://jira.o-ran-sc.org/browse/OAM-235>`__ | Create a Yang notification syntax                                               |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-237  <https://jira.o-ran-sc.org/browse/OAM-237>`__ | Bug fixes in o-ran-sc-du-hello-world yang                                       |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-238  <https://jira.o-ran-sc.org/browse/OAM-238>`__ | Update O-RAN-SC wiki release page                                               |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+
 
 Version 4.0.4, 2021-05-22 
 -------------------------
