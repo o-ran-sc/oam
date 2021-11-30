@@ -64,8 +64,8 @@ checkStatus "curl -skw %{http_code} http://localhost:30005/" "OK200" "SIM3"
 echo "check PMS status:"
 checkStatus "curl -skw %{http_code} http://localhost:8091/status" "hunky dory200" "PMS"
 
-# check ECS status
-echo "check ECS status:"
-checkStatus "curl -skw %{http_code} http://localhost:8083/status" '{"status":"hunky dory","no_of_producers":0,"no_of_types":0,"no_of_jobs":0}200' "ECS"
+# check ICS status
+echo "check ICS status:"
+checkStatus "curl -skw %{http_code} http://localhost:8083/status" '{"status":"hunky dory","no_of_producers":0,"no_of_types":0,"no_of_jobs":0}200' "ICS"
 
 echo "NONRTRIC health check passed."

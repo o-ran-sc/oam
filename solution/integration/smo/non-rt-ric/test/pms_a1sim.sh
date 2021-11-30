@@ -62,6 +62,6 @@ checkStatus "curl -skw %{http_code} http://localhost:8091/status" "hunky dory200
 
 cd ${SHELL_FOLDER}/../data
 ./preparePmsData.sh
-./prepareEcsData.sh
+./prepareIcsData.sh
 
 
