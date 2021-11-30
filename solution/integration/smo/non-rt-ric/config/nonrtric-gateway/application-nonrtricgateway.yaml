@@ -31,11 +31,11 @@ spring:
         predicates:
         - Path=/a1-policy/**
       - id: A1-EI
-        uri: http://ecs:8083
+        uri: http://ics:8083
         predicates:
         - Path=/ei-producer/**
       - id: A1-EI2
-        uri: http://ecs:8083
+        uri: http://ics:8083
         predicates:
         - Path=/data-producer/**,/data-consumer/**
 management:
