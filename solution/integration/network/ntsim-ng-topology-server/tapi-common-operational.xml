@@ -27,7 +27,7 @@
           <layer-protocol-name>ETH</layer-protocol-name>
           <name>
             <value-name>device-name</value-name>
-            <value>highstreet-O-DU-1122</value>
+            <value>O-DU-1122</value>
           </name>
           <administrative-state>LOCKED</administrative-state>
           <operational-state>ENABLED</operational-state>
@@ -69,7 +69,7 @@
           <layer-protocol-name>ETH</layer-protocol-name>
           <name>
             <value-name>device-name</value-name>
-            <value>highstreet-O-RU-11221</value>
+            <value>O-RU-11221</value>
           </name>
           <administrative-state>LOCKED</administrative-state>
           <operational-state>ENABLED</operational-state>
@@ -111,7 +111,7 @@
           <layer-protocol-name>ETH</layer-protocol-name>
           <name>
             <value-name>device-name</value-name>
-            <value>highstreet-O-RU-11222</value>
+            <value>O-RU-11222</value>
           </name>
           <administrative-state>LOCKED</administrative-state>
           <operational-state>ENABLED</operational-state>
@@ -153,7 +153,7 @@
           <layer-protocol-name>ETH</layer-protocol-name>
           <name>
             <value-name>device-name</value-name>
-            <value>highstreet-O-RU-11223</value>
+            <value>O-RU-11223</value>
           </name>
           <administrative-state>LOCKED</administrative-state>
           <operational-state>ENABLED</operational-state>
@@ -187,7 +187,7 @@
           <direction>BIDIRECTIONAL</direction>
           <name>
             <value-name>link-name</value-name>
-            <value>highstreet-O-DU-1122-to-highstreet-O-RU-11221</value>
+            <value>O-DU-1122-to-O-RU-11221</value>
           </name>
           <administrative-state>LOCKED</administrative-state>
           <operational-state>ENABLED</operational-state>
@@ -232,7 +232,7 @@
           <direction>BIDIRECTIONAL</direction>
           <name>
             <value-name>link-name</value-name>
-            <value>highstreet-O-DU-1122-to-highstreet-O-RU-11222</value>
+            <value>O-DU-1122-to-O-RU-11222</value>
           </name>
           <administrative-state>LOCKED</administrative-state>
           <operational-state>ENABLED</operational-state>
@@ -277,7 +277,7 @@
           <direction>BIDIRECTIONAL</direction>
           <name>
             <value-name>link-name</value-name>
-            <value>highstreet-O-DU-1122-to-highstreet-O-RU-11223</value>
+            <value>O-DU-1122-to-O-RU-11223</value>
           </name>
           <administrative-state>LOCKED</administrative-state>
           <operational-state>ENABLED</operational-state>
