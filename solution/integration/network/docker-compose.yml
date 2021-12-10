@@ -119,7 +119,7 @@ services:
 
   ntsim-ng-topology-server:
     <<: *common_nf
-    image: "${PUBLIC_DOCKER_REPO}smo-nts-ng-topology-server:${NTS_BUILD_VERSION}"
+    image: "${NEXUS3_DOCKER_REPO}smo-nts-ng-topology-server:${NTS_BUILD_VERSION}"
     container_name: ntsim-ng-topology-server
     hostname: highstreet-TAPI-topology-server
     volumes:
