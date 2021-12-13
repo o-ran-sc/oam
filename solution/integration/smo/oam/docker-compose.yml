@@ -87,6 +87,8 @@ services:
       - 8443:8443
     volumes:
       - ./ves-collector/collector.properties:/opt/app/VESCollector/etc/collector.properties
+      - ./ves-collector/ves-dmaap-config.json:/opt/app/VESCollector/etc/ves-dmaap-config.json
+      - ./ves-collector/externalRepo:/opt/app/VESCollector/etc/externalRepo
     networks:
       smo:
       default:
