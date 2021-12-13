@@ -1,0 +1,222 @@
+openapi: 3.0.3
+info:
+  version: 0.0.0
+  title: O-RAN-SC-DU PM Streaming
+  description: >-
+    The O-RAN-SC E-Release provides a mechanism for Performance Measurement
+    streaming.
+
+
+    The streaming interfaces depends on the o-ran-sc-du-hello-world.yang and
+    the schemas could be used as extension sot the VES domain 'stndDefind'.
+    The event message is send from a network-function to a SMO.
+
+
+    Copyright 2021 highstreet technologies GmbH
+
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+
+    reference: https://jira.o-ran-sc.org/browse/OAM-234.
+
+servers:
+  - url: https://management-service-consumer:8443/v1
+    description: The url of an event stream consumer.
+paths:
+  /performance-measurement-stream:
+    post:
+      description: Posts a collection of measurements.
+      summary: POST performance-measurement-stream
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/performance-measurement-job'
+        description: Collection of measurements.
+      responses:
+        '201':
+          description: Posted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '405':
+          description: Method Not allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        default:
+          description: Error case.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+components:
+  schemas:
+    error-response:
+      description: >-
+        Used when an API throws an error with a HTTP error response-code (3xx,
+        4xx, 5xx)
+      type: object
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          description: >-
+            Explanation of the reason for the error which can be shown to a
+            human user.
+        message:
+          type: string
+          description: >-
+            More details and corrective actions related to the error which can
+            be shown to a human user.
+        documentation-reference:
+          type: string
+          format: uri
+          description: URI of describing the error.
+    measurement:
+      description: An abstract object class of a measurement.
+      type: object
+      required:
+        - measurement-type-instance-reference
+        - value
+      properties:
+        measurement-type-instance-reference:
+          type: string
+          description: >-
+            A YANG instance identifier for a supported measurement type
+            according to the definitions in o-ran-sc-du-hello-world.yang.
+
+            Example for average downlink user equipment throughput per cell
+            /network-function/distributed-unit-functions[id='<id-value>']/cell[id='<id-value']/supported-measurements/performance-measurement-type[.='user-equipment-average-throughput-downlink']
+
+            Example for a specific slice-differentiator (here sd=12345) subcounter of average downlink user equipment throughput
+            /network-function/distributed-unit-functions[id='<id-value>']/cell[id='<id-value']/supported-measurements/performance-measurement-type[.='user-equipment-average-throughput-downlink']/supported-snssai-subcounter-instances/slice-differentiator[.=12345]";
+        value:
+          # oneOf:
+          #   - type: boolean
+          #     description: A boolean value for the measurement.
+          type: integer
+          description: A integer value for the measurement.
+            # - type: number
+            #   description: A number value for the measurement.
+            # - type: string
+            #   description: A string value for the measurement.
+          # description: 'The value of the measurement type for its period. '
+        unit:
+          type: string
+          maxLength: 255
+          description: >-
+            The unit for the measurement. If there is a unit associated to the
+            measurement the network-function MUST provide this field. It is
+            recommended to follow International System of Units (SI).
+    measurements:
+      description: A collection of measurements.
+      type: array
+      items:
+        $ref: '#/components/schemas/measurement'
+    performance-measurement-job:
+      description: The performance measurement job header and a collection of measurements.
+      type: object
+      required:
+        - id
+        - start-time
+        - granularity-period
+        - measurements
+      properties:
+        id:
+          type: string
+          description: >-
+            The identifier configured by the event stream consumer within a
+            event stream provider for a performance-measurement-job.
+        start-time:
+          type: string
+          format: date-time
+          description: 'The timestamp when the measurement was started. '
+        administrative-state:
+          description: >-
+            Administrative state of an object. Indicates the permission to use
+            or prohibition against the object, imposed through the OAM services.
+          type: string
+          default: locked
+          enum:
+            - locked
+            - unlocked
+            - shutting-down
+        operational-state:
+          type: string
+          default: disabled
+          enum:
+            - enabled
+            - disabled
+          description: >-
+            Operational state of the object. Indicates whether the associated
+            resource is installed and partially or fully operable (enabled) or
+            the associated resource is not installed or not operable (disabled).
+        user-label:
+          type: string
+          maxLength: 255
+          description: >-
+            A user defined label of the object. There is no function associated
+            to the user label. However, the network function stores the value
+            persistently.
+        job-tag:
+          type: string
+          maxLength: 255
+          description: >-
+            A job group identifier to combine several
+            performance-measurement-jobs to one logical job.
+        granularity-period:
+          type: number
+          format: int32
+          description: >-
+            The interval time in seconds between the start of a measurement and
+            the end of a measurement
+        measurements:
+          $ref: '#/components/schemas/measurements'
+          description: The collection of measurements.
