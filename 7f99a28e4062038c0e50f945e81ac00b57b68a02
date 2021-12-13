@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a20e8863_7907d12a",
+        "filename": "solution/integration/network/.env",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000124
+      },
+      "writtenOn": "2021-12-13T14:29:53Z",
+      "side": 1,
+      "message": "Please use version 1.4.3, it is the latest one.",
+      "revId": "7f99a28e4062038c0e50f945e81ac00b57b68a02",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
