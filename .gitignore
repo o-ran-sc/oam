@@ -52,6 +52,9 @@ release.properties
 */**/__pycache__
 *.log
 
+# avoid copyright issues with 3GPP
+*/**/3gpp/**/*.yaml
+
 # documentation
 
 .tox
