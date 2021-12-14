@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8caebba0_3af7df36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2021-12-14T15:13:42Z",
+      "side": 1,
+      "message": "This is needed to run Control-Loop (Clamp) rApps.\nThanks ",
+      "revId": "514ea504fa114524513fc4a83a6d83b2f6754903",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
