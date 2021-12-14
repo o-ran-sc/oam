@@ -16,6 +16,24 @@
       "message": "I have one question. How is this change being tested?",
       "revId": "6e5b18f64e1281746f772de27495842aa2a0bcb8",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16ef1816_951dca9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2021-12-14T12:33:42Z",
+      "side": 1,
+      "message": "Tests are made currently in ONAP and OWL (and pre-int tests in highstreet lab) - together with Seb we will run in future (f release) heml charts and automated end-to-end functional tests.\nMaybe even OTF wants to play a role here.",
+      "parentUuid": "8952efdf_caebb4c7",
+      "revId": "6e5b18f64e1281746f772de27495842aa2a0bcb8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
