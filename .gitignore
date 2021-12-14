@@ -23,6 +23,7 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 *.pyc
+.DS_STORE
 
 */**/bin/
 
