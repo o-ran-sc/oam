@@ -30,10 +30,13 @@ services:
       image: nexus3.onap.org:10001/mariadb:10.5.8
       container_name: mariadb
       hostname: mariadb
-      command: ['--lower-case-table-names=1', '--wait_timeout=28800']
-      env_file: config/db/db.conf
       volumes:
-         - ./config/db:/docker-entrypoint-initdb.d:ro
+       - db-vol:/var/lib/mysql
+       - "./config/db/:/docker-entrypoint-initdb.d:rw"
+      environment:
+       - MYSQL_ROOT_PASSWORD=strong_pitchou
+      ports:
+       - "3306:3306"
       expose:
        - 3306
       networks:
@@ -45,10 +48,11 @@ services:
        - mariadb
       hostname: policy-api
       ports:
-       - "6969:6969"
+       - "6869:6969"
       expose:
-       - 6969
+       - 6869
       volumes:
+       - ./config/api/defaultConfig.json:/opt/app/policy/api/etc/defaultConfig.json:ro
        - ./config/ks.jks:/opt/app/policy/api/etc/ssl/policy-keystore.jks:ro
        - ./wait_for_port.sh:/opt/app/policy/api/bin/wait_for_port.sh:ro
       entrypoint: ./wait_for_port.sh
@@ -58,6 +62,7 @@ services:
         ]
       networks:
        - nonrtric
+       - smo
    pap:
       image: nexus3.onap.org:10001/onap/policy-pap:2.4.2
       container_name: policy-pap
@@ -160,7 +165,7 @@ services:
        - nonrtric
        - smo
    apex-pdp:
-      image: registry.nordix.org/onap/policy-apex-pdp:2.6.0-SNAPSHOT
+      image: nexus3.onap.org:10001/onap/policy-apex-pdp:2.5.4
       container_name: policy-apex-pdp
       depends_on:
        - mariadb
@@ -208,3 +213,103 @@ services:
       networks:
        - nonrtric
        - smo
+   controlloop-runtime:
+      image: nexus3.onap.org:10001/onap/policy-clamp-cl-runtime:6.1.3
+      container_name: controlloop-runtime
+      depends_on:
+       - mariadb
+      hostname: controlloop-runtime
+      ports:
+       - "6969:6969"
+      expose:
+       - 6969
+      volumes:
+       - ./config/ks.jks:/opt/app/policy/clamp/etc/ssl/policy-keystore:ro
+       - ./wait_for_port.sh:/opt/app/policy/clamp/bin/wait_for_port.sh:ro
+      environment:
+       - TOPICSERVER=onap-dmaap
+       - MARIADB_HOST=mariadb
+       - MARIADB_PORT=3306
+       - KEYSTORE=/opt/app/policy/clamp/etc/ssl/policy-keystore
+       - KEYSTORE_PASSWD=Pol1cy_0nap
+       - RUNTIME_TOPICPARAMETERGROUP_TOPICSOURCES_0_TOPIC=POLICY-CLRUNTIME-PARTICIPANT
+       - RUNTIME_TOPICPARAMETERGROUP_TOPICSOURCES_0_SERVERS_0=onap-dmaap
+       - RUNTIME_TOPICPARAMETERGROUP_TOPICSOURCES_0_TOPICCOMMINFRASTRUCTURE=dmaap
+       - RUNTIME_TOPICPARAMETERGROUP_TOPICSOURCES_0_FETCHTIMEOUT=15000
+       - RUNTIME_TOPICPARAMETERGROUP_TOPICSOURCES_0_USEHTTPS=false
+       - RUNTIME_TOPICPARAMETERGROUP_TOPICSINKS_0_TOPIC=POLICY-CLRUNTIME-PARTICIPANT
+       - RUNTIME_TOPICPARAMETERGROUP_TOPICSINKS_0_SERVERS_0=onap-dmaap
+       - RUNTIME_TOPICPARAMETERGROUP_TOPICSINKS_0_TOPICCOMMINFRASTRUCTURE=dmaap
+       - RUNTIME_TOPICPARAMETERGROUP_TOPICSINKS_0_FETCHTIMEOUT=15000
+       - RUNTIME_TOPICPARAMETERGROUP_TOPICSINKS_0_USEHTTPS=false
+      entrypoint: /opt/app/policy/clamp/bin/wait_for_port.sh
+      command: [
+        '-c', '/opt/app/policy/clamp/bin/controlloop-runtime.sh',
+        'mariadb', '3306',
+        'onap-dmaap', '3904'
+        ]
+      networks:
+       - nonrtric
+       - smo
+   policy-participant:
+      image: nexus3.onap.org:10001/onap/policy-clamp-cl-pf-ppnt:6.1.3
+      container_name: policy-participant
+      depends_on:
+       - mariadb
+       - controlloop-runtime
+      hostname: policy-participant
+      volumes:
+       - ./config/ks.jks:/opt/app/policy/clamp/etc/ssl/policy-keystore:ro
+       - ./wait_for_port.sh:/opt/app/policy/clamp/bin/wait_for_port.sh:ro
+      environment:
+       - TOPICSERVER=onap-dmaap
+       - KEYSTORE=/opt/app/policy/clamp/etc/ssl/policy-keystore
+       - KEYSTORE_PASSWD=Pol1cy_0nap
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSOURCES_0_TOPIC=POLICY-CLRUNTIME-PARTICIPANT
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSOURCES_0_SERVERS_0=onap-dmaap
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSOURCES_0_TOPICCOMMINFRASTRUCTURE=dmaap
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSOURCES_0_FETCHTIMEOUT=15000
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSOURCES_0_USEHTTPS=false
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSINKS_0_TOPIC=POLICY-CLRUNTIME-PARTICIPANT
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSINKS_0_SERVERS_0=onap-dmaap
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSINKS_0_TOPICCOMMINFRASTRUCTURE=dmaap
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSINKS_0_FETCHTIMEOUT=15000
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSINKS_0_USEHTTPS=false
+      entrypoint: /opt/app/policy/clamp/bin/wait_for_port.sh
+      command: [
+        '-c', '/opt/app/policy/clamp/bin/policy-participant.sh',
+        'controlloop-runtime', '6969'
+        ]
+      networks:
+       - nonrtric
+       - smo
+   k8s-participant:
+      image: nexus3.onap.org:10001/onap/policy-clamp-cl-k8s-ppnt:6.1.3
+      container_name: k8s-participant
+      depends_on:
+       - mariadb
+       - controlloop-runtime
+      hostname: k8s-participant
+      volumes:
+       - ./config/ks.jks:/opt/app/policy/clamp/etc/ssl/policy-keystore:ro
+       - ./wait_for_port.sh:/opt/app/policy/clamp/bin/wait_for_port.sh:ro
+      environment:
+       - TOPICSERVER=onap-dmaap
+       - KEYSTORE=/opt/app/policy/clamp/etc/ssl/policy-keystore
+       - KEYSTORE_PASSWD=Pol1cy_0nap
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSOURCES_0_TOPIC=POLICY-CLRUNTIME-PARTICIPANT
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSOURCES_0_SERVERS_0=onap-dmaap
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSOURCES_0_TOPICCOMMINFRASTRUCTURE=dmaap
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSOURCES_0_FETCHTIMEOUT=15000
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSOURCES_0_USEHTTPS=false
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSINKS_0_TOPIC=POLICY-CLRUNTIME-PARTICIPANT
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSINKS_0_SERVERS_0=onap-dmaap
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSINKS_0_TOPICCOMMINFRASTRUCTURE=dmaap
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSINKS_0_FETCHTIMEOUT=15000
+       - PARTICIPANT_INTERMEDIARYPARAMETERS_CLAMPCONTROLLOOPTOPICS_TOPICSINKS_0_USEHTTPS=false
+      entrypoint: sh -c "/opt/app/policy/clamp/bin/wait_for_port.sh controlloop-runtime 6969 && /opt/app/policy/clamp/bin/kubernetes-participant.sh"
+      networks:
+       - nonrtric
+       - smo
+volumes:
+  db-vol:
