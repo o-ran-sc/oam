@@ -66,4 +66,4 @@ checkStatus "curl -s -o /dev/null -I -w %{http_code} http://localhost:8282/apido
 
 cd ${SHELL_FOLDER}/../data
 ./preparePmsData.sh
-./prepareEcsData.sh
+./prepareIcsData.sh
