@@ -45,10 +45,11 @@ def sendVesEvent(data):
       # catastrophic error. bail.
       raise SystemExit(e)
         
-    if response.status_code >= 200 and response.status_code <= 500:
+    if response.status_code >= 200 and response.status_code <= 300:
       print(response)
     else:
-      sys.exit('Reading VES "stndDefined" message template failed.')
+      print(response.status_code)
+      sys.exit('Sending VES "stndDefined" message template failed with code %d.' % response.status_code)
 
 def sendHttpGet(url):
     try:
