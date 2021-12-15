@@ -39,6 +39,30 @@
       },
       "revId": "734f45eb2134d7782268defda8b9c6baf0560834",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dfc414d_6cdc19e0",
+        "filename": "solution/integration/smo/non-rt-ric/.env",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000247
+      },
+      "writtenOn": "2021-12-15T14:33:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd63cc42_c60e4451",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 18
+      },
+      "revId": "734f45eb2134d7782268defda8b9c6baf0560834",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
