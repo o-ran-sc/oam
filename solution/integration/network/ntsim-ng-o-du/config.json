@@ -13,6 +13,14 @@
             "stderr": "log/netopeer-stderr.log"
         },
     
+        "sshd": {
+            "path": "/usr/sbin/sshd",
+            "args": ["-D"],
+            "autorestart": true,
+            "stdout": "log/sshd-stdout.log",
+            "stderr": "log/sshd-stderr.log"
+        },
+    
         "ntsim-network-function": {
             "path": "/opt/dev/ntsim-ng/ntsim-ng",
             "args": ["-w/opt/dev/ntsim-ng", "-f"],
@@ -32,21 +40,22 @@
             "ietf-truststore",
             "ietf-system",
             "ietf-netconf-server",
-            "nts-network-function"
+            "nts-network-function",
+            "o-ran-sc-du-hello-world"
         ],
         
-        "default-list-instances": 2,
+        "default-list-instances": 1,
         "custom-list-instances" : []
     },
 
     "datastore-populate-rules": {
-        "random-generation-enabled": true,
+        "random-generation-enabled": false,
 
         "pre-generated-operational-data": [
-            "/opt/dev/deploy/data/o-ran-sc-du-hello-world-operational.xml"
+            "../deploy/data/o-ran-sc-du-hello-world-operational.xml"
         ],
         "pre-generated-running-data": [
-            "/opt/dev/deploy/data/o-ran-sc-du-hello-world-running.xml"
+            "../deploy/data/o-ran-sc-du-hello-world-running.xml"
         ]
     },
 
@@ -55,81 +64,81 @@
         "choosing-method" : "linear",
         "faults" : [
             {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11221']",
-                "severity"  : "CRITICAL",
+                "condition" : "CPRI Port Down",
+                "object"    : "Slot-0-Port-A",
+                "severity"  : "MAJOR",
                 "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
+                "specific-problem" : "CPRI Port Down",
 
-                "fault-severity" : "CRITICAL",
+                "fault-severity" : "MAJOR",
                 "affected-object" : "%%object%%",
                 "cleared" : "false",
-                "text" : "O-RU Port Down"
+                "text" : "CPRI Port Down"
             },
 
             {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11221']",
+                "condition" : "CPRI Port Down",
+                "object"    : "Slot-0-Port-A",
                 "severity"  : "NORMAL",
                 "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
+                "specific-problem" : "CPRI Port Down",
 
-                "fault-severity" : "CRITICAL",
+                "fault-severity" : "MAJOR",
                 "affected-object" : "%%object%%",
                 "cleared" : "true",
-                "text" : "O-RU Port Down"
+                "text" : "CPRI Port Down"
             },
 
             {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11222']",
-                "severity"  : "CRITICAL",
+                "condition" : "CPRI Port Down",
+                "object"    : "Slot-0-Port-C",
+                "severity"  : "MAJOR",
                 "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
+                "specific-problem" : "CPRI Port Down",
 
-                "fault-severity" : "CRITICAL",
+                "fault-severity" : "MAJOR",
                 "affected-object" : "%%object%%",
                 "cleared" : "false",
-                "text" : "O-RU Port Down"
+                "text" : "CPRI Port Down"
             },
 
             {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11222']",
+                "condition" : "CPRI Port Down",
+                "object"    : "Slot-0-Port-C",
                 "severity"  : "NORMAL",
                 "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
+                "specific-problem" : "CPRI Port Down",
 
-                "fault-severity" : "CRITICAL",
+                "fault-severity" : "MAJOR",
                 "affected-object" : "%%object%%",
                 "cleared" : "true",
-                "text" : "O-RU Port Down"
+                "text" : "CPRI Port Down"
             },
 
             {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11223']",
-                "severity"  : "CRITICAL",
+                "condition" : "CPRI Port Down",
+                "object"    : "Slot-2-Port-B",
+                "severity"  : "MAJOR",
                 "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
+                "specific-problem" : "CPRI Port Down",
 
-                "fault-severity" : "CRITICAL",
+                "fault-severity" : "MAJOR",
                 "affected-object" : "%%object%%",
                 "cleared" : "false",
-                "text" : "O-RU Port Down"
+                "text" : "CPRI Port Down"
             },
 
             {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11223']",
+                "condition" : "CPRI Port Down",
+                "object"    : "Slot-2-Port-B",
                 "severity"  : "NORMAL",
                 "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
+                "specific-problem" : "CPRI Port Down",
 
-                "fault-severity" : "CRITICAL",
+                "fault-severity" : "MAJOR",
                 "affected-object" : "%%object%%",
                 "cleared" : "true",
-                "text" : "O-RU Port Down"
+                "text" : "CPRI Port Down"
             }
         ]
     }
