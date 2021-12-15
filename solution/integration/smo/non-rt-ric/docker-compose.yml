@@ -150,6 +150,22 @@ services:
     volumes:
       - ./config/oru-app/o-ru-to-o-du-map.txt:/usr/src/app/o-ru-to-o-du-map.txt:ro
 
+  odu-app:
+    image: "${ODU_APP_IMAGE_BASE}:${ODU_APP_IMAGE_TAG}"
+    container_name: odu-app
+    networks:
+      - default
+      - oam
+      - smo
+    environment:
+      - MR_HOST=http://onap-dmaap
+      - MR_PORT=3904
+      - SDNR_ADDRESS=http://sdnr:8181
+      - SDNR_USER=admin
+      - SDNR_PASSWORD=Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
+      - LOG_LEVEL=Info
+      - POLLTIME=10
+
   db:
     image: "${DB_IMAGE_BASE}:${DB_IMAGE_TAG}"
     container_name: sdncdb
