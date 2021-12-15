@@ -16,6 +16,29 @@
       "message": "This adds the O-DU Slice Assurance rApp. ",
       "revId": "734f45eb2134d7782268defda8b9c6baf0560834",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd63cc42_c60e4451",
+        "filename": "solution/integration/smo/non-rt-ric/.env",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000261
+      },
+      "writtenOn": "2021-12-15T14:29:49Z",
+      "side": 1,
+      "message": "It think SDNC uses mariadb - but I guess it still works with mysql?",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 18
+      },
+      "revId": "734f45eb2134d7782268defda8b9c6baf0560834",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
