@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa12caab_45edd525",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2021-12-15T12:07:11Z",
+      "side": 1,
+      "message": "This adds the O-DU Slice Assurance rApp. ",
+      "revId": "734f45eb2134d7782268defda8b9c6baf0560834",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
