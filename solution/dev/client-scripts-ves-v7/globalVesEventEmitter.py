@@ -45,7 +45,7 @@ def sendVesEvent(data):
       # catastrophic error. bail.
       raise SystemExit(e)
         
-    if response.status_code >= 200 and response.status_code < 300:
+    if response.status_code >= 200 and response.status_code <= 500:
       print(response)
     else:
       sys.exit('Reading VES "stndDefined" message template failed.')
@@ -106,5 +106,4 @@ def saveExample(data):
     with open(outputFileName, 'w') as f:
       json.dump(data['body'], f, indent=2, sort_keys=True)
   else:
-    print("Example could not been saved:\n" + json.dump(data, f, indent=2, sort_keys=True)) 
-  
+    print("Example could not been saved:\n" + json.dump(data, f, indent=2, sort_keys=True))
