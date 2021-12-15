@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d208542e_d5b94731",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2021-12-15T16:34:21Z",
+      "side": 1,
+      "message": "thanks - I will try to add it to e-release....",
+      "revId": "e61eacb12cf7ce0f2f54b059c3fd8bcaaa66d938",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
