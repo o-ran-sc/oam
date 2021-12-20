@@ -41,6 +41,18 @@
                     }
                 }
             ],
+            "networkSliceArray": [
+                {
+                    "DRB.UEThpDl.SNSSAI": 5000,
+                    "DRB.UEThpUl.SNSSAI": 4500,
+                    "networkSliceIdentifier": "255FFFFFF"
+                },
+                {
+                    "DRB.UEThpDl.SNSSAI": 4500,
+                    "DRB.UEThpUl.SNSSAI": 5000,
+                    "networkSliceIdentifier": "001FFFFFA"
+                }               
+            ],
             "additionalObjects": [],
             "codecUsageArray": [],
             "concurrentSessions": 2,
