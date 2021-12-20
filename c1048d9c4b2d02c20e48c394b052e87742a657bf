@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "330fa407_a41bb74e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2021-12-20T11:49:59Z",
+      "side": 1,
+      "message": "local tox says:\n\ndemx8as6 @ martindev ~/workspace/o-ran-sc/oam (OAM-244)\n└─ $ ▶ tox -e docs,docs-linkcheck\n[...]\n  docs: commands succeeded\n  docs-linkcheck: commands succeeded\n  congratulations :)\n",
+      "revId": "c1048d9c4b2d02c20e48c394b052e87742a657bf",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
