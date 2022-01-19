@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c58a4d2f_e774e54a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-01-19T09:33:30Z",
+      "side": 1,
+      "message": "Look for any errors in the above output or in docs/_build/linkcheck/output.txt\n_____________________________________________________________________________ summary _____________________________________________________________________________\n  docs: commands succeeded\n  docs-linkcheck: commands succeeded\n  congratulations :)\ndemx8as6 @ martindev ~/workspace/o-ran-sc/oam (OAM-244)",
+      "revId": "f12cc1a2593ac349c585f9d166e11127f042fd12",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
