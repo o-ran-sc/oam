@@ -138,16 +138,16 @@ components:
             Example for a specific slice-differentiator (here sd=12345) subcounter of average downlink user equipment throughput
             /network-function/distributed-unit-functions[id='<id-value>']/cell[id='<id-value']/supported-measurements/performance-measurement-type[.='user-equipment-average-throughput-downlink']/supported-snssai-subcounter-instances/slice-differentiator[.=12345]";
         value:
-          # oneOf:
-          #   - type: boolean
-          #     description: A boolean value for the measurement.
-          type: integer
-          description: A integer value for the measurement.
-            # - type: number
-            #   description: A number value for the measurement.
-            # - type: string
-            #   description: A string value for the measurement.
-          # description: 'The value of the measurement type for its period. '
+          anyOf: 
+            - type: boolean
+              description: A boolean value for the measurement.
+            - type: integer 
+              description: A integer value for the measurement.
+            - type: number
+              description: A number value for the measurement.
+            - type: string
+              description: A string value for the measurement.
+          description: 'The value of the measurement type for its period. '
         unit:
           type: string
           maxLength: 255
