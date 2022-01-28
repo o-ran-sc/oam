@@ -54,7 +54,7 @@ def getToken():
       raise SystemExit(e)
 
     if response.status_code >= 200 and response.status_code < 300:
-      print('Got tocken!')
+      print('Got token!')
       return response.json()['access_token']
     else:
       sys.exit('Getting token failed.')
