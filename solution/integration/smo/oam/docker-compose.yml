@@ -66,6 +66,7 @@ services:
       - IDENTITY_PROVIDER_URL=${IDENTITY_PROVIDER_URL}
       - SDNC_WEB_URL=https://sdnc-web:${SDNC_WEB_PORT}
     volumes:
+      - ./sdnr/oauth-aaa-app-config.xml:/opt/opendaylight/current/system/org/opendaylight/aaa/aaa-shiro/0.13.3/aaa-shiro-0.13.3-aaa-app-config.xml
       - ./sdnr/oauth-provider.config.json:/opt/opendaylight/etc/oauth-provider.config.json
       - ./sdnr/devicemanager.properties:/opt/opendaylight/etc/devicemanager.properties
       - ./sdnr/mountpoint-registrar.properties:/opt/opendaylight/etc/mountpoint-registrar.properties
