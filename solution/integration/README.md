@@ -30,16 +30,18 @@ for developer test or demo purposes
     ... representing an KeyCloak based identity service for centralized user
     management. Please note that the implementation does not support IPv6.
     Therefore, its own network is required called 'DMZ'.
+    In this configuration the external https port is 8463.
 
   * **SDN-R** single node instance
 
     ... representing the NetConf consumer on the Service Management and
     Orchestration framework (SMO) for the O1 interface based on
     ODL-Silicon/ONAP-Istanbul
+    SDN-R comes with is own web-portal the external port is 8463.
 
   * **VES collector**
 
-    ... representing the VES (REST) provider at SMO for all kind of events.
+    ... representing the VES (REST) provider at SMO for all kind of events. In this configuration the external https port is 8443.
 
   * **DMaaP**
     ... representing SMO DMaaP component, includes message-router
@@ -51,7 +53,7 @@ for developer test or demo purposes
 
   * **Non-RT-RIC**
     ... representing all the components of Non-RT-RIC, includes Non-RT-RIC Control Panel, Non-RT-RIC (Spring Cloud) Service Gateway, A1 Policy Management Services,
-    Enrichment Data Coordinator, Non-RT-RIC App Catalogue, "Helloworld" O-RU Fronthaul Recovery use-case, Near-RT RIC A1 Simulator etc.
+    Enrichment Data Coordinator, Non-RT-RIC App Catalogue, "HelloWorld" O-RU Fronthaul Recovery use-case, Near-RT RIC A1 Simulator etc.
 
 ## Prerequisites
 
@@ -60,13 +62,14 @@ $ cat /etc/os-release | grep PRETTY_NAME
 PRETTY_NAME="Ubuntu 20.04.2 LTS"
 
 $ docker --version
-Docker version 20.10.2, build 20.10.2-0ubuntu1~20.04.2
+Docker version 20.10.7, build 20.10.7-0ubuntu1~20.04.2
 
 $ docker-compose version
 docker-compose version 1.29.1, build c34c88b2
 docker-py version: 5.0.0
 CPython version: 3.7.10
 OpenSSL version: OpenSSL 1.1.0l  10 Sep 2019
+
 
 $ git --version
 git version 2.25.1
@@ -86,6 +89,13 @@ $ cat /etc/hosts
 127.0.1.1	              <your-system>
 <deployment-system-ipv4>   sdnc-web <your-system>
 <deployment-system-ipv4>   identity <your-system>
+```
+
+It is beneficial (but not mandatory) adding the following line add the
+end of your ~/.bashrc file. I will suppress warnings when python script
+do not verify self signed certificates for HTTPS communication. 
+```
+export PYTHONWARNINGS="ignore:Unverified HTTPS request"  
 ```
 
 ## Expected Folder Structure
@@ -139,6 +149,12 @@ nano smo/non-rt-ric/.env
 nano smo/oam/.env
 nano network/.env
 ```
+
+The tested configuration uses the following external https ports:
+
+ * 8443 for the ves-collector
+ * 8453 for web access to ODLUX (SDNC_WEB_PORT)
+ * 8463 for the keyclock web administrator user interface. 
 
 #### Startup solution
 
