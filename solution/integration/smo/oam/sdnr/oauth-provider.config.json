@@ -1,23 +1,24 @@
 {
-	"tokenSecret": "my-secret",
-	"tokenIssuer": "ONAP-SDNC",
-	"publicUrl": "${SDNC_WEB_URL}",
-	"redirectUri": "/odlux/index.html#/oauth?token=",
-	"supportOdlUsers": "true",
-	"providers": [
-		{
-			"id": "identity",
-			"type": "KEYCLOAK",
-			"url": "http://identity:8081",
-			"clientId": "odlux.app",
-			"secret": "2a64fdca-c205-4b52-9f58-195ccc142ddb",
-			"scope": "openid",
-			"title": "ONAP-IDENTITY",
-			"roleMapping": {
-				"administration": "admin"
-			},
-			"realmName": "onap",
-            "trustAll": "true"
+  "tokenSecret": "my-secret",
+  "tokenIssuer": "ONAP-SDNC",
+  "publicUrl": "https://sdnc-web:8453",
+  "redirectUri": "/odlux/index.html#/oauth?token=",
+  "supportOdlUsers": "true",
+  "providers": [
+    {
+      "id": "identity",
+      "type": "KEYCLOAK",
+      "url": "https://identity:8463",
+      "internalUrl": "https://identity:8443",
+      "clientId": "odlux.app",
+      "secret": "2a64fdca-c205-4b52-9f58-195ccc142ddb",
+      "scope": "openid",
+      "title": "ONAP-IDENTITY",
+      "roleMapping": {
+        "administration": "admin"
+      },
+      "realmName": "onap",
+      "trustAll": "true"
 		}
 	]
 }

@@ -698,7 +698,6 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "2a64fdca-c205-4b52-9f58-195ccc142ddb",
       "redirectUris": [
-        "http://localhost:8081/*",
         "https://sdnc-web:8453/*"
       ],
       "webOrigins": [],

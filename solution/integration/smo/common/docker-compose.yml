@@ -19,11 +19,12 @@ services:
     image: ${IDENTITY_IMAGE}
     container_name: identity
     ports: 
-      - ${IDENTITY_PORT}:${IDENTITY_PORT}
+      - ${IDENTITY_PORT}:8443
     environment: 
       - KEYCLOAK_USER=${ADMIN_USERNAME}
       - KEYCLOAK_PASSWORD=${ADMIN_PASSWORD}
-      - JAVA_OPTS=-Djboss.http.port=${IDENTITY_PORT}
+      - JAVA_OPTS=-Djboss.bind.address.private=[::1] -Djboss.bind.address=[::1] -Djava.net.preferIPv6Addresses=true -Djava.net.preferIPv4Stack=false
+      - DB_VENDOR=h2
     networks:
       dmz:
               

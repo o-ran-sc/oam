@@ -24,7 +24,7 @@ import getpass
 
 # global configurations
 # TODO: read from ../.env
-base = 'http://localhost:8081'
+base = 'https://identity:8463'
 username = 'admin'
 password = 'Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U'
 realmFile = os.path.dirname(os.path.abspath(__file__)) + '/o-ran-sc-realm.json'
