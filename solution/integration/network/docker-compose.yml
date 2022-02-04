@@ -64,7 +64,7 @@ services:
     <<: *common_nf
     image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-du:${NTS_BUILD_VERSION}"
     container_name: ntsim-ng-o-du-1122
-    hostname: highstreet-O-DU-1122
+    hostname: O-DU-1122
     volumes:
         - ./ntsim-ng-o-du/config.json:/opt/dev/ntsim-ng/config/config.json
         - ./ntsim-ng-o-du/o-ran-sc-du-hello-world-running.xml:/opt/dev/deploy/data/o-ran-sc-du-hello-world-running.xml
@@ -77,7 +77,7 @@ services:
     <<: *common_nf
     image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-ru-fh:${NTS_BUILD_VERSION}"
     container_name: ntsim-ng-o-ru-fh-11221
-    hostname: highstreet-O-RU-11221
+    hostname: O-RU-11221
     volumes:
         - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/config.json:/opt/dev/ntsim-ng/config/config.json
         - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
@@ -92,7 +92,7 @@ services:
     <<: *common_nf
     image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-ru-fh:${NTS_BUILD_VERSION}"
     container_name: ntsim-ng-o-ru-fh-11222
-    hostname: highstreet-O-RU-11222
+    hostname: O-RU-11222
     volumes:
         - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/config.json:/opt/dev/ntsim-ng/config/config.json
         - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
@@ -107,7 +107,7 @@ services:
     <<: *common_nf
     image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-ru-fh:${NTS_BUILD_VERSION}"
     container_name: ntsim-ng-o-ru-fh-11223
-    hostname: highstreet-O-RU-11223
+    hostname: O-RU-11223
     volumes:
         - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/config.json:/opt/dev/ntsim-ng/config/config.json
         - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
@@ -122,7 +122,7 @@ services:
     <<: *common_nf
     image: "${NEXUS3_DOCKER_REPO}smo-nts-ng-topology-server:${NTS_BUILD_VERSION}"
     container_name: ntsim-ng-topology-server
-    hostname: highstreet-TAPI-topology-server
+    hostname: TAPI-topology-server
     volumes:
         - ./ntsim-ng-topology-server/config.json:/opt/dev/ntsim-ng/config/config.json
         - ./ntsim-ng-topology-server/tapi-common-operational.xml:/opt/dev/deploy/data/tapi-common-operational.xml

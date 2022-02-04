@@ -25,7 +25,7 @@ import subprocess
 dockerFilter = subprocess.check_output("docker ps --format '{{.Names}}'", shell=True)
 containers = dockerFilter.splitlines()
 
-mapping = dict({"ntsim-ng-o-ru": "highstreet-O-RU", "ntsim-ng-o-du": "highstreet-O-DU"}) 
+mapping = dict({"ntsim-ng-o-ru": "O-RU", "ntsim-ng-o-du": "O-DU"}) 
 # base = 'https://sdnc-web:8453'
 base = 'https://localhost:8453'
 username = 'admin'
