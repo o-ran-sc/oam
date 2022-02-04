@@ -4,7 +4,7 @@
     <user-label>nf1</user-label>
     <distinguished-name-prefix>CN=KarenBerge,CN=admin,DC=corp,DC=Fabrikam,DC=COM</distinguished-name-prefix>
     <distributed-unit-functions>
-      <id>O-DU-1211</id>
+      <id>O-DU-1122</id>
       <administrative-state>unlocked</administrative-state>
       <user-label>o-du-1</user-label>
       <cell>

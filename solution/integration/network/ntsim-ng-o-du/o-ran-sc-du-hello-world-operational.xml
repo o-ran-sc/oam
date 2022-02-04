@@ -6,7 +6,7 @@
     <distinguished-name-prefix>CN=KarenBerge,CN=admin,DC=corp,DC=Fabrikam,DC=COM</distinguished-name-prefix>
     <location-name>address name</location-name>
     <distributed-unit-functions>
-      <id>O-DU-1211</id>
+      <id>O-DU-1122</id>
       <administrative-state>locked</administrative-state>
       <operational-state>enabled</operational-state>
       <user-label>o-du-1</user-label>
