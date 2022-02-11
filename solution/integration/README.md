@@ -215,7 +215,7 @@ script `preparePmsData.sh` sends http requests to policy-agent service, and crea
 bash prepareEcsData.sh
 ```
 
-script `prepareEcsData.sh` sends http requests to ecs service, and creates data accordingly.
+script `prepareIcsData.sh` sends http requests to ics service, and creates data accordingly.
 
 Afterwards, open webpage:
 <http://localhost:8182/>
