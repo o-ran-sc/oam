@@ -16,6 +16,29 @@
       "message": "This is a cherry-pick from master branch to e-release branch",
       "revId": "69b38004c2efeb167d517607f69609233a1fe350",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f68dbdb_462bcab1",
+        "filename": "solution/integration/smo/non-rt-ric/.env",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2022-02-15T07:08:53Z",
+      "side": 1,
+      "message": "Could you please also update this to 1.0.2, which is the released version?",
+      "range": {
+        "startLine": 52,
+        "startChar": 23,
+        "endLine": 52,
+        "endChar": 24
+      },
+      "revId": "69b38004c2efeb167d517607f69609233a1fe350",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
