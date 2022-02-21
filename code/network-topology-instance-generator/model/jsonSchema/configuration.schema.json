@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://highstreet-technologies.com/network-topology-instance-generator/configuration.schema.json",
+  "title": "Configuration",
+  "description": "This schema validates the initial configuration for the network topology instance generator. ",
+  "type": "object",
+  "required": [
+    "network"
+  ],
+  "properties": {
+    "network": {
+      "description": "Defines the network and its topology to be generated.",
+      "$ref": "#/$defs/network"
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "number",
+      "minimum": 1,
+      "exclusiveMaximum": 9
+    },
+    "pattern": {
+      "type": "object",
+      "properties": {
+        "smo": {
+          "description": "Number of Service Management and Orchestrion (SMO) instances to be generated. SMO is a root network topology node.",
+          "$ref": "#/$defs/count"
+        },
+        "o-cloud": {
+          "description": "Number of Near real-time RAN Intelligent Controller (Near-RT-RIC) instances to be generated per SMO.",
+          "$ref": "#/$defs/count"
+        },
+        "near-rt-ric": {
+          "description": "Number of Near real-time RAN Intelligent Controller (Near-RT-RIC) instances to be generated per SMO.",
+          "$ref": "#/$defs/count"
+        },
+        "o-cu": {
+          "description": "Number of O-RAN Centralized Units (O-CU) instances to be generated per Near-RT-RIC.",
+          "$ref": "#/$defs/count"
+        },
+        "o-du": {
+          "description": "Number of O-RAN Distributed Units (O-DU) instances to be generated per O-CU.",
+          "$ref": "#/$defs/count"
+        },
+        "fronthaul-gateway": {
+          "description": "Number of Fronthaul Gateway instances to be generated per O-DU.",
+          "type": "number",
+          "minimum": 1,
+          "exclusiveMaximum": 2
+        },
+        "o-ru": {
+          "description": "Number of O-RAN Radio Units (O-RU) instances to be generated per Fronthaul Gateway.",
+          "$ref": "#/$defs/count"
+        },
+        "ue": {
+          "description": "Number of User Equipment (UE) instances to be generated per O-RU.",
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "network": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The name as identification for humans. For the pattern explanation, please see: https://regex101.com/r/3ER25H/1",
+          "type": "string",
+          "pattern": "^[a-zA-Z]{1}[\\S]{0,254}$"
+        },
+        "pattern": {
+          "description": "A hierarchical order of network-function-types and its appearance relative to its parent.",
+          "$ref": "#/$defs/pattern"
+        }
+      }
+    }
+  }
+}
