@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ad676cf_45e9d98c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-02-22T12:05:39Z",
+      "side": 1,
+      "message": "The result is published at\nhttps://wiki.onap.org/download/attachments/100894530/o-ran-sc-f-release-network-view.svg?version\u003d2\u0026modificationDate\u003d1645367080000\u0026api\u003dv2\n\nKnow issues to be addressed in later commits\n- integration of css into a single SVG file\n- python test cases\n- python linter ",
+      "revId": "d108e098b835a88c2eeab580cfc7eb7a06a7172d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
