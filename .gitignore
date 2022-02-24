@@ -41,6 +41,11 @@ target-ide/
 release.properties
 .vscode
 
+# python
+__pycache__
+.pylintrc
+output
+
 # data models in scp/oam/modeling
 *.yang
 
@@ -56,7 +61,6 @@ release.properties
 */**/3gpp/**/*.yaml
 
 # documentation
-
 .tox
 docs/_build/
 ci-management/
