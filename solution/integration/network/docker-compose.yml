@@ -18,16 +18,16 @@ version: '3.8'
 x-common_env: &common_env
     IPv6_ENABLED: ${IPv6_ENABLED}
     SSH_CONNECTIONS: ${SSH_CONNECTIONS}
-    TLS_CONNECTIONS: ${TLS_CONNECTIONS}    
+    TLS_CONNECTIONS: ${TLS_CONNECTIONS}
     NTS_NF_MOUNT_POINT_ADDRESSING_METHOD: ${NTS_NF_MOUNT_POINT_ADDRESSING_METHOD}
-    
+
     NTS_HOST_IP: ${NTS_HOST_IP}
     NTS_HOST_BASE_PORT: ${NTS_HOST_BASE_PORT}
     NTS_HOST_NETCONF_SSH_BASE_PORT: ${NTS_HOST_NETCONF_SSH_BASE_PORT}
     NTS_HOST_NETCONF_TLS_BASE_PORT: ${NTS_HOST_NETCONF_TLS_BASE_PORT}
     NTS_HOST_TRANSFER_FTP_BASE_PORT: ${NTS_HOST_TRANSFER_FTP_BASE_PORT}
     NTS_HOST_TRANSFER_SFTP_BASE_PORT: ${NTS_HOST_TRANSFER_SFTP_BASE_PORT}
-    
+
     SDN_CONTROLLER_PROTOCOL: ${SDN_CONTROLLER_PROTOCOL}
     SDN_CONTROLLER_IP: ${SDNC_OAM_IPv6}
     SDN_CONTROLLER_PORT: ${SDNC_REST_PORT}
@@ -35,7 +35,7 @@ x-common_env: &common_env
     SDN_CONTROLLER_CALLHOME_PORT: ${SDN_CONTROLLER_CALLHOME_PORT}
     SDN_CONTROLLER_USERNAME: ${ADMIN_USERNAME}
     SDN_CONTROLLER_PASSWORD: ${ADMIN_PASSWORD}
-    
+
     VES_COMMON_HEADER_VERSION: ${VES_COMMON_HEADER_VERSION}
     VES_ENDPOINT_PROTOCOL: ${VES_ENDPOINT_PROTOCOL}
     VES_ENDPOINT_IP: ${VES_COLLECTOR_OAM_IPv6}
@@ -118,20 +118,6 @@ services:
         <<: *common_env
         <<: *ru_env
 
-  ntsim-ng-topology-server:
-    <<: *common_nf
-    image: "${NEXUS3_DOCKER_REPO}smo-nts-ng-topology-server:${NTS_BUILD_VERSION}"
-    container_name: ntsim-ng-topology-server
-    hostname: TAPI-topology-server
-    volumes:
-        - ./ntsim-ng-topology-server/config.json:/opt/dev/ntsim-ng/config/config.json
-        - ./ntsim-ng-topology-server/tapi-common-operational.xml:/opt/dev/deploy/data/tapi-common-operational.xml
-        - ./ntsim-ng-topology-server/tapi-common-running.xml:/opt/dev/deploy/data/tapi-common-running.xml
-    environment:
-        <<: *common_env
-        <<: *topo_env
-        SSH_CONNECTIONS: 1
-        TLS_CONNECTIONS: 0
 networks:
     default:
         external:

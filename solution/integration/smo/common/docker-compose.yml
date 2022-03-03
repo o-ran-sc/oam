@@ -18,28 +18,16 @@ services:
   identity:
     image: ${IDENTITY_IMAGE}
     container_name: identity
-    ports: 
+    ports:
       - ${IDENTITY_PORT}:8443
-    environment: 
+    environment:
       - KEYCLOAK_USER=${ADMIN_USERNAME}
       - KEYCLOAK_PASSWORD=${ADMIN_PASSWORD}
       - JAVA_OPTS=-Djboss.bind.address.private=[::1] -Djboss.bind.address=[::1] -Djava.net.preferIPv6Addresses=true -Djava.net.preferIPv4Stack=false
       - DB_VENDOR=h2
     networks:
       dmz:
-              
-  topology:
-    image: ${TOPOLOGY_IMAGE}
-    container_name: topology
-    ports:
-      - 3001:3001
-    environment:
-      - AUTH_ENABLED=true
-      - AUTH_HOST_URL=${IDENTITY_PROVIDER_URL}
-      # - AUTH_CONFIG_FILE 
-      - PROVIDERS=${TOPOLOGY_PROVIDERS}
-      - LOAD_PACKAGES=com.highstreet
- 
+
   persistence:
     image: ${PERSISTENCE_IMAGE}
     container_name: persistence
@@ -105,6 +93,16 @@ services:
     depends_on:
       - zookeeper
       - kafka
+
+  o-ran-sc-topology-service:
+    image: "${O_RAN_SC_TOPOLOGY_IMAGE}"
+    container_name: o-ran-sc-topology-service
+    hostname: o-ran-sc-topology-service
+    ports:
+      - 18181:8181
+    volumes:
+        - ./o-ran-sc-topology-service/tapi-common-operational.json:/opt/dev/deploy/data/tapi-common-operational.json
+        - ./o-ran-sc-topology-service/tapi-common-running.json:/opt/dev/deploy/data/tapi-common-running.json
 
 networks:
   dmz:

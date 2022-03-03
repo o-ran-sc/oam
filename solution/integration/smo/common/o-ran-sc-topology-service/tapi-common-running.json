@@ -1,0 +1,11 @@
+{
+  "tapi-common:context": {
+    "uuid": "fc3f3715-31e1-4282-89d1-8efa333d81b8",
+    "name": [
+      {
+        "value-name": "context-name",
+        "value": "Generated Topology"
+      }
+    ]
+  }
+}
