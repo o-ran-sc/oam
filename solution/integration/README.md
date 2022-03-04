@@ -117,6 +117,7 @@ export PYTHONWARNINGS="ignore:Unverified HTTPS request"
     │   ├── docker
     │   ├── identity
     │   ├── kafka
+    │   ├── o-ran-sc-topology-service
     │   └── zookeeper
     ├── non-rt-ric
     │   ├── docker-compose.yml
@@ -177,7 +178,7 @@ docker-compose -f smo/oam/docker-compose.yml up -d
 docker-compose -f smo/non-rt-ric/docker-compose.yml up -d
 ```
 
-In order to create/deploy the apex policy for O-RU closed loop recovery usecase,
+In order to create/deploy the apex policy for O-RU closed loop recovery use case,
 refer to the section named "Create/Deploy apex policy for O-RU & O-DU use case" in
 this page:
 https://wiki.o-ran-sc.org/pages/viewpage.action?pageId=35881325
@@ -194,16 +195,16 @@ If you see the login page (https://sdnc-web:8453) you are good to go and can sta
 
 ### populate data into Non-RT-RIC
 
-Full instrucion on how to run Non-RT-RIC can be found in this page:
+Full instruction on how to run Non-RT-RIC can be found in this page:
 <https://wiki.o-ran-sc.org/display/RICNR/Release+D>
 
-When containers in Non-RT-RIC are all up, by default, there is no data running inside. Folder `non-rt-ric/data/` contains serveral scripts to populate data into Non-RT-RIC for test & demo purpose.
+When containers in Non-RT-RIC are all up, by default, there is no data running inside. Folder `non-rt-ric/data/` contains several scripts to populate data into Non-RT-RIC for test & demo purpose.
 
 ```
 bash prepareDmaapMsg.sh
 ```
 
-script `prepareDmaapMsg.sh` sends messages to dmaap message router, then Non-RT-RIC policy-agent service polls messages from dmaap, and creates policy instances accordingly.
+script `prepareDmaapMsg.sh` sends messages to DMaaP message router, then Non-RT-RIC policy-agent service polls messages from DMaaP, and creates policy instances accordingly.
 
 ```
 bash preparePmsData.sh
@@ -300,6 +301,12 @@ docker logs ecs
     Password: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
 
 In case of trouble, please update the commands with your customized '.env' file.
+
+#### Access to Topology Service
+
+```
+curl -u admin:admin http://localhost:18181/rests/data/network-topology:network-topology/topology=topology-netconf/node=o-ran-sc-topology-service/yang-ext:mount/tapi-common:context/tapi-topology:topology-context                              
+```
 
 ### Terminate solution
 
