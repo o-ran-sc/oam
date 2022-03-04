@@ -30,8 +30,6 @@ services:
       - SSL_CERT_DIR=/opt/app/osaaf/local/certs
       - SSL_CERTIFICATE=cert.pem
       - SSL_CERTIFICATE_KEY=key.pem
-      - TOPOURL=http://topology:3001
-      - TILEURL=https://tile.openstreetmap.org
     volumes:
       - ./sdnc-web:/opt/app/osaaf/local/certs
     networks:
