@@ -31,5 +31,5 @@ class OCuUp(Node):
         :return Width in pixel
         """
         self.__width = max(2, len(self.tapi_object().data()[
-                           'owned-node-edge-point'])+1)*ConnectionEdgePoint.width(self)
+                           'owned-node-edge-point'])+0)*ConnectionEdgePoint.width(self)
         return self.__width

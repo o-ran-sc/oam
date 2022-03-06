@@ -24,7 +24,7 @@ class Node(Svg):
     """
     Class representing an SVG Element object as Connection Node Edge Point
     """
-    
+
     def label(self) -> str:
         """
         Getter for the short label as displayed of the SVG Element
@@ -38,7 +38,7 @@ class Node(Svg):
         Getter for height of the SVG Element
         :return Height in pixel
         """
-        self.__height = 1*ConnectionEdgePoint.width(self) 
+        self.__height = 1*ConnectionEdgePoint.width(self)
         return self.__height
 
     # overwrite
