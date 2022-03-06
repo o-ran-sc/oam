@@ -85,6 +85,10 @@ class TapiNodeEdgePoint(Top):
             "a1-rest-provider": 0*self.FONTSIZE,
             "e2-rest-consumer": 0*self.FONTSIZE,
 
+            "n1-nas-provider": 0*self.FONTSIZE,
+            "n2-nas-provider": 0*self.FONTSIZE,
+            "n3-nas-provider": 0*self.FONTSIZE,
+
             "f1-c-unknown-consumer": 0*self.FONTSIZE,
             "f1-u-unknown-consumer": 0*self.FONTSIZE,
 
@@ -92,6 +96,8 @@ class TapiNodeEdgePoint(Top):
             "e1-unknown-consumer": -2.5*self.FONTSIZE,
 
             "e2-rest-provider": 0*self.FONTSIZE,
+            "n2-nas-consumer": 0*self.FONTSIZE,
+            "n3-nas-consumer": 0*self.FONTSIZE,
             "f1-c-unknown-provider": 0*self.FONTSIZE,
             "f1-u-unknown-provider": 0*self.FONTSIZE,
             "f1-unknown-provider": 0*self.FONTSIZE,
@@ -105,9 +111,10 @@ class TapiNodeEdgePoint(Top):
             "eth-ofh-consumer": 0*self.FONTSIZE,
 
             "ofh-netconf-provider": 0*self.FONTSIZE,
-            "uu-unknown-provider": 0*self.FONTSIZE,
+            "uu-radio-provider": 0*self.FONTSIZE,
 
-            "uu-unknown-consumer": 0*self.FONTSIZE
+            "uu-radio-consumer": 0*self.FONTSIZE,
+            "n1-nas-consumer": 0*self.FONTSIZE
         }
         if name in mapping:
             return mapping[name]
@@ -127,6 +134,10 @@ class TapiNodeEdgePoint(Top):
             "a1-rest-provider": +1.5*self.FONTSIZE,
             "e2-rest-consumer": -1.5*self.FONTSIZE,
 
+            "n1-nas-provider": -1.5*self.FONTSIZE,
+            "n2-nas-provider": -1.5*self.FONTSIZE,
+            "n3-nas-provider": -1.5*self.FONTSIZE,
+
             "e1-unknown-provider": 0*self.FONTSIZE,
             "e1-unknown-consumer": 0*self.FONTSIZE,
 
@@ -134,6 +145,8 @@ class TapiNodeEdgePoint(Top):
             "f1-u-unknown-consumer": -1.5*self.FONTSIZE,
 
             "e2-rest-provider": +1.5*self.FONTSIZE,
+            "n2-nas-consumer": +1.5*self.FONTSIZE,
+            "n3-nas-consumer": +1.5*self.FONTSIZE,
             "f1-c-unknown-provider": +1.5*self.FONTSIZE,
             "f1-u-unknown-provider": +1.5*self.FONTSIZE,
             "f1-unknown-provider": +1.5*self.FONTSIZE,
@@ -147,9 +160,10 @@ class TapiNodeEdgePoint(Top):
             "eth-ofh-consumer": -1.5*self.FONTSIZE,
 
             "ofh-netconf-provider": +1.5*self.FONTSIZE,
-            "uu-unknown-provider": -1.5*self.FONTSIZE,
+            "uu-radio-provider": -1.5*self.FONTSIZE,
 
-            "uu-unknown-consumer": +1.5*self.FONTSIZE
+            "uu-radio-consumer": +1.5*self.FONTSIZE,
+            "n1-nas-consumer": +1.5*self.FONTSIZE
         }
         if name in mapping:
             return mapping[name]
