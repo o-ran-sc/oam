@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf1d0fd2_59db73ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-03-06T16:04:37Z",
+      "side": 1,
+      "message": "Had to do the modifications on top of OAM-256.\nResulting SVG looks as expected :) \u003e Verified +1",
+      "revId": "16945b9b123d4cb4b0e78b193aa97cae85beec7d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
