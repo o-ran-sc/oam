@@ -60,14 +60,18 @@ class TapiCommonContext(Top):
         """
         return self.__data
 
-    def json(self) -> Dict:
+    def json(self, running: bool) -> Dict:
         """
         Getter for a json object representing the TAPI Topology Context.
         :return TAPI Common Context as json object.
         """
         result = self.data().copy()
-        if self.__context is not None:
+        if self.__context is not None and running is False:
             result["tapi-common:context"].update(self.__context.json())
+
+        if running is True and "tapi-topology:topology-context" in result["tapi-common:context"]:
+            result["tapi-common:context"].pop("tapi-topology:topology-context")
+
         return result
 
     def identifier(self) -> str:
@@ -113,7 +117,10 @@ class TapiCommonContext(Top):
         root.append(desc)
 
         title=etree.Element("title")
-        title.text=self.configuration()["network"]["name"]
+        if "name" in self.configuration()["network"]:
+          title.text=self.configuration()["network"]["name"]
+        else:
+          title.text="o-ran-sc-topology-view"
         root.append(title)
 
         root.append(self.__context.svg(x, y))
