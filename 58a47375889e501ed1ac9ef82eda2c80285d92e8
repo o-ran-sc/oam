@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7815ac3f_45e40093",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-03-06T17:26:32Z",
+      "side": 1,
+      "message": "Please generate the two jsons and see if it works.\nNote: there is a new o-ran-sc-topology-common.yang revision",
+      "revId": "58a47375889e501ed1ac9ef82eda2c80285d92e8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
