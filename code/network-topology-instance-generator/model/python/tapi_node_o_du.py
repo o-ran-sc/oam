@@ -22,7 +22,7 @@ from model.python.tapi_node_edge_point import TapiNodeEdgePoint
 
 class TapiNodeODu(TapiNode):
     """
-    Class representing a O-RAN Distributed Unit as TAPI Node.
+    Class representing an O-RAN Distributed Unit as TAPI Node.
     """
     # constructor
 

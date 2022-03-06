@@ -22,7 +22,7 @@ from model.python.tapi_node_edge_point import TapiNodeEdgePoint
 
 class TapiNodeFronthaulGateway(TapiNode):
     """
-    Class representing a O-RAN Fronthaul Gateway as TAPI Node.
+    Class representing an O-RAN Fronthaul Gateway as TAPI Node.
     """
 
     # constructor
