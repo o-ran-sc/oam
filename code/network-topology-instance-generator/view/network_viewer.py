@@ -17,7 +17,6 @@
 Provides functions to convert the Network into different formats
 """
 
-import encodings
 import json
 from lxml import etree
 from model.python.tapi_common_context import TapiCommonContext
@@ -72,6 +71,15 @@ class NetworkViewer:
                       )
             print("File '" + filename + "' saved!")
 
+    def readStylesFromFile(self) -> str:
+        """
+        Method reading the css styles from known file
+        return: content of the file as string
+        """
+        with open('view/svg.style.css') as styles:
+            content = styles.read()
+            return content
+
     def svg(self, filename: str):
         """
         Method saving the class content to a file in xml/svg format.
@@ -80,10 +88,14 @@ class NetworkViewer:
         :type filename: string
         """
         root = self.__network.svg(0, 0)
-        root.addprevious(
-            etree.ProcessingInstruction("xml-stylesheet",
-                                        'href="svg.style.css" type="text/css"')
-        )
+        # not preferred see OAM-257
+        # root.addprevious(
+        #     etree.ProcessingInstruction("xml-stylesheet",
+        #                                 'href="svg.style.css" type="text/css"')
+        # )
+        style = etree.Element("style")
+        style.text = self.readStylesFromFile()
+        root.getchildren()[0].addnext(style)
         etree.ElementTree(root).write(filename,
                                       encoding="utf-8",
                                       xml_declaration=True,
