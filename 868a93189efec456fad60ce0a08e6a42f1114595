@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db29daea_b708945d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-03-06T13:40:23Z",
+      "side": 1,
+      "message": "SVG looks as expected\ngenerated JSON is valid according to yanglint\n\u003e\u003e Verified: +1",
+      "revId": "868a93189efec456fad60ce0a08e6a42f1114595",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
