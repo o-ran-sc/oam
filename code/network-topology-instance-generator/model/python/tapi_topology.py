@@ -25,6 +25,8 @@ from model.python.tapi_node import TapiNode
 from model.python.tapi_node_smo import TapiNodeSmo
 from model.python.tapi_node_o_cloud import TapiNodeOCloud
 from model.python.tapi_node_near_rt_ric import TapiNodeNearRtRic
+from model.python.tapi_node_amf import TapiNodeAmf
+from model.python.tapi_node_upf import TapiNodeUpf
 from model.python.tapi_node_o_cu_cp import TapiNodeOCuCp
 from model.python.tapi_node_o_cu_up import TapiNodeOCuUp
 from model.python.tapi_node_o_du import TapiNodeODu
@@ -170,22 +172,24 @@ class TapiTopology(Top):
         padding = 0  # self.FONTSIZE
         width_unit = (2 * 2 * self.FONTSIZE + padding)
 
-        ru = (pattern['user-equipment']-1) * width_unit / 2
+        ru = (pattern['user-equipment']-1) * width_unit - 2*self.FONTSIZE
         fhgw = (pattern['o-ru'] *
-                pattern['user-equipment'] - 1) * width_unit / 2
+                pattern['user-equipment'] - 1) * width_unit - 2*self.FONTSIZE
         odu = (pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']
-               - 1) * width_unit/2
+               - 1) * width_unit - 2*self.FONTSIZE
         ocu = (pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']
-               - 1) * width_unit / 2
+               - 1) * width_unit - 2*self.FONTSIZE
         ric = (pattern['near-rt-ric'] * pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']
-               - 1) * width_unit / 2
+               - 1) * width_unit - 2*self.FONTSIZE
         smo = (pattern['smo'] * pattern['near-rt-ric'] * pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']
-               -0.5) * width_unit 
+               -0.5) * width_unit * 2 - 2*self.FONTSIZE
 
         x_mapping: Dict[type, int] = {
             TapiNodeSmo: smo,
             TapiNodeOCloud: ric,
             TapiNodeNearRtRic: ric,
+            TapiNodeAmf: ric + 16*self.FONTSIZE,
+            TapiNodeUpf: ric + 24*self.FONTSIZE,
             TapiNodeOCuCp: ocu - 12.5*self.FONTSIZE,
             TapiNodeOCuUp: ocu + 12.5*self.FONTSIZE,
             TapiNodeODu: odu,
@@ -206,15 +210,17 @@ class TapiTopology(Top):
         pattern = self.configuration()['network']['pattern']
         width_unit = (2 * 2 * self.FONTSIZE + padding)
         x_mapping: Dict[type, int] = {
-            TapiNodeSmo: pattern['near-rt-ric'] * pattern['o-cu'] * pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment'],
-            TapiNodeOCloud: pattern['o-cu'] * pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment'],
-            TapiNodeNearRtRic: pattern['o-cu'] * pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment'],
-            TapiNodeOCuCp: pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment'],
-            TapiNodeOCuUp: pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment'],
-            TapiNodeODu: pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment'],
-            TapiNodeFronthaulGateway: pattern['o-ru'] * pattern['user-equipment'],
-            TapiNodeORu: pattern['user-equipment'],
-            TapiNodeUserEquipment: 1
+            TapiNodeSmo: pattern['near-rt-ric'] * pattern['o-cu'] * pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']*2,
+            TapiNodeOCloud: pattern['o-cu'] * pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']*2,
+            TapiNodeNearRtRic: pattern['o-cu'] * pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']*2,
+            TapiNodeAmf: pattern['o-cu'] * pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']*2,
+            TapiNodeUpf: pattern['o-cu'] * pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']*2,
+            TapiNodeOCuCp: pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']*2,
+            TapiNodeOCuUp: pattern['o-du'] * pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']*2,
+            TapiNodeODu: pattern['fronthaul-gateway'] * pattern['o-ru'] * pattern['user-equipment']*2,
+            TapiNodeFronthaulGateway: pattern['o-ru'] * pattern['user-equipment']*2,
+            TapiNodeORu: pattern['user-equipment']*2,
+            TapiNodeUserEquipment: 2
         }
         if node_type in x_mapping:
             return x_mapping[node_type] * width_unit
@@ -230,6 +236,8 @@ class TapiTopology(Top):
             TapiNodeSmo: 0 * offset,
             TapiNodeOCloud: 1 * offset,
             TapiNodeNearRtRic: 2 * offset,
+            TapiNodeAmf: 2 * offset,
+            TapiNodeUpf: 2 * offset,
             TapiNodeOCuCp: 3.5 * offset - 4 * self.FONTSIZE,
             TapiNodeOCuUp: 3.5 * offset + 4 * self.FONTSIZE,
             TapiNodeODu: 5 * offset,
@@ -257,6 +265,21 @@ class TapiTopology(Top):
         """
         self.__data["link"].append(link)
         return self
+
+    def find_node(self, type_name:str, client_local_id:str) -> TapiNode:
+        """
+        Method finding the parent no in the hierarchy based on the node type name
+        and the client local identifier.
+        :param type_name: the TAPI NODE Type name of interest.
+        :param client_local_id: which starts with the parent node local id.
+        :re
+        turn TAPI Node object.
+        """
+        for node in self.__data["node"]:
+            if type(node).__name__ == type_name:
+                if client_local_id.startswith(node.local_id()):
+                    return node
+        return # ERROR 404
 
     def __create_smos(self, parent: TapiNode, topology_structure: dict, count: int):
         """
@@ -343,6 +366,30 @@ class TapiTopology(Top):
             prefix = ""
             if parent is not None:
                 prefix = parent.json()["name"][1]["value"]
+
+            # hardcoded rule!
+            # create 1 5G-Core AMF and 1 5G-Core UPF instance per Near-RT-RIC
+
+            # 5G-Core AMF
+            current_type = "access-and-mobility-management-function"
+            function = "o-ran-sc-topology-common:"+current_type
+            node_configuration = {"node": {"localId": prefix + str(local_id),
+                                           "type": current_type,
+                                           "function": function}}
+            node = TapiNodeAmf(parent, node_configuration)
+            self.add_node(node)
+
+            # 5G-Core UPF
+            current_type = "user-plane-function"
+            function = "o-ran-sc-topology-common:"+current_type
+            node_configuration = {"node": {"localId": prefix + str(local_id),
+                                           "type": current_type,
+                                           "function": function}}
+            node = TapiNodeUpf(parent, node_configuration)
+            self.add_node(node)
+
+            # Near-RT-RIC
+            current_type = "near-rt-ric"
             function = "o-ran-sc-topology-common:"+current_type
             node_configuration = {"node": {"localId": prefix + str(local_id),
                                            "type": current_type,
@@ -477,6 +524,24 @@ class TapiTopology(Top):
                 "name_prefix": "e1-unknown",
                 "provider": node["up"],
                 "consumer": node["cp"]
+            }
+            self.add_link(TapiLink(link_configuration))
+
+            # N2 Interface between O-CU-CP and AMF
+            link_configuration = {
+                "topology_reference": self.data()["uuid"],
+                "name_prefix": "n2-nas",
+                "provider": self.find_node("TapiNodeAmf", node["cp"].local_id()),
+                "consumer": node["cp"]
+            }
+            self.add_link(TapiLink(link_configuration))
+
+            # N3 Interface between O-CU-UP and UPF
+            link_configuration = {
+                "topology_reference": self.data()["uuid"],
+                "name_prefix": "n3-nas",
+                "provider": self.find_node("TapiNodeUpf", node["up"].local_id()),
+                "consumer": node["up"]
             }
             self.add_link(TapiLink(link_configuration))
 
@@ -687,11 +752,20 @@ class TapiTopology(Top):
             self.add_node(node)
 
             # add links
-            # Uu unknown
+            # Uu radio
             link_configuration = {
                 "topology_reference": self.data()["uuid"],
-                "name_prefix": "uu-unknown",
+                "name_prefix": "uu-radio",
                 "provider": parent,
+                "consumer": node
+            }
+            self.add_link(TapiLink(link_configuration))
+
+            # N! to 5G-Core AMF
+            link_configuration = {
+                "topology_reference": self.data()["uuid"],
+                "name_prefix": "n1-nas",
+                "provider": self.find_node("TapiNodeAmf", node.local_id()),
                 "consumer": node
             }
             self.add_link(TapiLink(link_configuration))
