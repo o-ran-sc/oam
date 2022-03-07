@@ -54,7 +54,9 @@ class ConnectionEdgePoint(Svg):
             "netconf": "NC",
             "ves": "VES",
             "file": "FTP",
+            "nas":"NAS",
             "ofh": "OFH",
+            "radio": "RF",
             "rest": "REST",
             "restconf": "RC",
             "unknown": "-"
