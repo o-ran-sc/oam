@@ -53,22 +53,23 @@ class NetworkViewer:
         """
         print(self.__network)
 
-    def save(self, filename: str):
+    def save(self, filename: str, running: bool):
         """
         Method saving the class content to a file in json format.
         :param filename: A valid path to a file on the system.
         :type filename: string
         """
         with open(filename, "w", encoding='utf-8') as json_file:
-            output = self.__network.json()
+            output = self.__network.json(running)
             json.dump(output, json_file,
                       ensure_ascii=False, indent=2)
-            for key in ["Node", "Link"]:
-                print(key + "s:", len(output
-                                      ["tapi-common:context"]
-                                      ["tapi-topology:topology-context"]
-                                      ["topology"][0][key.lower()])
-                      )
+            if running is False:
+                for key in ["Node", "Link"]:
+                    print(key + "s:", len(output
+                                        ["tapi-common:context"]
+                                        ["tapi-topology:topology-context"]
+                                        ["topology"][0][key.lower()])
+                        )
             print("File '" + filename + "' saved!")
 
     def readStylesFromFile(self) -> str:
