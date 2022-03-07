@@ -20,10 +20,12 @@ import uuid
 from typing import Dict
 from lxml import etree
 from model.python.svg.near_tr_ric import NearRtRic
+from model.python.svg.amf import Amf
 from model.python.svg.o_cloud import OCloud
 from model.python.svg.o_cu_cp import OCuCp
 from model.python.svg.o_cu_up import OCuUp
 from model.python.svg.o_du import ODu
+from model.python.svg.ue import Ue
 from model.python.svg.fronthaul_gateway import FronthaulGateway
 from model.python.svg.node import Node
 from model.python.tapi_node_edge_point import TapiNodeEdgePoint
@@ -99,6 +101,10 @@ class TapiNode(Top):
             "a1-rest-provider": -8*self.FONTSIZE,
             "e2-rest-consumer": 0*self.FONTSIZE,
 
+            "n1-nas-provider": -2*self.FONTSIZE,
+            "n2-nas-provider": +2*self.FONTSIZE,
+            "n3-nas-provider": 0*self.FONTSIZE,
+
             "f1-c-unknown-consumer": 0*self.FONTSIZE,
             "f1-u-unknown-consumer": 0*self.FONTSIZE,
 
@@ -106,6 +112,8 @@ class TapiNode(Top):
             "e1-unknown-consumer": 5*2*self.FONTSIZE,
 
             "e2-rest-provider": -4*2*self.FONTSIZE,
+            "n2-nas-consumer": -2*2*self.FONTSIZE,
+            "n3-nas-consumer": -2*2*self.FONTSIZE,
             "f1-c-unknown-provider": -2*2*self.FONTSIZE,
             "f1-u-unknown-provider": 2*2*self.FONTSIZE,
             "f1-unknown-provider": -2*2*self.FONTSIZE,
@@ -121,9 +129,10 @@ class TapiNode(Top):
             "eth-ofh-consumer": 0-(cep_of_interest/2)*4*self.FONTSIZE + 2*self.FONTSIZE,
 
             "ofh-netconf-provider": 0*self.FONTSIZE,
-            "uu-unknown-provider": 0*self.FONTSIZE,
+            "uu-radio-provider": 0*self.FONTSIZE,
 
-            "uu-unknown-consumer": 0*self.FONTSIZE
+            "uu-radio-consumer": -2*self.FONTSIZE,
+            "n1-nas-consumer":2*self.FONTSIZE
         }
         if name in mapping:
             return mapping[name] + 4*self.FONTSIZE * local_id
@@ -143,6 +152,10 @@ class TapiNode(Top):
             "a1-rest-provider": -3*self.FONTSIZE,
             "e2-rest-consumer": 3*self.FONTSIZE,
 
+            "n1-nas-provider": 3*self.FONTSIZE,
+            "n2-nas-provider": 3*self.FONTSIZE,
+            "n3-nas-provider": 3*self.FONTSIZE,
+
             "e1-unknown-provider": 1*self.FONTSIZE,
             "e1-unknown-consumer": 1*self.FONTSIZE,
 
@@ -151,6 +164,8 @@ class TapiNode(Top):
             "f1-unknown-consumer": 3*self.FONTSIZE,
 
             "e2-rest-provider": -3*self.FONTSIZE,
+            "n2-nas-consumer": -3*self.FONTSIZE,
+            "n3-nas-consumer": -3*self.FONTSIZE,
             "f1-c-unknown-provider": -3*self.FONTSIZE,
             "f1-u-unknown-provider": -3*self.FONTSIZE,
             "f1-unknown-provider": -3*self.FONTSIZE,
@@ -164,9 +179,10 @@ class TapiNode(Top):
             "eth-ofh-consumer": +3*self.FONTSIZE,
 
             "ofh-netconf-provider": -3*self.FONTSIZE,
-            "uu-unknown-provider": 3*self.FONTSIZE,
+            "uu-radio-provider": 3*self.FONTSIZE,
 
-            "uu-unknown-consumer": -3*self.FONTSIZE
+            "uu-radio-consumer": -3*self.FONTSIZE,
+            "n1-nas-consumer": -3*self.FONTSIZE
         }
         if name in mapping:
             return mapping[name]
@@ -207,6 +223,8 @@ class TapiNode(Top):
             "o-ran-sc-topology-common:smo": "SMO",
             "o-ran-sc-topology-common:o-cloud": "O-Cloud",
             "o-ran-sc-topology-common:near-rt-ric": "Near-RT-RIC",
+            "o-ran-sc-topology-common:access-and-mobility-management-function": "AMF",
+            "o-ran-sc-topology-common:user-plane-function": "UPF",
             "o-ran-sc-topology-common:o-cu": "O-CU",
             "o-ran-sc-topology-common:o-cu-cp": "O-CU-CP",
             "o-ran-sc-topology-common:o-cu-up": "O-CU-UP",
@@ -264,6 +282,7 @@ class TapiNode(Top):
             for nep in self.__data["owned-node-edge-point"]:
                 print("# Check", cep_name, nep.json()["name"][0]["value"], nep.json()[
                       "tapi-connectivity:cep-list"]["connection-end-point"][0]["name"][0]["value"])
+            return
         if len(result) > 1:
             for nep in result:
                 if nep.name().endswith(str(local_id[-1])):
@@ -292,12 +311,16 @@ class TapiNode(Top):
             svg_nep = OCloud(self, x, y)
         elif type(self).__name__ == "TapiNodeNearRtRic":
             svg_nep = NearRtRic(self, x, y)
+        elif type(self).__name__ == "TapiNodeAmf":
+            svg_nep = Amf(self, x, y)
         elif type(self).__name__ == "TapiNodeOCuCp":
             svg_nep = OCuCp(self, x, y)
         elif type(self).__name__ == "TapiNodeOCuUp":
             svg_nep = OCuUp(self, x, y)
         elif type(self).__name__ == "TapiNodeODu":
             svg_nep = ODu(self, x, y)
+        elif type(self).__name__ == "TapiNodeUserEquipment":
+            svg_nep = Ue(self, x, y)
         elif type(self).__name__ == "TapiNodeFronthaulGateway":
             svg_nep = FronthaulGateway(self, x, y)
         # elif type(self).__name__ == "TapiNodeORu":
