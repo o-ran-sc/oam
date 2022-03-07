@@ -70,7 +70,8 @@
           "description": "A hierarchical order of network-function-types and its appearance relative to its parent.",
           "$ref": "#/$defs/pattern"
         }
-      }
+      },
+      "required": ["pattern"]
     }
   }
 }
