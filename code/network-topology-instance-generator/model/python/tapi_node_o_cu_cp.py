@@ -22,7 +22,7 @@ from model.python.tapi_node_edge_point import TapiNodeEdgePoint
 
 class TapiNodeOCuCp(TapiNode):
     """
-    Class representing a O-RAN Centralized Unit as TAPI Node.
+    Class representing an O-RAN Centralized Unit as TAPI Node.
     """
     # constructor
 
@@ -34,6 +34,15 @@ class TapiNodeOCuCp(TapiNode):
             "parent": self.identifier(),
             "nodeEdgePoint": {
                 "interface": "e2", "cep":[{"protocol": "REST", "role": "provider"}]
+            }
+        }
+        self.add(TapiNodeEdgePoint(nep_configuration))
+
+        # add N2 Consumer interface
+        nep_configuration = {
+            "parent": self.identifier(),
+            "nodeEdgePoint": {
+                "interface": "n2", "cep":[{"protocol": "NAS", "role": "consumer"}]
             }
         }
         self.add(TapiNodeEdgePoint(nep_configuration))

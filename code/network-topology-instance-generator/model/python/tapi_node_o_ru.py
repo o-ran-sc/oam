@@ -22,7 +22,7 @@ from model.python.tapi_node_edge_point import TapiNodeEdgePoint
 
 class TapiNodeORu(TapiNode):
     """
-    Class representing a O-RAN Radio Unit as TAPI Node.
+    Class representing an O-RAN Radio Unit as TAPI Node.
     """
 
     # constructor
@@ -44,7 +44,7 @@ class TapiNodeORu(TapiNode):
         nep_configuration = {
             "parent": self.identifier(),
             "nodeEdgePoint": {
-                "interface": "uu", "cep":[{"protocol": "unknown", "role": "provider"}]
+                "interface": "uu", "cep":[{"protocol": "radio", "role": "provider"}]
             }
         }
         self.add(TapiNodeEdgePoint(nep_configuration))
