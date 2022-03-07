@@ -121,7 +121,8 @@ class TapiLink(Top):
         """
 
         group = etree.Element("g")
-        group.attrib["class"] = "link"
+        class_name = self.name().split("-")[0].lower()
+        group.attrib["class"] = " ".join(["link", class_name])
         title = etree.Element("title")
         title.text = "\n TAPI Link\n id: " + \
             self.identifier() + "\n name: " + self.name()
