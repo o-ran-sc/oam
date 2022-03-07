@@ -1,0 +1,221 @@
+circle {
+  fill: red;
+  stroke: blue;
+  stroke-width: 2;
+}
+
+circle.dot {
+  fill: rgb(165, 163, 164);
+  stroke: blue;
+  stroke-width: 0;
+}
+
+ellipse {
+  fill: red;
+  stroke: blue;
+  stroke-width: 2;
+}
+
+ellipse.TapiConnectionEdgePoint {
+  fill: #dddddd;
+  stroke: #444444;
+  stroke-width: 1;
+}
+
+g.TapiConnectionEdgePoint>text {
+  fill: #444444;
+}
+
+g.TapiNodeFronthaulGateway>text {
+  fill: #444444;
+}
+
+g.node:hover>rect {
+  fill: #44aa44;
+  fill-opacity: .75;
+  stroke: #008800;
+  stroke-width: 4;
+}
+
+g.TapiNodeEdgePoint:hover>rect {
+  fill: #44aa44;
+  fill-opacity: .75;
+  stroke: #008800;
+  stroke-width: 4;
+}
+
+g.node:hover>text {
+  fill: #ffff88;
+  font-weight: bold;
+  cursor: default;
+}
+
+g.TapiNodeEdgePoint:hover>text {
+  fill: #ffff88;
+  font-weight: bold;
+  cursor: default;
+}
+
+g.TapiConnectionEdgePoint:hover>ellipse {
+  fill: #44aa44;
+  fill-opacity: .75;
+  stroke: #008800;
+  stroke-width: 4;
+}
+
+g.TapiConnectionEdgePoint:hover>text {
+  fill: #ffff88;
+  font-weight: bold;
+  cursor: default;
+}
+
+
+/* 3GPP defined interface links */
+
+g.e1>path {
+  fill: none;
+  stroke: #008800;
+  stroke-width: 1;
+}
+
+g.f1>path {
+  fill: none;
+  stroke: #008800;
+  stroke-width: 1;
+}
+
+g.n1>path {
+  fill: none;
+  stroke: #008800;
+  stroke-width: 1;
+}
+
+g.n2>path {
+  fill: none;
+  stroke: #008800;
+  stroke-width: 1;
+}
+
+g.n3>path {
+  fill: none;
+  stroke: #008800;
+  stroke-width: 1;
+}
+
+g.uu>path {
+  fill: none;
+  stroke: #008800;
+  stroke-width: 1;
+}
+
+g.link:hover>path {
+  fill: none;
+  stroke: #008800;
+  stroke-width: 6;
+}
+
+rect {
+  fill: red;
+  stroke: blue;
+  stroke-width: 2;
+}
+
+rect.node {
+  fill: lightcoral;
+  fill-opacity: .75;
+  stroke: darkred;
+}
+
+rect.TapiNodeEdgePoint {
+  fill: #888888;
+  stroke: #444444;
+  stroke-width: 1;
+}
+
+rect.smo {
+  fill: gold;
+  stroke: goldenrod;
+}
+
+rect.o2-controller {
+  fill: greenyellow;
+  stroke: green;
+}
+
+rect.o-cloud {
+  fill: greenyellow;
+  stroke: green;
+}
+
+rect.amf {
+  fill: green;
+  stroke: lightgreen;
+}
+
+rect.upf {
+  fill: green;
+  stroke: lightgreen;
+}
+
+rect.fhgw {
+  fill: #dddddd;
+  stroke: #444444;
+}
+
+rect.ue {
+  fill: skyblue;
+  stroke: lightskyblue;
+}
+
+path {
+  fill: red;
+  stroke: blue;
+  stroke-width: 2;
+}
+
+path.link {
+  fill: none;
+  stroke: #444444;
+}
+
+title {
+  background-color: #44aa44;
+  font-size: 100pt;
+}
+
+text {
+  fill: white;
+  stroke: none;
+  text-anchor: middle;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: normal;
+}
+
+text.amf {
+  fill: lightgreen;
+}
+
+text.upf {
+  fill: lightgreen;
+}
+
+text.smo {
+  fill: #444444;
+}
+
+text.o2-controller {
+  fill: #444444;
+}
+
+g.TapiNodeOCloud>text {
+  fill: #444444;
+}
+
+text.fhgw {
+  fill: #444444;
+}
+
+text.ue {
+  fill: #444444;
+}
