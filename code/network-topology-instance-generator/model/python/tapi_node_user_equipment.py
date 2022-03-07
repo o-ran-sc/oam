@@ -29,14 +29,21 @@ class TapiNodeUserEquipment(TapiNode):
     def __init__(self, parent, config):
         super().__init__(parent, config)
 
-        super().width( (1 + 1) * (2*self.FONTSIZE) )  # 1x nep
+        super().width( (2 + 1) * (2*self.FONTSIZE) )  # 2x nep
 
         # add air consumer interface
         nep_configuration = {
             "parent": self.identifier(),
             "nodeEdgePoint": {
-                "interface": "uu", "cep":[{"protocol": "unknown", "role": "consumer"}]
+                "interface": "uu", "cep":[{"protocol": "radio", "role": "consumer"}]
             }
         }
         self.add(TapiNodeEdgePoint(nep_configuration))
 
+        nep_configuration = {
+            "parent": self.identifier(),
+            "nodeEdgePoint": {
+                "interface": "n1", "cep":[{"protocol": "NAS", "role": "consumer"}]
+            }
+        }
+        self.add(TapiNodeEdgePoint(nep_configuration))
