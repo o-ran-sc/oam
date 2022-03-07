@@ -86,7 +86,7 @@ class TapiCommonContext(Top):
 
     def __svg_width(self) -> int:
         p = self.configuration()['network']['pattern']
-        return (p['smo'] * p['near-rt-ric'] * p['o-cu'] * p['o-du'] * p['fronthaul-gateway'] * p['o-ru'] * p['user-equipment'] + 1) * 2*2*self.FONTSIZE
+        return (p['smo'] * p['near-rt-ric'] * p['o-cu'] * p['o-du'] * p['fronthaul-gateway'] * p['o-ru'] * p['user-equipment'] + 1) * 4*2*self.FONTSIZE
 
     def __svg_height(self) -> int:
         return (8 * 11 + 6) * self.FONTSIZE
