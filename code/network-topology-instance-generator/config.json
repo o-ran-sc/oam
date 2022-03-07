@@ -1,6 +1,5 @@
 {
   "network": {
-    "name": "o-ran-sc-f-release-network-view",
     "pattern": {
       "smo": 1,
       "o-cloud": 2,
