@@ -47,12 +47,16 @@ class TapiTopology(Top):
     # constructor
     def __init__(self, configuration: dict):
         super().__init__(configuration)
+        name = "o-ran-sc-topology-view"
+        if "name" in configuration['network']:
+            name = configuration['network']['name']
+
         self.__configuration = configuration
         self.__data = {
             "uuid": str(uuid.uuid4()),
             "name": [{
                 "value-name": "network-name",
-                "value": configuration['network']['name']}],
+                "value": name}],
             "layer-protocol-name": ["ETH"],
             "node": [],
             "link": []}
