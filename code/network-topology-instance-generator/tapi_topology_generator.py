@@ -30,14 +30,23 @@ if validator.is_valid():
     network = generator.generate()
     viewer = NetworkViewer(network)
 
-    filename: str = "output/network.json"
-    if configuration['network']['name']:
-        filename = "output/" + configuration['network']['name'] + ".json"
-    viewer.json().save(filename)
+    # operational json
+    filename: str = "output/tapi-common-operational.json"
+    if "name" in configuration['network']:
+        filename = "output/" + configuration['network']['name'] + "-operational.json"
+    viewer.json().save(filename, False)
+
+    # running json
+    filename: str = "output/tapi-common-running.json"
+    if "name" in configuration['network']:
+        filename = "output/" + configuration['network']['name'] + "-running.json"
+    viewer.json().save(filename, True)
+
     # viewer.json().showAsJson()
 
-    filename: str = "output/network.svg"
-    if configuration['network']['name']:
+    # svg
+    filename: str = "output/o-ran-sc-topology-view.svg"
+    if "name" in configuration['network']:
         filename = "output/" + configuration['network']['name'] + ".svg"
     viewer.svg(filename)
 
