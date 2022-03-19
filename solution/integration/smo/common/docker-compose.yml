@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2021 highstreet technologies GmbH
+# Copyright 2022 highstreet technologies GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -104,6 +104,22 @@ services:
         - ./o-ran-sc-topology-service/tapi-common-operational.json:/opt/dev/deploy/data/tapi-common-operational.json
         - ./o-ran-sc-topology-service/tapi-common-running.json:/opt/dev/deploy/data/tapi-common-running.json
 
+  wireshark:
+    image: "${WIRESHARK_IMAGE}"
+    container_name: wireshark
+    cap_add:
+      - NET_ADMIN
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./wireshark:/config
+    # no port mappbecause of network mode host.
+    # ports:
+    #   - 3000:3000
+    restart: unless-stopped
 networks:
   dmz:
     driver: bridge
