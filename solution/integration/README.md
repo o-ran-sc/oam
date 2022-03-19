@@ -93,9 +93,9 @@ $ cat /etc/hosts
 
 It is beneficial (but not mandatory) adding the following line add the
 end of your ~/.bashrc file. I will suppress warnings when python script
-do not verify self signed certificates for HTTPS communication. 
+do not verify self signed certificates for HTTPS communication.
 ```
-export PYTHONWARNINGS="ignore:Unverified HTTPS request"  
+export PYTHONWARNINGS="ignore:Unverified HTTPS request"
 ```
 
 ## Expected Folder Structure
@@ -155,7 +155,7 @@ The tested configuration uses the following external https ports:
 
  * 8443 for the ves-collector
  * 8453 for web access to ODLUX (SDNC_WEB_PORT)
- * 8463 for the keyclock web administrator user interface. 
+ * 8463 for the keyclock web administrator user interface.
 
 #### Startup solution
 
@@ -305,9 +305,17 @@ In case of trouble, please update the commands with your customized '.env' file.
 #### Access to Topology Service
 
 ```
-curl -u admin:admin http://localhost:18181/rests/data/network-topology:network-topology/topology=topology-netconf/node=o-ran-sc-topology-service/yang-ext:mount/tapi-common:context/tapi-topology:topology-context                              
+curl -u admin:admin http://localhost:18181/rests/data/network-topology:network-topology/topology=topology-netconf/node=o-ran-sc-topology-service/yang-ext:mount/tapi-common:context/tapi-topology:topology-context
 ```
 
+#### Access to Wireshark
+
+```
+  http://localhost:3000
+```
+
+Select the interfaces you would like to capture.
+As first guess, please select the bridge interfaces.
 ### Terminate solution
 
 To stop all container please respect the following order

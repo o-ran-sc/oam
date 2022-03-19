@@ -60,6 +60,9 @@ output
 # avoid copyright issues with 3GPP
 */**/3gpp/**/*.yaml
 
+# wireshark
+.cache
+
 # documentation
 .tox
 docs/_build/
