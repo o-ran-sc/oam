@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf6c1fb1_3ad2ef76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-04-07T15:28:17Z",
+      "side": 1,
+      "message": "Thanks Alex for your support!\n\nVerification of the function:\n\ndemx8as6 @ martindev ~/workspace/o-ran-sc/oam/solution/dev/client-scripts-ves-v7 (master)\n└─ $ ▶ ./sendStndDefinedNotifyNewAlarm.sh 1234 lossOfSignal CRITICAL\n################################################################################\n# send NotifyNewAlarm\n\n        severity: CRITICAL\n       eventType: O_RAN_COMPONENT\n           pnfId: NSHMRIACQ01M01123401\n  controllerName: martindev\n           model: 1234 BestInClass\n         eventId: NSHMRIACQ01M01123401_LP-MWPS-RADIO_lossOfSignal\n          vendor: VENDORA\n          domain: stndDefined\n       eventTime: 2022-04-07T14:57:16.567480Z\n           alarm: lossOfSignal\n            type: 1234\n       timestamp: 1649343436567480\n       interface: LP-MWPS-RADIO\n\nHTTP/1.1 100 \n\nHTTP/1.1 202 \nContent-Type: application/json\nContent-Length: 23\nDate: Thu, 07 Apr 2022 14:57:17 GMT\n\nSuccessfully send even\n\n",
+      "revId": "3520587094fb15a9c5fea772043d39fbf3b89dcc",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
