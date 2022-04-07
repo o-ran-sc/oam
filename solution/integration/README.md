@@ -98,6 +98,56 @@ do not verify self signed certificates for HTTPS communication.
 export PYTHONWARNINGS="ignore:Unverified HTTPS request"
 ```
 
+Please ensure that you download and copy the required 3GPP OpenAPIs for VES-stndDefined
+message validation into the folder './solution/integration/smo/oam/ves-collector/externalRepo'.
+
+Please follow the instructions in ./solution/integration/smo/oam/ves-collector/externalRepo/3gpp/rep/sa5/MnS/blob/Rel16/OpenAPI/README.md.
+
+The following tree shows the successfully tested folder structure. It combines different versions of the schemas ('Rel16' and 'SA88-Rel16') using 3GPP branch names.
+
+```
+$ tree solution/integration/smo/oam/ves-collector/externalRepo/
+solution/integration/smo/oam/ves-collector/externalRepo/
+├── 3gpp
+│   └── rep
+│       └── sa5
+│           └── MnS
+│               └── blob
+│                   ├── Rel16
+│                   │   └── OpenAPI
+│                   │       ├── 5gcNrm.yaml
+│                   │       ├── PerfMeasJobCtrlMnS.yaml
+│                   │       ├── README.md
+│                   │       ├── comDefs.yaml
+│                   │       ├── coslaNrm.yaml
+│                   │       ├── faultMnS.yaml
+│                   │       ├── fileDataReportingMnS.yaml
+│                   │       ├── genericNrm.yaml
+│                   │       ├── heartbeatNtf.yaml
+│                   │       ├── nrNrm.yaml
+│                   │       ├── perfMnS.yaml
+│                   │       ├── provMnS.yaml
+│                   │       ├── sliceNrm.yaml
+│                   │       └── streamingDataMnS.yaml
+│                   └── SA88-Rel16
+│                       └── OpenAPI
+│                           ├── 5gcNrm.yaml
+│                           ├── PerDataFileReportMnS.yaml
+│                           ├── PerMeasJobCtlMnS.yaml
+│                           ├── PerThresMonMnS.yaml
+│                           ├── PerfDataStreamingMnS.yaml
+│                           ├── README.md
+│                           ├── comDefs.yaml
+│                           ├── coslaNrm.yaml
+│                           ├── faultMnS.yaml
+│                           ├── genericNrm.yaml
+│                           ├── heartbeatNtf.yaml
+│                           ├── nrNrm.yaml
+│                           ├── provMnS.yaml
+│                           ├── sliceNrm.yaml
+│                           └── streamingDataMnS.yaml
+```
+
 ## Expected Folder Structure
 
 ```
