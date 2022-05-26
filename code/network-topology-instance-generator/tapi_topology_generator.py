@@ -15,7 +15,7 @@
 #!/usr/bin/python
 
 """
-Module as entry point to generatate a TAPI topology json
+Module as entry point to generate a TAPI topology json
 """
 import sys
 from controller.parameter_validator import ParameterValidator
