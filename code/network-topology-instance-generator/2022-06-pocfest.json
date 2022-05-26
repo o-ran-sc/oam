@@ -1,0 +1,14 @@
+{
+  "network": {
+    "pattern": {
+      "smo": 1,
+      "o-cloud": 7,
+      "near-rt-ric": 1,
+      "o-cu": 7,
+      "o-du": 3,
+      "fronthaul-gateway": 1,
+      "o-ru": 3,
+      "user-equipment": 3
+    }
+  }
+}
