@@ -41,7 +41,7 @@ class TapiNodeNearRtRic(TapiNode):
         nep_configuration = {
             "parent": self.identifier(),
             "nodeEdgePoint": {
-                "interface": "e2", "cep": [{"protocol": "REST", "role": "consumer"}]
+                "interface": "e2", "cep": [{"protocol": "SCTP", "role": "consumer"}]
             }
         }
         self.add(TapiNodeEdgePoint(nep_configuration))
