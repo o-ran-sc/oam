@@ -488,7 +488,7 @@ class TapiTopology(Top):
                 # E2
                 link_configuration = {
                     "topology_reference": self.data()["uuid"],
-                    "name_prefix": "e2-rest",
+                    "name_prefix": "e2-sctp",
                     "provider": node[plane],
                     "consumer": parent
                 }
@@ -583,7 +583,7 @@ class TapiTopology(Top):
                 # E2
                 link_configuration = {
                     "topology_reference": self.data()["uuid"],
-                    "name_prefix": "e2-rest",
+                    "name_prefix": "e2-sctp",
                     "provider": node,
                     "consumer": parent.parent()
                 }
