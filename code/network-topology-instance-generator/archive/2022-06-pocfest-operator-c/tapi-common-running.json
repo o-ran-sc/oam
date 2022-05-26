@@ -1,0 +1,11 @@
+{
+  "tapi-common:context": {
+    "uuid": "473ddc8d-ce1f-4aa8-a3ba-6bb508ff5806",
+    "name": [
+      {
+        "value-name": "context-name",
+        "value": "Operator C"
+      }
+    ]
+  }
+}
