@@ -1,25 +1,25 @@
-# Network Topology Instance Generator 
+# Network Topology Instance Generator
 
-This python project generates a network topology according 
+This python project generates a network topology according
 [TAPI-Topology yang - v2.1.3](https://github.com/OpenNetworkingFoundation/TAPI/blob/v2.1.3/YANG/tapi-topology.yang).
 
-Please note: The generator does not need to implement streaming or notification 
-functions. The dependencies to tapi-notification and tapi-streaming were 
-removed. 
+Please note: The generator does not need to implement streaming or notification
+functions. The dependencies to tapi-notification and tapi-streaming were
+removed.
 
-Each network-function is represented as TAPI-Node which exposes interfaces to 
+Each network-function is represented as TAPI-Node which exposes interfaces to
 other network-functions or to management systems.
 
-Therefore the Network Topology can cover 
+Therefore the Network Topology can cover
 
- * Data Plane (also called User Plane), 
- * Synchronization Plane, 
+ * Data Plane (also called User Plane),
+ * Synchronization Plane,
  * Control Plane and
  * Management Plane.
 
-Interface end-points of network-functions are represented as 
-TAPI-Owned-Node-Edge-Points. TAPI-Links create a logical connection between 
-TAPI-Owned-Node-Edge-Points of the same layer (or even more strict of the same 
+Interface end-points of network-functions are represented as
+TAPI-Owned-Node-Edge-Points. TAPI-Links create a logical connection between
+TAPI-Owned-Node-Edge-Points of the same layer (or even more strict of the same
 layer-protocol-name).
 
 ## Prerequisites
@@ -48,7 +48,7 @@ git clone "https://gerrit.o-ran-sc.org/r/scp/oam/modeling"
 
 ## Generation Input
 
-The generator consumes a json as input. The json defines the hierarchy of 
+The generator consumes a json as input. The json defines the hierarchy of
 network-function types and its number of elements per parent.
 
 Example:
@@ -65,7 +65,7 @@ Example:
 }
 ```
 
-The resulting network will include 2 network-functions of type "o-du". 
+The resulting network will include 2 network-functions of type "o-du".
 Each "o-du" is connected to 3 network-function instances of type "o-ru".
 
 ```
@@ -95,5 +95,5 @@ yanglint -f json \
 -p model/yang/TAPI/YANG \
 model/yang/modeling/data-model/yang/working/o-ran-sc/o-ran-sc-topology/o-ran-sc-topology*.yang \
 model/yang/TAPI/YANG/*.yang \
-output/TestNetwork.json
+output/tapi-common-operational.json
 ```
