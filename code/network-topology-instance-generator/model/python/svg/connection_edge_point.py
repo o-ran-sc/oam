@@ -59,6 +59,7 @@ class ConnectionEdgePoint(Svg):
             "radio": "RF",
             "rest": "REST",
             "restconf": "RC",
+            "sctp": "SCTP",
             "unknown": "-"
         }
         search = protocol.split(":")[1]
