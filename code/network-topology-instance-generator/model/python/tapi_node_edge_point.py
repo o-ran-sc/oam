@@ -83,7 +83,7 @@ class TapiNodeEdgePoint(Top):
 
             "o2-rest-provider": 0*self.FONTSIZE,
             "a1-rest-provider": 0*self.FONTSIZE,
-            "e2-rest-consumer": 0*self.FONTSIZE,
+            "e2-sctp-consumer": 0*self.FONTSIZE,
 
             "n1-nas-provider": 0*self.FONTSIZE,
             "n2-nas-provider": 0*self.FONTSIZE,
@@ -95,7 +95,7 @@ class TapiNodeEdgePoint(Top):
             "e1-unknown-provider": +2.5*self.FONTSIZE,
             "e1-unknown-consumer": -2.5*self.FONTSIZE,
 
-            "e2-rest-provider": 0*self.FONTSIZE,
+            "e2-sctp-provider": 0*self.FONTSIZE,
             "n2-nas-consumer": 0*self.FONTSIZE,
             "n3-nas-consumer": 0*self.FONTSIZE,
             "f1-c-unknown-provider": 0*self.FONTSIZE,
@@ -132,7 +132,7 @@ class TapiNodeEdgePoint(Top):
 
             "o2-rest-provider": +1.5*self.FONTSIZE,
             "a1-rest-provider": +1.5*self.FONTSIZE,
-            "e2-rest-consumer": -1.5*self.FONTSIZE,
+            "e2-sctp-consumer": -1.5*self.FONTSIZE,
 
             "n1-nas-provider": -1.5*self.FONTSIZE,
             "n2-nas-provider": -1.5*self.FONTSIZE,
@@ -144,7 +144,7 @@ class TapiNodeEdgePoint(Top):
             "f1-c-unknown-consumer": -1.5*self.FONTSIZE,
             "f1-u-unknown-consumer": -1.5*self.FONTSIZE,
 
-            "e2-rest-provider": +1.5*self.FONTSIZE,
+            "e2-sctp-provider": +1.5*self.FONTSIZE,
             "n2-nas-consumer": +1.5*self.FONTSIZE,
             "n3-nas-consumer": +1.5*self.FONTSIZE,
             "f1-c-unknown-provider": +1.5*self.FONTSIZE,
