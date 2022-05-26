@@ -33,7 +33,7 @@ class TapiNodeOCuUp(TapiNode):
         nep_configuration = {
             "parent": self.identifier(),
             "nodeEdgePoint": {
-                "interface": "e2", "cep":[{"protocol": "REST", "role": "provider"}]
+                "interface": "e2", "cep":[{"protocol": "SCTP", "role": "provider"}]
             }
         }
         self.add(TapiNodeEdgePoint(nep_configuration))
