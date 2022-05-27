@@ -16,6 +16,23 @@
       "message": "tox -e docs,docs-linkcheck\n\ndocs: commands succeeded\ndocs-linkcheck: commands succeeded\ncongratulations :)",
       "revId": "0e52bec43460a1724047fc54e21ae595b8964fd2",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "513bf127_77554e52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-05-27T14:19:49Z",
+      "side": 1,
+      "message": "Sorry - jobbuilder vanished 😞\n\nhowever:\n\ntox -e docs,docs-linkcheck\n[...]\nLook for any errors in the above output or in docs/_build/linkcheck/output.txt\n____ summary _______\n  docs: commands succeeded\n  docs-linkcheck: commands succeeded\n  congratulations :)",
+      "revId": "0e52bec43460a1724047fc54e21ae595b8964fd2",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
