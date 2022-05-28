@@ -60,6 +60,10 @@ output
 # avoid copyright issues with 3GPP
 */**/3gpp/**/*.yaml
 
+# node js
+node_modules
+package-lock.json
+
 # wireshark
 .cache
 
