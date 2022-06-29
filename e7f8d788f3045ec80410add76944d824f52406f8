@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4004931_aa0c26a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-06-29T12:15:49Z",
+      "side": 1,
+      "message": "$ tox -e docs,docs-linkcheck\n[...]\n  docs: commands succeeded\n  docs-linkcheck: commands succeeded\n  congratulations :)\n$",
+      "revId": "e7f8d788f3045ec80410add76944d824f52406f8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
