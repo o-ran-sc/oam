@@ -40,6 +40,7 @@ yang-gen-sal/
 target-ide/
 release.properties
 .vscode
+archive
 
 # python
 __pycache__
