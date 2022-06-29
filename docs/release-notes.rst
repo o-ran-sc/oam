@@ -1,6 +1,6 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 .. SPDX-License-Identifier: CC-BY-4.0
-.. Copyright (C) 2021 highstreet technologies GmbH
+.. Copyright (C) 2022 highstreet technologies USA Corp.
 
 
 Operation and Maintenance Release Notes
@@ -8,7 +8,99 @@ Operation and Maintenance Release Notes
 
 This document provides the release notes for O-RAN-SC D-Release of the Operation and Maintenance (OAM) project.
 
-A collection of release notes for used projects is available in `O-RAN-SC OAM wiki release notes <https://wiki.o-ran-sc.org/display/OAM/E-Release+Notes>`__.
+Version 6.0.0, 2022-06-28
+-------------------------
+
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| Issue                                                   | Summary                                                                         |
++=========================================================+=================================================================================+
+| `OAM-271  <https://jira.o-ran-sc.org/browse/OAM-271>`__ | Deployment: sdnc-web is not coming up                                           |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-270  <https://jira.o-ran-sc.org/browse/OAM-270>`__ | O-DUs must not be affected by a disaster for June 2022                          |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-269  <https://jira.o-ran-sc.org/browse/OAM-269>`__ | Correct E2 protocol                                                             |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-268  <https://jira.o-ran-sc.org/browse/OAM-268>`__ | create topologies for 2022-06 OTIC PoCfest                                      |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-266  <https://jira.o-ran-sc.org/browse/OAM-266>`__ | Create additional information model for topology                                |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-265  <https://jira.o-ran-sc.org/browse/OAM-265>`__ | Deployment: jenkins pod not coming up, missing pv                               |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-264  <https://jira.o-ran-sc.org/browse/OAM-264>`__ | Deployment:  Minor corrections in README.md                                     |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-263  <https://jira.o-ran-sc.org/browse/OAM-263>`__ | Create more VES stndDefined Examples                                            |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-262  <https://jira.o-ran-sc.org/browse/OAM-262>`__ | Define Wireshark configuration                                                  |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-261  <https://jira.o-ran-sc.org/browse/OAM-261>`__ | Update README to document new Wireshark function                                |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-260  <https://jira.o-ran-sc.org/browse/OAM-260>`__ | Add Wireshark to docker-compose                                                 |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-259  <https://jira.o-ran-sc.org/browse/OAM-259>`__ | Add Wireshark to the solution                                                   |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-258  <https://jira.o-ran-sc.org/browse/OAM-258>`__ | Ues json file names as expected by o-ran-sc-topology service                    |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-257  <https://jira.o-ran-sc.org/browse/OAM-257>`__ | Use inline css styles for SVG                                                   |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-256  <https://jira.o-ran-sc.org/browse/OAM-256>`__ | ADD N1, N2 N3 interfacing to topology generation                                |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-255  <https://jira.o-ran-sc.org/browse/OAM-255>`__ | Add nodes, function and protocols for N1, N2 and N3 interfacing                 |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-254  <https://jira.o-ran-sc.org/browse/OAM-254>`__ | Create topology-parser tool                                                     |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-253  <https://jira.o-ran-sc.org/browse/OAM-253>`__ | remove dependency to unused tile-server                                         |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-252  <https://jira.o-ran-sc.org/browse/OAM-252>`__ | Update nexus port to 10001 for VES Collector images as it is now released.      |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-251  <https://jira.o-ran-sc.org/browse/OAM-251>`__ | Align docker-compose with SIM topology-service                                  |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-250  <https://jira.o-ran-sc.org/browse/OAM-250>`__ | Add LayerProtocolQualifier                                                      |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-249  <https://jira.o-ran-sc.org/browse/OAM-249>`__ | Create a script to generate a Topology                                          |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-248  <https://jira.o-ran-sc.org/browse/OAM-248>`__ | Create O-RAN-SC extension to TAPI Topology v2.1.3                               |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-247  <https://jira.o-ran-sc.org/browse/OAM-247>`__ | Remove highstreet from simulated Network Functions names                        |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-246  <https://jira.o-ran-sc.org/browse/OAM-246>`__ | Modify docker-compose configuration                                             |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-245  <https://jira.o-ran-sc.org/browse/OAM-245>`__ | Correct pm-streaming model                                                      |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-244  <https://jira.o-ran-sc.org/browse/OAM-244>`__ | Add known issue section to release notes                                        |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-243  <https://jira.o-ran-sc.org/browse/OAM-243>`__ | Network slicing event support by OAM (Simulator)                                |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-211  <https://jira.o-ran-sc.org/browse/OAM-211>`__ | Update to Java 11                                                               |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-172  <https://jira.o-ran-sc.org/browse/OAM-172>`__ | Update Deployment                                                               |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-143  <https://jira.o-ran-sc.org/browse/OAM-143>`__ | 1852,Provide ONAP Guilin based nonrtric-o1-controller image                     |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-132  <https://jira.o-ran-sc.org/browse/OAM-132>`__ | ONAP Guilin SDN-R based nonrtric-o1-controller                                  |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-130  <https://jira.o-ran-sc.org/browse/OAM-130>`__ | SPV is failing if Admin state and another parameter present in single request   |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-129  <https://jira.o-ran-sc.org/browse/OAM-129>`__ | Adding Copyright license for missing files                                      |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-127  <https://jira.o-ran-sc.org/browse/OAM-127>`__ | Support of heartbeat and Software management Code delivery                      |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-123  <https://jira.o-ran-sc.org/browse/OAM-123>`__ | Yang model files should be part of scp/oam/modeling                             |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-117  <https://jira.o-ran-sc.org/browse/OAM-117>`__ | License.txt should update with latest 3rd party software list                   |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-115  <https://jira.o-ran-sc.org/browse/OAM-115>`__ | Remove unused directories                                                       |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-35   <https://jira.o-ran-sc.org/browse/OAM-35>`__  | User plane Topology View                                                        |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-34   <https://jira.o-ran-sc.org/browse/OAM-34>`__  | Control Plane Topology View                                                     |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-33   <https://jira.o-ran-sc.org/browse/OAM-33>`__  | O1 Topology View                                                                |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+| `OAM-32   <https://jira.o-ran-sc.org/browse/OAM-32>`__  | A1/E2 Topology View                                                             |
++---------------------------------------------------------+---------------------------------------------------------------------------------+
+
+Please see related release notes in `ONAP SDNC <https://docs.onap.org/projects/onap-sdnc-oam/en/jakarta/release-notes.html>`__
+and `OpenDaylight <https://docs.opendaylight.org/en/stable-phosphorus/release-notes/index.html>`__ .
 
 Version 5.1.0, 2022-01-31
 -------------------------
