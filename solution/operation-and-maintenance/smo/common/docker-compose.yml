@@ -1,0 +1,111 @@
+################################################################################
+# Copyright 2022 highstreet technologies GmbH
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+version: '3.8'
+services:
+
+  identity:
+    image: ${IDENTITY_IMAGE}
+    container_name: identity
+    ports:
+      - ${IDENTITY_PORT}:8443
+    environment:
+      - KEYCLOAK_USER=${ADMIN_USERNAME}
+      - KEYCLOAK_PASSWORD=${ADMIN_PASSWORD}
+      - JAVA_OPTS=-Djboss.bind.address.private=[::1] -Djboss.bind.address=[::1] -Djava.net.preferIPv6Addresses=true -Djava.net.preferIPv4Stack=false
+      - DB_VENDOR=h2
+    networks:
+      dmz:
+
+  persistence:
+    image: ${PERSISTENCE_IMAGE}
+    container_name: persistence
+    environment:
+      - discovery.type=single-node
+
+  zookeeper:
+    image: ${ZOOKEEPER_IMAGE}
+    container_name: zookeeper
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_REPLICAS: 1
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 5
+      ZOOKEEPER_INIT_LIMIT: 10
+      ZOOKEEPER_MAX_CLIENT_CNXNS: 200
+      ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT: 3
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: 24
+      ZOOKEEPER_CLIENT_PORT: 2181
+      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/zookeeper/secrets/jaas/zk_server_jaas.conf -Dzookeeper.kerberos.removeHostFromPrincipal=true -Dzookeeper.kerberos.removeRealmFromPrincipal=true -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider -Dzookeeper.requireClientAuthScheme=sasl
+      ZOOKEEPER_SERVER_ID:
+    volumes:
+      -  ./zookeeper/zk_server_jaas.conf:/etc/zookeeper/secrets/jaas/zk_server_jaas.conf
+
+  kafka:
+    image: ${KAFKA_IMAGE}
+    container_name: kafka
+    ports:
+     - 9092:9092
+    environment:
+      enableCadi: 'false'
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS: 40000
+      KAFKA_ZOOKEEPER_SESSION_TIMEOUT_MS: 40000
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL_PLAINTEXT:PLAINTEXT,EXTERNAL_PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL_PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: INTERNAL_PLAINTEXT://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL_PLAINTEXT
+      KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/jaas/zk_client_jaas.conf
+      KAFKA_ZOOKEEPER_SET_ACL: 'true'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      # Reduced the number of partitions only to avoid the timeout error for the first subscribe call in slow environment
+      KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS: 1
+    volumes:
+      -  ./kafka/zk_client_jaas.conf:/etc/kafka/secrets/jaas/zk_client_jaas.conf
+    depends_on:
+     - zookeeper
+
+  dmaap:
+    container_name: onap-dmaap
+    image: ${DMAAP_IMAGE}
+    ports:
+      - 3904:3904
+      - 3905:3905
+    environment:
+      enableCadi: 'false'
+    volumes:
+      - ./dmaap/MsgRtrApi.properties:/appl/dmaapMR1/bundleconfig/etc/appprops/MsgRtrApi.properties
+      - ./dmaap/logback.xml:/appl/dmaapMR1/bundleconfig/etc/logback.xml
+      - ./dmaap/cadi.properties:/appl/dmaapMR1/etc/cadi.properties
+    depends_on:
+      - zookeeper
+      - kafka
+
+networks:
+  dmz:
+    driver: bridge
+    name: dmz
+    enable_ipv6: false
+  default:
+    driver: bridge
+    name: smo
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+      - subnet:  ${NETWORK_SUBNET_SMO}
+        gateway: ${NETWORK_GATEWAY_SMO}
