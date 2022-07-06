@@ -1,0 +1,122 @@
+################################################################################
+# Copyright 2021 highstreet technologies GmbH
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+version: '3.8'
+services:
+  sdnc-web:
+    image: ${SDNC_WEB_IMAGE}
+    container_name: sdnc-web
+    ports:
+      - ${SDNC_WEB_PORT}:${SDNC_WEB_PORT}
+    environment:
+      - WEBPROTOCOL=HTTPS
+      - WEBPORT=${SDNC_WEB_PORT}
+      - SDNRPROTOCOL=http
+      - SDNRHOST=sdnr
+      - SDNRPORT=${SDNC_REST_PORT}
+      - SSL_CERT_DIR=/opt/app/osaaf/local/certs
+      - SSL_CERTIFICATE=cert.pem
+      - SSL_CERTIFICATE_KEY=key.pem
+      - ENABLE_OAUTH=true
+      - ENABLE_ODLUX_RBAC=false
+    volumes:
+      - ./web:/opt/app/osaaf/local/certs
+    networks:
+      dmz:
+      smo:
+
+  sdnr:
+    image: ${SDNC_IMAGE}
+    container_name: sdnr
+    ports:
+      - ${SDNC_REST_PORT}:8181
+      - 6666:6666
+      - 4335:4335
+    environment:
+      - LOG4J_FORMAT_MSG_NO_LOOKUPS=true
+      - KARAF_CONSOLE_LOG_LEVEL=INFO
+      - ENABLE_ODL_CLUSTER=false
+      - ENABLE_OAUTH=true
+      - ODL_CERT_DIR=${SDNC_CERT_DIR}
+      - ODL_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - SDNC_CONFIG_DIR=/opt/onap/ccsdk/data/properties
+      - SDNC_REPLICAS=0
+      - CCSDK_REPLICAS=0
+      - DOMAIN=""
+      - SDNRWT=true
+      - SDNRONLY=true
+      - SDNRINIT=true
+      - SDNRDM=true
+      - SDNRDBURL=http://persistence:9200
+      - SDNRDBTRUSTALLCERTS=true
+      - SDNR_NETCONF_CALLHOME_ENABLED=true
+      - A1_ADAPTER_NORTHBOUND=false
+      - JAVA_OPTS=-Xms256m -Xmx4g
+      - IDENTITY_PROVIDER_URL=${IDENTITY_PROVIDER_URL}
+      - SDNC_WEB_URL=https://sdnc-web:${SDNC_WEB_PORT}
+
+      - SDNR_VES_COLLECTOR_ENABLED=true
+      - SDNR_VES_COLLECTOR_TLS_ENABLED=true
+      - SDNR_VES_COLLECTOR_TRUST_ALL_CERTS=true
+      - SDNR_VES_COLLECTOR_IP=ves-collector
+      - SDNR_VES_COLLECTOR_PORT=$VES_ENDPOINT_PORT
+      - SDNR_VES_COLLECTOR_VERSION=v7
+      - SDNR_VES_COLLECTOR_REPORTING_ENTITY_NAME=ONAP SDN-R
+      - SDNR_VES_COLLECTOR_EVENTLOG_MSG_DETAIL=LONG
+      - SDNR_VES_COLLECTOR_USERNAME=${VES_ENDPOINT_USERNAME}
+      - SDNR_VES_COLLECTOR_PASSWORD=${VES_ENDPOINT_PASSWORD}
+    volumes:
+      - ./controller/oauth-aaa-app-config.xml:/opt/onap/sdnc/data/oauth-aaa-app-config.xml
+      - ./controller/oauth-provider.config.json:/opt/opendaylight/etc/oauth-provider.config.json
+      - ./controller/devicemanager.properties:/opt/opendaylight/etc/devicemanager.properties
+      - ./controller/mountpoint-registrar.properties:/opt/opendaylight/etc/mountpoint-registrar.properties
+      - ./controller/certs/certs.properties:${SDNC_CERT_DIR}/certs.properties
+      - ./controller/certs/keys0.zip:${SDNC_CERT_DIR}/keys0.zip
+    networks:
+      dmz:
+      smo:
+      default:
+        ipv6_address: ${SDNC_OAM_IPv6}
+
+  ves-collector:
+    image: ${VES_COLLECTOR_IMAGE}
+    container_name: ves-collector
+    environment:
+      DMAAPHOST: onap-dmaap
+    ports:
+      - 8443:8443
+    volumes:
+      - ./ves-collector/collector.properties:/opt/app/VESCollector/etc/collector.properties
+      - ./ves-collector/ves-dmaap-config.json:/opt/app/VESCollector/etc/ves-dmaap-config.json
+      - ./ves-collector/externalRepo:/opt/app/VESCollector/etc/externalRepo
+    networks:
+      smo:
+      default:
+        ipv6_address: ${VES_COLLECTOR_OAM_IPv6}
+
+networks:
+  dmz:
+    external: true
+  smo:
+    external: true
+  default:
+    driver: bridge
+    name: oam
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+      - subnet:  ${NETWORK_SUBNET_OAM_IPv6}
+        gateway: ${NETWORK_GATEWAY_OAM_IPv6}
