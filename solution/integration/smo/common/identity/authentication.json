@@ -79,38 +79,41 @@
     {
       "firstName": "Martin",
       "lastName": "Skorupski",
-      "email": "martin.skorupski@sdnr.onap.org",
+      "email": "martin.skorupski@highstreet-technologies.com",
       "enabled": "true",
       "username": "martin.skorupski",
       "credentials": [
         {
           "type": "password",
-          "value": "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U",
-          "temporary": false
+          "value": "Default4SDN!",
+          "temporary": true
         }
+      ],
+      "requiredActions": [
+        "UPDATE_PASSWORD"
       ]
     }
   ],
   "grants": [
     {
-      "username":"leia.organa",
-      "role":"administration"
+      "username": "leia.organa",
+      "role": "administration"
     },
     {
-      "username":"r2.d2",
-      "role":"administration"
+      "username": "r2.d2",
+      "role": "administration"
     },
     {
-      "username":"luke.skywalker",
-      "role":"provision"
+      "username": "luke.skywalker",
+      "role": "provision"
     },
     {
-      "username":"jargo.fett",
-      "role":"supervision"
+      "username": "jargo.fett",
+      "role": "supervision"
     },
     {
-      "username":"martin.skorupski",
-      "role":"administration"
+      "username": "martin.skorupski",
+      "role": "administration"
     }
   ]
 }
