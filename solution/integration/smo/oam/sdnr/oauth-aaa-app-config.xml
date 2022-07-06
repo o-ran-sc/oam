@@ -40,11 +40,11 @@
     </main>
     <main>
         <pair-key>anyroles</pair-key>
-        <pair-value>org.opendaylight.aaa.shiro.filters.AnyRoleHttpAuthenticationFilter</pair-value>
+        <pair-value>org.onap.ccsdk.features.sdnr.wt.oauthprovider.filters.AnyRoleHttpAuthenticationFilter</pair-value>
     </main>
     <main>
         <pair-key>authcBearer</pair-key>
-        <pair-value>org.opendaylight.aaa.shiro.filters.ODLHttpAuthenticationFilter2</pair-value>
+        <pair-value>org.onap.ccsdk.features.sdnr.wt.oauthprovider.filters.BearerAndBasicHttpAuthenticationFilter</pair-value>
     </main>
 
     <!-- in order to track AAA challenge attempts -->
