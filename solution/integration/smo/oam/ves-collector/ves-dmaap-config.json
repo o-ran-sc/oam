@@ -202,6 +202,13 @@
       "topic_url": "http://onap-dmaap:3904/events/unauthenticated.VES_PNFREG_OUTPUT/"
     }
   },
+  "ves-o1-notify-pnf-registration": {
+    "type": "message_router",
+    "dmaap_info": {
+      "location": "mtl5",
+      "topic_url": "http://onap-dmaap:3904/events/unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT/"
+    }
+  },
   "ves-o-ran-sc-du-hello-world-pm-streaming-oas3": {
     "type": "message_router",
     "dmaap_info": {
