@@ -1,24 +1,4 @@
 {
-  "roles": {
-    "administration": [
-      {
-        "id": "66f90a7a-3766-4f69-989d-c94910e0bad6",
-        "name": "administration"
-      }
-    ],
-    "provision": [
-      {
-        "id": "7c6d7309-c7c1-4a51-8a85-bd6713af5ca7",
-        "name": "provision"
-      }
-    ],
-    "supervision": [
-      {
-        "id": "d2594199-99c2-4e0c-9b33-94b0a84b569a",
-        "name": "supervision"
-      }
-    ]
-  },
   "users": [
     {
       "firstName": "Leia",
