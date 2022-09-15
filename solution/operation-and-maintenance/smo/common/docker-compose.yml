@@ -20,14 +20,46 @@ services:
     image: ${IDENTITY_IMAGE}
     container_name: identity
     ports:
-      - ${IDENTITY_PORT}:8443
+      - ${IDENTITY_PORT_HTTPS}:${IDENTITY_PORT_HTTPS}
     environment:
-      - KEYCLOAK_USER=${ADMIN_USERNAME}
-      - KEYCLOAK_PASSWORD=${ADMIN_PASSWORD}
-      - JAVA_OPTS=-Djboss.bind.address.private=[::1] -Djboss.bind.address=[::1] -Djava.net.preferIPv6Addresses=true -Djava.net.preferIPv4Stack=false
-      - DB_VENDOR=h2
+      - KEYCLOAK_HTTPS_PORT=${IDENTITY_PORT_HTTPS}
+      - KEYCLOAK_CREATE_ADMIN_USER=true
+      - KEYCLOAK_ADMIN_USER=${ADMIN_USERNAME}
+      - KEYCLOAK_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - KEYCLOAK_MANAGEMENT_USER=${IDENTITY_MGMT_USERNAME}
+      - KEYCLOAK_MANAGEMENT_PASSWORD=${IDENTITY_MGMT_PASSWORD}
+      - KEYCLOAK_DATABASE_HOST=identitydb
+      - KEYCLOAK_DATABASE_NAME=keycloak
+      - KEYCLOAK_DATABASE_USER=keycloak
+      - KEYCLOAK_DATABASE_PASSWORD=keycloak
+      - KEYCLOAK_JDBC_PARAMS=sslmode=disable&connectTimeout=30000
+      - KEYCLOAK_PRODUCTION=false
+      - KEYCLOAK_ENABLE_TLS=true
+      - KEYCLOAK_TLS_KEYSTORE_FILE=/opt/bitnami/keycloak/certs/keystore.jks
+      - KEYCLOAK_TLS_TRUSTSTORE_FILE=/opt/bitnami/keycloak/certs/truststore.jks
+      - KEYCLOAK_TLS_KEYSTORE_PASSWORD=password
+      - KEYCLOAK_TLS_TRUSTSTORE_PASSWORD=changeit
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./identity/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
+      - ./identity/keystore.jks:/opt/bitnami/keycloak/certs/keystore.jks
+      - ./identity/truststoreONAPall.jks:/opt/bitnami/keycloak/certs/truststore.jks
+    depends_on:
+      - identitydb
     networks:
-      dmz:
+      - dmz
+
+  identitydb:
+    image: docker.io/bitnami/postgresql:13
+    container_name: identitydb
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - POSTGRESQL_USERNAME=keycloak
+      - POSTGRESQL_DATABASE=keycloak
+      - POSTGRESQL_PASSWORD=keycloak
+    networks:
+      - dmz
+
 
   persistence:
     image: ${PERSISTENCE_IMAGE}
