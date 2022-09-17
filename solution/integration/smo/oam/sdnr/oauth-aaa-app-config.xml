@@ -72,26 +72,35 @@
         <pair-key>/**/v1/**</pair-key>
         <pair-value>authcBearer, roles[admin]</pair-value>
     </urls>
+    <!-- allow admin only access to write mdsal auth config -->
     <urls>
-        <pair-key>/**/config/aaa*/**</pair-key>
+        <pair-key>/rests/**/aaa*/**</pair-key>
         <pair-value>authcBearer, roles[admin]</pair-value>
     </urls>
-     <urls>
+    <!-- anon access for login api -->
+    <urls>
         <pair-key>/oauth/**</pair-key>
         <pair-value>anon</pair-value>
     </urls>
     <urls>
+        <pair-key>/ready</pair-key>
+        <pair-value>anon</pair-value>
+    </urls>
+    <!-- anon access for odlux ui -->
+    <urls>
         <pair-key>/odlux/**</pair-key>
         <pair-value>anon</pair-value>
     </urls>
+    <!-- admin only access for apidocs -->
     <urls>
         <pair-key>/apidoc/**</pair-key>
-        <pair-value>authcBasic</pair-value>
+        <pair-value>authcBasic, roles[admin]</pair-value>
     </urls>
     <urls>
         <pair-key>/rests/**</pair-key>
         <pair-value>authcBearer, anyroles["admin,provision"]</pair-value>
     </urls>
+    <!-- any other access with configured dynamic filter -->
     <urls>
         <pair-key>/**</pair-key>
         <pair-value>authcBearer, anyroles["admin,provision"]</pair-value>
