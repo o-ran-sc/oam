@@ -18,9 +18,9 @@ services:
   sdnc-web:
     image: ${SDNC_WEB_IMAGE}
     container_name: sdnc-web
-    ports: 
+    ports:
       - ${SDNC_WEB_PORT}:${SDNC_WEB_PORT}
-    environment: 
+    environment:
       - ENABLE_OAUTH=true
       - WEBPROTOCOL=HTTPS
       - WEBPORT=${SDNC_WEB_PORT}
@@ -41,13 +41,14 @@ services:
     container_name: sdnr
     ports:
       - ${SDNC_REST_PORT}:8181
-      - 8101:8101
       - 6666:6666
       - 4335:4335
     environment:
-      - SDNC_CONFIG_DIR=/opt/onap/ccsdk/data/properties
-      - ODL_CERT_DIR=${SDNC_CERT_DIR}
       - ENABLE_ODL_CLUSTER=false
+      - ENABLE_OAUTH=true
+      - ODL_CERT_DIR=${SDNC_CERT_DIR}
+      - ODL_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - SDNC_CONFIG_DIR=/opt/onap/ccsdk/data/properties
       - SDNC_REPLICAS=0
       - CCSDK_REPLICAS=0
       - DOMAIN=""
@@ -56,15 +57,23 @@ services:
       - SDNRINIT=true
       - SDNRDM=true
       - SDNRDBURL=http://persistence:9200
-      - A1_ADAPTER_NORTHBOUND=false
-      - ODL_ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      - ENABLE_OAUTH=true
       - SDNR_NETCONF_CALLHOME_ENABLED=true
+      - A1_ADAPTER_NORTHBOUND=false
       - JAVA_OPTS=-Xms256m -Xmx4g
       - IDENTITY_PROVIDER_URL=${IDENTITY_PROVIDER_URL}
       - SDNC_WEB_URL=https://sdnc-web:${SDNC_WEB_PORT}
+      - SDNR_VES_COLLECTOR_ENABLED=true
+      - SDNR_VES_COLLECTOR_TLS_ENABLED=true
+      - SDNR_VES_COLLECTOR_TRUST_ALL_CERTS=true
+      - SDNR_VES_COLLECTOR_IP=ves-collector
+      - SDNR_VES_COLLECTOR_PORT=$VES_COLLECTOR_PORT
+      - SDNR_VES_COLLECTOR_VERSION=v7
+      - SDNR_VES_COLLECTOR_REPORTING_ENTITY_NAME=ONAP SDN-R
+      - SDNR_VES_COLLECTOR_EVENTLOG_MSG_DETAIL=LONG
+      - SDNR_VES_COLLECTOR_USERNAME=${VES_COLLECTOR_USERNAME}
+      - SDNR_VES_COLLECTOR_PASSWORD=${VES_COLLECTOR_PASSWORD}
     volumes:
-      - ./sdnr/oauth-aaa-app-config.xml:/opt/opendaylight/current/system/org/opendaylight/aaa/aaa-shiro/0.13.3/aaa-shiro-0.13.3-aaa-app-config.xml
+      - ./sdnr/oauth-aaa-app-config.xml:/opt/onap/sdnc/data/oauth-aaa-app-config.xml
       - ./sdnr/oauth-provider.config.json:/opt/opendaylight/etc/oauth-provider.config.json
       - ./sdnr/devicemanager.properties:/opt/opendaylight/etc/devicemanager.properties
       - ./sdnr/mountpoint-registrar.properties:/opt/opendaylight/etc/mountpoint-registrar.properties
@@ -82,7 +91,6 @@ services:
     environment:
       DMAAPHOST: onap-dmaap
     ports:
-      - 8080:8080
       - 8443:8443
     volumes:
       - ./ves-collector/collector.properties:/opt/app/VESCollector/etc/collector.properties
