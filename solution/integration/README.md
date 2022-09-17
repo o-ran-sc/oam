@@ -115,20 +115,22 @@ solution/integration/smo/oam/ves-collector/externalRepo/
 │               └── blob
 │                   ├── Rel16
 │                   │   └── OpenAPI
-│                   │       ├── 5gcNrm.yaml
-│                   │       ├── PerfMeasJobCtrlMnS.yaml
-│                   │       ├── README.md
-│                   │       ├── comDefs.yaml
-│                   │       ├── coslaNrm.yaml
-│                   │       ├── faultMnS.yaml
-│                   │       ├── fileDataReportingMnS.yaml
-│                   │       ├── genericNrm.yaml
-│                   │       ├── heartbeatNtf.yaml
-│                   │       ├── nrNrm.yaml
-│                   │       ├── perfMnS.yaml
-│                   │       ├── provMnS.yaml
-│                   │       ├── sliceNrm.yaml
-│                   │       └── streamingDataMnS.yaml
+│                   │       ├── TS28532_FaultMnS.yaml
+│                   │       ├── TS28532_FileDataReportingMnS.yaml
+│                   │       ├── TS28532_HeartbeatNtf.yaml
+│                   │       ├── TS28532_PerfMnS.yaml
+│                   │       ├── TS28532_ProvMnS.yaml
+│                   │       ├── TS28532_StreamingDataMnS.yaml
+│                   │       ├── TS28536_CoslaNrm.yaml
+│                   │       ├── TS28541_5GcNrm.yaml
+│                   │       ├── TS28541_NrNrm.yaml
+│                   │       ├── TS28541_SliceNrm.yaml
+│                   │       ├── TS28550_PerfMeasJobCtrlMnS.yaml
+│                   │       ├── TS28623_ComDefs.yaml
+│                   │       ├── TS28623_GenericNrm.yaml
+│                   │       ├── TS29512_Npcf_SMPolicyControl.yaml
+│                   │       ├── TS29514_Npcf_PolicyAuthorization.yaml
+│                   │       └── TS29571_CommonData.yaml
 │                   └── SA88-Rel16
 │                       └── OpenAPI
 │                           ├── 5gcNrm.yaml

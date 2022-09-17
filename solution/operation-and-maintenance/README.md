@@ -26,7 +26,7 @@ with the following components.
 
     ... representing the NETCONF consumer on the Service Management and
     Orchestration framework (SMO) for the O1 interface based on
-    ODL-Phosphorus.
+    ODL.
     SDN-R comes with is own web-portal the external port is 8463.
 
   * **VES collector**
@@ -97,20 +97,23 @@ solution/operation-and-maintenance/smo/oam/ves-collector/externalRepo/
 │               └── blob
 │                   ├── Rel16
 │                   │   └── OpenAPI
-│                   │       ├── 5gcNrm.yaml
-│                   │       ├── PerfMeasJobCtrlMnS.yaml
 │                   │       ├── README.md
-│                   │       ├── comDefs.yaml
-│                   │       ├── coslaNrm.yaml
-│                   │       ├── faultMnS.yaml
-│                   │       ├── fileDataReportingMnS.yaml
-│                   │       ├── genericNrm.yaml
-│                   │       ├── heartbeatNtf.yaml
-│                   │       ├── nrNrm.yaml
-│                   │       ├── perfMnS.yaml
-│                   │       ├── provMnS.yaml
-│                   │       ├── sliceNrm.yaml
-│                   │       └── streamingDataMnS.yaml
+│                   │       ├── TS28532_FaultMnS.yaml
+│                   │       ├── TS28532_FileDataReportingMnS.yaml
+│                   │       ├── TS28532_HeartbeatNtf.yaml
+│                   │       ├── TS28532_PerfMnS.yaml
+│                   │       ├── TS28532_ProvMnS.yaml
+│                   │       ├── TS28532_StreamingDataMnS.yaml
+│                   │       ├── TS28536_CoslaNrm.yaml
+│                   │       ├── TS28541_5GcNrm.yaml
+│                   │       ├── TS28541_NrNrm.yaml
+│                   │       ├── TS28541_SliceNrm.yaml
+│                   │       ├── TS28550_PerfMeasJobCtrlMnS.yaml
+│                   │       ├── TS28623_ComDefs.yaml
+│                   │       ├── TS28623_GenericNrm.yaml
+│                   │       ├── TS29512_Npcf_SMPolicyControl.yaml
+│                   │       ├── TS29514_Npcf_PolicyAuthorization.yaml
+│                   │       └── TS29571_CommonData.yaml
 │                   └── SA88-Rel16
 │                       └── OpenAPI
 │                           ├── 5gcNrm.yaml
@@ -216,10 +219,20 @@ A system user (%USER) is also created with administration rights.
 
 ```
 docker-compose -f smo/oam/docker-compose.yml up -d
-python smo/identity/config.py
 ```
 
-Please wait about 2min until all the service are up and running.
+Looking into the ONAP SDN-R logs will give you the startup procedure.
+
+```
+docker logs -f sdnr
+```
+
+The startup was successful when you see the following line:
+
+```
+Everything OK in Certificate Installation
+```
+
 If you see the login page (https://sdnc-web:8453) you are good to go and can start the (simulated) network.
 
 ```
