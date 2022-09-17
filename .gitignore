@@ -68,6 +68,9 @@ package-lock.json
 # wireshark
 .cache
 
+# ODLUX cache
+*/**/O D L UX*
+
 # documentation
 .tox
 docs/_build/
