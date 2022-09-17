@@ -21,6 +21,7 @@ services:
     ports:
       - ${SDNC_WEB_PORT}:${SDNC_WEB_PORT}
     environment:
+      - ENABLE_OAUTH=true
       - WEBPROTOCOL=HTTPS
       - WEBPORT=${SDNC_WEB_PORT}
       - SDNRPROTOCOL=http
@@ -29,8 +30,6 @@ services:
       - SSL_CERT_DIR=/opt/app/osaaf/local/certs
       - SSL_CERTIFICATE=cert.pem
       - SSL_CERTIFICATE_KEY=key.pem
-      - ENABLE_OAUTH=true
-      - ENABLE_ODLUX_RBAC=false
     volumes:
       - ./web:/opt/app/osaaf/local/certs
     networks:
@@ -45,8 +44,6 @@ services:
       - 6666:6666
       - 4335:4335
     environment:
-      - LOG4J_FORMAT_MSG_NO_LOOKUPS=true
-      - KARAF_CONSOLE_LOG_LEVEL=INFO
       - ENABLE_ODL_CLUSTER=false
       - ENABLE_OAUTH=true
       - ODL_CERT_DIR=${SDNC_CERT_DIR}
@@ -60,13 +57,11 @@ services:
       - SDNRINIT=true
       - SDNRDM=true
       - SDNRDBURL=http://persistence:9200
-      - SDNRDBTRUSTALLCERTS=true
       - SDNR_NETCONF_CALLHOME_ENABLED=true
       - A1_ADAPTER_NORTHBOUND=false
       - JAVA_OPTS=-Xms256m -Xmx4g
       - IDENTITY_PROVIDER_URL=${IDENTITY_PROVIDER_URL}
       - SDNC_WEB_URL=https://sdnc-web:${SDNC_WEB_PORT}
-
       - SDNR_VES_COLLECTOR_ENABLED=true
       - SDNR_VES_COLLECTOR_TLS_ENABLED=true
       - SDNR_VES_COLLECTOR_TRUST_ALL_CERTS=true
