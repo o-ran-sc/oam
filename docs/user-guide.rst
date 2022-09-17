@@ -12,6 +12,6 @@ This document provides a quickstart for users of the O-RAN SC OAM web applicatio
 
    general
    applications
-   installation
+   deployment
    faq
    abbreviations

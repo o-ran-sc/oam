@@ -2,5 +2,6 @@ from docs_conf.conf import *
 linkcheck_ignore = [
     'http://localhost.*',
     'http://127.0.0.1.*',
-    'https://gerrit.o-ran-sc.org.*'
+    'https://gerrit.o-ran-sc.org.*',
+    'https://sdnc-web:8453'
 ]

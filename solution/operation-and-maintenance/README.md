@@ -191,7 +191,8 @@ python network/config.py
 #### Check (adjust if required) environment variables
 
 ```
-nano smo/.env
+nano smo/common/.env
+nano smo/oam/.env
 nano network/.env
 ```
 
