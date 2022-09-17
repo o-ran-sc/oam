@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "241f2d7c_e664754a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-09-17T09:37:15Z",
+      "side": 1,
+      "message": "each component was automatically tested\nmanual validation of this deployment\n- login via keycloak\n- callhome via TLS and IPv6\n- netconf-notification\n- VES messages for fault and pnfRegistration\n- all visible in ODLUX",
+      "revId": "eff858eb74faa4d21d1bdf1b46f8af13024f46dc",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
