@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adb98283_2132614e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-09-18T08:47:56Z",
+      "side": 1,
+      "message": "no code changes - just moveing or deleting files",
+      "revId": "dde573c74442f104159c3ee1b5b886d1f300d807",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
