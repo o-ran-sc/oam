@@ -1,0 +1,61 @@
+{
+  "event": {
+    "commonEventHeader": {
+      "domain": "@domain@",
+      "eventId": "@eventId@",
+      "eventName": "@domain@_@eventType@_Alarms_@alarm@",
+      "eventType": "@eventType@_Alarms",
+      "sequence": 0,
+      "priority": "Low",
+      "reportingEntityId": "",
+      "reportingEntityName": "@controllerName@",
+      "sourceId": "",
+      "sourceName": "@pnfId@",
+      "startEpochMicrosec": "@timestamp@",
+      "lastEpochMicrosec": "@timestamp@",
+      "nfNamingCode": "@type@",
+      "nfVendorName": "@vendor@",
+      "timeZoneOffset": "+00:00",
+      "version": "4.1",
+      "stndDefinedNamespace": "3GPP-FaultSupervision",
+      "vesEventListenerVersion": "7.2.1"
+    },
+    "stndDefinedFields": {
+      "schemaReference": "https://forge.3gpp.org/rep/sa5/MnS/-/raw/Rel-16/OpenAPI/TS28532_FaultMnS.yaml#components/schemas/NotifyNewAlarm",
+      "data": {
+        "href": "href1",
+        "notificationId": 0,
+        "notificationType": "notifyNewAlarm",
+        "eventTime": "@eventTime@",
+        "systemDN": "xyz",
+        "alarmId": "@alarm@",
+        "alarmType": "COMMUNICATIONS_ALARM",
+        "probableCause": "@alarm@",
+        "specificProblem": "@alarm@",
+        "perceivedSeverity": "@severity@",
+        "backedUpStatus": true,
+        "backUpObject": "xyz",
+        "trendIndication": "MORE_SEVERE",
+        "thresholdInfo": {
+          "observedMeasurement": "new",
+          "observedValue": 123.1
+        },
+        "correlatedNotifications": [],
+        "stateChangeDefinition": [{ "operational-state": "DISABLED" }],
+        "monitoredAttributes": {
+          "interface": "@interface@"
+        },
+        "proposedRepairActions": "Call the police!",
+        "additionalText": "O-RAN Software Community OAM",
+        "additionalInformation": {
+          "eventTime": "@eventTime@",
+          "equipType": "@type@",
+          "vendor": "@vendor@",
+          "model": "@model@"
+        },
+        "rootCauseIndicator": false
+      },
+      "stndDefinedFieldsVersion": "1.0"
+    }
+  }
+}
