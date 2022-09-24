@@ -1,0 +1,41 @@
+{
+  "event": {
+    "commonEventHeader": {
+      "domain": "@domain@",
+      "eventId": "@eventId@",
+      "eventName": "@domain@_@eventType@_Alarms_@alarm@",
+      "eventType": "@eventType@_Alarms",
+      "sequence": 0,
+      "priority": "Low",
+      "reportingEntityId": "",
+      "reportingEntityName": "@controllerName@",
+      "sourceId": "",
+      "sourceName": "@pnfId@",
+      "startEpochMicrosec": "@timestamp@",
+      "lastEpochMicrosec": "@timestamp@",
+      "nfNamingCode": "@type@",
+      "nfVendorName": "@vendor@",
+      "timeZoneOffset": "+00:00",
+      "version": "4.1",
+      "stndDefinedNamespace": "3GPP-FaultSupervision",
+      "vesEventListenerVersion": "7.2.1"
+    },
+    "stndDefinedFields": {
+      "schemaReference": "https://forge.3gpp.org/rep/sa5/MnS/-/raw/Rel-16/OpenAPI/TS28532_FaultMnS.yaml#components/schemas/NotifyClearedAlarm",
+      "data": {
+        "href": "href1",
+        "notificationId": 0,
+        "notificationType": "notifyClearedAlarm",
+        "eventTime": "@eventTime@",
+        "systemDN": "xyz",
+        "alarmId": "@alarm@",
+        "alarmType": "COMMUNICATIONS_ALARM",
+        "probableCause": "@alarm@",
+        "perceivedSeverity": "@severity@",
+        "clearUserId": "@vendor@",
+        "clearSystemId": "@vendor@"
+      },
+      "stndDefinedFieldsVersion": "1.0"
+    }
+  }
+}
