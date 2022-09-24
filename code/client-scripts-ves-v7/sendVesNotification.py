@@ -21,8 +21,6 @@
 # importing the sys, json, requests library
 import sys
 import getopt
-import json
-import requests
 from globalVesEventEmitter import getInitData, saveExample, sendVesEvent
 
 # Construct VES body and send

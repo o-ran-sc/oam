@@ -19,8 +19,6 @@
 # Send a VES event for domain 'heartbeat'
 
 # importing the datetime, json, requests, os socket and yaml library
-import json
-import requests
 from globalVesEventEmitter import getInitData, saveExample, sendVesEvent
 
 # Globals
