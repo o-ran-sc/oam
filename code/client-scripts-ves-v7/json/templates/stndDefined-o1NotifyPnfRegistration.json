@@ -1,0 +1,60 @@
+{
+  "event": {
+    "commonEventHeader": {
+      "domain": "@domain@",
+      "eventId": "@eventId@",
+      "eventName": "@domain@_@eventType@_Alarms_@alarm@",
+      "eventType": "@eventType@_Alarms",
+      "sequence": 0,
+      "priority": "Low",
+      "reportingEntityId": "",
+      "reportingEntityName": "@controllerName@",
+      "sourceId": "",
+      "sourceName": "@pnfId@",
+      "startEpochMicrosec": "@timestamp@",
+      "lastEpochMicrosec": "@timestamp@",
+      "nfNamingCode": "@type@",
+      "nfVendorName": "@vendor@",
+      "timeZoneOffset": "+00:00",
+      "version": "4.1",
+      "stndDefinedNamespace": "o1-notify-pnf-registration",
+      "vesEventListenerVersion": "7.2.1"
+    },
+    "stndDefinedFields": {
+      "schemaReference": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob;f=data-model/yang/working/o-ran-sc/template/yes-o1-notify-pnf-registration.yang",
+      "data": {
+        "object-class": "managed-element",
+        "object-instance": "@pnfId@",
+        "notification-identifier": "@timestamp@",
+        "notification-type": "o1-notify-pnf-registration",
+        "event-time": "@eventTime@",
+        "system": "xyz",
+        "o1-specification-version": "v07.00",
+        "vendor-pen": "57272",
+        "vendor-name": "highstreet technologies USA Corp.",
+        "oam-host": "@oamIpV6@",
+        "oam-port": 830,
+        "unit-family": "@vendor@-@type@",
+        "unit-type": "@type@",
+        "restart-reason": "system-reboot",
+        "serial-number": "@vendor@-@type@-@oamIp@-@model@",
+        "macAddress": "@macAddress@",
+        "modelNumber": "@model@",
+        "softwareVersion": "2.3.5",
+        "manufactureDate": "2021-01-16",
+        "lastServiceDate": "2021-03-26",
+        "transport-protocol": "SSH",
+        "username": "netconf",
+        "password": "netconf!",
+        "reconnect-on-changed-schema": "false",
+        "sleep-factor": "1.5",
+        "tcpOnly": "false",
+        "connection-timeout": "20000",
+        "max-connection-attempts": "100",
+        "between-attempts-timeout": "2000",
+        "keepalive-delay": "120"
+      },
+      "stndDefinedFieldsVersion": "1.0"
+    }
+  }
+}
