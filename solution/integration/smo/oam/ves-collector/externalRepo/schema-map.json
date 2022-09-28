@@ -41,6 +41,6 @@
   },
   {
     "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob;f=data-model/yang/working/o-ran-sc/template/yes-o1-notify-pnf-registration.yang",
-    "localURL": "o-ran-sc/experimental/yes-o1-notify-pnf-registration-oas3.yaml"
+    "localURL": "o-ran-sc/experimental/yes-o1-notify-pnf-registration.yaml"
   }
 ]
