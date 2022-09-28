@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e89bd0e_dcb98ac1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-09-28T14:43:41Z",
+      "side": 1,
+      "message": "Date: Wed, 28 Sep 2022 14:29:03 GMT\n\nSuccessfully send event",
+      "revId": "ffeb0b282d1ce5815939d10d9e2ec58d350da183",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
