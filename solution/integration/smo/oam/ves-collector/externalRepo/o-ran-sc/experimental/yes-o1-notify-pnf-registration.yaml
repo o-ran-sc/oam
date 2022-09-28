@@ -1,0 +1,369 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: YES-API-PROVIDER modules of RestConf (RFC8040)
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://yes-api-provider.orbit-lab.org/
+paths:
+  /restconf/yang-based-event-stream:event-history:
+    get:
+      description: 'The root container of an event log. '
+      summary: GET - YES-API-PROVIDER - yang-based-event-stream - event-history
+      tags:
+        - mounted YES-API-PROVIDER yang-based-event-stream
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/yang-based-event-stream_event-history_TOP'
+          description: OK
+components:
+  schemas:
+    domain-id:
+      title: domain-id
+      description: |-
+        Base identity for the event domain.  A unique identification of the
+        event domain.
+
+        This identity is abstract and MUST NOT be used for domains.
+      enum:
+        - o1-notify-pnf-registration
+      type: string
+    event-type-id:
+      title: event-type-id
+      description: |-
+        Base identity for the event type.  A unique identification of the
+        event type.
+
+        This identity is abstract and MUST NOT be used for event types.
+      enum:
+        - application
+        - platform
+        - micro-service
+        - guest-operating-system
+        - physical-network-function
+        - host-operating-system
+      type: string
+    yang-based-event-stream_event-history_event_header:
+      properties:
+        domain:
+          $ref: '#/components/schemas/domain-id'
+        event-id:
+          description: The event key that is unique to the event source.
+          minLength: 1
+          maxLength: 255
+          type: string
+        event-name:
+          description: |-
+            A unique event name. A names space ensures the uniqueness
+            between the data-models.
+          default: Some event-name
+          type: string
+        event-type:
+          $ref: '#/components/schemas/event-type-id'
+        last-epoch:
+          description: The latest time aka epoch time associated with the event from any component.
+          minLength: 20
+          maxLength: 1024
+          default: '1970-01-01T00:00:00.000Z'
+          type: string
+        nfc-naming-code:
+          description: |-
+            The network function component type, aligned with vfc naming
+            standards.
+
+            TODO: Add a reference to the VFC naming standard.
+          minLength: 3
+          maxLength: 3
+          type: string
+        nf-naming-code:
+          description: |-
+            The network function type, aligned with network-function (NF)
+            naming standards.
+
+            TODO: Add a reference to the NF naming standard.
+          minLength: 4
+          maxLength: 4
+          type: string
+        nf-vendor-pen:
+          description: Network function vendor IANA private enterprise number.
+          format: int64
+          type: integer
+        nf-vendor-name:
+          description: Network function vendor name according to IANA Private Enterprise Numbers
+          type: string
+        priority:
+          description: The event priority to control the processing of the event.
+          enum:
+            - high
+            - medium
+            - normal
+            - low
+          default: high
+          type: string
+        reporting-entity-id:
+          description: The entity reporting the event, for example an OAM VM.
+          minLength: 1
+          maxLength: 1024
+          type: string
+        reporting-entity-name:
+          description: |-
+            The name of the entity reporting the event, for example, an EMS
+            name; may be the same as 'source-name'.
+          minLength: 1
+          maxLength: 255
+          type: string
+        sequence:
+          description: Ordering of events communicated by an event source instance or 0, if not needed.
+          default: 0
+          type: integer
+        source-id:
+          description: UUID identifying the entity experiencing the event issue.
+          minLength: 1
+          maxLength: 1024
+          type: string
+        source-name:
+          description: The name of the entity experiencing the event issue,
+          type: string
+        start-epoch:
+          description: |-
+            The earliest time aka epoch time associated with the event from
+            any component.
+          minLength: 20
+          maxLength: 1024
+          default: '1970-01-01T00:00:00.000Z'
+          type: string
+      required:
+        - domain
+        - event-id
+        - event-name
+        - last-epoch
+        - priority
+        - reporting-entity-name
+        - sequence
+        - source-name
+        - start-epoch
+      type: object
+      title: yang-based-event-stream_event-history_event_header
+      description: |-
+        This contains all the parameters which are common to all
+        events.
+    o1-notify-pnf-registration:
+      properties:
+        object-class:
+          description: |-
+            The name of the object class describing a PNF in the context of
+            PNF registration.
+          minLength: 3
+          maxLength: 255
+          default: managed-function
+          type: string
+        object-instance:
+          description: Reference to the object representing the PNF.
+          type: string
+        notification-identifier:
+          description: An notification identifier of this event as defined in ITU-T Rec. X.733.
+          type: integer
+        notification-type:
+          $ref: '#/components/schemas/domain-id'
+        event-time:
+          description: |-
+            The earliest time aka epoch time associated with the event from
+            any component.
+          minLength: 20
+          maxLength: 1024
+          default: '1970-01-01T00:00:00.000Z'
+          type: string
+        system-distinguished-name:
+          description: Distinguished Name of the management service provider of the notification
+          default: Some system-distinguished-name
+          type: string
+        o1-specification-version:
+          description: The version of the O1 Specification defining the format of this PNF registration notification
+          minLength: 1
+          maxLength: 32
+          default: v07.00
+          type: string
+        serial-number:
+          description: The serial number of the network function.
+          minLength: 1
+          maxLength: 255
+          type: string
+        vendor-pen:
+          description: Network function vendor IANA private enterprise number.
+          format: int64
+          type: integer
+        vendor-name:
+          description: Network function vendor name according to IANA Private Enterprise Numbers
+          type: string
+        oam-host:
+          description: |-
+            The m-plane fully qualified domain name (host) or IP address to
+            be used by the manager to contact the PNF.
+          type: string
+        oam-port:
+          description: The port number the PNF listens for OAM commands..
+          format: int32
+          default: 830
+          type: integer
+        mac-address:
+          description: The MAC address of OAM interface of the network function in Colon-Hexadecimal notation.
+          minLength: 17
+          maxLength: 17
+          type: string
+        unit-family:
+          description: The general type of hardware.
+          minLength: 1
+          maxLength: 255
+          type: string
+        unit-type:
+          description: Name for the network function
+          minLength: 1
+          maxLength: 255
+          type: string
+        model-number:
+          description: Version of the network function from the vendor.
+          minLength: 1
+          maxLength: 255
+          type: string
+        software-version:
+          description: The active software version running on the network function.
+          minLength: 1
+          maxLength: 255
+          type: string
+        restart-reason:
+          description: The reason the network function restarted.
+          minLength: 1
+          maxLength: 255
+          type: string
+        manufacture-date:
+          description: Manufacture date of the network function.
+          minLength: 10
+          maxLength: 1024
+          default: '1970-01-01T00:00:00.000Z'
+          type: string
+        last-service-date:
+          description: Date when the field operation stuff way on-side.
+          minLength: 10
+          maxLength: 1024
+          default: '1970-01-01T00:00:00.000Z'
+          type: string
+        transport-protocol:
+          description: Defines the security protocol for NETCONF
+          enum:
+            - ssh
+            - tls
+          default: ssh
+          type: string
+        username:
+          description: The username for the connection.
+          minLength: 3
+          maxLength: 255
+          type: string
+        password:
+          description: The user's password for the SSH session.
+          minLength: 8
+          maxLength: 255
+          type: string
+        host-key:
+          description: |-
+            BASE-64 encoded public key which is used by the network-function
+             during the connection.
+          type: string
+        key-reference:
+          description: |-
+            Key identifier inside the NETCONF server's keystore.
+             It is used during two-way TLS authentication.
+          type: string
+        reconnect-on-changed-schema:
+          description: |-
+            Defines if the NETCONF client should reconnect to the network
+            function, if new YANG capabilities are exposed.
+          default: false
+          type: boolean
+        connection-timeout:
+          description: |-
+            Defines the NETCONF client timeout to indicate that the connection
+            was lost.
+          format: int64
+          default: 20000
+          type: integer
+        max-connection-attempts:
+          description: |-
+            Defines the number of attempts by the NETCONF client to connect
+            to the NETCONF server, before the automated connection function, by
+            the NETCONF client is switched off. The value 0 means 'infinity'.
+          format: int64
+          default: 0
+          type: integer
+        between-attempts-timeout:
+          description: |-
+            Defines the first delay time in milliseconds to try a new reconnect
+            by the NETCONF client. For the next attempts the values is
+            multiplied with the 'sleep-factor'.
+          format: int64
+          default: 2000
+          type: integer
+        sleep-factor:
+          description: Defines the factor to increase the reconnect attempt.
+          default: 1.5
+          type: number
+        keepalive-delay:
+          description: |-
+            Defines the time in seconds between two 'empty' NETCONF request to
+            check if the NETCONF server is functional or can be reached. The
+            value 0 turns of such function.
+          format: int64
+          default: 120
+          type: integer
+      required:
+        - object-class
+        - object-instance
+        - notification-identifier
+        - notification-type
+        - event-time
+        - system-distinguished-name
+        - o1-specification-version
+        - serial-number
+        - oam-host
+      type: object
+      title: o1-notify-pnf-registration
+      description: |-
+        A single object for specific parameters, used for the registration of
+        physical network functions (PNF).
+    yang-based-event-stream_event-history_event:
+      properties:
+        header:
+          $ref: '#/components/schemas/yang-based-event-stream_event-history_event_header'
+        o1-notify-pnf-registration:
+          $ref: '#/components/schemas/o1-notify-pnf-registration'
+      type: object
+      title: yang-based-event-stream_event-history_event
+      description: This contains the set of asynchronous messages.
+    yang-based-event-stream_event-history:
+      properties:
+        maximum-number-of-entries:
+          description: |-
+            The maximum number of item in the event list supported by
+            the server.
+          format: int32
+          default: 255
+          type: integer
+        event:
+          type: array
+          items:
+            $ref: '#/components/schemas/yang-based-event-stream_event-history_event'
+          description: This contains the set of asynchronous messages.
+      type: object
+      title: yang-based-event-stream_event-history
+      description: 'The root container of an event log. '
+    yang-based-event-stream_event-history_TOP:
+      type: object
+      properties:
+        event-history:
+          $ref: '#/components/schemas/yang-based-event-stream_event-history'
+      title: yang-based-event-stream_event-history_TOP
