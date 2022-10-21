@@ -51,7 +51,7 @@ def performJob(domain, pnfId, stdnBody):
 
     initData['body']['event']['stndDefinedFields']['data']['eventTime'] = initData['eventTime']
     initData['body']['event']['stndDefinedFields']['data']['eventTime'] = initData['interface']
-    
+
     # Save example body
     saveExample(initData)
 
@@ -62,7 +62,7 @@ def performJob(domain, pnfId, stdnBody):
 # Analysing command line parameters
 def main(argv):
     domain = 'stndDefined'
-    usage = 'sendVesStndDefined.py --pnfId <physical-network-function-nwuid> --body <3gpp-Fault | 3GPP-Heartbeat | 3GPP-PerformanceAssurance | 3GPP-Provisioning>'
+    usage = 'python sendVesStndDefined.py --pnfId <physical-network-function-nwuid> --body <3gpp-Fault | 3GPP-Heartbeat | 3GPP-PerformanceAssurance | 3GPP-Provisioning>'
     pnfId = ''
     stdnBody = ''
     try:
