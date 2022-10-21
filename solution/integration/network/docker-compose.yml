@@ -45,7 +45,8 @@ x-common_env: &common_env
     VES_ENDPOINT_PASSWORD: ${VES_ENDPOINT_PASSWORD}
 
 x-du_env: &du_env
-    NTS_NF_STANDALONE_START_FEATURES: "datastore-populate ves-heartbeat ves-file-ready ves-pnf-registration web-cut-through"
+    # NTS_NF_STANDALONE_START_FEATURES: "datastore-populate ves-heartbeat ves-file-ready ves-pnf-registration web-cut-through"
+    NTS_NF_STANDALONE_START_FEATURES: "datastore-populate ves-heartbeat ves-file-ready ves-pnf-registration ves-o1-pnf-registration web-cut-through"
 
 x-ru-env: &ru_env
     NTS_NF_STANDALONE_START_FEATURES: "datastore-populate netconf-call-home web-cut-through"
