@@ -1,12 +1,12 @@
 ################################################################################
-# Copyright 2021 highstreet technologies GmbH
+# Copyright 2022 highstreet technologies GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     https://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,7 @@
 #
 
 ################################################################################
-# Configuration for interface tests 
+# Configuration for interface tests
 
 ################################################################################
 # DCAE VES Collector communication end point
@@ -35,7 +35,7 @@ settings:
 ################################################################################
 # Information from document: SDN-R System Requirements
 #
-# a. VendorA   1234 BestInClass    (1234)
+# a. VendorA   pnf2 BestInClass    (pnf2)
 # b. VendorA   FancyNextGeneration (FYNG)
 # c. VendorB   R2D2 NewFuture      (R2D2)
 # d. VendorB   7200DEV             (7DEV)
@@ -44,66 +44,66 @@ settings:
 
 # g. VendorA   PNF5G               (NO5G)
 # h. VendorB   PNF5G               (VB5G)
-# i. VendorC   NGCell              (NGCE)  
+# i. VendorC   NGCell              (NGCE)
 # j. VendorC   O-RU                (SCRU)
 #
 # z. SDN-R     Controller itself   (SDNR)
 
 pnfType:
-  a234: 
+  pnf2:
     id: f2030d4a-8f0e-11eb-8dcd-0242ac130003
-    model: "a234 BestInClass" 
+    model: "pnf2 BestInClass"
     oamIpv4: 10.10.10.11
-    vendor: VendorA 
-  fyng: 
-    id: f2030f70-8f0e-11eb-8dcd-0242ac130003 
-    model: FancyNextGeneration 
+    vendor: VendorA
+  fyng:
+    id: f2030f70-8f0e-11eb-8dcd-0242ac130003
+    model: FancyNextGeneration
     oamIpv4: 10.10.10.11
-    vendor: VendorA 
-  r2d2: 
-    id: f203111e-8f0e-11eb-8dcd-0242ac130003 
-    model: R2D2 NewFuture 
-    oamIpv4: 10.10.10.11
-    vendor: VendorB
-  7dev: 
-    id: f203136c-8f0e-11eb-8dcd-0242ac130003 
-    model: 7200DEV 
+    vendor: VendorA
+  r2d2:
+    id: f203111e-8f0e-11eb-8dcd-0242ac130003
+    model: R2D2 NewFuture
     oamIpv4: 10.10.10.11
     vendor: VendorB
-  nsky: 
-    id: f203143e-8f0e-11eb-8dcd-0242ac130003 
-    model: TheSkyIsTheLimit 
+  7dev:
+    id: f203136c-8f0e-11eb-8dcd-0242ac130003
+    model: 7200DEV
+    oamIpv4: 10.10.10.11
+    vendor: VendorB
+  nsky:
+    id: f203143e-8f0e-11eb-8dcd-0242ac130003
+    model: TheSkyIsTheLimit
     oamIpv4: 10.10.10.11
     vendor: VendorC
-  1OSF: 
+  1OSF:
     id: f20317e0-8f0e-11eb-8dcd-0242ac130003
-    model: OpenSourceFirst 
+    model: OpenSourceFirst
     oamIpv4: 10.10.10.11
     vendor: VendorC
-  no5g: 
-    id: f20318b2-8f0e-11eb-8dcd-0242ac130003 
-    model: PNF5G 
+  no5g:
+    id: f20318b2-8f0e-11eb-8dcd-0242ac130003
+    model: PNF5G
     oamIpv4: 10.10.10.11
-    vendor: VendorA 
-  vb5g: 
-    id: f2031966-8f0e-11eb-8dcd-0242ac130003 
-    model: PNF5G 
+    vendor: VendorA
+  vb5g:
+    id: f2031966-8f0e-11eb-8dcd-0242ac130003
+    model: PNF5G
     oamIpv4: 10.10.10.11
     vendor: VendorB
-  ngce: 
-    id: f2031a2e-8f0e-11eb-8dcd-0242ac130003 
+  ngce:
+    id: f2031a2e-8f0e-11eb-8dcd-0242ac130003
     model: NGCell
     oamIpv4: 10.10.10.11
     vendor: VendorC
-  scru: 
+  scru:
     id: 4365333e-8f0f-11eb-8dcd-0242ac130003
     model: O-RU
     oamIpv4: 10.10.10.11
     vendor: VendorC
-    interface: LP-MWPS-RADIO
-  sdnr: 
+    interface: 4af8681f-f2e4-4058-8052-4e9343ee7bf2
+  sdnr:
     id: 4365360e-8f0f-11eb-8dcd-0242ac130003
-    model: "ONAP SDN Controller for Radio" 
+    model: "ONAP SDN Controller for Radio"
     oamIpv4: 127.0.0.1
     vendor: ONAP
     interface: northbound-interface
