@@ -1,0 +1,36 @@
+{
+  "event": {
+    "commonEventHeader": {
+      "domain": "@domain@",
+      "eventId": "@eventId@",
+      "eventName": "@domain@_@eventType@_heartbeat",
+      "eventType": "@eventType@_heartbeat",
+      "sequence": 0,
+      "priority": "Low",
+      "reportingEntityId": "",
+      "reportingEntityName": "@controllerName@",
+      "sourceId": "",
+      "sourceName": "@pnfId@",
+      "startEpochMicrosec": "@timestamp@",
+      "lastEpochMicrosec": "@timestamp@",
+      "nfNamingCode": "@type@",
+      "nfVendorName": "@vendor@",
+      "timeZoneOffset": "+00:00",
+      "version": "4.1",
+      "stndDefinedNamespace": "3GPP-Heartbeat",
+      "vesEventListenerVersion": "7.2.1"
+    },
+    "stndDefinedFields": {
+      "schemaReference": "https://forge.3gpp.org/rep/sa5/MnS/-/raw/Rel-16/OpenAPI/TS28532_HeartbeatNtf.yaml#components/schemas/NotifyHeartbeat",
+      "data": {
+        "href": "href1",
+        "notificationId": 0,
+        "notificationType": "notifyHeartbeat",
+        "eventTime": "@eventTime@",
+        "systemDN": "xyz",
+        "heartbeatNtfPeriod": 120
+      },
+      "stndDefinedFieldsVersion": "1.0"
+    }
+  }
+}
