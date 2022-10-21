@@ -33,7 +33,7 @@ def createLoggingWindow():
   ves.send_keys('docker logs -f ves-collector', enter=True)
 
   env = ntsim.split_window(attach=False, vertical=False)
-  env.send_keys('htop', enter=True)
+  env.send_keys('btop', enter=True)
 
 # main
 server = Server()
