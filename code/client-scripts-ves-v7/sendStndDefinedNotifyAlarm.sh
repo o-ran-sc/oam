@@ -55,6 +55,7 @@ declare -A mapping=(
 echo "################################################################################";
 echo "# send NotifyNewAlarm or NotifyClearedAlarm";
 echo;
+echo "  alarmEventType: $raised"
 for key in "${!mapping[@]}"
 do
   #label=${${"$spaces$i"}:(-14)};
@@ -74,5 +75,3 @@ template="./json/templates/$domain-r16-notify-${raised,,}-alarm.json"
 sed -e "$sequence" $template > $body;
 
 curl -i -k -u $basicAuthVes -X POST -d @${body} --header "Content-Type: application/json" $urlVes
-
-#curl -i -k -u "sample1:sample1" -X POST -d @./json/examples/NSKY-lossOfSignal-CRITICAL-stndDefined.json --header "Content-Type: application/json" https://localhost:8443/eventListener/v7
