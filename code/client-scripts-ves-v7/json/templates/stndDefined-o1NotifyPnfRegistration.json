@@ -3,8 +3,8 @@
     "commonEventHeader": {
       "domain": "@domain@",
       "eventId": "@eventId@",
-      "eventName": "@domain@_@eventType@_Alarms_@alarm@",
-      "eventType": "@eventType@_Alarms",
+      "eventName": "@domain@_@eventType@_pnf_registration",
+      "eventType": "@eventType@_pnf_registration",
       "sequence": 0,
       "priority": "Low",
       "reportingEntityId": "",
