@@ -24,7 +24,7 @@
 
 ################################################################################
 # send pnf registration event
-./pnfRegister.sh 1234
+./pnfRegister.sh pnf2
 ./pnfRegister.sh FYNG
 ./pnfRegister.sh R2D2
 ./pnfRegister.sh 7DEV
@@ -34,7 +34,7 @@
 
 ################################################################################
 # raise fault
-./sendFault.sh 1234 lossOfSignal CRITICAL
+./sendFault.sh pnf2 lossOfSignal CRITICAL
 ./sendFault.sh FYNG TCA MAJOR
 ./sendFault.sh R2D2 TCA MINOR
 ./sendFault.sh 7DEV signalIsLost CRITICAL
@@ -43,18 +43,8 @@
 ./sendFault.sh SDNR connectionLossNe MAJOR
 
 ################################################################################
-# raise stndDefined NotifyNewAlarm
-./sendStndDefinedNotifyNewAlarm.sh 1234 lossOfSignal CRITICAL
-./sendStndDefinedNotifyNewAlarm.sh FYNG TCA MAJOR
-./sendStndDefinedNotifyNewAlarm.sh R2D2 TCA MINOR
-./sendStndDefinedNotifyNewAlarm.sh 7DEV signalIsLost CRITICAL
-./sendStndDefinedNotifyNewAlarm.sh nSky LossOfSignalAlarm CRITICAL
-./sendStndDefinedNotifyNewAlarm.sh 1OSF HAAMRunningInLowerModulation MAJOR
-./sendStndDefinedNotifyNewAlarm.sh SDNR connectionLossNe MAJOR
-
-################################################################################
 # clear fault
-./sendFault.sh 1234 lossOfSignal NORMAL
+./sendFault.sh pnf2 lossOfSignal NORMAL
 ./sendFault.sh FYNG TCA NORMAL
 ./sendFault.sh R2D2 TCA NORMAL
 ./sendFault.sh 7DEV signalIsLost NORMAL
@@ -63,8 +53,28 @@
 ./sendFault.sh SDNR connectionLossNe NORMAL
 
 ################################################################################
+# raise stndDefined Alarm
+./sendStndDefinedNotifyAlarm.sh pnf2 lossOfSignal CRITICAL new
+./sendStndDefinedNotifyAlarm.sh FYNG TCA MAJOR new
+./sendStndDefinedNotifyAlarm.sh R2D2 TCA MINOR new
+./sendStndDefinedNotifyAlarm.sh 7DEV signalIsLost CRITICAL new
+./sendStndDefinedNotifyAlarm.sh nSky LossOfSignalAlarm CRITICAL new
+./sendStndDefinedNotifyAlarm.sh 1OSF HAAMRunningInLowerModulation MAJOR new
+./sendStndDefinedNotifyAlarm.sh SDNR connectionLossNe MAJOR new
+
+################################################################################
+# clear stndDefined Alarm
+./sendStndDefinedNotifyAlarm.sh pnf2 lossOfSignal CRITICAL cleared
+./sendStndDefinedNotifyAlarm.sh FYNG TCA MAJOR cleared
+./sendStndDefinedNotifyAlarm.sh R2D2 TCA MINOR cleared
+./sendStndDefinedNotifyAlarm.sh 7DEV signalIsLost CRITICAL cleared
+./sendStndDefinedNotifyAlarm.sh nSky LossOfSignalAlarm CRITICAL neclearedw
+./sendStndDefinedNotifyAlarm.sh 1OSF HAAMRunningInLowerModulation MAJOR cleared
+./sendStndDefinedNotifyAlarm.sh SDNR connectionLossNe MAJOR cleared
+
+################################################################################
 # raise threshold crossed alerts
-./sendTca.sh 1234 TCA CONT
+./sendTca.sh pnf2 TCA CONT
 ./sendTca.sh FYNG TCA SET
 ./sendTca.sh R2D2 TCA CONT
 ./sendTca.sh 7DEV thresholdCrossed SET
@@ -73,7 +83,7 @@
 
 ################################################################################
 # clear threshold crossed alerts
-./sendTca.sh 1234 TCA CLEAR
+./sendTca.sh pnf2 TCA CLEAR
 ./sendTca.sh FYNG TCA CLEAR
 ./sendTca.sh R2D2 TCA CLEAR
 ./sendTca.sh 7DEV thresholdCrossed CLEAR
@@ -82,9 +92,18 @@
 
 ################################################################################
 # send 15min performance measurement data
-./send15minPm.sh 1234
+./send15minPm.sh pnf2
 ./send15minPm.sh FYNG
 ./send15minPm.sh R2D2
 ./send15minPm.sh 7DEV
 ./send15minPm.sh nSky
 ./send15minPm.sh 1OSF
+
+################################################################################
+# send o1-notify-pnf-registration
+./sendStndDefinedO1NotifyPnfRegistration.sh pnf2
+./sendStndDefinedO1NotifyPnfRegistration.sh FYNG
+./sendStndDefinedO1NotifyPnfRegistration.sh R2D2
+./sendStndDefinedO1NotifyPnfRegistration.sh 7DEV
+./sendStndDefinedO1NotifyPnfRegistration.sh nSky
+./sendStndDefinedO1NotifyPnfRegistration.sh 1OSF
