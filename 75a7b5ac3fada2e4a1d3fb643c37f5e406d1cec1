@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e314800d_0fd21231",
+        "filename": "solution/integration/smo/non-rt-ric/.env",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2022-10-25T12:23:58Z",
+      "side": 1,
+      "message": "nonrtric-rapp-orufhrecovery",
+      "range": {
+        "startLine": 47,
+        "startChar": 55,
+        "endLine": 47,
+        "endChar": 89
+      },
+      "revId": "75a7b5ac3fada2e4a1d3fb643c37f5e406d1cec1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72510a93_94a57506",
+        "filename": "solution/integration/smo/non-rt-ric/.env",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2022-10-25T12:23:58Z",
+      "side": 1,
+      "message": "1.1.0",
+      "range": {
+        "startLine": 48,
+        "startChar": 19,
+        "endLine": 48,
+        "endChar": 24
+      },
+      "revId": "75a7b5ac3fada2e4a1d3fb643c37f5e406d1cec1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de069621_ef5e7803",
+        "filename": "solution/integration/smo/non-rt-ric/.env",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2022-10-25T12:23:58Z",
+      "side": 1,
+      "message": "nonrtric-rapp-ransliceassurance",
+      "range": {
+        "startLine": 51,
+        "startChar": 55,
+        "endLine": 51,
+        "endChar": 84
+      },
+      "revId": "75a7b5ac3fada2e4a1d3fb643c37f5e406d1cec1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a09afd0_05eab450",
+        "filename": "solution/integration/smo/non-rt-ric/.env",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2022-10-25T12:23:58Z",
+      "side": 1,
+      "message": "1.1.1",
+      "range": {
+        "startLine": 52,
+        "startChar": 19,
+        "endLine": 52,
+        "endChar": 24
+      },
+      "revId": "75a7b5ac3fada2e4a1d3fb643c37f5e406d1cec1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
