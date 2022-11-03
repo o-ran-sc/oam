@@ -206,7 +206,7 @@ The several docker-compose yml files must be started in the right order as liste
 First the SMO common services must be started::
 
    docker-compose -f smo/common/docker-compose.yml up -d
-   python smo/identity/config.py
+   python smo/common/identity/config.py
 
 The python script configure the users within the identity service (keycloak).
 A system user (%USER) is also created with administration rights. The initial password (Default4SDN!).
