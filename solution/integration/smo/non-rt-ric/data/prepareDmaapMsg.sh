@@ -79,10 +79,10 @@ echo -e "\n"
 
 for i in {1..12}; do
 	echo "policy types from policy agent:"
-    curlString="curl -skw %{http_code} $httpx://localhost:8091/policy_types"
+    curlString="curl -skw %{http_code} $httpx://localhost:8091/a1-policy/v2/policy-types"
     res=$($curlString)
     echo "$res"
-    expect="[\"1\",\"2\"]200"
+    expect="{\"policytype_ids\":[\"1\",\"2\"]}200"
     if [ "$res" == "$expect" ]; then
         echo -e "\n"
         break;
