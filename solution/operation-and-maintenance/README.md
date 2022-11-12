@@ -211,7 +211,7 @@ The several docker-compose yml files must be started in the right order as liste
 
 ```
 docker-compose -f smo/common/docker-compose.yml up -d
-python smo/identity/config.py
+python smo/common/identity/config.py
 ```
 
 The python script configure the users within the identity service (keycloak).
