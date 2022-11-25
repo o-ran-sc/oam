@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fc9f42c_85efe101",
+        "filename": "code/client-scripts-ves-v7/json/templates/stndDefined-r16-notify-file-ready.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2022-11-25T13:45:55Z",
+      "side": 1,
+      "message": "Would it be possible to pass in the filename? \nevent time is needed inside the event, but I don\u0027t think it should be the filename.\n\nSome systems parse the filename to extract useful information - where the filename is in a standard format: \nSee sec 5.1.2. in TS 32.432 https://www.etsi.org/deliver/etsi_ts/132400_132499/132432/17.00.00_60/ts_132432v170000p.pdf\n\ni.e.: \u003cType\u003e\u003cStartdate\u003e.\u003cStarttime\u003e-[\u003cEnddate\u003e.]\u003cEndtime\u003e[_-\u003cjobId\u003e][_\u003cUniqueId\u003e][_-_\u003cRC\u003e]\ne.g.: A20220626.2315+0200-2330+0200_Odu00001.xml\ne.g.: A20201215.1000+0000-1015+0000_MeContext\u003dRBS000041_statsfile.xml.gz",
+      "range": {
+        "startLine": 32,
+        "startChar": 43,
+        "endLine": 32,
+        "endChar": 61
+      },
+      "revId": "e35c8ffe46c0054b3343706249e5ba6c79f70b25",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
