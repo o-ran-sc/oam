@@ -17,23 +17,28 @@
       "nfVendorName": "@vendor@",
       "timeZoneOffset": "+00:00",
       "version": "4.1",
-      "stndDefinedNamespace": "3GPP-FaultSupervision",
+      "stndDefinedNamespace": "file-ready",
       "vesEventListenerVersion": "7.2.1"
     },
     "stndDefinedFields": {
-      "schemaReference": "https://forge.3gpp.org/rep/sa5/MnS/-/raw/Rel-16/OpenAPI/TS28532_FaultMnS.yaml#components/schemas/NotifyClearedAlarm",
+      "schemaReference": "https://forge.3gpp.org/rep/sa5/MnS/-/raw/Rel-16/OpenAPI/TS28532_FileDataReportingMnS.yaml#components/schemas/NotifyFileReady",
       "data": {
         "href": "href1",
         "notificationId": 0,
-        "notificationType": "notifyClearedAlarm",
+        "notificationType": "notifyFileReady",
         "eventTime": "@eventTime@",
         "systemDN": "xyz",
-        "alarmId": "@alarm@",
-        "alarmType": "COMMUNICATIONS_ALARM",
-        "probableCause": "@alarm@",
-        "perceivedSeverity": "@severity@",
-        "clearUserId": "@vendor@",
-        "clearSystemId": "@vendor@"
+        "fileInfoList": [{
+            "fileLocation": "/pm-data-files/A@startTime@-@endTime@_@pnfId@.xml",
+            "fileSize": 1234,
+            "fileReadyTime": "@eventTime@",
+            "fileExpirationTime": "@eventTime@",
+            "fileCompression": "no",
+            "fileFormat": "xml",
+            "fileDataType": "Performance"
+        }
+        ],
+        "additionalText": "Have fun!"
       },
       "stndDefinedFieldsVersion": "1.0"
     }
