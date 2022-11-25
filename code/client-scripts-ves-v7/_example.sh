@@ -107,3 +107,12 @@
 ./sendStndDefinedO1NotifyPnfRegistration.sh 7DEV
 ./sendStndDefinedO1NotifyPnfRegistration.sh nSky
 ./sendStndDefinedO1NotifyPnfRegistration.sh 1OSF
+
+################################################################################
+# send o1-notify-pnf-registration
+./sendStndDefinedNotifyFileReady.sh pnf2
+./sendStndDefinedNotifyFileReady.sh FYNG
+./sendStndDefinedNotifyFileReady.sh R2D2
+./sendStndDefinedNotifyFileReady.sh 7DEV
+./sendStndDefinedNotifyFileReady.sh nSky
+./sendStndDefinedNotifyFileReady.sh 1OSF
