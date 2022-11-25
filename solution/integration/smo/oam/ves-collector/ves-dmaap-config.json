@@ -215,5 +215,12 @@
       "location": "mtl5",
       "topic_url": "http://onap-dmaap:3904/events/unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT/"
     }
+  },
+  "ves-file-ready": {
+    "type": "message_router",
+    "dmaap_info": {
+      "location": "mtl5",
+      "topic_url": "http://onap-dmaap:3904/events/unauthenticated.VES_FILE_READY_OUTPUT/"
+    }
   }
 }
