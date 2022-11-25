@@ -42,5 +42,9 @@
   {
     "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob;f=data-model/yang/working/o-ran-sc/template/yes-o1-notify-pnf-registration.yang",
     "localURL": "o-ran-sc/experimental/yes-o1-notify-pnf-registration.yaml"
+  },
+  {
+    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/-/raw/Rel-16/OpenAPI/TS28532_FileDataReportingMnS.yaml",
+    "localURL": "3gpp/rep/sa5/MnS/blob/Rel16/OpenAPI/TS28532_FileDataReportingMnS.yaml"
   }
 ]
