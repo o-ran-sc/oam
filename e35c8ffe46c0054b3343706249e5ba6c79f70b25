@@ -46,6 +46,30 @@
       },
       "revId": "e35c8ffe46c0054b3343706249e5ba6c79f70b25",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f97aa67_23fc19db",
+        "filename": "code/client-scripts-ves-v7/json/templates/stndDefined-r16-notify-file-ready.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-12-01T10:05:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bfcf212_0b78a4aa",
+      "range": {
+        "startLine": 32,
+        "startChar": 43,
+        "endLine": 32,
+        "endChar": 61
+      },
+      "revId": "e35c8ffe46c0054b3343706249e5ba6c79f70b25",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
