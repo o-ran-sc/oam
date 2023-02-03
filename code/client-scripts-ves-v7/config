@@ -19,7 +19,8 @@
 
 ################################################################################
 # DCAE VES Collector communication end point
-urlVes=https://localhost:8443/eventListener/v7
+# urlVes=https://smo.o-ran-sc.org:8443/eventListener/v7
+urlVes=https://ves-collector.oam.smo.o-ran-sc.org/eventListener/v7
 basicAuthVes=sample1:sample1
 
 ################################################################################
