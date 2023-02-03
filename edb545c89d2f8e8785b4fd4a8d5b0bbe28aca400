@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d0aec57_1278d374",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-02-03T11:55:15Z",
+      "side": 1,
+      "message": "End-to-end function is available:\n\n $ docker-compose -f smo/common/docker-compose.yml up -d\n $ python smo/common/identity/config.py \n $ docker-compose -f smo/oam/docker-compose.yml up -d\n $ docker-compose -f network/docker-compose.yml up -d\n $ docker-compose -f network/docker-compose.yml restart\n $ docker restart ntsim-ng-o-du-1122 \n $ python network/config.py\nSet O-RU-11223 True\nSet O-RU-11221 True\nSet O-DU-1122 True\nSet O-RU-11222 True\n\n[sko] means all NF are auto mounted by NETCONF-CALLHOME or VES",
+      "revId": "edb545c89d2f8e8785b4fd4a8d5b0bbe28aca400",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
