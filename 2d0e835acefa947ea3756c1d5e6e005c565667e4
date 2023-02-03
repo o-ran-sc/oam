@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f1bceb3_4371a036",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-02-03T11:59:45Z",
+      "side": 1,
+      "message": "works:\n\n$ ./sendStndDefinedNotifyFileReady.sh pnf2\n################################################################################\n# send VES 3GPP FileReady\n\n            type: PNF2\n         endTime: 1145+0000\n          domain: stndDefined\n           pnfId: NSHMRIACQ01M01pnf201\n         eventId: NSHMRIACQ01M01pnf201_4af8681f-f2e4-4058-8052-4e9343ee7bf2_\n  controllerName: martindev\n       eventTime: 2023-02-03T11:59:05.497118Z\n       timestamp: 1675425545497118\n       eventType: O_RAN_COMPONENT\n       startTime: 20230203.1130+0000\n\nHTTP/2 202 \ncontent-type: application/json\ndate: Fri, 03 Feb 2023 11:59:06 GMT\ncontent-length: 23\n\nSuccessfully send event",
+      "revId": "2d0e835acefa947ea3756c1d5e6e005c565667e4",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
