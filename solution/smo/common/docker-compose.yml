@@ -1,0 +1,193 @@
+# no more versions needed! Compose spec supports all features w/o a version
+services:
+
+  gateway:
+    image: ${TRAEFIK_IMAGE}
+    container_name: gateway
+    hostname: gateway
+    healthcheck:
+      test:
+        - CMD
+        - traefik
+        - healthcheck
+        - --ping
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    command:
+      - --serverstransport.insecureskipverify=true
+      - --log.level=${TRAEFIK_LOG_LEVEL}
+      - --global.sendanonymoususage=false
+      - --global.checkNewVersion=false
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --api.debug=true
+      - --ping
+      - --accesslog=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls.domains[0].main=gateway.${SOLUTION_DOMAIN}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${SOLUTION_DOMAIN}
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      - --providers.docker.network=${TRAEFIK_NETWORK_NAME}
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.watch=true
+      - --providers.file.filename=/middleware.yml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./gateway/conf/middleware.yml:/middleware.yml:ro
+      - ./gateway/conf/.htpasswd:/.htpasswd:ro
+    labels:
+      traefik.enable: true
+      traefik.http.middlewares.traefik-auth.basicauth.usersfile: .htpasswd
+      traefik.http.routers.gateway.rule: Host(`gateway.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.gateway.entrypoints: websecure
+      traefik.http.routers.gateway.service: api@internal
+      traefik.http.routers.gateway.middlewares: strip
+      traefik.http.middlewares.strip.stripprefix.prefixes: /traefik
+      traefik.http.routers.gateway.tls: true
+      traefik.http.services.gateway.loadbalancer.server.port: 8080
+    networks:
+      - dmz
+      - default
+
+  identitydb:
+    image: ${IDENTITYDB_IMAGE}
+    container_name: identitydb
+    hostname: identitydb
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - POSTGRESQL_USERNAME=keycloak
+      - POSTGRESQL_DATABASE=keycloak
+      - POSTGRESQL_PASSWORD=keycloak
+
+  identity:
+    image: ${IDENTITY_IMAGE}
+    container_name: identity
+    hostname: identity
+    environment:
+      - KEYCLOAK_CREATE_ADMIN_USER=true
+      - KEYCLOAK_ADMIN_USER=${ADMIN_USERNAME}
+      - KEYCLOAK_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - KEYCLOAK_MANAGEMENT_USER=${IDENTITY_MGMT_USERNAME}
+      - KEYCLOAK_MANAGEMENT_PASSWORD=${IDENTITY_MGMT_PASSWORD}
+      - KEYCLOAK_DATABASE_HOST=identitydb
+      - KEYCLOAK_DATABASE_NAME=keycloak
+      - KEYCLOAK_DATABASE_USER=keycloak
+      - KEYCLOAK_DATABASE_PASSWORD=keycloak
+      - KEYCLOAK_JDBC_PARAMS=sslmode=disable&connectTimeout=30000
+      - KEYCLOAK_PRODUCTION=false
+      - KEYCLOAK_ENABLE_TLS=true
+      - KEYCLOAK_TLS_KEYSTORE_FILE=/opt/bitnami/keycloak/certs/keystore.jks
+      - KEYCLOAK_TLS_TRUSTSTORE_FILE=/opt/bitnami/keycloak/certs/truststore.jks
+      - KEYCLOAK_TLS_KEYSTORE_PASSWORD=password
+      - KEYCLOAK_TLS_TRUSTSTORE_PASSWORD=changeit
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./identity/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
+      - ./identity/keystore.jks:/opt/bitnami/keycloak/certs/keystore.jks
+      - ./identity/truststoreONAPall.jks:/opt/bitnami/keycloak/certs/truststore.jks
+    labels:
+      traefik.enable: true
+      traefik.http.routers.identity.entrypoints: websecure
+      traefik.http.routers.identity.rule: Host(`identity.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.identity.tls: true
+      traefik.http.services.identity.loadbalancer.server.port: 8080
+    depends_on:
+      identitydb:
+        condition: service_started
+      gateway:
+        condition: service_healthy
+
+  persistence:
+    image: ${PERSISTENCE_IMAGE}
+    container_name: persistence
+    environment:
+      - discovery.type=single-node
+
+  zookeeper:
+    image: ${ZOOKEEPER_IMAGE}
+    container_name: zookeeper
+    # ports:
+    # - 2181:2181
+    environment:
+      ZOOKEEPER_REPLICAS: 1
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 5
+      ZOOKEEPER_INIT_LIMIT: 10
+      ZOOKEEPER_MAX_CLIENT_CNXNS: 200
+      ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT: 3
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: 24
+      ZOOKEEPER_CLIENT_PORT: 2181
+      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/zookeeper/secrets/jaas/zk_server_jaas.conf -Dzookeeper.kerberos.removeHostFromPrincipal=true -Dzookeeper.kerberos.removeRealmFromPrincipal=true -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider -Dzookeeper.requireClientAuthScheme=sasl
+      ZOOKEEPER_SERVER_ID:
+    volumes:
+      - ./zookeeper/zk_server_jaas.conf:/etc/zookeeper/secrets/jaas/zk_server_jaas.conf
+
+  kafka:
+    image: ${KAFKA_IMAGE}
+    container_name: kafka
+    environment:
+      enableCadi: 'false'
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS: 40000
+      KAFKA_ZOOKEEPER_SESSION_TIMEOUT_MS: 40000
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL_PLAINTEXT:PLAINTEXT,EXTERNAL_PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL_PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: INTERNAL_PLAINTEXT://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL_PLAINTEXT
+      KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/jaas/zk_client_jaas.conf
+      KAFKA_ZOOKEEPER_SET_ACL: 'true'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      # Reduced the number of partitions only to avoid the timeout error for the first subscribe call in slow environment
+      KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS: 1
+    volumes:
+      - ./kafka/zk_client_jaas.conf:/etc/kafka/secrets/jaas/zk_client_jaas.conf
+    depends_on:
+      zookeeper:
+        condition: service_started
+
+  messages:
+    image: ${DMAAP_IMAGE}
+    container_name: messages
+    hostname: messages
+    environment:
+      enableCadi: 'false'
+    volumes:
+      - ./messages/MsgRtrApi.properties:/appl/dmaapMR1/bundleconfig/etc/appprops/MsgRtrApi.properties
+      - ./messages/logback.xml:/appl/dmaapMR1/bundleconfig/etc/logback.xml
+      - ./messages/cadi.properties:/appl/dmaapMR1/etc/cadi.properties
+    labels:
+      traefik.enable: true
+      traefik.http.routers.messages.entrypoints: websecure
+      traefik.http.routers.messages.rule: Host(`messages.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.messages.tls: true
+      traefik.http.services.messages.loadbalancer.server.port: 3904
+    depends_on:
+      kafka:
+        condition: service_started
+      gateway:
+        condition: service_healthy
+
+networks:
+  dmz:
+    name: dmz
+    driver: bridge
+    enable_ipv6: false
+    ipam:
+      driver: default
+      config:
+        - subnet: ${TRAEFIK_SUBNET}
+          gateway: ${TRAEFIK_GATEWAY_IP}
+        - subnet: ${TRAEFIK_SUBNET_IPv6}
+          gateway: ${TRAEFIK_GATEWAY_IPv6}
+  default:
+    name: ${TRAEFIK_NETWORK_NAME}

@@ -1,0 +1,24 @@
+{
+  "tokenSecret": "my-secret",
+  "tokenIssuer": "ONAP-SDNC",
+  "publicUrl": "https://odlux.oam.smo.o-ran-sc.org",
+  "redirectUri": "/odlux/index.html#/oauth?token=",
+  "supportOdlUsers": "true",
+  "providers": [
+    {
+      "id": "identity",
+      "type": "KEYCLOAK",
+      "url": "https://identity.smo.o-ran-sc.org",
+      "clientId": "odlux.app",
+      "openIdConfigUrl": "/realms/onap/.well-known/openid-configuration",
+      "secret": "2a64fdca-c205-4b52-9f58-195ccc142ddb",
+      "scope": "openid",
+      "title": "ONAP-IDENTITY",
+      "roleMapping": {
+        "administration": "admin"
+      },
+      "realmName": "onap",
+      "trustAll": "true"
+		}
+	]
+}
