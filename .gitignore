@@ -71,6 +71,9 @@ package-lock.json
 # ODLUX cache
 */**/O D L UX*
 
+# nodered
+*.backup
+
 # documentation
 .tox
 docs/_build/
