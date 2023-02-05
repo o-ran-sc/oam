@@ -20,18 +20,16 @@ with the following components.
     ... representing an KeyCloak based identity service for centralized user
     management. Please note that the implementation does not support IPv6.
     Therefore, its own network is required called 'DMZ'.
-    In this configuration the external https port is 8463.
 
   * **Controller** single node instance
 
     ... representing the NETCONF consumer on the Service Management and
     Orchestration framework (SMO) for the O1 interface based on
     ODL.
-    SDN-R comes with is own web-portal the external port is 8463.
 
   * **VES collector**
 
-    ... representing the VES (REST) provider at SMO for all kind of events. In this configuration the external https port is 8443.
+    ... representing the VES (REST) provider at SMO for all kind of events.
 
   * **Messages**
     ... representing SMO MessageRouter component, includes message-router
@@ -206,12 +204,6 @@ nano smo/oam/.env
 nano network/.env
 ```
 
-The tested configuration uses the following external https ports:
-
- * 8443 for the ves-collector
- * 8453 for web access to ODLUX (SDNC_WEB_PORT)
- * 8463 for the keyclock web administrator user interface.
-
 #### Startup solution
 
 Please note that it is necessary to configure first the identity service,
@@ -235,16 +227,10 @@ docker-compose -f smo/oam/docker-compose.yml up -d
 Looking into the ONAP SDN-R logs will give you the startup procedure.
 
 ```
-docker logs -f sdnr
+docker logs -f controller
 ```
 
-The startup was successful when you see the following line:
-
-```
-Everything OK in Certificate Installation
-```
-
-If you see the login page (https://sdnc-web:8453) you are good to go and can start the (simulated) network.
+If you see the login page (https://odlux.oam.smo.o-ran-sc.org) you are good to go and can start the (simulated) network.
 
 ```
 docker-compose -f network/docker-compose.yml up -d
@@ -278,7 +264,7 @@ Finally the fault events are visible in ODLUX.
 #### ODL karaf.logs
 
 ```
-docker exec -it sdnr tail -f /opt/opendaylight/data/log/karaf.log
+docker exec -it controller tail -f /opt/opendaylight/data/log/karaf.log
 ```
 
 #### ves-collector logs
@@ -297,7 +283,7 @@ docker logs -f ves-collector
 
 ##### Login into SDN-R
 
-    https://sdnc-web:8453
+    https://odlux.oam.smo.o-ran-sc.org
 
     User: admin // see .env file
 
@@ -311,6 +297,7 @@ To stop all container please respect the following order
 
 ```
 docker-compose -f network/docker-compose.yml down
+docker-compose -f smo/apps/docker-compose.yml down
 docker-compose -f smo/oam/docker-compose.yml down
 docker-compose -f smo/common/docker-compose.yml down
 ```
@@ -332,3 +319,4 @@ The commands ...
 ```
 docker ps -a
 docker-compose ps
+docker rm -f $(docker ps -aq)
