@@ -1,0 +1,25 @@
+# no more versions needed! Compose spec supports all features w/o a version
+services:
+
+  flows:
+    image: ${FLOWS_IMAGE}
+    container_name: flows
+    hostname: flows
+    environment:
+      - APP_VENDOR=${APP_VENDOR}
+      - APP_SOURCE=${APP_SOURCE}
+      - APP_NETWORK_FUNCTION_ID=${APP_NETWORK_FUNCTION_ID}
+    labels:
+      traefik.enable: true
+      traefik.http.routers.flows.entrypoints: websecure
+      traefik.http.routers.flows.rule: Host(`flows.oam.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.flows.tls: true
+      traefik.http.services.flows.loadbalancer.server.port: 1880
+    volumes:
+      - ./flows/data:/data
+    networks:
+      smo:
+
+networks:
+  smo:
+    external: true
