@@ -10,7 +10,7 @@ services:
       - WEBPROTOCOL=HTTP
       - WEBPORT=${SDNC_WEB_PORT}
       - SDNRPROTOCOL=http
-      - SDNRHOST=sdnr
+      - SDNRHOST=controller
       - SDNRPORT=${SDNC_REST_PORT}
     labels:
       traefik.enable: true
@@ -21,12 +21,12 @@ services:
     networks:
       smo:
 
-  sdnr:
+  controller:
     image: ${SDNC_IMAGE}
-    container_name: sdnr
-    hostname: sdnr
+    container_name: controller
+    hostname: controller
     ports:
-      - 6666:6666
+      - 4334:4334
       - 4335:4335
     environment:
       - ENABLE_ODL_CLUSTER=false
@@ -63,10 +63,10 @@ services:
       - ./controller/mountpoint-registrar.properties:/opt/opendaylight/etc/mountpoint-registrar.properties
     labels:
       traefik.enable: true
-      traefik.http.routers.sdnr.entrypoints: websecure
-      traefik.http.routers.sdnr.rule: Host(`controller.oam.${SOLUTION_DOMAIN}`)
-      traefik.http.routers.sdnr.tls: true
-      traefik.http.services.sdnr.loadbalancer.server.port: 8181
+      traefik.http.routers.controller.entrypoints: websecure
+      traefik.http.routers.controller.rule: Host(`controller.oam.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.controller.tls: true
+      traefik.http.services.controller.loadbalancer.server.port: 8181
     networks:
       smo:
       default:
