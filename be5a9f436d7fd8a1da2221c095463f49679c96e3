@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45bbf0c8_83abb32a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-02-05T18:15:45Z",
+      "side": 1,
+      "message": "VES Collector Response \"Successfully send event\"",
+      "revId": "be5a9f436d7fd8a1da2221c095463f49679c96e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
