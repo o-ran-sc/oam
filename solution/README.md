@@ -188,6 +188,8 @@ docker-compose -f smo/common/docker-compose.yml up -d
 python smo/common/identity/config.py
 
 docker-compose -f smo/oam/docker-compose.yml up -d
+docker-compose -f smo/apps/docker-compose.yml up -d
+
 # wait until the cpu load is low again
 
 docker-compose -f network/docker-compose.yml up -d
