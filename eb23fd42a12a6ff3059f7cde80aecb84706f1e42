@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f17bdef_faf6fd9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-02-11T15:28:23Z",
+      "side": 1,
+      "message": "Successfully send event for 3GPP R18 ves stndDefined notifyHeartbeat and notifyFileReady",
+      "revId": "eb23fd42a12a6ff3059f7cde80aecb84706f1e42",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
