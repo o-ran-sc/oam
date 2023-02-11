@@ -1,14 +1,14 @@
-# 3gpp Release 16
+# 3gpp Release 18
 
 This folder should contain the 3GPP YAML files. Such files are used be the VES
 Collector to valid VES messages for domain 'stndDefined'.
 
 Please copy the files from
 ```
-https://forge.3gpp.org/rep/sa5/MnS/tree/Rel-16/OpenAPI
+https://forge.3gpp.org/rep/sa5/MnS/tree/Rel-18/OpenAPI
 ```
 
-For G-Release only the following schemas ...
+For H-Release only the following schemas ...
 
  * TS28623_ComDefs.yaml
  * TS28532_FaultMnS.yaml
