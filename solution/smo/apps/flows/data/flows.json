@@ -2,9 +2,17 @@
     {
         "id": "51e83a0892da060e",
         "type": "tab",
-        "label": "VES-Messages",
+        "label": "Event Streaming (VES)",
         "disabled": false,
-        "info": "Sends a VES message with body defined by 3GPP TS 28.532.\n",
+        "info": "Sends a VES messages with body defined by 3GPP TS 28.532.\n",
+        "env": []
+    },
+    {
+        "id": "c5746e29f53f72ce",
+        "type": "tab",
+        "label": "Message Topics",
+        "disabled": false,
+        "info": "Subscribes to Kafka topics ",
         "env": []
     },
     {
@@ -43,7 +51,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 120,
-        "y": 160,
+        "y": 360,
         "wires": [
             [
                 "b5533c10604af5a6",
@@ -56,14 +64,14 @@
         "type": "function",
         "z": "51e83a0892da060e",
         "name": "vesHeader",
-        "func": "const timeStamp = new Date(msg.payload);\nconst eventType = msg.topic;\nlet domain = \"stndDefined\";\n// handle domain expecption for 'pnfRegistration'\nif (eventType === 'pnfRegistration') {\n    domain = eventType;\n} \nconst nfNamingCode = env.get('APP_NETWORK_FUNCTION_ID');\nconst namespaces = {\n    notifyHeartbeat: '3GPP-Heartbeat',\n    notifyFileReady: 'file-ready',\n    pnfRegistration: undefined\n};\n\nmsg.topic = \"commonEventHeader\"\nmsg.payload = {\n    domain: domain,\n    eventType: eventType,\n    eventId:[nfNamingCode, eventType, msg._msgid].join('_'),\n    eventName: [domain, eventType].join('_'),\n    sequence: Number(timeStamp),\n    priority: \"Low\",\n    reportingEntityId: \"c2b7d6e9-ee35-459a-ab8e-717a6fc1fde6\",\n    reportingEntityName: global.get('os').hostname(),\n    sourceId: \"378e9904-6d39-40ea-9994-0596fe2235a3\",\n    sourceName: env.get('APP_SOURCE'),\n    startEpochMicrosec: timeStamp.getTime() * 1000,\n    lastEpochMicrosec: timeStamp.getTime() * 1000,\n    nfNamingCode: nfNamingCode,\n    nfVendorName: env.get('APP_VENDOR'),\n    timeZoneOffset: \"+00:00\",\n    stndDefinedNamespace: namespaces[eventType],\n    version: \"4.1\",\n    vesEventListenerVersion: \"7.2.1\"\n}\nreturn msg;",
+        "func": "const timeStamp = new Date(msg.payload);\nconst eventType = msg.topic;\nlet domain = \"stndDefined\";\n// handle domain expecption for 'pnfRegistration'\nif (eventType === 'pnfRegistration') {\n    domain = eventType;\n} \nconst nfNamingCode = env.get('APP_NETWORK_FUNCTION_ID');\nconst namespaces = {\n    pnfRegistration: undefined,\n    o1NotifyPnfRegistration: 'o1-notify-pnf-registration',\n    oRanScDuHelloWorldPmStreaming: 'o-ran-sc-du-hello-world-pm-streaming-oas3',\n    notifyHeartbeat: '3GPP-Heartbeat',\n    notifyFileReady: 'file-ready',\n};\n\nmsg.topic = \"commonEventHeader\"\nmsg.payload = {\n    domain: domain,\n    eventType: eventType,\n    eventId:[nfNamingCode, eventType, msg._msgid].join('_'),\n    eventName: [domain, eventType].join('_'),\n    sequence: Number(timeStamp),\n    priority: \"Low\",\n    reportingEntityId: \"c2b7d6e9-ee35-459a-ab8e-717a6fc1fde6\",\n    reportingEntityName: global.get('os').hostname(),\n    sourceId: \"378e9904-6d39-40ea-9994-0596fe2235a3\",\n    sourceName: env.get('APP_SOURCE'),\n    startEpochMicrosec: timeStamp.getTime() * 1000,\n    lastEpochMicrosec: timeStamp.getTime() * 1000,\n    nfNamingCode: nfNamingCode,\n    nfVendorName: env.get('APP_VENDOR'),\n    timeZoneOffset: \"+00:00\",\n    stndDefinedNamespace: namespaces[eventType],\n    version: \"4.1\",\n    vesEventListenerVersion: \"7.2.1\"\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
-        "y": 40,
+        "x": 430,
+        "y": 260,
         "wires": [
             [
                 "f65b1c13e0243ef6"
@@ -75,14 +83,14 @@
         "type": "function",
         "z": "51e83a0892da060e",
         "name": "vesStndDefindBody",
-        "func": "const timeStamp = new Date(msg.payload);\nconst startTime = new Date(Math.floor(Number(timeStamp) / 900000) * 900000);\nconst endTime = new Date(Number(startTime) + 900000);\nconst paddy = (num, padlen, padchar) => {\n    const pad_char = typeof padchar !== 'undefined' ? padchar : '0';\n    const pad = new Array(1 + padlen).join(pad_char);\n    return (pad + num).slice(-pad.length);\n}\nconst fileStartTime = [\n    paddy(startTime.getFullYear(), 4),\n    paddy(startTime.getMonth() + 1, 2),\n    paddy(startTime.getDate(), 2),\n    '.',\n    paddy(startTime.getHours(), 2),\n    paddy(startTime.getMinutes(), 2),\n    '+0000'\n].join('');\nconst fileEndTime = [\n    paddy(endTime.getHours(), 2),\n    paddy(endTime.getMinutes(), 2),\n    '+0000'\n].join('');\nconst fileLocation = ['/pm-data-files/A', fileStartTime, '-', fileEndTime, '_', env.get('APP_NETWORK_FUNCTION_ID'), '.xml'].join('');\nmsg.payload = {\n    schemaReference: 'https://forge.3gpp.org/rep/sa5/MnS/-/raw/Rel-16/OpenAPI/TS28532_FileDataReportingMnS.yaml#components/schemas/NotifyFileReady',\n    stndDefinedFieldsVersion: '1.0',\n    data: {\n        href: global.get('os').hostname(),\n        notificationId: Number(startTime),\n        notificationType: msg.topic,\n        eventTime: timeStamp.toISOString(),\n        systemDN: '/',\n        fileInfoList: [\n            {\n                fileLocation: fileLocation,\n                fileSize: 1234,\n                fileReadyTime: startTime.toISOString(),\n                fileExpirationTime: endTime.toISOString(),\n                fileCompression: 'no',\n                fileFormat: 'xml',\n                fileDataType: 'Performance'\n            }\n        ],\n        additionalText: 'Have fun!'\n    }\n};\nmsg.topic = 'stndDefinedFields';\nreturn msg;",
+        "func": "const timeStamp = new Date(msg.payload);\nconst startTime = new Date(Math.floor(Number(timeStamp) / 900000) * 900000);\nconst endTime = new Date(Number(startTime) + 900000);\nconst paddy = (num, padlen, padchar) => {\n    const pad_char = typeof padchar !== 'undefined' ? padchar : '0';\n    const pad = new Array(1 + padlen).join(pad_char);\n    return (pad + num).slice(-pad.length);\n}\nconst fileStartTime = [\n    paddy(startTime.getFullYear(), 4),\n    paddy(startTime.getMonth() + 1, 2),\n    paddy(startTime.getDate(), 2),\n    '.',\n    paddy(startTime.getHours(), 2),\n    paddy(startTime.getMinutes(), 2),\n    '+0000'\n].join('');\nconst fileEndTime = [\n    paddy(endTime.getHours(), 2),\n    paddy(endTime.getMinutes(), 2),\n    '+0000'\n].join('');\nconst fileLocation = ['/pm-data-files/A', fileStartTime, '-', fileEndTime, '_', env.get('APP_NETWORK_FUNCTION_ID'), '.xml'].join('');\nmsg.payload = {\n    schemaReference: 'https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_FileDataReportingMnS.yaml#components/schemas/NotifyFileReady',\n    stndDefinedFieldsVersion: '1.0',\n    data: {\n        href: global.get('os').hostname(),\n        notificationId: Number(startTime),\n        notificationType: msg.topic,\n        eventTime: timeStamp.toISOString(),\n        systemDN: '/',\n        fileInfoList: [\n            {\n                fileLocation: fileLocation,\n                fileSize: 1234,\n                fileReadyTime: startTime.toISOString(),\n                fileExpirationTime: endTime.toISOString(),\n                fileCompression: 'no',\n                fileFormat: 'xml',\n                fileDataType: 'Performance'\n            }\n        ],\n        additionalText: 'Have fun!'\n    }\n};\nmsg.topic = 'stndDefinedFields';\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
-        "y": 160,
+        "x": 470,
+        "y": 360,
         "wires": [
             [
                 "f65b1c13e0243ef6"
@@ -109,8 +117,8 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 550,
-        "y": 120,
+        "x": 690,
+        "y": 280,
         "wires": [
             [
                 "1d6949a57bce82ab"
@@ -128,8 +136,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
-        "y": 120,
+        "x": 840,
+        "y": 280,
         "wires": [
             [
                 "27e1d8d1e9b8fd93",
@@ -153,8 +161,8 @@
         "authType": "basic",
         "senderr": false,
         "headers": [],
-        "x": 910,
-        "y": 120,
+        "x": 1030,
+        "y": 280,
         "wires": [
             [
                 "f3412bcb9e134063"
@@ -166,7 +174,7 @@
         "type": "debug",
         "z": "51e83a0892da060e",
         "name": "VesCollectorResponse",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -174,8 +182,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1120,
-        "y": 120,
+        "x": 1220,
+        "y": 280,
         "wires": []
     },
     {
@@ -219,7 +227,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
+        "x": 440,
         "y": 80,
         "wires": [
             [
@@ -240,15 +248,95 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 930,
-        "y": 160,
+        "x": 1050,
+        "y": 320,
         "wires": []
     },
     {
         "id": "7d589030272c0a94",
         "type": "inject",
         "z": "51e83a0892da060e",
+        "d": true,
         "name": "notifyHeartbeat",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "notifyHeartbeat",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 320,
+        "wires": [
+            [
+                "b5533c10604af5a6",
+                "ab3bc53f12d28d8f"
+            ]
+        ]
+    },
+    {
+        "id": "ab3bc53f12d28d8f",
+        "type": "function",
+        "z": "51e83a0892da060e",
+        "name": "vesStndDefindBody",
+        "func": "const timeStamp = new Date(msg.payload);\nmsg.payload = {\n    schemaReference: 'https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_HeartbeatNtf.yaml#components/schemas/NotifyHeartbeat',\n    stndDefinedFieldsVersion: '1.0',\n    data: {\n        href: global.get('os').hostname(),\n        notificationId: Number(timeStamp),\n        notificationType: msg.topic,\n        eventTime: timeStamp.toISOString(),\n        systemDN: \"/\",\n        heartbeatNtfPeriod: 120\n    }\n};\nmsg.topic = \"stndDefinedFields\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 320,
+        "wires": [
+            [
+                "f65b1c13e0243ef6"
+            ]
+        ]
+    },
+    {
+        "id": "1bada25ea9a5aa01",
+        "type": "comment",
+        "z": "51e83a0892da060e",
+        "name": "from SA5 R-18 branch",
+        "info": "",
+        "x": 120,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "f4f4670363ec760f",
+        "type": "comment",
+        "z": "51e83a0892da060e",
+        "name": "from O-RAN-SC",
+        "info": "",
+        "x": 100,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "e4dc4647c388ab77",
+        "type": "comment",
+        "z": "51e83a0892da060e",
+        "name": "from ONAP",
+        "info": "",
+        "x": 90,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "fb6413675e22dc71",
+        "type": "inject",
+        "z": "51e83a0892da060e",
+        "name": "o1NotifyPnfRegistration",
         "props": [
             {
                 "p": "payload"
@@ -262,34 +350,338 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "notifyHeartbeat",
+        "topic": "o1NotifyPnfRegistration",
         "payload": "",
         "payloadType": "date",
-        "x": 120,
-        "y": 120,
+        "x": 140,
+        "y": 180,
         "wires": [
             [
                 "b5533c10604af5a6",
-                "ab3bc53f12d28d8f"
+                "51f5fa54867b7e65"
             ]
         ]
     },
     {
-        "id": "ab3bc53f12d28d8f",
+        "id": "73beab79d5024f4b",
+        "type": "inject",
+        "z": "51e83a0892da060e",
+        "name": "oRanScDuHelloWorldPmStreaming",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "oRanScDuHelloWorldPmStreaming",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 220,
+        "wires": [
+            [
+                "5c6f93626fac58b5",
+                "b5533c10604af5a6"
+            ]
+        ]
+    },
+    {
+        "id": "51f5fa54867b7e65",
         "type": "function",
         "z": "51e83a0892da060e",
         "name": "vesStndDefindBody",
-        "func": "const timeStamp = new Date(msg.payload);\nmsg.payload = {\n    schemaReference: 'https://forge.3gpp.org/rep/sa5/MnS/-/raw/Rel-16/OpenAPI/TS28532_HeartbeatNtf.yaml#components/schemas/NotifyHeartbeat',\n    stndDefinedFieldsVersion: '1.0',\n    data: {\n        href: global.get('os').hostname(),\n        notificationId: Number(timeStamp),\n        notificationType: msg.topic,\n        eventTime: timeStamp.toISOString(),\n        systemDN: \"/\",\n        heartbeatNtfPeriod: 120\n    }\n};\nmsg.topic = \"stndDefinedFields\";\nreturn msg;",
+        "func": "const timeStamp = new Date(msg.payload);\nmsg.payload = {\n    schemaReference: 'https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/working/o-ran-sc/template/yes-o1-notify-pnf-registration.yang',\n    stndDefinedFieldsVersion: '1.0',\n    data: {\n        'object-class': 'managed-element',\n        'object-instance': global.get('os').hostname(),\n        'notification-identifier': Number(timeStamp),\n        'notification-type': msg.topic,\n        'event-time': timeStamp.toISOString(),\n        systemDN: \"/\",\n        'vendor-pen': '57272',\n        'vendor-name': 'highstreet technologies USA Corp.',\n        'oam-host': global.get('os').networkInterfaces()['eth0'][0].address || global.get('os').hostname(),\n        'oam-port': 830,\n        'unit-family': 'O-RAN-SC',\n        'unit-type': 'PNF2',\n        'restart-reason': 'system-reboot',\n        'serial-number': 'O-RAN-SC-PNF2-10.10.10.11-pnf2 BestInClass',\n        'macAddress': global.get('os').networkInterfaces()['eth0'][0].mac || '00:00:00:00:00:00',\n        'modelNumber': 'O-RAN-SC Model',\n        'softwareVersion': '2.3.5',\n        'manufactureDate': '2021-01-16',\n        'lastServiceDate': '2021-03-26',\n        'transport-protocol': 'SSH',\n        'username': 'netconf',\n        'password': 'netconf!',\n        'reconnect-on-changed-schema': 'false',\n        'sleep-factor': '1.5',\n        'tcpOnly': 'false',\n        'connection-timeout': '20000',\n        'max-connection-attempts': '100',\n        'between-attempts-timeout': '2000',\n        'keepalive-delay': '120'\n    }\n};\nmsg.topic = \"stndDefinedFields\";\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
-        "y": 120,
+        "x": 470,
+        "y": 180,
         "wires": [
             [
                 "f65b1c13e0243ef6"
+            ]
+        ]
+    },
+    {
+        "id": "5c6f93626fac58b5",
+        "type": "function",
+        "z": "51e83a0892da060e",
+        "name": "vesStndDefindBody",
+        "func": "const timeStamp = new Date(msg.payload);\nmsg.payload = {\n  schemaReference: 'https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/oas3/experimental/o-ran-sc-du-hello-world-pm-streaming-oas3.yaml#components/schemas/performance-measurement-job',\n    stndDefinedFieldsVersion: '1.0',\n    data: {\n        id: 'id:' + Number(timeStamp),\n        'start-time': timeStamp.toISOString(),\n        'administrative-state': 'unlocked',\n        'operational-state': 'enabled',\n        'user-label': 'pm-kpis',\n        'job-tag': '1a0827b7-25e7-4292-959f-6b8ab46f14c2',\n        'granularity-period': 900,\n        measurements: [\n          {\n            'measurement-type-instance-reference': 'user-equipment-average-throughput-downlink',\n            value: 300000000,\n            unit: 'kBis/s'\n          },\n          {\n            'measurement-type-instance-reference': 'user-equipment-average-throughput-uplink',\n            value: 300000000,\n            unit: 'kBis/s'\n          }\n        ]\n    }\n};\nmsg.topic = \"stndDefinedFields\";\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 220,
+        "wires": [
+            [
+                "f65b1c13e0243ef6"
+            ]
+        ]
+    },
+    {
+        "id": "910dfec7eb74df65",
+        "type": "inject",
+        "z": "c5746e29f53f72ce",
+        "name": "pnfRegistration",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "pnfRegistration",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "e5f66f4bd6777ca0"
+            ]
+        ]
+    },
+    {
+        "id": "562063a080cb99d6",
+        "type": "debug",
+        "z": "c5746e29f53f72ce",
+        "name": "eventData",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 950,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "172060688d87f510",
+        "type": "inject",
+        "z": "c5746e29f53f72ce",
+        "d": true,
+        "name": "notifyHeartbeat",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "notifyHeartbeat",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 320,
+        "wires": [
+            [
+                "e5f66f4bd6777ca0"
+            ]
+        ]
+    },
+    {
+        "id": "311c3b5d3d73fc24",
+        "type": "inject",
+        "z": "c5746e29f53f72ce",
+        "name": "notifyFileReady",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "notifyFileReady",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 360,
+        "wires": [
+            [
+                "e5f66f4bd6777ca0"
+            ]
+        ]
+    },
+    {
+        "id": "5437e3fdfca300c9",
+        "type": "http request",
+        "z": "c5746e29f53f72ce",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "7b2f4859e5963695",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": true,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 630,
+        "y": 220,
+        "wires": [
+            [
+                "dc576b6355478428"
+            ]
+        ]
+    },
+    {
+        "id": "dc576b6355478428",
+        "type": "function",
+        "z": "c5746e29f53f72ce",
+        "name": "JSON",
+        "func": "const string = msg.payload;\nconst array = JSON.parse(string);\nif (Array.isArray(array)) {\n    msg.payload = array.map( (item) => {\n        if (typeof item === 'string' || item instanceof String) {\n            return JSON.parse(item);\n        }\n    });\n} else {\n    msg.payload = array;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 220,
+        "wires": [
+            [
+                "562063a080cb99d6"
+            ]
+        ]
+    },
+    {
+        "id": "e5f66f4bd6777ca0",
+        "type": "function",
+        "z": "c5746e29f53f72ce",
+        "name": "SET msg.url",
+        "func": "const base = 'https://messages.smo.o-ran-sc.org';\nconst path = 'events';\nconst urlMapping = {\n    pnfRegistration: \"unauthenticated.VES_PNFREG_OUTPUT\",\n    o1NotifyPnfRegistration: \"unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT\",\n    oRanScDuHelloWorldPmStreaming: \"unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT\",\n    notifyHeartbeat: \"unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT\",\n    notifyFileReady: \"unauthenticated.VES_FILE_READY_OUTPUT\"\n};\nmsg.url = [base, path, urlMapping[msg.topic], '1','1'].join('/');\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 220,
+        "wires": [
+            [
+                "5437e3fdfca300c9"
+            ]
+        ]
+    },
+    {
+        "id": "42275e9c12f8e52b",
+        "type": "comment",
+        "z": "c5746e29f53f72ce",
+        "name": "from O-RAN-SC",
+        "info": "",
+        "x": 100,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "e07fa97ebc66dce0",
+        "type": "comment",
+        "z": "c5746e29f53f72ce",
+        "name": "from ONAP",
+        "info": "",
+        "x": 90,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "44b8c2cc138777f1",
+        "type": "comment",
+        "z": "c5746e29f53f72ce",
+        "name": "from SA5 R-18 branch",
+        "info": "",
+        "x": 120,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "4480e5473a65a757",
+        "type": "inject",
+        "z": "c5746e29f53f72ce",
+        "name": "oRanScDuHelloWorldPmStreaming",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "oRanScDuHelloWorldPmStreaming",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 220,
+        "wires": [
+            [
+                "e5f66f4bd6777ca0"
+            ]
+        ]
+    },
+    {
+        "id": "52f22ee054e5b4ac",
+        "type": "inject",
+        "z": "c5746e29f53f72ce",
+        "name": "o1NotifyPnfRegistration",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "o1NotifyPnfRegistration",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 180,
+        "wires": [
+            [
+                "e5f66f4bd6777ca0"
             ]
         ]
     }
