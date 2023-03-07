@@ -71,6 +71,13 @@ git version 2.34.1
 $ python3 --version
 Python 3.10.6
 ```
+
+A python parser package is required.
+```
+sudo apt install python3-pip
+pip install jproperties
+```
+
 It is beneficial (but not mandatory) adding the following line add the
 end of your ~/.bashrc file. I will suppress warnings when python script
 do not verify self signed certificates for HTTPS communication.
