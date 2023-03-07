@@ -10,7 +10,6 @@ https://docs.docker.com/config/daemon/ipv6/
 
 ```
 {
-  "dns": ["1.1.1.1"],
   "registry-mirrors": [
       "https://nexus3.o-ran-sc.org:10002", 
       "https://nexus3.onap.org:10001"
