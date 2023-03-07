@@ -5,24 +5,52 @@ as component for O-DU and/or SMO implementations.
 
 ## Prerequisites
 
+### Operating (HOST) System
+
 ```
 $ cat /etc/os-release | grep PRETTY_NAME
-PRETTY_NAME="Ubuntu 22.04.1 LTS"
+PRETTY_NAME="Ubuntu 22.04.2 LTS"
+```
 
-$ docker --version
-Docker version 20.10.12, build 20.10.12-0ubuntu4
-
-$ docker-compose version
-docker-compose version 1.29.2, build unknown
-docker-py version: <module 'docker.version' from '/usr/local/lib/python3.10/dist-packages/docker/version.py'>
-CPython version: 3.10.6
-OpenSSL version: OpenSSL 3.0.2 15 Mar 2022
-
-
-$ git --version
-git version 2.34.1
+### Docker
 
 ```
+$ docker --version
+Docker version 23.0.1, build a5ee5b1
+```
+Please follow the required docker daemon configuration as documented in the following README.md:
+- [./smo/common/docker/README.md](./smo/common/docker/README.md)
+
+### Docker Compose
+
+```
+$ docker-compose version
+Docker Compose version v2.16.0
+```
+
+### GIT
+
+```
+$ git --version
+git version 2.34.1
+```
+
+### Python
+
+```
+$ python3 --version
+Python 3.10.6
+```
+It is beneficial (but not mandatory) adding the following line add the
+end of your ~/.bashrc file. I will suppress warnings when python script
+do not verify self signed certificates for HTTPS communication.
+
+```
+export PYTHONWARNINGS="ignore:Unverified HTTPS request"
+```
+
+### ETC Host (DNS function)
+
 Please modify the /etc/hosts of your system.
 
 * \<your-system>: is the hostname of the system, where the browser is started
@@ -46,6 +74,7 @@ $ cat /etc/hosts
 <deployment-system-ipv4>    controller.oam.smo.o-ran-sc.org
 
 ```
+
 ## Bring Up Solution
 
 The following commands should be invoked. More detailed can be found in the
@@ -58,7 +87,6 @@ docker-compose -f smo/oam/docker-compose.yml up -d odlux controller
 docker-compose -f network/docker-compose.yml up -d ntsim-ng-o-ru-fh-11221
 python network/config.py
 ```
-
 
 ## Verification Solution
 
