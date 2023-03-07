@@ -24,8 +24,7 @@ with the following components.
   * **Controller** single node instance
 
     ... representing the NETCONF consumer on the Service Management and
-    Orchestration framework (SMO) for the O1 interface based on
-    ODL.
+    Orchestration framework (SMO) for O-RAN O1 interface and/or O-RAN OpenFronthaul Management Plane and/or other NETCONF/YANG schemas implemented by the OpenDaylight project.
 
   * **VES collector**
 
@@ -36,24 +35,52 @@ with the following components.
 
 ## Prerequisites
 
+### Operating (HOST) System
+
 ```
 $ cat /etc/os-release | grep PRETTY_NAME
-PRETTY_NAME="Ubuntu 22.04.1 LTS"
+PRETTY_NAME="Ubuntu 22.04.2 LTS"
+```
 
-$ docker --version
-Docker version 20.10.12, build 20.10.12-0ubuntu4
-
-$ docker-compose version
-docker-compose version 1.29.2, build unknown
-docker-py version: <module 'docker.version' from '/usr/local/lib/python3.10/dist-packages/docker/version.py'>
-CPython version: 3.10.6
-OpenSSL version: OpenSSL 3.0.2 15 Mar 2022
-
-
-$ git --version
-git version 2.34.1
+### Docker
 
 ```
+$ docker --version
+Docker version 23.0.1, build a5ee5b1
+```
+Please follow the required docker daemon configuration as documented in the following README.md:
+- [./smo/common/docker/README.md](./smo/common/docker/README.md)
+
+### Docker Compose
+
+```
+$ docker-compose version
+Docker Compose version v2.16.0
+```
+
+### GIT
+
+```
+$ git --version
+git version 2.34.1
+```
+
+### Python
+
+```
+$ python3 --version
+Python 3.10.6
+```
+It is beneficial (but not mandatory) adding the following line add the
+end of your ~/.bashrc file. I will suppress warnings when python script
+do not verify self signed certificates for HTTPS communication.
+
+```
+export PYTHONWARNINGS="ignore:Unverified HTTPS request"
+```
+
+### ETC Host (DNS function)
+
 Please modify the /etc/hosts of your system.
 
 * \<your-system>: is the hostname of the system, where the browser is started
@@ -78,20 +105,14 @@ $ cat /etc/hosts
 
 ```
 
-It is beneficial (but not mandatory) adding the following line add the
-end of your ~/.bashrc file. I will suppress warnings when python script
-do not verify self signed certificates for HTTPS communication.
-
-```
-export PYTHONWARNINGS="ignore:Unverified HTTPS request"
-```
+### VES Schemas
 
 Please ensure that you download and copy the required 3GPP OpenAPIs for VES-stndDefined
-message validation into the folder './solution/operation-and-maintenance/smo/oam/ves-collector/externalRepo'.
+message validation into the folder [./smo/oam/ves-collector/externalRepo](./smo/oam/ves-collector/externalRepo).
 
-Please follow the instructions in ./solution/operation-and-maintenance/smo/oam/ves-collector/externalRepo/3gpp/rep/sa5/MnS/blob/Rel16/OpenAPI/README.md.
+Please follow the instructions in [./smo/oam/ves-collector/externalRepo/3gpp/rep/sa5/MnS/raw/Rel-18/OpenAPI/README.md](./smo/oam/ves-collector/externalRepo/3gpp/rep/sa5/MnS/raw/Rel-18/OpenAPI/README.md).
 
-The following tree shows the successfully tested folder structure. It combines different versions of the schemas ('Rel16' and 'SA88-Rel16') using 3GPP branch names.
+The following tree shows the successfully tested folder structure. It combines different versions of the schemas ('Rel16' ) using 3GPP branch names.
 
 ```
 $ tree solution/operation-and-maintenance/smo/oam/ves-collector/externalRepo/
@@ -100,43 +121,26 @@ solution/operation-and-maintenance/smo/oam/ves-collector/externalRepo/
 │   └── rep
 │       └── sa5
 │           └── MnS
-│               └── blob
-│                   ├── Rel16
-│                   │   └── OpenAPI
-│                   │       ├── README.md
-│                   │       ├── TS28532_FaultMnS.yaml
-│                   │       ├── TS28532_FileDataReportingMnS.yaml
-│                   │       ├── TS28532_HeartbeatNtf.yaml
-│                   │       ├── TS28532_PerfMnS.yaml
-│                   │       ├── TS28532_ProvMnS.yaml
-│                   │       ├── TS28532_StreamingDataMnS.yaml
-│                   │       ├── TS28536_CoslaNrm.yaml
-│                   │       ├── TS28541_5GcNrm.yaml
-│                   │       ├── TS28541_NrNrm.yaml
-│                   │       ├── TS28541_SliceNrm.yaml
-│                   │       ├── TS28550_PerfMeasJobCtrlMnS.yaml
-│                   │       ├── TS28623_ComDefs.yaml
-│                   │       ├── TS28623_GenericNrm.yaml
-│                   │       ├── TS29512_Npcf_SMPolicyControl.yaml
-│                   │       ├── TS29514_Npcf_PolicyAuthorization.yaml
-│                   │       └── TS29571_CommonData.yaml
-│                   └── SA88-Rel16
-│                       └── OpenAPI
-│                           ├── 5gcNrm.yaml
-│                           ├── PerDataFileReportMnS.yaml
-│                           ├── PerMeasJobCtlMnS.yaml
-│                           ├── PerThresMonMnS.yaml
-│                           ├── PerfDataStreamingMnS.yaml
-│                           ├── README.md
-│                           ├── comDefs.yaml
-│                           ├── coslaNrm.yaml
-│                           ├── faultMnS.yaml
-│                           ├── genericNrm.yaml
-│                           ├── heartbeatNtf.yaml
-│                           ├── nrNrm.yaml
-│                           ├── provMnS.yaml
-│                           ├── sliceNrm.yaml
-│                           └── streamingDataMnS.yaml
+│               └── raw
+│                   └── Rel-16
+│                       └── OpenAPI
+│                           ├── README.md
+│                           ├── TS28532_FaultMnS.yaml
+│                           ├── TS28532_FileDataReportingMnS.yaml
+│                           ├── TS28532_HeartbeatNtf.yaml
+│                           ├── TS28532_PerfMnS.yaml
+│                           ├── TS28532_ProvMnS.yaml
+│                           ├── TS28532_StreamingDataMnS.yaml
+│                           ├── TS28536_CoslaNrm.yaml
+│                           ├── TS28541_5GcNrm.yaml
+│                           ├── TS28541_NrNrm.yaml
+│                           ├── TS28541_SliceNrm.yaml
+│                           ├── TS28550_PerfMeasJobCtrlMnS.yaml
+│                           ├── TS28623_ComDefs.yaml
+│                           ├── TS28623_GenericNrm.yaml
+│                           ├── TS29512_Npcf_SMPolicyControl.yaml
+│                           ├── TS29514_Npcf_PolicyAuthorization.yaml
+│                           └── TS29571_CommonData.yaml
 ```
 
 ## Expected Folder Structure
@@ -153,13 +157,18 @@ docker-compose file and its configurations.
 │   ├── ntsim-ng-o-du
 │   └── ntsim-ng-o-ru
 └── smo
+    ├── apps
+    │   ├── .env
+    │   ├── docker-compose.yml
+    │   └── flows
     ├── common
     │   ├── .env
     │   ├── docker-compose.yml
     │   │
-    │   ├── messages
     │   ├── docker
+    │   ├── gateway
     │   ├── identity
+    │   ├── messages
     │   ├── kafka
     │   └── zookeeper
     └── oam
