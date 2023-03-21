@@ -28,6 +28,8 @@ services:
     image: ${SDNC_IMAGE}
     container_name: controller
     hostname: controller
+    extra_hosts:
+      - "identity.smo.o-ran-sc.org:${HOST_IP}"
     healthcheck:
       test: wget -U ${ADMIN_USERNAME}:${ADMIN_PASSWORD} --no-verbose --tries=1 --spider http://localhost:${SDNC_REST_PORT}/ready || exit 1
       start_period: 60s

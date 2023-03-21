@@ -56,6 +56,10 @@ x-topo-env: &topo_env
 
 x-nf: &common_nf
     stop_grace_period: 5m
+    extra_hosts:
+      - "identity.smo.o-ran-sc.org:${HOST_IP}"
+      - "controller.oam.smo.o-ran-sc.org:${HOST_IP}"
+      - "ves-collector.oam.smo.o-ran-sc.org:${HOST_IP}"
     cap_add:
     - SYS_ADMIN
     - SYS_PTRACE
