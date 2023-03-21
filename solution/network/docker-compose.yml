@@ -63,13 +63,11 @@ x-nf: &common_nf
 services:
   ntsim-ng-o-du-1122:
     <<: *common_nf
-    image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-du:${NTS_BUILD_VERSION}"
+    image: "${LOCAL_DOCKER_REPO}nts-ng-o-ran-du-3gpp:${NTS_BUILD_VERSION}"
     container_name: ntsim-ng-o-du-1122
     hostname: O-DU-1122
     volumes:
         - ./ntsim-ng-o-du/config.json:/opt/dev/ntsim-ng/config/config.json
-        - ./ntsim-ng-o-du/o-ran-sc-du-hello-world-running.xml:/opt/dev/deploy/data/o-ran-sc-du-hello-world-running.xml
-        - ./ntsim-ng-o-du/o-ran-sc-du-hello-world-operational.xml:/opt/dev/deploy/data/o-ran-sc-du-hello-world-operational.xml
     environment:
         <<: *common_env
         <<: *du_env

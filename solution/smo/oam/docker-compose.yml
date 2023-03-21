@@ -29,7 +29,7 @@ services:
     container_name: controller
     hostname: controller
     healthcheck:
-      test: wget -U ${ADMIN_USERNAME}:${ADMIN_PASSWORD} --no-verbose --tries=1 --spider http://localhost:${SDNC_REST_PORT}/ready || exit 1
+      test: wget -U ${ADMIN_USERNAME}:${ADMIN_PASSWORD} --no-verbose --tries=1 --spider http://controller.smo:${SDNC_REST_PORT}/ready || exit 1
       start_period: 60s
       interval: 10s
       timeout: 5s
@@ -53,7 +53,7 @@ services:
       - SDNR_NETCONF_CALLHOME_ENABLED=true
       - A1_ADAPTER_NORTHBOUND=false
       - JAVA_OPTS=-Xms256m -Xmx4g
-      - IDENTITY_PROVIDER_URL=${IDENTITY_PROVIDER_URL}
+      - IDENTITY_PROVIDER_URL=http://identity.smo
       - SDNC_WEB_URL=https://odlux.oam.${SOLUTION_DOMAIN}
       - SDNR_VES_COLLECTOR_ENABLED=true
       - SDNR_VES_COLLECTOR_TLS_ENABLED=false
