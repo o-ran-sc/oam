@@ -5,6 +5,14 @@ as component for O-DU and/or SMO implementations.
 
 ## Prerequisites
 
+### Resources
+
+The solution was tested on a VM with
+
+- 4x Core
+- 16 GBit RAM 
+- 50 Gbit Storage
+
 ### Operating (HOST) System
 
 ```
