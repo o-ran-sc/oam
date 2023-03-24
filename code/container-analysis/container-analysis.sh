@@ -27,32 +27,35 @@
 
 SYFT=$(which syft)
 if [ -z "$SYFT" ]; then
-    echo "unable to find syft. please install."
+    echo "Unable to find syft. Please install."
     exit 1
 fi
 
 GRYPE=$(which grype)
 if [ -z "$GRYPE" ]; then
-    echo "unable to find grype. please install."
+    echo "Unable to find grype. Please install."
     exit 1
 fi
 
-excluded_images=(nexus3.onap.org:10001/onap/dmaap/dmaap-mr:1.1.18 nexus3.onap.org:10001/onap/dmaap/kafka111:1.0.4 nexus3.onap.org:10001/onap/dmaap/zookeeper:6.0.3 nexus3.onap.org:10001/onap/org.onap.dcaegen2.collectors.ves.vescollector:1.10.1)
+mkdir -p out
+
+excluded_images=()
 
 image_names=($(docker ps --format '{{.Image}}' | tr ' ' '\n' | sort -u | tr '\n' ' '))
 
+# avoid doublicates
 for ele in "${excluded_images[@]}"; do
-image_names=(${image_names[@]/*${ele}*/})
+ image_names=(${image_names[@]/*${ele}*/})
 done
 
 echo "Analysing following images: ${image_names[*]}"
 
 for image in "${image_names[@]}"; do
-image_name_no_repo="${image##*/}"
-echo "Creating SBOM for ${image} in ${image_name_no_repo}.sbom.spdx.json..."
-${SYFT} -q ${image} -o spdx-json --file ${image_name_no_repo}.sbom.spdx.json
-echo "Creating Vulnerabilities for ${image} in ${image_name_no_repo}.vulnerabilities.vex.json..."
-${GRYPE} -q ${image} -o embedded-cyclonedx-vex-json --file ${image_name_no_repo}.vulnerabilities.vex.json
+  image_name_no_repo="${image##*/}"
+  echo "Creating SBOM for ${image} in ${image_name_no_repo}.sbom.spdx.json..."
+  ${SYFT} -q ${image} -o spdx-json --file out/${image_name_no_repo}.sbom.spdx.json
+  echo "Creating Vulnerabilities for ${image} in ${image_name_no_repo}.vulnerabilities.vex.json..."
+  ${GRYPE} -q ${image} -o embedded-cyclonedx-vex-json --file out/${image_name_no_repo}.vulnerabilities.vex.json
 done
 
 echo "Done!"
