@@ -74,6 +74,10 @@ package-lock.json
 # nodered
 *.backup
 
+# container-analyis
+*.sbom.spdx.json
+*.vulnerabilities.vex.json
+
 # documentation
 .tox
 docs/_build/
