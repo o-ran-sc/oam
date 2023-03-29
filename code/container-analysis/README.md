@@ -29,3 +29,19 @@ Once your docker containers are up and running just use:
 Note: It takes time ...
 
 You will find the results in the 'out' folder.
+
+### Viewer
+
+If you would like to see a kind of summary, please run:
+
+```
+cd viewer
+npm install
+npm start
+```
+
+... and view in your browser 
+
+```
+http://localhost:3000
+```
