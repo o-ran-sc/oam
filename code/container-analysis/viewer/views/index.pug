@@ -1,0 +1,72 @@
+//-
+//- Copyright 2023 highstreet technologies and others
+//-
+//- Licensed under the Apache License, Version 2.0 (the "License");
+//- you may not use this file except in compliance with the License.
+//- You may obtain a copy of the License at
+//-
+//-     http://www.apache.org/licenses/LICENSE-2.0
+//-
+//- Unless required by applicable law or agreed to in writing, software
+//- distributed under the License is distributed on an "AS IS" BASIS,
+//- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//- See the License for the specific language governing permissions and
+//- limitations under the License.
+//-
+ 
+extends layout
+
+block content
+  h1= title
+  p Date: #{date}
+
+  h2 Images
+  table(class='table  table-striped table-hover') 
+    thead(class='thead-dark')
+      tr 
+        th(scope=col, class='text-left') Name
+        th(scope=col, class='text-right') Version
+        th(scope=col, class='text-center') SBOM
+        th(scope=col, class='text-right') # Files
+        th(scope=col, class='text-right') # Packages
+        th(scope=col, class='text-right') Created
+        th(scope=col, class='text-center') VEX
+        th(scope=col, class='text-right') # Components
+        th(scope=col, class='text-right') # Vulnerabilities
+        th(scope=col, class='text-right') # Critical
+        th(scope=col, class='text-right') # High
+        th(scope=col, class='text-right') # Medium
+        th(scope=col, class='text-right') # Low
+        th(scope=col, class='text-right') # Unknown
+        th(scope=col, class='text-right') # None
+        th(scope=col, class='text-center') Chart
+        th(scope=col, class='text-right') Created
+        
+    tbody 
+      each image in images
+        tr
+          td(scope=col, class='text-left')= image.name
+          td(scope=col, class='text-right')= image.version
+          td(scope=col, class='text-center')
+            a(href=image.sbom.url, title=image.sbom.url) link
+          td(scope=col, class='text-right')= image.sbom.files
+          td(scope=col, class='text-right')= image.sbom.packages
+          td(scope=col, class='text-right')= image.sbom.created
+          td(scope=col, class='text-center')
+            a(href=image.vex.url,title=image.vex.url) link
+          td(scope=col, class='text-right')= image.vex.components
+          td(scope=col, class='text-right')= image.vex.vulnerabilities.count
+          td(scope=col, class='text-right')= image.vex.vulnerabilities.critical
+          td(scope=col, class='text-right')= image.vex.vulnerabilities.high
+          td(scope=col, class='text-right')= image.vex.vulnerabilities.medium
+          td(scope=col, class='text-right')= image.vex.vulnerabilities.low
+          td(scope=col, class='text-right')= image.vex.vulnerabilities.unknown
+          td(scope=col, class='text-right')= image.vex.vulnerabilities.none
+          td(scope=col, class='text-center')
+            svg( width=`${10 * image.vex.vulnerabilities.scale}`, height=`${10 * image.vex.vulnerabilities.scale}`, viewbox=`${-5 * image.vex.vulnerabilities.scale} ${-5 * image.vex.vulnerabilities.scale} ${10 * image.vex.vulnerabilities.scale} ${10 * image.vex.vulnerabilities.scale}`, transform=`scale( ${image.vex.vulnerabilities.scale} ) rotate(180 0 0)`)
+              circle(cx='0', cy='0', r='5', fill='white', stroke='black', stroke-width='0')
+              each slice, i in image.vex.vulnerabilities.slices
+                path(d=`M0,0 L${0 + 5 * Math.cos(slice.startAngle)},${0 + 5 * Math.sin(slice.startAngle)} A5,5 0 ${slice.arc}, 1${0 + 5 * Math.cos(slice.endAngle)},${0 + 5 * Math.sin(slice.endAngle)} Z`, fill=slice.color)
+                  title= slice.name + ': ' + slice.count
+              circle(cx='0', cy='0', r='2', fill='white', stroke='black', stroke-width='0')
+          td(scope=col, class='text-right')= image.vex.created
