@@ -1,76 +1,10 @@
 [
   {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/blob/SA88-Rel16/OpenAPI/faultMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/blob/SA88-Rel16/OpenAPI/faultMnS.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/blob/SA88-Rel16/OpenAPI/heartbeatNtf.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/blob/SA88-Rel16/OpenAPI/heartbeatNtf.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/blob/SA88-Rel16/OpenAPI/PerDataFileReportMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/blob/SA88-Rel16/OpenAPI/PerDataFileReportMnS.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/blob/SA88-Rel16/OpenAPI/provMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/blob/SA88-Rel16/OpenAPI/provMnS.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_FaultMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_FaultMnS.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_HeartbeatNtf.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_HeartbeatNtf.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_FileDataReportingMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_FileDataReportingMnS.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_PerfMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_PerfMnS.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_ProvMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_ProvMnS.yaml"
-  },
-  {
     "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/oas3/experimental/o-ran-sc-du-hello-world-pm-streaming-oas3.yaml",
     "localURL": "o-ran-sc/experimental/o-ran-sc-du-hello-world-pm-streaming-oas3.yaml"
   },
   {
     "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/working/o-ran-sc/template/yes-o1-notify-pnf-registration.yang",
     "localURL": "o-ran-sc/experimental/yes-o1-notify-pnf-registration.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_FileDataReportingMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_FileDataReportingMnS.yaml"
-  },
-
-
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_FaultMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_FaultMnS.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_HeartbeatNtf.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_HeartbeatNtf.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_FileDataReportingMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_FileDataReportingMnS.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_PerfMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_PerfMnS.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_ProvMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_ProvMnS.yaml"
-  },
-  {
-    "publicURL": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_FileDataReportingMnS.yaml",
-    "localURL": "3gpp/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_FileDataReportingMnS.yaml"
   }
 ]
