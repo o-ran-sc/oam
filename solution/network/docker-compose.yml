@@ -78,6 +78,19 @@ services:
         <<: *common_env
         <<: *du_env
 
+  ntsim-ng-o-du-rel-18-1122:
+    <<: *common_nf
+    image: "${LOCAL_DOCKER_REPO}nts-ng-o-ran-du-rel-18:${NTS_BUILD_VERSION}"
+    container_name: ntsim-ng-o-du-1122b
+    hostname: O-DU-1122b
+    volumes:
+        - ./ntsim-ng-o-du-rel-18/config.json:/opt/dev/ntsim-ng/config/config.json
+        - ./ntsim-ng-o-du-rel-18/_3gpp-common-managed-element-running.xml:/opt/dev/deploy/data/_3gpp-common-managed-element-running.xml
+        - ./ntsim-ng-o-du-rel-18/_3gpp-common-managed-element-operational.xml:/opt/dev/deploy/data/_3gpp-common-managed-element-operational.xml
+    environment:
+        <<: *common_env
+        <<: *du_env
+
   ntsim-ng-o-ru-fh-11221:
     <<: *common_nf
     image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-ru-fh:${NTS_BUILD_VERSION}"
