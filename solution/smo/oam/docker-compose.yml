@@ -84,7 +84,11 @@ services:
         ipv6_address: ${SDNC_OAM_IPv6}
 
   ves-collector:
-    image: ${VES_COLLECTOR_IMAGE}
+    image: ${VES_COLLECTOR_IMAGE}-configured
+    build:
+      context: ./ves-collector
+      args:
+        - BASEIMAGE=${VES_COLLECTOR_IMAGE}
     container_name: ves-collector
     hostname: ves-collector
     environment:
@@ -92,7 +96,6 @@ services:
     volumes:
       - ./ves-collector/collector.properties:/opt/app/VESCollector/etc/collector.properties
       - ./ves-collector/ves-dmaap-config.json:/opt/app/VESCollector/etc/ves-dmaap-config.json
-      - ./ves-collector/externalRepo:/opt/app/VESCollector/etc/externalRepo
     labels:
       traefik.enable: true
       traefik.http.routers.ves.entrypoints: websecure
