@@ -54,8 +54,8 @@ Please follow the required docker daemon configuration as documented in the foll
 ### Docker Compose
 
 ```
-$ docker-compose version
-Docker Compose version v2.16.0
+$ docker compose version
+Docker Compose version v2.17.2
 ```
 
 ### GIT
@@ -112,44 +112,6 @@ $ cat /etc/hosts
 
 ```
 
-### VES Schemas
-
-Please ensure that you download and copy the required 3GPP OpenAPIs for VES-stndDefined
-message validation into the folder [./smo/oam/ves-collector/externalRepo](./smo/oam/ves-collector/externalRepo).
-
-Please follow the instructions in [./smo/oam/ves-collector/externalRepo/3gpp/rep/sa5/MnS/raw/Rel-18/OpenAPI/README.md](./smo/oam/ves-collector/externalRepo/3gpp/rep/sa5/MnS/raw/Rel-18/OpenAPI/README.md).
-
-The following tree shows the successfully tested folder structure. It combines different versions of the schemas ('Rel16' ) using 3GPP branch names.
-
-```
-$ tree solution/operation-and-maintenance/smo/oam/ves-collector/externalRepo/
-solution/operation-and-maintenance/smo/oam/ves-collector/externalRepo/
-├── 3gpp
-│   └── rep
-│       └── sa5
-│           └── MnS
-│               └── raw
-│                   └── Rel-16
-│                       └── OpenAPI
-│                           ├── README.md
-│                           ├── TS28532_FaultMnS.yaml
-│                           ├── TS28532_FileDataReportingMnS.yaml
-│                           ├── TS28532_HeartbeatNtf.yaml
-│                           ├── TS28532_PerfMnS.yaml
-│                           ├── TS28532_ProvMnS.yaml
-│                           ├── TS28532_StreamingDataMnS.yaml
-│                           ├── TS28536_CoslaNrm.yaml
-│                           ├── TS28541_5GcNrm.yaml
-│                           ├── TS28541_NrNrm.yaml
-│                           ├── TS28541_SliceNrm.yaml
-│                           ├── TS28550_PerfMeasJobCtrlMnS.yaml
-│                           ├── TS28623_ComDefs.yaml
-│                           ├── TS28623_GenericNrm.yaml
-│                           ├── TS29512_Npcf_SMPolicyControl.yaml
-│                           ├── TS29514_Npcf_PolicyAuthorization.yaml
-│                           └── TS29571_CommonData.yaml
-```
-
 ## Expected Folder Structure
 
 The following figure show the expected folder structure for the different
@@ -197,16 +159,16 @@ The following commands should be invoked. More detailed can be found in the
 next chapters.
 
 ```
-docker-compose -f smo/common/docker-compose.yml up -d
+docker compose -f smo/common/docker-compose.yml up -d
 # wait until the cpu load is low again
 python smo/common/identity/config.py
 
-docker-compose -f smo/oam/docker-compose.yml up -d
-docker-compose -f smo/apps/docker-compose.yml up -d
+docker compose -f smo/oam/docker-compose.yml up -d
+docker compose -f smo/apps/docker-compose.yml up -d
 
 # wait until the cpu load is low again
 
-docker-compose -f network/docker-compose.yml up -d
+docker compose -f network/docker-compose.yml up -d
 # wait about 2min
 docker restart ntsim-ng-o-du-1122
 python network/config.py
@@ -228,7 +190,7 @@ before starting further docker images.
 The several docker-compose yml files must be started in the right order as listed below:
 
 ```
-docker-compose -f smo/common/docker-compose.yml up -d
+docker compose -f smo/common/docker-compose.yml up -d
 python smo/common/identity/config.py
 ```
 
@@ -237,7 +199,7 @@ A system user (%USER) is also created with administration rights.
 
 
 ```
-docker-compose -f smo/oam/docker-compose.yml up -d
+docker compose -f smo/oam/docker-compose.yml up -d
 ```
 
 Looking into the ONAP SDN-R logs will give you the startup procedure.
@@ -249,13 +211,13 @@ docker logs -f controller
 If you see the login page (https://odlux.oam.smo.o-ran-sc.org) you are good to go and can start the (simulated) network.
 
 ```
-docker-compose -f network/docker-compose.yml up -d
+docker compose -f network/docker-compose.yml up -d
 ```
 
 Usually the first ves:event gets lost. Please restart the O-DU docker container(s) to send a second ves:pnfRegistration.
 
 ```
-docker-compose -f network/docker-compose.yml restart ntsim-ng-o-du-1122
+docker compose -f network/docker-compose.yml restart ntsim-ng-o-du-1122
 python network/config.py
 ```
 
@@ -312,10 +274,10 @@ In case of trouble, please update the commands with your customized '.env' file.
 To stop all container please respect the following order
 
 ```
-docker-compose -f network/docker-compose.yml down
-docker-compose -f smo/apps/docker-compose.yml down
-docker-compose -f smo/oam/docker-compose.yml down
-docker-compose -f smo/common/docker-compose.yml down
+docker compose -f network/docker-compose.yml down
+docker compose -f smo/apps/docker-compose.yml down
+docker compose -f smo/oam/docker-compose.yml down
+docker compose -f smo/common/docker-compose.yml down
 ```
 
 ### Cleanup
