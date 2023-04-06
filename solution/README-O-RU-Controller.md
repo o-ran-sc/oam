@@ -32,8 +32,8 @@ Please follow the required docker daemon configuration as documented in the foll
 ### Docker Compose
 
 ```
-$ docker-compose version
-Docker Compose version v2.16.0
+$ docker compose version
+Docker Compose version v2.17.2
 ```
 
 ### GIT
@@ -95,10 +95,10 @@ The following commands should be invoked. More detailed can be found in the
 next chapters.
 
 ```
-docker-compose -f smo/common/docker-compose.yml up -d
+docker compose -f smo/common/docker-compose.yml up -d
 python smo/common/identity/config.py
-docker-compose -f smo/oam/docker-compose.yml up -d odlux controller
-docker-compose -f network/docker-compose.yml up -d ntsim-ng-o-ru-fh-11221
+docker compose -f smo/oam/docker-compose.yml up -d odlux controller
+docker compose -f network/docker-compose.yml up -d ntsim-ng-o-ru-fh-11221
 python network/config.py
 ```
 
@@ -131,7 +131,7 @@ In the O-RU Controller UI you should see the generated alarm notifications of th
 To stop all container please respect the following order
 
 ```
-docker-compose -f network/docker-compose.yml down
-docker-compose -f smo/oam/docker-compose.yml down
-docker-compose -f smo/common/docker-compose.yml down
+docker compose -f network/docker-compose.yml down
+docker compose -f smo/oam/docker-compose.yml down
+docker compose -f smo/common/docker-compose.yml down
 ```
