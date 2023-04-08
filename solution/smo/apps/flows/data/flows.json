@@ -51,7 +51,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 120,
-        "y": 360,
+        "y": 460,
         "wires": [
             [
                 "b5533c10604af5a6",
@@ -64,7 +64,7 @@
         "type": "function",
         "z": "51e83a0892da060e",
         "name": "vesHeader",
-        "func": "const timeStamp = new Date(msg.payload);\nconst eventType = msg.topic;\nlet domain = \"stndDefined\";\n// handle domain expecption for 'pnfRegistration'\nif (eventType === 'pnfRegistration') {\n    domain = eventType;\n} \nconst nfNamingCode = env.get('APP_NETWORK_FUNCTION_ID');\nconst namespaces = {\n    pnfRegistration: undefined,\n    o1NotifyPnfRegistration: 'o1-notify-pnf-registration',\n    oRanScDuHelloWorldPmStreaming: 'o-ran-sc-du-hello-world-pm-streaming-oas3',\n    notifyHeartbeat: '3GPP-Heartbeat',\n    notifyFileReady: 'file-ready',\n};\n\nmsg.topic = \"commonEventHeader\"\nmsg.payload = {\n    domain: domain,\n    eventType: eventType,\n    eventId:[nfNamingCode, eventType, msg._msgid].join('_'),\n    eventName: [domain, eventType].join('_'),\n    sequence: Number(timeStamp),\n    priority: \"Low\",\n    reportingEntityId: \"c2b7d6e9-ee35-459a-ab8e-717a6fc1fde6\",\n    reportingEntityName: global.get('os').hostname(),\n    sourceId: \"378e9904-6d39-40ea-9994-0596fe2235a3\",\n    sourceName: env.get('APP_SOURCE'),\n    startEpochMicrosec: timeStamp.getTime() * 1000,\n    lastEpochMicrosec: timeStamp.getTime() * 1000,\n    nfNamingCode: nfNamingCode,\n    nfVendorName: env.get('APP_VENDOR'),\n    timeZoneOffset: \"+00:00\",\n    stndDefinedNamespace: namespaces[eventType],\n    version: \"4.1\",\n    vesEventListenerVersion: \"7.2.1\"\n}\nreturn msg;",
+        "func": "const timeStamp = new Date(msg.payload);\nconst eventType = msg.topic;\nlet domain = \"stndDefined\";\n// handle domain expecption for 'pnfRegistration'\nif (eventType === 'pnfRegistration') {\n    domain = eventType;\n} \nconst nfNamingCode = env.get('APP_NETWORK_FUNCTION_ID');\nconst namespaces = {\n    pnfRegistration: undefined,\n    o1NotifyPnfRegistration: 'o1-notify-pnf-registration',\n    oRanScDuHelloWorldPmStreaming: 'o-ran-sc-du-hello-world-pm-streaming-oas3',\n    notifyHeartbeat: '3GPP-Heartbeat',\n    notifyFileReady: 'file-ready',\n    'o-ran-file-management:file-download-event': 'o-ran-sc-ofhm',\n    'o-ran-file-management:file-upload-notification': 'o-ran-sc-ofhm'\n};\n\nmsg.topic = \"commonEventHeader\"\nmsg.payload = {\n    domain: domain,\n    eventType: eventType,\n    eventId:[nfNamingCode, eventType, msg._msgid].join('_'),\n    eventName: [domain, eventType].join('_'),\n    sequence: Number(timeStamp),\n    priority: \"Low\",\n    reportingEntityId: \"c2b7d6e9-ee35-459a-ab8e-717a6fc1fde6\",\n    reportingEntityName: global.get('os').hostname(),\n    sourceId: \"378e9904-6d39-40ea-9994-0596fe2235a3\",\n    sourceName: env.get('APP_SOURCE'),\n    startEpochMicrosec: timeStamp.getTime() * 1000,\n    lastEpochMicrosec: timeStamp.getTime() * 1000,\n    nfNamingCode: nfNamingCode,\n    nfVendorName: env.get('APP_VENDOR'),\n    timeZoneOffset: \"+00:00\",\n    stndDefinedNamespace: namespaces[eventType],\n    version: \"4.1\",\n    vesEventListenerVersion: \"7.2.1\"\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -90,7 +90,7 @@
         "finalize": "",
         "libs": [],
         "x": 470,
-        "y": 360,
+        "y": 460,
         "wires": [
             [
                 "f65b1c13e0243ef6"
@@ -174,7 +174,7 @@
         "type": "debug",
         "z": "51e83a0892da060e",
         "name": "VesCollectorResponse",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -275,7 +275,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 130,
-        "y": 320,
+        "y": 420,
         "wires": [
             [
                 "b5533c10604af5a6",
@@ -295,7 +295,7 @@
         "finalize": "",
         "libs": [],
         "x": 470,
-        "y": 320,
+        "y": 420,
         "wires": [
             [
                 "f65b1c13e0243ef6"
@@ -309,7 +309,7 @@
         "name": "from SA5 R-18 branch",
         "info": "",
         "x": 120,
-        "y": 280,
+        "y": 380,
         "wires": []
     },
     {
@@ -431,6 +431,114 @@
         ]
     },
     {
+        "id": "2d033da139fb379e",
+        "type": "comment",
+        "z": "51e83a0892da060e",
+        "name": "from OpenFronthaul Management-Plane",
+        "info": "",
+        "x": 820,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "456597d0477d239f",
+        "type": "inject",
+        "z": "51e83a0892da060e",
+        "name": "o-ran-file-management:file-download-event",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "o-ran-file-management:file-download-event",
+        "payload": "",
+        "payloadType": "date",
+        "x": 840,
+        "y": 420,
+        "wires": [
+            [
+                "f40d1d16c7044edc",
+                "b5533c10604af5a6"
+            ]
+        ]
+    },
+    {
+        "id": "f40d1d16c7044edc",
+        "type": "function",
+        "z": "51e83a0892da060e",
+        "name": "vesStndDefindBody",
+        "func": "const eventTime = new Date(msg.payload).toISOString();\nmsg.payload = {\n    schemaReference: 'https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-file-management.yang#components/schemas/ofhm-event-stream',\n    stndDefinedFieldsVersion: '1.0',\n    data: {\n        'ietf:notification': {\n            'eventTime': eventTime,\n            'o-ran-file-management:file-download-event': {\n                'local-logical-file-path': 'o-ran/log',\n                'remote-file-path': 'ftpes://username@ftpes.oam.smo.o-ran-sc/downloads',\n                'status': 'FAILURE',\n                'reject-reason': 'FTPes Server not reachable.'\n            }\n        }\n    }\n};\nmsg.topic = 'stndDefinedFields';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 420,
+        "wires": [
+            [
+                "f65b1c13e0243ef6"
+            ]
+        ]
+    },
+    {
+        "id": "3d8f8180f204d804",
+        "type": "inject",
+        "z": "51e83a0892da060e",
+        "name": "o-ran-file-management:file-upload-notification",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "o-ran-file-management:file-upload-notification",
+        "payload": "",
+        "payloadType": "date",
+        "x": 850,
+        "y": 460,
+        "wires": [
+            [
+                "d473bf42d8169599",
+                "b5533c10604af5a6"
+            ]
+        ]
+    },
+    {
+        "id": "d473bf42d8169599",
+        "type": "function",
+        "z": "51e83a0892da060e",
+        "name": "vesStndDefindBody",
+        "func": "const eventTime = new Date(msg.payload).toISOString();\nmsg.payload = {\n    schemaReference: 'https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-file-management.yang#components/schemas/ofhm-event-stream',\n    stndDefinedFieldsVersion: '1.0',\n    data: {\n        'ietf:notification': {\n            'eventTime': eventTime,\n            'o-ran-file-management:file-upload-notification': {\n                'local-logical-file-path': 'o-ran/log',\n                'remote-file-path': 'ftpes://username@ftpes.oam.smo.o-ran-sc/downloads',\n                'status': 'FAILURE',\n                'reject-reason': 'FTPes Server not reachable.'\n            }\n        }\n    }\n};\nmsg.topic = 'stndDefinedFields';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 460,
+        "wires": [
+            [
+                "f65b1c13e0243ef6"
+            ]
+        ]
+    },
+    {
         "id": "910dfec7eb74df65",
         "type": "inject",
         "z": "c5746e29f53f72ce",
@@ -451,7 +559,7 @@
         "topic": "pnfRegistration",
         "payload": "",
         "payloadType": "date",
-        "x": 120,
+        "x": 240,
         "y": 80,
         "wires": [
             [
@@ -472,7 +580,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 950,
+        "x": 990,
         "y": 220,
         "wires": []
     },
@@ -498,8 +606,8 @@
         "topic": "notifyHeartbeat",
         "payload": "",
         "payloadType": "date",
-        "x": 130,
-        "y": 320,
+        "x": 230,
+        "y": 420,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -527,8 +635,8 @@
         "topic": "notifyFileReady",
         "payload": "",
         "payloadType": "date",
-        "x": 120,
-        "y": 360,
+        "x": 240,
+        "y": 460,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -551,7 +659,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 630,
+        "x": 670,
         "y": 220,
         "wires": [
             [
@@ -570,7 +678,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 790,
+        "x": 830,
         "y": 220,
         "wires": [
             [
@@ -583,13 +691,13 @@
         "type": "function",
         "z": "c5746e29f53f72ce",
         "name": "SET msg.url",
-        "func": "const base = 'https://messages.smo.o-ran-sc.org';\nconst path = 'events';\nconst urlMapping = {\n    pnfRegistration: \"unauthenticated.VES_PNFREG_OUTPUT\",\n    o1NotifyPnfRegistration: \"unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT\",\n    oRanScDuHelloWorldPmStreaming: \"unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT\",\n    notifyHeartbeat: \"unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT\",\n    notifyFileReady: \"unauthenticated.VES_FILE_READY_OUTPUT\"\n};\nmsg.url = [base, path, urlMapping[msg.topic], '1','1'].join('/');\nreturn msg;",
+        "func": "const base = 'https://messages.smo.o-ran-sc.org';\nconst path = 'events';\nconst urlMapping = {\n    pnfRegistration: \"unauthenticated.VES_PNFREG_OUTPUT\",\n    o1NotifyPnfRegistration: \"unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT\",\n    oRanScDuHelloWorldPmStreaming: \"unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT\",\n    notifyHeartbeat: \"unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT\",\n    notifyFileReady: \"unauthenticated.VES_FILE_READY_OUTPUT\",\n    oRanOpenfrontManagementPlane: \"unauthenticated.VES_O_RAN_SC_OPENFRONTHAUL_OUTPUT\"\n};\nmsg.url = [base, path, urlMapping[msg.topic], '1','1'].join('/');\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
+        "x": 490,
         "y": 220,
         "wires": [
             [
@@ -624,7 +732,7 @@
         "name": "from SA5 R-18 branch",
         "info": "",
         "x": 120,
-        "y": 280,
+        "y": 380,
         "wires": []
     },
     {
@@ -677,8 +785,107 @@
         "topic": "o1NotifyPnfRegistration",
         "payload": "",
         "payloadType": "date",
-        "x": 140,
+        "x": 220,
         "y": 180,
+        "wires": [
+            [
+                "e5f66f4bd6777ca0"
+            ]
+        ]
+    },
+    {
+        "id": "3051f52553efaaa4",
+        "type": "http request",
+        "z": "c5746e29f53f72ce",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://messages.smo.o-ran-sc.org/topics",
+        "tls": "7b2f4859e5963695",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": true,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "Accept",
+                "valueType": "other",
+                "valueValue": "application/json"
+            }
+        ],
+        "x": 670,
+        "y": 180,
+        "wires": [
+            [
+                "dc576b6355478428"
+            ]
+        ]
+    },
+    {
+        "id": "0acceacb99b7981a",
+        "type": "inject",
+        "z": "c5746e29f53f72ce",
+        "name": "Topics?",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "topics",
+        "payload": "",
+        "payloadType": "date",
+        "x": 510,
+        "y": 180,
+        "wires": [
+            [
+                "3051f52553efaaa4"
+            ]
+        ]
+    },
+    {
+        "id": "34b7ac222692e06d",
+        "type": "comment",
+        "z": "c5746e29f53f72ce",
+        "name": "from OpenFronthaul Management-Plane",
+        "info": "",
+        "x": 180,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "efd550c650283862",
+        "type": "inject",
+        "z": "c5746e29f53f72ce",
+        "name": "oRanOpenfrontManagementPlane",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "oRanOpenfrontManagementPlane",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 320,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
