@@ -6,5 +6,61 @@
   {
     "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/working/o-ran-sc/template/yes-o1-notify-pnf-registration.yang",
     "localURL": "o-ran-sc/experimental/yes-o1-notify-pnf-registration.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/oas3/experimental/o-ran-sc-ofhm.yaml",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-trace.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-antenna-calibration.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-supervision.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-fm.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-beamforming.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-software-management.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-troubleshooting.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-uplane-conf.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-sync.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-laa-operations.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-performance-management.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-ald-port.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
+  },
+  {
+    "publicURL": "https://gerrit.o-ran-sc.org/r/gitweb?p=scp/oam/modeling.git;a=blob_plain;f=data-model/yang/published/o-ran/ru-fh/o-ran-file-management.yang",
+    "localURL": "o-ran-sc/experimental/o-ran-sc-ofhm.yaml"
   }
 ]
