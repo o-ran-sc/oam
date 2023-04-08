@@ -1,0 +1,162 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: OFHM-PROVIDER modules of RestConf (RFC8040)
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: |-
+    This documentation implements the VES notifications defined by
+    O-RAN Alliance WG4 for OpenFronthaul Management Plane (OFHM).
+externalDocs:
+  description: |-
+    O-RAN Working Group 4 (Open Fronthaul Interfaces WG)
+    Management Plane Specification
+    O-RAN.WG4.MP.0-R003-v11.00
+  url: https://orandownloadsweb.azurewebsites.net/specifications
+servers:
+  - url: https://ohfm-provider.orbit-lab.org/
+paths:
+  /restconf/ofhm-event-stream:event-history:
+    get:
+      description: |-
+        The root container of an event log inspired by O-RAN Alliance WG4 OpenFronthaul-Management-Plane.
+      summary: GET - VES-OFHM-API-PROVIDER - ofhm-event-stream - event-history
+      tags:
+        - mounted VES-OFHM-API-PROVIDER - ofhm-event-stream - event-history
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ofhm-event-stream-event-history-ref'
+          description: OK
+
+components:
+  schemas:
+    # notifications for o-ran-file-management.yang
+    o-ran-file-management:file-path-grouping:
+      type: object
+      required:
+      - local-logical-file-path
+      - remote-file-path
+      properties:
+        local-logical-file-path:
+          type: string
+          description: |-
+            URI specifying the complete logical path relative to the root of the logical file system
+            structure (the common root for o-ran/log, o-ran/pm, o-ran/transceiver or o-ran/beamforming) of the file
+            to upload/download (no wildcard is allowed), including a file name and its extension.
+            Example: 'o-ran/log/file_1.abc', where 'o-ran/log/' represents relative path to folder containing log files
+            as specified by O-RAN, 'file_1' represents desired filename and 'abc' represents desired filename's extension.
+            The content shall conform to RFC3986 'Uniform Resource Identifier (URI): Generic Syntax'
+        remote-file-path:
+          type: string
+          description: |-
+            URI specifying the remote-file-path on O-DU/SMO or on stand-alone file server.
+            The content shall conform to RFC3986 'Uniform Resource Identifier (URI): Generic Syntax'.
+            When upload/download is via sftp, the format shall be of the form
+            sftp://<username>@<host>[:port]/path
+            When upload/download is via ftpes, the format shall be of the form
+            ftpes://<username>@<host>[:port]/path
+            Note, ftpes is not an IANA registered URI scheme, but used here to signal
+            that a file transfer should be performed over FTPES
+      title: o-ran-file-management:file-path-grouping
+      description: |-
+        Grouping, that provides local path and remote path for the
+        purpose of File Management scenarios.
+
+    o-ran-file-management:output-status-grouping:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: 
+          - SUCCESS 
+          - FAILURE
+          description: |-
+            Operation status
+        reject-reason:
+          type: string
+          description: |-
+            The field is only needed when the value of the field 'status' is ual to 'FAILURE'.
+      title: o-ran-file-management:output-status-grouping
+      description: |-
+        Status grouping
+
+    o-ran-file-management:file-download-event:
+      type: object
+      properties:
+        o-ran-file-management:file-download-event:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/o-ran-file-management:file-path-grouping'
+          - $ref: '#/components/schemas/o-ran-file-management:output-status-grouping'
+      title: o-ran-file-management:file-download-event
+      description: |-
+        An abstract object class for a file-download-event.
+
+    o-ran-file-management:file-upload-notification:
+      type: object
+      properties:
+        o-ran-file-management:file-upload-notification:
+          type: object
+          anyOf:
+          - $ref: '#/components/schemas/o-ran-file-management:file-path-grouping'
+          - $ref: '#/components/schemas/o-ran-file-management:output-status-grouping'
+      title: o-ran-file-management:file-upload-notification
+      description: |-
+        An abstract object class for a file-upload-notification.
+
+    # Generic part to OFHM specific parts
+    ofhm-event-stream:
+      type: object
+      properties:
+        ietf:notification:
+          type: object
+          required:
+          - eventTime
+          properties:
+            eventTime:
+              type: string
+              format: date-time
+              description: |-
+                The time the event was generated by the event source. This
+                parameter is of type dateTime and compliant to [RFC3339].
+                Implementations must support time zones.
+                Reference: RFC3339, RFC5277, RFC8040
+          anyOf:
+            - $ref: '#/components/schemas/o-ran-file-management:file-download-event'
+            - $ref: '#/components/schemas/o-ran-file-management:file-upload-notification'
+      title: ofhm-event-stream
+      description: |-
+        This contains the set of asynchronous messages.
+
+    # Generic Part
+    ofhm-event-stream_event-history:
+      type: object
+      properties:
+        maximum-number-of-entries:
+          description: |-
+            The maximum number of item in the event list supported by
+            the server.
+          format: int32
+          default: 255
+          type: integer
+        event:
+          type: array
+          items:
+            $ref: '#/components/schemas/ofhm-event-stream'
+          description: This contains the set of asynchronous messages.
+      title: ofhm-event-stream_event-history
+      description: |-
+        The properties of the root container of an event log.
+
+    ofhm-event-stream-event-history-ref:
+      type: object
+      properties:
+        event-history:
+          $ref: '#/components/schemas/ofhm-event-stream_event-history'
+      title: ofhm-event-stream-event-history-ref
+      description: |-
+        The root container of an event-history list.
