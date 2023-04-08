@@ -222,5 +222,12 @@
       "location": "mtl5",
       "topic_url": "http://messages:3904/events/unauthenticated.VES_FILE_READY_OUTPUT/"
     }
+  },
+  "ves-o-ran-sc-ofhm": {
+    "type": "message_router",
+    "dmaap_info": {
+      "location": "mtl5",
+      "topic_url": "http://messages:3904/events/unauthenticated.VES_O_RAN_SC_OPENFRONTHAUL_OUTPUT/"
+    }
   }
 }
