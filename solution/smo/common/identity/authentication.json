@@ -10,8 +10,11 @@
         {
           "type": "password",
           "value": "Default4SDN!",
-          "temporary": false
+          "temporary": true
         }
+      ],
+      "requiredActions": [
+        "UPDATE_PASSWORD"
       ]
     },
     {
@@ -24,8 +27,11 @@
         {
           "type": "password",
           "value": "Default4SDN!",
-          "temporary": false
+          "temporary": true
         }
+      ],
+      "requiredActions": [
+        "UPDATE_PASSWORD"
       ]
     },
     {
@@ -38,8 +44,11 @@
         {
           "type": "password",
           "value": "Default4SDN!",
-          "temporary": false
+          "temporary": true
         }
+      ],
+      "requiredActions": [
+        "UPDATE_PASSWORD"
       ]
     },
     {
@@ -52,8 +61,11 @@
         {
           "type": "password",
           "value": "Default4SDN!",
-          "temporary": false
+          "temporary": true
         }
+      ],
+      "requiredActions": [
+        "UPDATE_PASSWORD"
       ]
     },
     {

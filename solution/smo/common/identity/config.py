@@ -202,9 +202,12 @@ def createUsers(token, realmConfig, authConfig):
             {
                 "type": "password",
                 "value": password,
-                "temporary": False
+                "temporary": True
             }
-        ]
+      ],
+      "requiredActions": [
+        "UPDATE_PASSWORD"
+      ]
     }
     createUser(token, realmConfig, systemUser)
 
@@ -231,7 +234,6 @@ def addUserRole(user: dict, role: dict, options: dict):
               user['username'], role['name'], 'failed!\n', response.text)
 
 # searches for the role of a given user
-
 
 def findRole(username: str, authConfig: dict, realmConfig: dict) -> dict:
     roleName = 'administration'
