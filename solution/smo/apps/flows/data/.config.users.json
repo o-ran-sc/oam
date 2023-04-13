@@ -14,7 +14,18 @@
             },
             "tours": {
                 "welcome": "3.0.2"
+            },
+            "keymap": {
+                "core:enable-selected-nodes": {
+                    "scope": "*",
+                    "key": "ctrl-alt-e"
+                },
+                "core:disable-selected-nodes": {
+                    "scope": "*",
+                    "key": "ctrl-alt-d"
+                }
             }
-        }
+        },
+        "menu-menu-item-sidebar": true
     }
 }
