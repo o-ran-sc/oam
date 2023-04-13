@@ -223,11 +223,31 @@
       "topic_url": "http://messages:3904/events/unauthenticated.VES_FILE_READY_OUTPUT/"
     }
   },
-  "ves-o-ran-sc-ofhm": {
-    "type": "message_router",
-    "dmaap_info": {
-      "location": "mtl5",
-      "topic_url": "http://messages:3904/events/unauthenticated.VES_O_RAN_SC_OPENFRONTHAUL_OUTPUT/"
-    }
+  "o-ran-ald-port:dc-enabled-status-change":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-ald-port-dc-enabled-status-change/"}},
+  "o-ran-ald-port:overcurrent-report":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-ald-port-overcurrent-report/"}},
+  "o-ran-antenna-calibration:antenna-calibration-coordinated":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-antenna-calibration-antenna-calibration-coordinated/"}},
+  "o-ran-antenna-calibration:antenna-calibration-multiple-time-resource-params":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-antenna-calibration-antenna-calibration-multiple-time-resource-params/"}},
+  "o-ran-antenna-calibration:antenna-calibration-required":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-antenna-calibration-antenna-calibration-required/"}},
+  "o-ran-antenna-calibration:antenna-calibration-result":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-antenna-calibration-antenna-calibration-result/"}},
+  "o-ran-beamforming:beamforming-information-update":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-beamforming-beamforming-information-update/"}},
+  "o-ran-beamforming:capability-group-beamforming-information-update":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-beamforming-capability-group-beamforming-information-update/"}},
+  "o-ran-beamforming:predefined-beam-tilt-offset-complete":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-beamforming-predefined-beam-tilt-offset-complete/"}},
+  "o-ran-externalio:external-input-change":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-externalio-external-input-change/"}},
+  "o-ran-file-management:file-download-event":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-file-management-file-download-event/"}},
+  "o-ran-file-management:file-upload-notification":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-file-management-file-upload-notification/"}},
+  "o-ran-fm:alarm-notif":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-fm-alarm-notif/"}},
+  "o-ran-laa-operations:measurement-result":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-laa-operations-measurement-result/"}},
+  "o-ran-performance-management:measurement-result-stats":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-performance-management-measurement-result-stats/"}},
+  "o-ran-software-management:activation-event":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-software-management-activation-event/"}},
+  "o-ran-software-management:download-event":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-software-management-download-event/"}},
+  "o-ran-software-management:install-event":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-software-management-install-event/"}},
+  "o-ran-supervision:supervision-notification":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-supervision-supervision-notification/"}},
+  "o-ran-sync:gnss-state-change":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-sync-gnss-state-change/"}},
+  "o-ran-sync:ptp-state-change":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-sync-ptp-state-change/"}},
+  "o-ran-sync:synce-state-change":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-sync-synce-state-change/"}},
+  "o-ran-sync:synchronization-state-change":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-sync-synchronization-state-change/"}},
+  "o-ran-trace:trace-log-generated":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-trace-trace-log-generated/"}},
+  "o-ran-troubleshooting:troubleshooting-log-generated":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-troubleshooting-troubleshooting-log-generated/"}},
+  "o-ran-uplane-conf:rx-array-carriers-state-change":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-uplane-conf-rx-array-carriers-state-change/"}},
+  "o-ran-uplane-conf:tx-array-carriers-state-change":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-uplane-conf-tx-array-carriers-state-change/"}}  
   }
-}
