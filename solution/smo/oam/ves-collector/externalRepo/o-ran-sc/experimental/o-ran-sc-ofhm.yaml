@@ -34,6 +34,25 @@ paths:
 
 components:
   schemas:
+    # notifications for o-ran-supervision.yang
+    o-ran-supervision:supervision-notification:
+      type: object
+      properties:
+        session-id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 4294967295
+          description: |-
+            This value uniquely identifies the NETCONF session in an O-RU. The value is conveyed to NETCONF client in hello message.
+            the session-id for the netconf session is sent as part of each supervision-notification notification.
+            and may be used for create-subscription to filter the relevant
+            notifications
+
+      title: o-ran-supervision:supervision-notification
+      description: |-
+        Notification to indicate that NETCONF management interface is up.
+
     # notifications for o-ran-file-management.yang
     o-ran-file-management:file-path-grouping:
       type: object
@@ -101,7 +120,7 @@ components:
       properties:
         o-ran-file-management:file-upload-notification:
           type: object
-          anyOf:
+          allOf:
           - $ref: '#/components/schemas/o-ran-file-management:file-path-grouping'
           - $ref: '#/components/schemas/o-ran-file-management:output-status-grouping'
       title: o-ran-file-management:file-upload-notification
@@ -126,8 +145,9 @@ components:
                 Implementations must support time zones.
                 Reference: RFC3339, RFC5277, RFC8040
           anyOf:
-            - $ref: '#/components/schemas/o-ran-file-management:file-download-event'
-            - $ref: '#/components/schemas/o-ran-file-management:file-upload-notification'
+          - $ref: '#/components/schemas/o-ran-supervision:supervision-notification'
+          - $ref: '#/components/schemas/o-ran-file-management:file-download-event'
+          - $ref: '#/components/schemas/o-ran-file-management:file-upload-notification'
       title: ofhm-event-stream
       description: |-
         This contains the set of asynchronous messages.
