@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a4f9404_a64b6b3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-04-13T13:15:45Z",
+      "side": 1,
+      "message": "manual verification of o-ran-supervision:supervision-notification",
+      "revId": "119a6d14bd7886714e1b7e8da9faf63cc39f4a50",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
