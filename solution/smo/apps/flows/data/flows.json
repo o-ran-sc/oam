@@ -2541,7 +2541,7 @@
         "type": "function",
         "z": "7ba02ed596e8cde5",
         "name": "Consumer (new Data?)",
-        "func": "const topicData = global.get('topicData');\nmsg.payload = topicData.map(event => {\n    if (event.event.commonEventHeader.stndDefinedNamespace === 'o-ran-supervision:supervision-notification')\n        return event.event.commonEventHeader.sourceName;\n}).filter(element => {\n    return element !== undefined;\n});\nglobal.set('topicData', []);\nreturn msg;",
+        "func": "// read topic data from global context\nconst topicData = global.get('topicData');\n// init result as array\nlet result = [];\nif (Array.isArray(topicData)) {\n    result = topicData.filter(event => {\n        return event.event.commonEventHeader.stndDefinedNamespace === 'o-ran-supervision:supervision-notification';\n    }).map(event => {\n        return event.event.commonEventHeader.sourceName;;\n    });\n}\nmsg.payload = result;\nglobal.set('topicData', []);\nreturn msg; ",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
