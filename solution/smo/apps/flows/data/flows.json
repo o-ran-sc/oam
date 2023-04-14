@@ -1301,7 +1301,7 @@
         "type": "debug",
         "z": "c5746e29f53f72ce",
         "name": "eventData",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1606,7 +1606,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "",
+        "repeat": "5",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
