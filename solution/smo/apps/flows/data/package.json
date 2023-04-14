@@ -4,6 +4,7 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
+        "node-red-contrib-loop": "^1.0.1",
         "os": "^0.1.2"
     }
 }
