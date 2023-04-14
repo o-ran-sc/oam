@@ -16,6 +16,14 @@
         "env": []
     },
     {
+        "id": "7ba02ed596e8cde5",
+        "type": "tab",
+        "label": "OpenFronthaul",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "7b2f4859e5963695",
         "type": "tls-config",
         "name": "",
@@ -1301,7 +1309,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 990,
+        "x": 1150,
         "y": 220,
         "wires": []
     },
@@ -1403,7 +1411,7 @@
         "y": 220,
         "wires": [
             [
-                "562063a080cb99d6"
+                "2a2e05d79287f4a0"
             ]
         ]
     },
@@ -2386,5 +2394,219 @@
                 "e5f66f4bd6777ca0"
             ]
         ]
+    },
+    {
+        "id": "2a2e05d79287f4a0",
+        "type": "function",
+        "z": "c5746e29f53f72ce",
+        "name": "Provider",
+        "func": "global.set('topicData', msg.payload)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 220,
+        "wires": [
+            [
+                "562063a080cb99d6"
+            ]
+        ]
+    },
+    {
+        "id": "c5648c1528804847",
+        "type": "inject",
+        "z": "7ba02ed596e8cde5",
+        "name": "supervision-watchdog-reset",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "supervision-watchdog-reset",
+        "payload": "[\"O-RU-11221\"]",
+        "payloadType": "json",
+        "x": 180,
+        "y": 180,
+        "wires": [
+            [
+                "2bd693b8c7e5a3cb"
+            ]
+        ]
+    },
+    {
+        "id": "329e838eb4bf63f4",
+        "type": "function",
+        "z": "7ba02ed596e8cde5",
+        "name": "ResetAction",
+        "func": "const base = 'https://odlux.oam.smo.o-ran-sc.org';\nconst path = 'rests/operations/network-topology:network-topology/topology=topology-netconf/node=';\nconst nodeId = msg.payload;\nconst mount = 'yang-ext:mount';\nconst action = 'o-ran-supervision:supervision-watchdog-reset';\n\nmsg.url = [base,path + nodeId, mount, action].join('/');\nmsg.payload = { \n  \"o-ran-supervision:input\": \n    {\n      \"supervision-notification-interval\": 60, \n      \"guard-timer-overhead\": 10\n    }\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 180,
+        "wires": [
+            [
+                "1a4b6a4ec23c8f9f",
+                "2bd693b8c7e5a3cb",
+                "6959992dd04213f6"
+            ]
+        ]
+    },
+    {
+        "id": "1a4b6a4ec23c8f9f",
+        "type": "http request",
+        "z": "7ba02ed596e8cde5",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "7b2f4859e5963695",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": true,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "Accept",
+                "valueType": "other",
+                "valueValue": "application/json"
+            },
+            {
+                "keyType": "other",
+                "keyValue": "Content-Type",
+                "valueType": "other",
+                "valueValue": "application/json"
+            }
+        ],
+        "x": 670,
+        "y": 180,
+        "wires": [
+            [
+                "eb6c2de759c8eb54"
+            ]
+        ]
+    },
+    {
+        "id": "eb6c2de759c8eb54",
+        "type": "debug",
+        "z": "7ba02ed596e8cde5",
+        "name": "Response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "0d3ade9a80560c04",
+        "type": "inject",
+        "z": "7ba02ed596e8cde5",
+        "name": "Trigger",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 100,
+        "wires": [
+            [
+                "5322d78ad66fcb96"
+            ]
+        ]
+    },
+    {
+        "id": "5322d78ad66fcb96",
+        "type": "function",
+        "z": "7ba02ed596e8cde5",
+        "name": "Consumer",
+        "func": "const topicData = global.get('topicData');\nmsg.payload = topicData.map(event => {\n    if (event.event.commonEventHeader.stndDefinedNamespace === 'o-ran-supervision:supervision-notification')\n        return event.event.commonEventHeader.sourceName;\n});\n//global.set('topicData', []);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 270,
+        "y": 100,
+        "wires": [
+            [
+                "2bd693b8c7e5a3cb"
+            ]
+        ]
+    },
+    {
+        "id": "2bd693b8c7e5a3cb",
+        "type": "loop",
+        "z": "7ba02ed596e8cde5",
+        "name": "Item",
+        "kind": "enum",
+        "count": "",
+        "initial": "1",
+        "step": "1",
+        "condition": "",
+        "conditionType": "js",
+        "when": "before",
+        "enumeration": "payload",
+        "enumerationType": "msg",
+        "limit": "",
+        "loopPayload": "loop-val",
+        "finalPayload": "final-last",
+        "x": 470,
+        "y": 100,
+        "wires": [
+            [],
+            [
+                "329e838eb4bf63f4"
+            ]
+        ]
+    },
+    {
+        "id": "f7dc363e5421d1cf",
+        "type": "comment",
+        "z": "7ba02ed596e8cde5",
+        "name": "Supervision",
+        "info": "",
+        "x": 90,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "6959992dd04213f6",
+        "type": "debug",
+        "z": "7ba02ed596e8cde5",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "url",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 260,
+        "wires": []
     }
 ]
