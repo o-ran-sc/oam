@@ -2418,7 +2418,7 @@
         "id": "c5648c1528804847",
         "type": "inject",
         "z": "7ba02ed596e8cde5",
-        "name": "supervision-watchdog-reset",
+        "name": "supervision-watchdog-reset for O-RU-11221",
         "props": [
             {
                 "p": "payload"
@@ -2435,8 +2435,8 @@
         "topic": "supervision-watchdog-reset",
         "payload": "[\"O-RU-11221\"]",
         "payloadType": "json",
-        "x": 180,
-        "y": 180,
+        "x": 230,
+        "y": 100,
         "wires": [
             [
                 "2bd693b8c7e5a3cb"
@@ -2447,20 +2447,19 @@
         "id": "329e838eb4bf63f4",
         "type": "function",
         "z": "7ba02ed596e8cde5",
-        "name": "ResetAction",
+        "name": "ResetActionData",
         "func": "const base = 'https://odlux.oam.smo.o-ran-sc.org';\nconst path = 'rests/operations/network-topology:network-topology/topology=topology-netconf/node=';\nconst nodeId = msg.payload;\nconst mount = 'yang-ext:mount';\nconst action = 'o-ran-supervision:supervision-watchdog-reset';\n\nmsg.url = [base,path + nodeId, mount, action].join('/');\nmsg.payload = { \n  \"o-ran-supervision:input\": \n    {\n      \"supervision-notification-interval\": 60, \n      \"guard-timer-overhead\": 10\n    }\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 180,
+        "x": 570,
+        "y": 220,
         "wires": [
             [
                 "1a4b6a4ec23c8f9f",
-                "2bd693b8c7e5a3cb",
-                "6959992dd04213f6"
+                "2bd693b8c7e5a3cb"
             ]
         ]
     },
@@ -2468,7 +2467,7 @@
         "id": "1a4b6a4ec23c8f9f",
         "type": "http request",
         "z": "7ba02ed596e8cde5",
-        "name": "",
+        "name": "RESTCONF request",
         "method": "POST",
         "ret": "txt",
         "paytoqs": "ignore",
@@ -2493,8 +2492,8 @@
                 "valueValue": "application/json"
             }
         ],
-        "x": 670,
-        "y": 180,
+        "x": 800,
+        "y": 220,
         "wires": [
             [
                 "eb6c2de759c8eb54"
@@ -2514,23 +2513,23 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 840,
-        "y": 180,
+        "x": 1000,
+        "y": 220,
         "wires": []
     },
     {
         "id": "0d3ade9a80560c04",
         "type": "inject",
         "z": "7ba02ed596e8cde5",
-        "name": "Trigger",
+        "name": "Every 5s",
         "props": [],
-        "repeat": "",
+        "repeat": "5",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 110,
-        "y": 100,
+        "x": 120,
+        "y": 140,
         "wires": [
             [
                 "5322d78ad66fcb96"
@@ -2541,15 +2540,15 @@
         "id": "5322d78ad66fcb96",
         "type": "function",
         "z": "7ba02ed596e8cde5",
-        "name": "Consumer",
-        "func": "const topicData = global.get('topicData');\nmsg.payload = topicData.map(event => {\n    if (event.event.commonEventHeader.stndDefinedNamespace === 'o-ran-supervision:supervision-notification')\n        return event.event.commonEventHeader.sourceName;\n});\n//global.set('topicData', []);\nreturn msg;",
+        "name": "Consumer (new Data?)",
+        "func": "const topicData = global.get('topicData');\nmsg.payload = topicData.map(event => {\n    if (event.event.commonEventHeader.stndDefinedNamespace === 'o-ran-supervision:supervision-notification')\n        return event.event.commonEventHeader.sourceName;\n}).filter(element => {\n    return element !== undefined;\n});\nglobal.set('topicData', []);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 270,
-        "y": 100,
+        "x": 310,
+        "y": 140,
         "wires": [
             [
                 "2bd693b8c7e5a3cb"
@@ -2560,7 +2559,7 @@
         "id": "2bd693b8c7e5a3cb",
         "type": "loop",
         "z": "7ba02ed596e8cde5",
-        "name": "Item",
+        "name": "Loop through O-RUs",
         "kind": "enum",
         "count": "",
         "initial": "1",
@@ -2573,8 +2572,8 @@
         "limit": "",
         "loopPayload": "loop-val",
         "finalPayload": "final-last",
-        "x": 470,
-        "y": 100,
+        "x": 580,
+        "y": 140,
         "wires": [
             [],
             [
@@ -2593,19 +2592,12 @@
         "wires": []
     },
     {
-        "id": "6959992dd04213f6",
-        "type": "debug",
+        "id": "a72d8f5e9683dd39",
+        "type": "comment",
         "z": "7ba02ed596e8cde5",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "url",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 600,
+        "name": "The Consumer checks for data on the message router provided by the \"Massage Topics\" flow.",
+        "info": "The Consumer checks for data on the message router provided by the \"Massage Topics\" flow.",
+        "x": 520,
         "y": 260,
         "wires": []
     }
