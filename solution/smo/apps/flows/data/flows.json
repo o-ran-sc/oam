@@ -163,7 +163,7 @@
         "paytoqs": "ignore",
         "url": "https://ves-collector.oam.smo.o-ran-sc.org/eventListener/v7",
         "tls": "7b2f4859e5963695",
-        "persist": false,
+        "persist": true,
         "proxy": "",
         "insecureHTTPParser": false,
         "authType": "basic",
@@ -1420,7 +1420,7 @@
         "type": "function",
         "z": "c5746e29f53f72ce",
         "name": "SET msg.url",
-        "func": "const base = 'https://messages.smo.o-ran-sc.org';\nconst path = 'events';\nconst urlMapping = {\n    pnfRegistration: \"unauthenticated.VES_PNFREG_OUTPUT\",\n    o1NotifyPnfRegistration: \"unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT\",\n    oRanScDuHelloWorldPmStreaming: \"unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT\",\n    notifyHeartbeat: \"unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT\",\n    notifyFileReady: \"unauthenticated.VES_FILE_READY_OUTPUT\",\n    oRanOpenfrontManagementPlane: \"unauthenticated.VES_O_RAN_SC_OPENFRONTHAUL_OUTPUT\"\n};\nconst urlTopic = urlMapping[msg.topic] || msg.topic.replace(':', '-');\nmsg.url = [base, path, urlTopic, '1','1'].join('/');\nreturn msg;",
+        "func": "const base = 'https://messages.smo.o-ran-sc.org';\nconst path = 'events';\nconst urlMapping = {\n    pnfRegistration: \"unauthenticated.VES_PNFREG_OUTPUT\",\n    o1NotifyPnfRegistration: \"unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT\",\n    oRanScDuHelloWorldPmStreaming: \"unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT\",\n    notifyHeartbeat: \"unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT\",\n    notifyFileReady: \"unauthenticated.VES_FILE_READY_OUTPUT\",\n    oRanOpenfrontManagementPlane: \"unauthenticated.VES_O_RAN_SC_OPENFRONTHAUL_OUTPUT\"\n};\nconst longPolling = '?timeout=60000'\nconst urlTopic = urlMapping[msg.topic] || msg.topic.replace(':', '-');\nmsg.url = [base, path, urlTopic, '1', '1'].join('/') + longPolling;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1606,7 +1606,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "5",
+        "repeat": "60",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
