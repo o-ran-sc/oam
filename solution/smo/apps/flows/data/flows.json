@@ -72,7 +72,7 @@
         "type": "function",
         "z": "51e83a0892da060e",
         "name": "vesHeader",
-        "func": "const timeStamp = new Date(msg.payload);\nconst eventType = msg.topic;\nlet domain = \"stndDefined\";\n// handle domain expecption for 'pnfRegistration'\nif (eventType === 'pnfRegistration') {\n    domain = eventType;\n} \nconst nfNamingCode = env.get('APP_NETWORK_FUNCTION_ID');\nconst namespaces = {\n    pnfRegistration: undefined,\n    o1NotifyPnfRegistration: 'o1-notify-pnf-registration',\n    oRanScDuHelloWorldPmStreaming: 'o-ran-sc-du-hello-world-pm-streaming-oas3',\n    notifyHeartbeat: '3GPP-Heartbeat',\n    notifyFileReady: 'file-ready'\n};\nconst topic = namespaces[eventType] || msg.topic;\n\nmsg.topic = \"commonEventHeader\"\nmsg.payload = {\n    domain: domain,\n    eventType: eventType,\n    eventId:[nfNamingCode, eventType, msg._msgid].join('_'),\n    eventName: [domain, eventType].join('_'),\n    sequence: Number(timeStamp),\n    priority: \"Low\",\n    reportingEntityId: \"c2b7d6e9-ee35-459a-ab8e-717a6fc1fde6\",\n    reportingEntityName: global.get('os').hostname(),\n    sourceId: \"378e9904-6d39-40ea-9994-0596fe2235a3\",\n    sourceName: env.get('APP_SOURCE'),\n    startEpochMicrosec: timeStamp.getTime() * 1000,\n    lastEpochMicrosec: timeStamp.getTime() * 1000,\n    nfNamingCode: nfNamingCode,\n    nfVendorName: env.get('APP_VENDOR'),\n    timeZoneOffset: \"+00:00\",\n    stndDefinedNamespace: topic,\n    version: \"4.1\",\n    vesEventListenerVersion: \"7.2.1\"\n}\nreturn msg;",
+        "func": "const timeStamp = new Date(msg.payload);\nconst eventType = msg.topic;\nlet domain = \"stndDefined\";\n// handle domain expecption for 'pnfRegistration'\nif (eventType === 'pnfRegistration') {\n    domain = eventType;\n} \nconst nfNamingCode = env.get('APP_NETWORK_FUNCTION_ID');\nconst namespaces = {\n    pnfRegistration: undefined,\n    o1NotifyPnfRegistration: 'o1-notify-pnf-registration',\n    oRanScDuHelloWorldPmStreaming: 'o-ran-sc-du-hello-world-pm-streaming-oas3',\n    notifyHeartbeat: '3GPP-Heartbeat',\n    notifyNewAlarm: '3GPP-FaultSupervision',\n    notifyFileReady: 'file-ready'\n};\nconst topic = namespaces[eventType] || msg.topic;\n\nmsg.topic = \"commonEventHeader\"\nmsg.payload = {\n    domain: domain,\n    eventType: eventType,\n    eventId:[nfNamingCode, eventType, msg._msgid].join('_'),\n    eventName: [domain, eventType].join('_'),\n    sequence: Number(timeStamp),\n    priority: \"Low\",\n    reportingEntityId: \"c2b7d6e9-ee35-459a-ab8e-717a6fc1fde6\",\n    reportingEntityName: global.get('os').hostname(),\n    sourceId: \"378e9904-6d39-40ea-9994-0596fe2235a3\",\n    sourceName: env.get('APP_SOURCE'),\n    startEpochMicrosec: timeStamp.getTime() * 1000,\n    lastEpochMicrosec: timeStamp.getTime() * 1000,\n    nfNamingCode: nfNamingCode,\n    nfVendorName: env.get('APP_VENDOR'),\n    timeZoneOffset: \"+00:00\",\n    stndDefinedNamespace: topic,\n    version: \"4.1\",\n    vesEventListenerVersion: \"7.2.1\"\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1268,6 +1268,55 @@
         ]
     },
     {
+        "id": "bfa425cb3d578d07",
+        "type": "inject",
+        "z": "51e83a0892da060e",
+        "name": "notifyNewAlarm",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "notifyNewAlarm",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 500,
+        "wires": [
+            [
+                "f71ebd595a7de756",
+                "b5533c10604af5a6"
+            ]
+        ]
+    },
+    {
+        "id": "f71ebd595a7de756",
+        "type": "function",
+        "z": "51e83a0892da060e",
+        "name": "vesStndDefindBody",
+        "func": "const timeStamp = new Date(msg.payload);\nconst alarm = 'Connection Loss';\nconst severity = 'CRITICAL';\n\nmsg.payload = {\n    schemaReference: 'https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28532_FaultMnS.yaml#components/schemas/NotifyNewAlarm',\n    stndDefinedFieldsVersion: '1.0',\n    data: {\n        href: global.get('os').hostname(),\n        notificationId: Number(timeStamp),\n        notificationType: msg.topic,\n        eventTime: timeStamp.toISOString(),\n        systemDN: '/',\n        alarmId: alarm,\n        alarmType: 'COMMUNICATIONS_ALARM',\n        probableCause: alarm,\n        specificProblem: alarm,\n        perceivedSeverity: severity,\n        backedUpStatus: true,\n        backUpObject: 'xyz',\n        trendIndication: 'MORE_SEVERE',\n        thresholdInfo: {\n            observedMeasurement: 'new',\n            observedValue: 123.1\n        },\n        correlatedNotifications: [],\n        stateChangeDefinition: [{ 'operational-state': 'DISABLED' }],\n        monitoredAttributes: {\n            interface: 'uuid-of-the-interface'\n        },\n        proposedRepairActions: 'Call the police!',\n        additionalText: 'O-RAN Software Community OAM',\n        additionalInformation: {\n            description: 'a test alarm'\n        },\n        rootCauseIndicator: false\n    }\n\n};\nmsg.topic = 'stndDefinedFields';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 500,
+        "wires": [
+            [
+                "f65b1c13e0243ef6"
+            ]
+        ]
+    },
+    {
         "id": "910dfec7eb74df65",
         "type": "inject",
         "z": "c5746e29f53f72ce",
@@ -1301,7 +1350,7 @@
         "type": "debug",
         "z": "c5746e29f53f72ce",
         "name": "eventData",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1420,7 +1469,7 @@
         "type": "function",
         "z": "c5746e29f53f72ce",
         "name": "SET msg.url",
-        "func": "const base = 'https://messages.smo.o-ran-sc.org';\nconst path = 'events';\nconst urlMapping = {\n    pnfRegistration: \"unauthenticated.VES_PNFREG_OUTPUT\",\n    o1NotifyPnfRegistration: \"unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT\",\n    oRanScDuHelloWorldPmStreaming: \"unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT\",\n    notifyHeartbeat: \"unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT\",\n    notifyFileReady: \"unauthenticated.VES_FILE_READY_OUTPUT\",\n    oRanOpenfrontManagementPlane: \"unauthenticated.VES_O_RAN_SC_OPENFRONTHAUL_OUTPUT\"\n};\nconst longPolling = '?timeout=60000'\nconst urlTopic = urlMapping[msg.topic] || msg.topic.replace(':', '-');\nmsg.url = [base, path, urlTopic, '1', '1'].join('/') + longPolling;\nreturn msg;",
+        "func": "const base = 'https://messages.smo.o-ran-sc.org';\nconst path = 'events';\nconst urlMapping = {\n    pnfRegistration: \"unauthenticated.VES_PNFREG_OUTPUT\",\n    o1NotifyPnfRegistration: \"unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT\",\n    oRanScDuHelloWorldPmStreaming: \"unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT\",\n    notifyHeartbeat: \"unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT\",\n    notifyFileReady: \"unauthenticated.VES_FILE_READY_OUTPUT\",\n    notifyNewAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    oRanOpenfrontManagementPlane: \"unauthenticated.VES_O_RAN_SC_OPENFRONTHAUL_OUTPUT\"\n};\nconst longPolling = '?timeout=60000'\nconst urlTopic = urlMapping[msg.topic] || msg.topic.replace(':', '-');\nmsg.url = [base, path, urlTopic, '1', '1'].join('/') + longPolling;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -2411,6 +2460,35 @@
         "wires": [
             [
                 "562063a080cb99d6"
+            ]
+        ]
+    },
+    {
+        "id": "d932661ae80274a1",
+        "type": "inject",
+        "z": "c5746e29f53f72ce",
+        "name": "notifyNewAlarm",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "notifyNewAlarm",
+        "payload": "",
+        "payloadType": "date",
+        "x": 240,
+        "y": 400,
+        "wires": [
+            [
+                "e5f66f4bd6777ca0"
             ]
         ]
     },
