@@ -6,12 +6,12 @@ services:
     container_name: odlux
     hostname: odlux
     environment:
-      - ENABLE_OAUTH=true
-      - WEBPROTOCOL=HTTP
-      - WEBPORT=${SDNC_WEB_PORT}
-      - SDNRPROTOCOL=http
-      - SDNRHOST=controller
-      - SDNRPORT=${SDNC_REST_PORT}
+      ENABLE_OAUTH: true
+      WEBPROTOCOL: HTTP
+      WEBPORT: ${SDNC_WEB_PORT}
+      SDNRPROTOCOL: http
+      SDNRHOST: controller
+      SDNRPORT: ${SDNC_REST_PORT}
     labels:
       traefik.enable: true
       traefik.http.routers.sdnc-web.entrypoints: websecure
@@ -40,33 +40,33 @@ services:
       - 4334:4334
       - 4335:4335
     environment:
-      - ENABLE_ODL_CLUSTER=false
-      - ENABLE_OAUTH=true
-      - ODL_ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      - SDNC_CONFIG_DIR=/opt/onap/ccsdk/data/properties
-      - SDNC_REPLICAS=0
-      - CCSDK_REPLICAS=0
-      - DOMAIN=""
-      - SDNRWT=true
-      - SDNRONLY=true
-      - SDNRINIT=true
-      - SDNRDM=true
-      - SDNRDBURL=http://persistence:9200
-      - SDNR_NETCONF_CALLHOME_ENABLED=true
-      - A1_ADAPTER_NORTHBOUND=false
-      - JAVA_OPTS=-Xms256m -Xmx4g
-      - IDENTITY_PROVIDER_URL=${IDENTITY_PROVIDER_URL}
-      - SDNC_WEB_URL=https://odlux.oam.${SOLUTION_DOMAIN}
-      - SDNR_VES_COLLECTOR_ENABLED=true
-      - SDNR_VES_COLLECTOR_TLS_ENABLED=false
-      - SDNR_VES_COLLECTOR_TRUST_ALL_CERTS=true
-      - SDNR_VES_COLLECTOR_IP=ves-collector
-      - SDNR_VES_COLLECTOR_PORT=$VES_ENDPOINT_PORT
-      - SDNR_VES_COLLECTOR_VERSION=v7
-      - SDNR_VES_COLLECTOR_REPORTING_ENTITY_NAME=ONAP SDN-R
-      - SDNR_VES_COLLECTOR_EVENTLOG_MSG_DETAIL=LONG
-      - SDNR_VES_COLLECTOR_USERNAME=${VES_ENDPOINT_USERNAME}
-      - SDNR_VES_COLLECTOR_PASSWORD=${VES_ENDPOINT_PASSWORD}
+      ENABLE_ODL_CLUSTER: false
+      ENABLE_OAUTH: true
+      ODL_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      SDNC_CONFIG_DIR: /opt/onap/ccsdk/data/properties
+      SDNC_REPLICAS: 0
+      CCSDK_REPLICAS: 0
+      DOMAIN: ""
+      SDNRWT: true
+      SDNRONLY: true
+      SDNRINIT: true
+      SDNRDM: true
+      SDNRDBURL: http://persistence:9200
+      SDNR_NETCONF_CALLHOME_ENABLED: true
+      A1_ADAPTER_NORTHBOUND: false
+      JAVA_OPTS: -Xms256m -Xmx4g
+      IDENTITY_PROVIDER_URL: ${IDENTITY_PROVIDER_URL}
+      SDNC_WEB_URL: https://odlux.oam.${SOLUTION_DOMAIN}
+      SDNR_VES_COLLECTOR_ENABLED: true
+      SDNR_VES_COLLECTOR_TLS_ENABLED: false
+      SDNR_VES_COLLECTOR_TRUST_ALL_CERTS: true
+      SDNR_VES_COLLECTOR_IP: ves-collector
+      SDNR_VES_COLLECTOR_PORT: $VES_ENDPOINT_PORT
+      SDNR_VES_COLLECTOR_VERSION: v7
+      SDNR_VES_COLLECTOR_REPORTING_ENTITY_NAME: ONAP SDN-R
+      SDNR_VES_COLLECTOR_EVENTLOG_MSG_DETAIL: LONG
+      SDNR_VES_COLLECTOR_USERNAME: ${VES_ENDPOINT_USERNAME}
+      SDNR_VES_COLLECTOR_PASSWORD: ${VES_ENDPOINT_PASSWORD}
     volumes:
       - ./controller/oauth-aaa-app-config.xml:/opt/onap/sdnc/data/oauth-aaa-app-config.xml
       - ./controller/oauth-provider.config.json:/opt/opendaylight/etc/oauth-provider.config.json
@@ -91,6 +91,12 @@ services:
         - BASEIMAGE=${VES_COLLECTOR_IMAGE}
     container_name: ves-collector
     hostname: ves-collector
+    healthcheck:
+      test: curl -k -u ${VES_ENDPOINT_USERNAME}:${VES_ENDPOINT_PASSWORD} ${VES_ENDPOINT_PROTOCOL}://localhost:${VES_ENDPOINT_PORT} || exit 1
+      start_period: 1s
+      interval: 5s
+      timeout: 4s
+      retries: 5
     environment:
       DMAAPHOST: messages
     volumes:
