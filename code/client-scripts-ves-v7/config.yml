@@ -20,7 +20,8 @@
 ################################################################################
 # DCAE VES Collector communication end point
 vesEndpoint:
-  url: https://localhost:8443/eventListener/v7
+  # url: https://localhost:8443/eventListener/v7
+  url: https://ves-collector.oam.smo.o-ran-sc.org/eventListener/v7
   username: sample1
   password: sample1
   verify: False
