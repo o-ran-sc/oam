@@ -12,7 +12,7 @@
         "type": "tab",
         "label": "Message Topics",
         "disabled": false,
-        "info": "Subscribes to Kafka topics ",
+        "info": "Subscribes to Kafka topics",
         "env": []
     },
     {
@@ -137,8 +137,8 @@
         "id": "1d6949a57bce82ab",
         "type": "function",
         "z": "51e83a0892da060e",
-        "name": "createVesEvent",
-        "func": "msg.payload = {\n  event: msg.payload\n};\nreturn msg;",
+        "name": "http-preparation",
+        "func": "const protocol = env.get('VES_ENDPOINT_PROTOCOL');\nconst host = env.get('VES_ENDPOINT_HOST');\nconst port = env.get('VES_ENDPOINT_PORT');\nconst base = protocol + '://' + host + ':' + port;\nconst path = 'eventListener/v7';\nmsg.url = [base, path].join('/');\n\nconst user = env.get('VES_ENDPOINT_USERNAME');\nconst password = env.get('VES_ENDPOINT_PASSWORD');\nconst auth = Buffer.from([user, password].join(':')).toString('base64')\nconst basicAuth = ['Basic', auth].join(' ');\n\nmsg.headers = {};\nmsg.headers['Content-Type'] = 'application/json';\nmsg.headers['Accept'] = 'application/json';\nmsg.headers['Authorization'] = basicAuth;\n\nmsg.payload = {\n  event: msg.payload\n};\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -161,12 +161,12 @@
         "method": "POST",
         "ret": "txt",
         "paytoqs": "ignore",
-        "url": "https://ves-collector.oam.smo.o-ran-sc.org/eventListener/v7",
+        "url": "",
         "tls": "7b2f4859e5963695",
         "persist": true,
         "proxy": "",
         "insecureHTTPParser": false,
-        "authType": "basic",
+        "authType": "",
         "senderr": false,
         "headers": [],
         "x": 1030,
@@ -183,14 +183,14 @@
         "z": "51e83a0892da060e",
         "name": "VesCollectorResponse",
         "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
+        "tosidebar": false,
+        "console": true,
+        "tostatus": true,
         "complete": "payload",
         "targetType": "msg",
-        "statusVal": "",
+        "statusVal": "payload",
         "statusType": "auto",
-        "x": 1220,
+        "x": 1230,
         "y": 280,
         "wires": []
     },
@@ -248,16 +248,16 @@
         "type": "debug",
         "z": "51e83a0892da060e",
         "name": "ves-message-data",
-        "active": false,
-        "tosidebar": true,
+        "active": true,
+        "tosidebar": false,
         "console": false,
-        "tostatus": false,
+        "tostatus": true,
         "complete": "payload",
         "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
+        "statusVal": "payload.event.commonEventHeader.stndDefinedNamespace",
+        "statusType": "msg",
         "x": 1050,
-        "y": 320,
+        "y": 220,
         "wires": []
     },
     {
@@ -1644,7 +1644,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "",
+        "repeat": "60",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
@@ -1666,13 +1666,13 @@
         "name": "eventData",
         "active": true,
         "tosidebar": true,
-        "console": false,
-        "tostatus": false,
+        "console": true,
+        "tostatus": true,
         "complete": "payload",
         "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1150,
+        "statusVal": "payload.length",
+        "statusType": "msg",
+        "x": 1170,
         "y": 220,
         "wires": []
     },
@@ -1699,7 +1699,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 230,
-        "y": 320,
+        "y": 400,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -1728,7 +1728,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 240,
-        "y": 400,
+        "y": 480,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -1751,7 +1751,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 670,
+        "x": 850,
         "y": 220,
         "wires": [
             [
@@ -1763,18 +1763,18 @@
         "id": "dc576b6355478428",
         "type": "function",
         "z": "c5746e29f53f72ce",
-        "name": "JSON",
-        "func": "const string = msg.payload;\nconst array = JSON.parse(string);\nif (Array.isArray(array)) {\n    msg.payload = array.map( (item) => {\n        if (typeof item === 'string' || item instanceof String) {\n            return JSON.parse(item);\n        }\n    });\n} else {\n    msg.payload = array;\n}\nreturn msg;",
+        "name": "Provider",
+        "func": "const string = msg.payload;\nconst array = JSON.parse(string);\nif (Array.isArray(array)) {\n    msg.payload = array.map( (item) => {\n        if (typeof item === 'string' || item instanceof String) {\n            return JSON.parse(item);\n        }\n    });\n} else {\n    msg.payload = array;\n}\nglobal.set('topicData', msg.payload)\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 830,
+        "x": 1020,
         "y": 220,
         "wires": [
             [
-                "2a2e05d79287f4a0"
+                "562063a080cb99d6"
             ]
         ]
     },
@@ -1782,14 +1782,14 @@
         "id": "e5f66f4bd6777ca0",
         "type": "function",
         "z": "c5746e29f53f72ce",
-        "name": "SET msg.url",
-        "func": "const base = 'https://messages.smo.o-ran-sc.org';\nconst path = 'events';\nconst urlMapping = {\n    pnfRegistration: 'unauthenticated.VES_PNFREG_OUTPUT',\n    o1NotifyPnfRegistration: 'unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT',\n    oRanScDuHelloWorldPmStreaming: 'unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT',\n    notifyHeartbeat: 'unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT',\n    notifyFileReady: 'unauthenticated.VES_FILE_READY_OUTPUT',\n    notifyFilePreparationError: 'unauthenticated.VES_FILE_READY_OUTPUT',\n    oRanOpenfrontManagementPlane: 'unauthenticated.VES_O_RAN_SC_OPENFRONTHAUL_OUTPUT',\n    notifyNewAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyChangedAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyChangedAlarmGeneral: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyAckStateChanged: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyCorrelatedNotificationChanged: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyComments: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyClearedAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyAlarmListRebuilt: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyPotentialFaultyAlarmList: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT'\n};\nconst longPolling = '?timeout=60000'\nconst urlTopic = urlMapping[msg.topic] || msg.topic.replace(':', '-');\nmsg.url = [base, path, urlTopic, '1', '1'].join('/') + longPolling;\nreturn msg;",
+        "name": "http-preparation",
+        "func": "const protocol = env.get('MESSAGES_PROTOCOL');\nconst host = env.get('MESSAGES_HOST');\nconst port = env.get('MESSAGES_PORT');;\nconst base = protocol + '://' + host + ':' + port;\n\nconst path = 'events';\nconst urlMapping = {\n    pnfRegistration: 'unauthenticated.VES_PNFREG_OUTPUT',\n    heartbeat: 'unauthenticated.SEC_HEARTBEAT_OUTPUT',\n    fault: 'unauthenticated.SEC_FAULT_OUTPUT',\n    o1NotifyPnfRegistration: 'unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT',\n    oRanScDuHelloWorldPmStreaming: 'unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT',\n    notifyHeartbeat: 'unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT',\n    notifyFileReady: 'unauthenticated.VES_FILE_READY_OUTPUT',\n    notifyFilePreparationError: 'unauthenticated.VES_FILE_READY_OUTPUT',\n    oRanOpenfrontManagementPlane: 'unauthenticated.VES_O_RAN_SC_OPENFRONTHAUL_OUTPUT',\n    notifyNewAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyChangedAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyChangedAlarmGeneral: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyAckStateChanged: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyCorrelatedNotificationChanged: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyComments: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyClearedAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyAlarmListRebuilt: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyPotentialFaultyAlarmList: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT'\n};\nconst longPolling = '?timeout=60000'\nconst urlTopic = urlMapping[msg.topic] || msg.topic.replace(':', '-');\nmsg.url = [base, path, urlTopic, '1', '1'].join('/') + longPolling;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 490,
+        "x": 500,
         "y": 220,
         "wires": [
             [
@@ -1804,7 +1804,7 @@
         "name": "from O-RAN-SC",
         "info": "",
         "x": 100,
-        "y": 140,
+        "y": 220,
         "wires": []
     },
     {
@@ -1824,7 +1824,7 @@
         "name": "from SA5 R-18 branch",
         "info": "",
         "x": 120,
-        "y": 280,
+        "y": 360,
         "wires": []
     },
     {
@@ -1849,7 +1849,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 180,
-        "y": 220,
+        "y": 300,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -1878,7 +1878,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 180,
+        "y": 260,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -1893,22 +1893,15 @@
         "method": "GET",
         "ret": "txt",
         "paytoqs": "ignore",
-        "url": "https://messages.smo.o-ran-sc.org/topics",
+        "url": "",
         "tls": "7b2f4859e5963695",
         "persist": true,
         "proxy": "",
         "insecureHTTPParser": true,
         "authType": "",
         "senderr": false,
-        "headers": [
-            {
-                "keyType": "other",
-                "keyValue": "Accept",
-                "valueType": "other",
-                "valueValue": "application/json"
-            }
-        ],
-        "x": 670,
+        "headers": [],
+        "x": 850,
         "y": 180,
         "wires": [
             [
@@ -1937,11 +1930,11 @@
         "topic": "topics",
         "payload": "",
         "payloadType": "date",
-        "x": 510,
+        "x": 530,
         "y": 180,
         "wires": [
             [
-                "3051f52553efaaa4"
+                "e4ec70e46406674f"
             ]
         ]
     },
@@ -2759,25 +2752,6 @@
         ]
     },
     {
-        "id": "2a2e05d79287f4a0",
-        "type": "function",
-        "z": "c5746e29f53f72ce",
-        "name": "Provider",
-        "func": "global.set('topicData', msg.payload)\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 980,
-        "y": 220,
-        "wires": [
-            [
-                "562063a080cb99d6"
-            ]
-        ]
-    },
-    {
         "id": "d932661ae80274a1",
         "type": "inject",
         "z": "c5746e29f53f72ce",
@@ -2799,7 +2773,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 240,
-        "y": 520,
+        "y": 600,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -2828,7 +2802,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 230,
-        "y": 560,
+        "y": 640,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -2857,7 +2831,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 200,
-        "y": 600,
+        "y": 680,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -2886,7 +2860,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 640,
+        "y": 720,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -2915,7 +2889,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 180,
-        "y": 680,
+        "y": 760,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -2944,7 +2918,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 240,
-        "y": 720,
+        "y": 800,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -2973,7 +2947,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 230,
-        "y": 760,
+        "y": 840,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -3002,7 +2976,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 800,
+        "y": 880,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -3031,7 +3005,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 200,
-        "y": 840,
+        "y": 920,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -3045,7 +3019,7 @@
         "name": "TS28532_FaultMnS.yaml",
         "info": "",
         "x": 130,
-        "y": 480,
+        "y": 560,
         "wires": []
     },
     {
@@ -3055,7 +3029,7 @@
         "name": "TS28532_FileDataReportingMnS.yaml",
         "info": "",
         "x": 170,
-        "y": 360,
+        "y": 440,
         "wires": []
     },
     {
@@ -3080,7 +3054,84 @@
         "payload": "",
         "payloadType": "date",
         "x": 210,
-        "y": 440,
+        "y": 520,
+        "wires": [
+            [
+                "e5f66f4bd6777ca0"
+            ]
+        ]
+    },
+    {
+        "id": "e4ec70e46406674f",
+        "type": "function",
+        "z": "c5746e29f53f72ce",
+        "name": "http-preparation",
+        "func": "const protocol = env.get('MESSAGES_PROTOCOL');\nconst host = env.get('MESSAGES_HOST');\nconst port = env.get('MESSAGES_PORT');\nconst base = protocol + '://' + host + ':' + port;\nconst path = msg.topic;\nmsg.url = [base, path].join('/');\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 180,
+        "wires": [
+            [
+                "3051f52553efaaa4"
+            ]
+        ]
+    },
+    {
+        "id": "58232148f55eafc9",
+        "type": "inject",
+        "z": "c5746e29f53f72ce",
+        "name": "heartbeat (deprecated)",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "heartbeat",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 120,
+        "wires": [
+            [
+                "e5f66f4bd6777ca0"
+            ]
+        ]
+    },
+    {
+        "id": "23cf0bc0546d281b",
+        "type": "inject",
+        "z": "c5746e29f53f72ce",
+        "name": "fault (deprecated)",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "fault",
+        "payload": "",
+        "payloadType": "date",
+        "x": 230,
+        "y": 160,
         "wires": [
             [
                 "e5f66f4bd6777ca0"
@@ -3120,14 +3171,14 @@
         "id": "329e838eb4bf63f4",
         "type": "function",
         "z": "7ba02ed596e8cde5",
-        "name": "ResetActionData",
-        "func": "const base = 'https://odlux.oam.smo.o-ran-sc.org';\nconst path = 'rests/operations/network-topology:network-topology/topology=topology-netconf/node=';\nconst nodeId = msg.payload;\nconst mount = 'yang-ext:mount';\nconst action = 'o-ran-supervision:supervision-watchdog-reset';\n\nmsg.url = [base,path + nodeId, mount, action].join('/');\nmsg.payload = { \n  \"o-ran-supervision:input\": \n    {\n      \"supervision-notification-interval\": 60, \n      \"guard-timer-overhead\": 10\n    }\n}\nreturn msg;",
+        "name": "http-preparation",
+        "func": "const protocol = env.get('SDN_CONTROLLER_PROTOCOL');\nconst host = env.get('SDN_CONTROLLER_HOST');\nconst port = env.get('SDN_CONTROLLER_PORT');;\nconst base = protocol + '://' + host + ':' + port;\nconst path = 'rests/operations/network-topology:network-topology/topology=topology-netconf/node=';\nconst nodeId = msg.payload;\nconst mount = 'yang-ext:mount';\nconst action = 'o-ran-supervision:supervision-watchdog-reset';\nmsg.url = [base,path + nodeId, mount, action].join('/');\n\nconst user = env.get('SDN_CONTROLLER_USERNAME');\nconst password = env.get('SDN_CONTROLLER_PASSWORD');\nconst auth = Buffer.from([user, password].join(':')).toString('base64')\nconst basicAuth = ['Basic', auth].join(' ');\n\nmsg.headers = {};\nmsg.headers['Content-Type'] = 'application/yang-data+json';\nmsg.headers['Accept'] = 'application/yang-data+json';\nmsg.headers['Authorization'] = basicAuth;\n\nmsg.payload = { \n  \"o-ran-supervision:input\": \n    {\n      \"supervision-notification-interval\": 60, \n      \"guard-timer-overhead\": 10\n    }\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 570,
+        "x": 560,
         "y": 220,
         "wires": [
             [
@@ -3149,22 +3200,9 @@
         "persist": true,
         "proxy": "",
         "insecureHTTPParser": true,
-        "authType": "basic",
+        "authType": "",
         "senderr": false,
-        "headers": [
-            {
-                "keyType": "other",
-                "keyValue": "Accept",
-                "valueType": "other",
-                "valueValue": "application/json"
-            },
-            {
-                "keyType": "other",
-                "keyValue": "Content-Type",
-                "valueType": "other",
-                "valueValue": "application/json"
-            }
-        ],
+        "headers": [],
         "x": 800,
         "y": 220,
         "wires": [
@@ -3180,13 +3218,13 @@
         "name": "Response",
         "active": true,
         "tosidebar": true,
-        "console": false,
-        "tostatus": false,
+        "console": true,
+        "tostatus": true,
         "complete": "payload",
         "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1000,
+        "statusVal": "payload.length",
+        "statusType": "msg",
+        "x": 1010,
         "y": 220,
         "wires": []
     },
@@ -3271,7 +3309,7 @@
         "name": "The Consumer checks for data on the message router provided by the \"Massage Topics\" flow.",
         "info": "The Consumer checks for data on the message router provided by the \"Massage Topics\" flow.",
         "x": 520,
-        "y": 260,
+        "y": 280,
         "wires": []
     }
 ]
