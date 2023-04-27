@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c29e68f_e696dbc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-04-27T13:19:02Z",
+      "side": 1,
+      "message": "$ python3 sendVesHeartbeat.py PNF2\n################################################################################\n# send SDN-Controller heartbeat\n\u003cResponse [202]\u003e",
+      "revId": "79751b76b823d794542f6207b3ac97e525bcebf8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
