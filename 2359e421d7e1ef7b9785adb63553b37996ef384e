@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24c9b9bc_56c34975",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-04-27T13:12:34Z",
+      "side": 1,
+      "message": "$  ./send15minPm.sh FYNG\n################################################################################\n# send 15min performance values\n\n     intervalEndTime: Thu, 27 Apr 2023 13:00:00 +0000\n collectionStartTime: 1682599500000000\n                type: FYNG\n              domain: measurement\n              vendor: VENDORA\n               pnfId: LKCYFL79Q01M01FYNG01\n   collectionEndTime: 1682600400000000\n             eventId: LKCYFL79Q01M01FYNG01_1682600400_PM15min\n           interface: 4af8681f-f2e4-4058-8052-4e9343ee7bf2\n      controllerName: martindev\n   intervalStartTime: Thu, 27 Apr 2023 12:45:00 +0000\n               model: FancyNextGeneration\n           eventTime: 2023-04-27T13:10:17.280033Z\n           timestamp: 1682601017280033\n           eventType: O_RAN_COMPONENT\n         granularity: PM15min\n\nHTTP/2 202 \ncontent-type: application/json\ndate: Thu, 27 Apr 2023 13:10:17 GMT\ncontent-length: 23",
+      "revId": "2359e421d7e1ef7b9785adb63553b37996ef384e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
