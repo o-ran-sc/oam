@@ -42,6 +42,7 @@ services:
     environment:
       ENABLE_ODL_CLUSTER: false
       ENABLE_OAUTH: true
+      ODL_CERT_DIR: ${SDNC_CERT_DIR}
       ODL_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       SDNC_CONFIG_DIR: /opt/onap/ccsdk/data/properties
       SDNC_REPLICAS: 0
@@ -72,6 +73,8 @@ services:
       - ./controller/oauth-provider.config.json:/opt/opendaylight/etc/oauth-provider.config.json
       - ./controller/devicemanager.properties:/opt/opendaylight/etc/devicemanager.properties
       - ./controller/mountpoint-registrar.properties:/opt/opendaylight/etc/mountpoint-registrar.properties
+      - ./controller/certs/certs.properties:${SDNC_CERT_DIR}/certs.properties
+      - ./controller/certs/keys0.zip:${SDNC_CERT_DIR}/keys0.zip    
     labels:
       traefik.enable: true
       traefik.http.routers.controller.entrypoints: websecure
@@ -81,6 +84,7 @@ services:
     networks:
       smo:
       default:
+        ipv4_address: ${SDNC_OAM_IPv4}
         ipv6_address: ${SDNC_OAM_IPv6}
 
   ves-collector:
@@ -110,6 +114,9 @@ services:
       traefik.http.services.ves.loadbalancer.server.port: ${VES_ENDPOINT_PORT}
     networks:
       smo:
+      default:
+        ipv4_address: ${VES_COLLECTOR_OAM_IPv4}
+        ipv6_address: ${VES_COLLECTOR_OAM_IPv6}
 
 networks:
   smo:
@@ -121,5 +128,7 @@ networks:
     ipam:
       driver: default
       config:
-      - subnet:  "${NETWORK_SUBNET_OAM_IPv6}"
-        gateway: "${NETWORK_GATEWAY_OAM_IPv6}"
+      - subnet:  ${NETWORK_SUBNET_OAM_IPv4}
+        gateway: ${NETWORK_GATEWAY_OAM_IPv4}
+      - subnet:  ${NETWORK_SUBNET_OAM_IPv6}
+        gateway: ${NETWORK_GATEWAY_OAM_IPv6}
