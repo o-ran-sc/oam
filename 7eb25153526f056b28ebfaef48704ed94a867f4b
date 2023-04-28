@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13d43648_48543641",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-04-28T06:58:05Z",
+      "side": 1,
+      "message": "NAMES           IMAGE                                                                                        STATUS\nves-collector   nexus3.onap.org:10001/onap/org.onap.dcaegen2.collectors.ves.vescollector:1.10.1-configured   Up 17 hours (healthy)",
+      "revId": "7eb25153526f056b28ebfaef48704ed94a867f4b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
