@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62f67464_909719bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-04-28T15:46:02Z",
+      "side": 1,
+      "message": "function tested in OpenWirelessLab Cosmos\n\nnative@node1-2 ~/workspace/oam/solution (review/martin_skorupski/OAM-334)$ python3.10 network/config.py \nSet O-RU-11223 True\nSet O-RU-11222 True\nSet O-RU-11224 True\nSet O-DU-1122 True\nSet O-RU-11221 True\nnative@node1-2 ~/workspace/oam/solution (review/martin_skorupski/OAM-334)$",
+      "revId": "9841e09804a4762ad639d764e698afbb10ac68b2",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
