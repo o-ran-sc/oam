@@ -30,9 +30,6 @@ x-common_env: &common_env
 
     SDN_CONTROLLER_PROTOCOL: ${SDN_CONTROLLER_PROTOCOL}
     SDN_CONTROLLER_IP: ${SDNC_OAM_HOST}
-    # SDN_CONTROLLER_PORT: ${SDNC_REST_PORT}
-    SDN_CONTROLLER_CALLHOME_IP: ${SDNC_OAM_IPv6}
-    SDN_CONTROLLER_CALLHOME_PORT: ${SDN_CONTROLLER_CALLHOME_PORT}
     SDN_CONTROLLER_USERNAME: ${ADMIN_USERNAME}
     SDN_CONTROLLER_PASSWORD: ${ADMIN_PASSWORD}
 
@@ -89,46 +86,68 @@ services:
     environment:
         <<: [*common_env, *du_env]
 
-  ntsim-ng-o-ru-fh-11221:
+  ntsim-ng-o-ru-11221:
     <<: *common_nf
     image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-ru-fh:${NTS_BUILD_VERSION}"
-    container_name: ntsim-ng-o-ru-fh-11221
+    container_name: ntsim-ng-o-ru-11221
     hostname: O-RU-11221
     volumes:
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/config.json:/opt/dev/ntsim-ng/config/config.json
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/ietf-hardware-running.json:/opt/dev/deploy/data/ietf-hardware-running.json
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-1/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
+        - ./ntsim-ng-o-ru/o-ru-11221/config.json:/opt/dev/ntsim-ng/config/config.json
+        - ./ntsim-ng-o-ru/o-ru-11221/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
+        - ./ntsim-ng-o-ru/o-ru-11221/ietf-hardware-running.json:/opt/dev/deploy/data/ietf-hardware-running.json
+        - ./ntsim-ng-o-ru/o-ru-11221/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
+        - ./ntsim-ng-o-ru/o-ru-11221/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
     environment:
+        SDN_CONTROLLER_CALLHOME_IP: ${SDNC_OAM_IPv4}
+        SDN_CONTROLLER_CALLHOME_PORT: ${SDN_CONTROLLER_CALLHOME_SSH_PORT}
         <<: [*common_env, *ru_env]
 
-  ntsim-ng-o-ru-fh-11222:
+  ntsim-ng-o-ru-11222:
     <<: *common_nf
     image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-ru-fh:${NTS_BUILD_VERSION}"
-    container_name: ntsim-ng-o-ru-fh-11222
+    container_name: ntsim-ng-o-ru-11222
     hostname: O-RU-11222
     volumes:
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/config.json:/opt/dev/ntsim-ng/config/config.json
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/ietf-hardware-running.json:/opt/dev/deploy/data/ietf-hardware-running.json
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-2/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
+        - ./ntsim-ng-o-ru/o-ru-11222/config.json:/opt/dev/ntsim-ng/config/config.json
+        - ./ntsim-ng-o-ru/o-ru-11222/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
+        - ./ntsim-ng-o-ru/o-ru-11222/ietf-hardware-running.json:/opt/dev/deploy/data/ietf-hardware-running.json
+        - ./ntsim-ng-o-ru/o-ru-11222/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
+        - ./ntsim-ng-o-ru/o-ru-11222/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
     environment:
+        SDN_CONTROLLER_CALLHOME_IP: ${SDNC_OAM_IPv6}
+        SDN_CONTROLLER_CALLHOME_PORT: ${SDN_CONTROLLER_CALLHOME_SSH_PORT}
         <<: [*common_env, *ru_env]
 
-  ntsim-ng-o-ru-fh-11223:
+  ntsim-ng-o-ru-11223:
     <<: *common_nf
     image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-ru-fh:${NTS_BUILD_VERSION}"
-    container_name: ntsim-ng-o-ru-fh-11223
+    container_name: ntsim-ng-o-ru-11223
     hostname: O-RU-11223
     volumes:
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/config.json:/opt/dev/ntsim-ng/config/config.json
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/ietf-hardware-running.json:/opt/dev/deploy/data/ietf-hardware-running.json
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
-        - ./ntsim-ng-o-ru/ntsim-ng-o-ru-fh-3/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
+        - ./ntsim-ng-o-ru/o-ru-11223/config.json:/opt/dev/ntsim-ng/config/config.json
+        - ./ntsim-ng-o-ru/o-ru-11223/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
+        - ./ntsim-ng-o-ru/o-ru-11223/ietf-hardware-running.json:/opt/dev/deploy/data/ietf-hardware-running.json
+        - ./ntsim-ng-o-ru/o-ru-11223/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
+        - ./ntsim-ng-o-ru/o-ru-11223/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
     environment:
+        SDN_CONTROLLER_CALLHOME_IP: ${SDNC_OAM_IPv4}
+        SDN_CONTROLLER_CALLHOME_PORT: ${SDN_CONTROLLER_CALLHOME_TLS_PORT}
+        <<: [*common_env, *ru_env]
+
+  ntsim-ng-o-ru-11224:
+    <<: *common_nf
+    image: "${NEXUS3_DOCKER_REPO}nts-ng-o-ran-ru-fh:${NTS_BUILD_VERSION}"
+    container_name: ntsim-ng-o-ru-11224
+    hostname: O-RU-11224
+    volumes:
+        - ./ntsim-ng-o-ru/o-ru-11223/config.json:/opt/dev/ntsim-ng/config/config.json
+        - ./ntsim-ng-o-ru/o-ru-11223/ietf-hardware-operational.json:/opt/dev/deploy/data/ietf-hardware-operational.json
+        - ./ntsim-ng-o-ru/o-ru-11223/ietf-hardware-running.json:/opt/dev/deploy/data/ietf-hardware-running.json
+        - ./ntsim-ng-o-ru/o-ru-11223/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
+        - ./ntsim-ng-o-ru/o-ru-11223/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
+    environment:
+        SDN_CONTROLLER_CALLHOME_IP: ${SDNC_OAM_IPv6}
+        SDN_CONTROLLER_CALLHOME_PORT: ${SDN_CONTROLLER_CALLHOME_TLS_PORT}
         <<: [*common_env, *ru_env]
 
 networks:
