@@ -98,7 +98,7 @@ next chapters.
 docker compose -f smo/common/docker-compose.yml up -d
 python smo/common/identity/config.py
 docker compose -f smo/oam/docker-compose.yml up -d odlux controller
-docker compose -f network/docker-compose.yml up -d ntsim-ng-o-ru-fh-11221
+docker compose -f network/docker-compose.yml up -d ntsim-ng-o-ru-11221
 python network/config.py
 ```
 
@@ -108,9 +108,9 @@ python network/config.py
 
     https://odlux.oam.smo.o-ran-sc.org
 
-    User: admin // see .env file
+    User: admin 
 
-    Password: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
+    Password: // see .env file
 
 In case of trouble, please update the commands with your customized '.env' file.
 

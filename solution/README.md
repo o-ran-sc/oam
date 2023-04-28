@@ -35,6 +35,14 @@ with the following components.
 
 ## Prerequisites
 
+### Resources
+
+The solution was tested on a VM with
+
+- 4x Core
+- 16 GBit RAM 
+- 50 Gbit Storage
+
 ### Operating (HOST) System
 
 ```
@@ -88,6 +96,10 @@ export PYTHONWARNINGS="ignore:Unverified HTTPS request"
 
 ### ETC Host (DNS function)
 
+Please change in the different .env files the environment variable 'HOST_IP'
+to the IP address of the system where you deploy the solution - search for 
+'aaa.bbb.ccc.ddd' and replace it. 
+
 Please modify the /etc/hosts of your system.
 
 * \<your-system>: is the hostname of the system, where the browser is started
@@ -112,43 +124,6 @@ $ cat /etc/hosts
 
 ```
 
-## Expected Folder Structure
-
-The following figure show the expected folder structure for the different
-docker-compose file and its configurations.
-
-```
-├── network
-│   ├── .env
-│   ├── config.py
-│   ├── docker-compose.yml
-│   │
-│   ├── ntsim-ng-o-du
-│   └── ntsim-ng-o-ru
-└── smo
-    ├── apps
-    │   ├── .env
-    │   ├── docker-compose.yml
-    │   └── flows
-    ├── common
-    │   ├── .env
-    │   ├── docker-compose.yml
-    │   │
-    │   ├── docker
-    │   ├── gateway
-    │   ├── identity
-    │   ├── messages
-    │   ├── kafka
-    │   └── zookeeper
-    └── oam
-        ├── .env
-        ├── docker-compose.yml
-        │
-        ├── odlux
-        ├── controller
-        └── ves-collector
-```
-
 ## Usage
 
 ### Bring Up Solution
@@ -160,7 +135,6 @@ next chapters.
 
 ```
 docker compose -f smo/common/docker-compose.yml up -d
-# wait until the cpu load is low again
 python smo/common/identity/config.py
 
 docker compose -f smo/oam/docker-compose.yml up -d
@@ -169,8 +143,7 @@ docker compose -f smo/apps/docker-compose.yml up -d
 # wait until the cpu load is low again
 
 docker compose -f network/docker-compose.yml up -d
-# wait about 2min
-docker restart ntsim-ng-o-du-1122
+docker compose -f network/docker-compose.yml restart ntsim-ng-o-du-1122 ntsim-ng-o-du-1123
 python network/config.py
 ```
 
@@ -223,8 +196,8 @@ python network/config.py
 
 The python script configures the simulated O-DU and O-RU according to O-RAN hybrid architecture.
 
-O-DU - NETCONF Call HOME and NETCONF notifications
-O-RU - ves:pnfRegistration and ves:fault, ves:heartbeat
+O-RU - NETCONF Call HOME and NETCONF notifications
+O-DU - ves:pnfRegistration and ves:fault, ves:heartbeat
 
 ![ves:pnfRegistration in ODLUX](docs/nstim-ng-connected-after-ves-pnf-registration-in-odlux.png "ves:pnfRegistration in ODLUX")
 
@@ -259,13 +232,21 @@ docker logs -f ves-collector
 
 #### Access to SDN-R ODLUX
 
-##### Login into SDN-R
-
     https://odlux.oam.smo.o-ran-sc.org
 
-    User: admin // see .env file
+    User: admin 
 
-    Password: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
+    Password: // see .env file
+
+In case of trouble, please update the commands with your customized '.env' file.
+
+#### Access to Node Red Flows
+
+    https://flows.oam.smo.o-ran-sc.org
+
+    User: admin 
+
+    Password: // see .env file
 
 In case of trouble, please update the commands with your customized '.env' file.
 
@@ -298,3 +279,81 @@ The commands ...
 docker ps -a
 docker-compose ps
 docker rm -f $(docker ps -aq)
+
+## Commands in action
+
+```
+$ docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}" 
+NAMES     IMAGE     STATUS
+$ docker compose -f smo/common/docker-compose.yml up -d
+[+] Running 9/9
+ ✔ Network smo            Created                                                                                                                                                                  0.1s 
+ ✔ Network dmz            Created                                                                                                                                                                  0.1s 
+ ✔ Container zookeeper    Started                                                                                                                                                                  1.6s 
+ ✔ Container persistence  Started                                                                                                                                                                  1.5s 
+ ✔ Container identitydb   Started                                                                                                                                                                  1.2s 
+ ✔ Container gateway      Healthy                                                                                                                                                                 12.1s 
+ ✔ Container kafka        Started                                                                                                                                                                  2.2s 
+ ✔ Container identity     Started                                                                                                                                                                 13.4s 
+ ✔ Container messages     Started                                                                                                                                                                 13.4s 
+$ python3 smo/common/identity/config.py 
+Got token!
+User leia.organa created!
+User r2.d2 created!
+User luke.skywalker created!
+User jargo.fett created!
+User role jargo.fett supervision created!
+User role leia.organa administration created!
+User role luke.skywalker provision created!
+User role r2.d2 administration created!
+$ docker compose -f smo/oam/docker-compose.yml up -d
+[+] Running 4/4
+ ✔ Network oam              Created                                                                                                                                                                0.1s 
+ ✔ Container controller     Healthy                                                                                                                                                               83.4s 
+ ✔ Container ves-collector  Started                                                                                                                                                                1.2s 
+ ✔ Container odlux          Started                                                                                                                                                               84.0s 
+$ docker compose -f smo/apps/docker-compose.yml up -d
+WARN[0000] Found orphan containers ([odlux controller ves-collector]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up. 
+[+] Running 1/1
+ ✔ Container flows  Started                                                                                                                                                                        0.9s 
+$ docker compose -f network/docker-compose.yml up -d
+WARN[0000] Found orphan containers ([flows odlux controller ves-collector]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up. 
+[+] Running 6/6
+ ✔ Container ntsim-ng-o-du-1123   Started                                                                                                                                                          2.6s 
+ ✔ Container ntsim-ng-o-ru-11223  Started                                                                                                                                                          2.2s 
+ ✔ Container ntsim-ng-o-ru-11221  Started                                                                                                                                                          1.9s 
+ ✔ Container ntsim-ng-o-ru-11224  Started                                                                                                                                                          1.9s 
+ ✔ Container ntsim-ng-o-du-1122   Started                                                                                                                                                          2.4s 
+ ✔ Container ntsim-ng-o-ru-11222  Started                                                                                                                                                          2.3s 
+$ docker compose -f network/docker-compose.yml restart ntsim-ng-o-du-1122 ntsim-ng-o-du-1123
+[+] Running 2/2
+ ✔ Container ntsim-ng-o-du-1122  Started                                                                                                                                                           2.8s 
+ ✔ Container ntsim-ng-o-du-1123  Started                                                                                                                                                           2.9s 
+$ python3 network/config.py 
+Set O-RU-11221 True
+Set O-RU-11224 True
+Set O-RU-11222 True
+Set O-DU-1123 True
+Set O-DU-1122 True
+Set O-RU-11223 True
+$ docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+NAMES                 IMAGE                                                                                        STATUS
+ntsim-ng-o-ru-11221   nexus3.o-ran-sc.org:10004/o-ran-sc/nts-ng-o-ran-ru-fh:1.6.2                                  Up 4 minutes
+ntsim-ng-o-ru-11224   nexus3.o-ran-sc.org:10004/o-ran-sc/nts-ng-o-ran-ru-fh:1.6.2                                  Up 4 minutes
+ntsim-ng-o-ru-11222   nexus3.o-ran-sc.org:10004/o-ran-sc/nts-ng-o-ran-ru-fh:1.6.2                                  Up 4 minutes
+ntsim-ng-o-du-1123    o-ran-sc/nts-ng-o-ran-du-rel-18:1.6.2                                                        Up 54 seconds
+ntsim-ng-o-du-1122    nexus3.o-ran-sc.org:10004/o-ran-sc/nts-ng-o-ran-du:1.6.2                                     Up About a minute
+ntsim-ng-o-ru-11223   nexus3.o-ran-sc.org:10004/o-ran-sc/nts-ng-o-ran-ru-fh:1.6.2                                  Up 4 minutes
+flows                 nodered/node-red:latest-configured                                                           Up 4 minutes (healthy)
+odlux                 nexus3.onap.org:10001/onap/sdnc-web-image:2.4.2                                              Up 7 minutes
+controller            nexus3.onap.org:10001/onap/sdnc-image:2.4.2                                                  Up 8 minutes (healthy)
+ves-collector         nexus3.onap.org:10001/onap/org.onap.dcaegen2.collectors.ves.vescollector:1.10.1-configured   Up 8 minutes (healthy)
+messages              nexus3.onap.org:10001/onap/dmaap/dmaap-mr:1.1.18                                             Up 11 minutes
+identity              bitnami/keycloak:18.0.2                                                                      Up 11 minutes
+kafka                 nexus3.onap.org:10001/onap/dmaap/kafka111:1.0.4                                              Up 11 minutes
+zookeeper             nexus3.onap.org:10001/onap/dmaap/zookeeper:6.0.3                                             Up 11 minutes
+identitydb            bitnami/postgresql:13                                                                        Up 11 minutes
+persistence           docker.elastic.co/elasticsearch/elasticsearch-oss:7.9.3                                      Up 11 minutes
+gateway               traefik:v2.9                                                                                 Up 11 minutes (healthy)
+$ 
+```
