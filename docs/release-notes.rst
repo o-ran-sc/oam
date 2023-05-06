@@ -211,7 +211,7 @@ Version 4.0.3, 2021-04-23
 +--------------------------------------------------------------------+-------------------------------------------------------------------------+
 | `OAM-184     <https://jira.o-ran-sc.org/browse/OAM-184>`__         | Create VES client example for domain 'stateChange'                      |
 +--------------------------------------------------------------------+-------------------------------------------------------------------------+
-| `OAM-185     <https://jira.o-ran-sc.org/browse/OAM-185>`__         | Create VES client example for domain 'stndefined'                       |
+| `OAM-185     <https://jira.o-ran-sc.org/browse/OAM-185>`__         | Create VES client example for domain 'stndDefined'                       |
 +--------------------------------------------------------------------+-------------------------------------------------------------------------+
 | `OAM-187     <https://jira.o-ran-sc.org/browse/OAM-187>`__         | Update Jenkins Jobs                                                     |
 +--------------------------------------------------------------------+-------------------------------------------------------------------------+
@@ -271,7 +271,7 @@ Version 4.0.3, 2021-04-23
 +--------------------------------------------------------------------+-------------------------------------------------------------------------+
 | `OAM-184     <https://jira.o-ran-sc.org/browse/OAM-184>`__         | Create VES client example for domain 'stateChange'                      |
 +--------------------------------------------------------------------+-------------------------------------------------------------------------+
-| `OAM-185     <https://jira.o-ran-sc.org/browse/OAM-185>`__         | Create VES client example for domain 'stndefined'                       |
+| `OAM-185     <https://jira.o-ran-sc.org/browse/OAM-185>`__         | Create VES client example for domain 'stndDefined'                       |
 +--------------------------------------------------------------------+-------------------------------------------------------------------------+
 | `OAM-187     <https://jira.o-ran-sc.org/browse/OAM-187>`__         | Update Jenkins Jobs                                                     |
 +--------------------------------------------------------------------+-------------------------------------------------------------------------+
@@ -354,12 +354,12 @@ Version 2.0.3, 2020-04-08
 -------------------------
 
 * What is an SMO?
-* Provide xRAN datamodels
+* Provide xRAN data-models
 * Provide curl bash scripts for Software Management
 * Add jenkins jobs for oam
 * Add parents to model artifacts
 * Add top level pom file to distribution
-* Wrong image tag in nonrt-o1-controller distribution pom
+* Wrong image tag in non-rt-ric-o1-controller distribution pom
 * Use ONAP release parents directly
 * Adjust artifact group name to ORAN naming rule
 * Use ORAN parents
