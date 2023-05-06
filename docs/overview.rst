@@ -6,7 +6,7 @@ OAM Operation and Maintenance Overview
 ======================================
 
 The O-RAN SC OAM project provides administrative and operator
-functions for O-RAN components, such as Near-Realtime-RAN-Inelegant-Controller,
+functions for O-RAN components, such as Near-Realtime-RAN-Intelligent-Controller,
 O-RAN Centralized Unit, O-RAN Distributed Unit and O-RAN Radio Unit.
 
 The project follows the specifications for the `O1 interface <https://www.o-ran.org/specifications>`_
