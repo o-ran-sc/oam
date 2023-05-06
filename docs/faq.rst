@@ -9,7 +9,7 @@
 Frequently asked questions
 ==========================
 
-Which browser should I use to operate Opendaylight SDN-R User interface?
+Which browser should I use to operate OpenDaylight SDN-R User interface?
 ------------------------------------------------------------------------
 
 An actual version of `Google
@@ -47,7 +47,7 @@ set back the debug level to 'INFO' as soon possible.
 
 --------------
 
-Which commands should be used to analyse karaf logs?
+Which commands should be used to analyze karaf logs?
 ----------------------------------------------------
 
 ::
