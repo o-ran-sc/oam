@@ -118,9 +118,11 @@ $ cat /etc/hosts
 <deployment-system-ipv4>           gateway.smo.o-ran-sc.org
 <deployment-system-ipv4>          identity.smo.o-ran-sc.org
 <deployment-system-ipv4>          messages.smo.o-ran-sc.org
-<deployment-system-ipv4> ves-collector.oam.smo.o-ran-sc.org
 <deployment-system-ipv4>         odlux.oam.smo.o-ran-sc.org
-<deployment-system-ipv4>    controller.oam.smo.o-ran-sc.org
+<deployment-system-ipv4>         flows.oam.smo.o-ran-sc.org
+<deployment-system-ipv4>         tests.oam.smo.o-ran-sc.org
+<deployment-system-ipv4>    controller.dcn.smo.o-ran-sc.org
+<deployment-system-ipv4> ves-collector.dcn.smo.o-ran-sc.org
 
 ```
 

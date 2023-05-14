@@ -29,13 +29,14 @@ x-common_env: &common_env
     NTS_HOST_TRANSFER_SFTP_BASE_PORT: ${NTS_HOST_TRANSFER_SFTP_BASE_PORT}
 
     SDN_CONTROLLER_PROTOCOL: ${SDN_CONTROLLER_PROTOCOL}
-    SDN_CONTROLLER_IP: ${SDNC_OAM_HOST}
+    SDN_CONTROLLER_IP: ${SDNC_DCN_HOST}
+    SDN_CONTROLLER_CALLHOME_IP: ${SDNC_DCN_HOST}
     SDN_CONTROLLER_USERNAME: ${ADMIN_USERNAME}
     SDN_CONTROLLER_PASSWORD: ${ADMIN_PASSWORD}
 
     VES_COMMON_HEADER_VERSION: ${VES_COMMON_HEADER_VERSION}
     VES_ENDPOINT_PROTOCOL: ${VES_ENDPOINT_PROTOCOL}
-    VES_ENDPOINT_IP: ${VES_COLLECTOR_OAM_HOST}
+    VES_ENDPOINT_IP: ${VES_COLLECTOR_DCN_HOST}
     VES_ENDPOINT_PORT: ${VES_ENDPOINT_PORT}
     VES_ENDPOINT_AUTH_METHOD: ${VES_ENDPOINT_AUTH_METHOD}
     VES_ENDPOINT_USERNAME: ${VES_ENDPOINT_USERNAME}
@@ -54,9 +55,8 @@ x-topo-env: &topo_env
 x-nf: &common_nf
     stop_grace_period: 5m
     extra_hosts:
-      - "identity.smo.o-ran-sc.org:${HOST_IP}"
-      - "controller.oam.smo.o-ran-sc.org:${HOST_IP}"
-      - "ves-collector.oam.smo.o-ran-sc.org:${HOST_IP}"
+      - "controller.dcn.${GATEWAY_DOMAIN}:${HOST_IP}"
+      - "ves-collector.dcn.${GATEWAY_DOMAIN}:${HOST_IP}"
     cap_add:
     - SYS_ADMIN
     - SYS_PTRACE
@@ -98,7 +98,6 @@ services:
         - ./ntsim-ng-o-ru/o-ru-11221/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
         - ./ntsim-ng-o-ru/o-ru-11221/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
     environment:
-        SDN_CONTROLLER_CALLHOME_IP: ${SDNC_OAM_IPv4}
         SDN_CONTROLLER_CALLHOME_PORT: ${SDN_CONTROLLER_CALLHOME_SSH_PORT}
         <<: [*common_env, *ru_env]
 
@@ -114,7 +113,6 @@ services:
         - ./ntsim-ng-o-ru/o-ru-11222/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
         - ./ntsim-ng-o-ru/o-ru-11222/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
     environment:
-        SDN_CONTROLLER_CALLHOME_IP: ${SDNC_OAM_IPv6}
         SDN_CONTROLLER_CALLHOME_PORT: ${SDN_CONTROLLER_CALLHOME_SSH_PORT}
         <<: [*common_env, *ru_env]
 
@@ -130,7 +128,6 @@ services:
         - ./ntsim-ng-o-ru/o-ru-11223/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
         - ./ntsim-ng-o-ru/o-ru-11223/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
     environment:
-        SDN_CONTROLLER_CALLHOME_IP: ${SDNC_OAM_IPv4}
         SDN_CONTROLLER_CALLHOME_PORT: ${SDN_CONTROLLER_CALLHOME_TLS_PORT}
         <<: [*common_env, *ru_env]
 
@@ -146,11 +143,15 @@ services:
         - ./ntsim-ng-o-ru/o-ru-11223/ietf-interfaces-operational.xml:/opt/dev/deploy/data/ietf-interfaces-operational.xml
         - ./ntsim-ng-o-ru/o-ru-11223/ietf-interfaces-running.xml:/opt/dev/deploy/data/ietf-interfaces-running.xml
     environment:
-        SDN_CONTROLLER_CALLHOME_IP: ${SDNC_OAM_IPv6}
         SDN_CONTROLLER_CALLHOME_PORT: ${SDN_CONTROLLER_CALLHOME_TLS_PORT}
         <<: [*common_env, *ru_env]
 
 networks:
     default:
-        name: oam
-        external: true
+        driver: bridge
+        name: network
+        enable_ipv6: true
+        ipam:
+            driver: default
+            config:
+            - subnet:  ${NETWORK_SUBNET_DCN_IPv6}

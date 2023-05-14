@@ -1,3 +1,18 @@
+################################################################################
+# Copyright 2023 highstreet technologies GmbH
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 # no more versions needed! Compose spec supports all features w/o a version
 services:
 
@@ -18,6 +33,8 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 4334:4334
+      - 4335:4335
     command:
       - --serverstransport.insecureskipverify=true
       - --log.level=${TRAEFIK_LOG_LEVEL}
@@ -34,6 +51,8 @@ services:
       - --entrypoints.websecure.address=:443
       - --entrypoints.websecure.http.tls.domains[0].main=gateway.${SOLUTION_DOMAIN}
       - --entrypoints.websecure.http.tls.domains[0].sans=*.${SOLUTION_DOMAIN}
+      - --entrypoints.ssh-netconf-callhome.address=:4334
+      - --entrypoints.tls-netconf-callhome.address=:4335
       - --providers.docker.endpoint=unix:///var/run/docker.sock
       - --providers.docker.network=${TRAEFIK_NETWORK_NAME}
       - --providers.docker.exposedByDefault=false
@@ -55,7 +74,7 @@ services:
       traefik.http.services.gateway.loadbalancer.server.port: 8080
     networks:
       - dmz
-      - default
+      - dcn
 
   identitydb:
     image: ${IDENTITYDB_IMAGE}
@@ -105,6 +124,9 @@ services:
         condition: service_started
       gateway:
         condition: service_healthy
+    networks:
+      - dmz
+      - default
 
   persistence:
     image: ${PERSISTENCE_IMAGE}
@@ -115,8 +137,6 @@ services:
   zookeeper:
     image: ${ZOOKEEPER_IMAGE}
     container_name: zookeeper
-    # ports:
-    # - 2181:2181
     environment:
       ZOOKEEPER_REPLICAS: 1
       ZOOKEEPER_TICK_TIME: 2000
@@ -176,18 +196,24 @@ services:
         condition: service_started
       gateway:
         condition: service_healthy
+    networks:
+      - dmz
+      - default
 
 networks:
   dmz:
     name: dmz
     driver: bridge
     enable_ipv6: false
+  default:
+    name: smo
+    driver: bridge
+    enable_ipv6: false
+  dcn:
+    driver: bridge
+    name: dcn
+    enable_ipv6: true
     ipam:
       driver: default
       config:
-        - subnet: ${TRAEFIK_SUBNET}
-          gateway: ${TRAEFIK_GATEWAY_IP}
-        - subnet: ${TRAEFIK_SUBNET_IPv6}
-          gateway: ${TRAEFIK_GATEWAY_IPv6}
-  default:
-    name: ${TRAEFIK_NETWORK_NAME}
+      - subnet:  ${NETWORK_SUBNET_DCN_IPv6}
