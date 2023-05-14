@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4338ed6a_56ea4adc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-05-14T10:38:40Z",
+      "side": 1,
+      "message": "manual test in OTIC COSMOS LAB",
+      "revId": "470bbf5501fc5afbb2b084c86ccc1e0184292a5b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
