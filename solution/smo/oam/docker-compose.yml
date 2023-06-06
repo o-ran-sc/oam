@@ -46,16 +46,13 @@ services:
     container_name: controller
     hostname: controller
     extra_hosts:
-      - "identity.smo.o-ran-sc.org:${HOST_IP}"
+      - "controller.dcn.smo.o-ran-sc.org:${HOST_IP}"
     healthcheck:
-      test: wget -U ${ADMIN_USERNAME}:${ADMIN_PASSWORD} --no-verbose --tries=1 --spider http://localhost:${SDNC_REST_PORT}/ready || exit 1
+      test: wget --no-verbose --tries=1 --spider http://localhost:${SDNC_REST_PORT}/ready || exit 1
       start_period: 60s
       interval: 10s
       timeout: 5s
       retries: 5
-    # ports:
-      # - 4334:4334
-      # - 4335:4335
     environment:
       ENABLE_ODL_CLUSTER: false
       ENABLE_OAUTH: true
@@ -122,6 +119,8 @@ services:
         - BASEIMAGE=${VES_COLLECTOR_IMAGE}
     container_name: ves-collector
     hostname: ves-collector
+    extra_hosts:
+      - "ves-collector.dcn.${SOLUTION_DOMAIN}:${HOST_IP}"
     healthcheck:
       test: curl -k -u ${VES_ENDPOINT_USERNAME}:${VES_ENDPOINT_PASSWORD} ${VES_ENDPOINT_PROTOCOL}://localhost:${VES_ENDPOINT_PORT} || exit 1
       start_period: 1s
