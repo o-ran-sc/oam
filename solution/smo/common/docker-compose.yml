@@ -73,8 +73,8 @@ services:
       traefik.http.routers.gateway.tls: true
       traefik.http.services.gateway.loadbalancer.server.port: 8080
     networks:
-      - dmz
-      - dcn
+      dmz:
+      dcn:
 
   identitydb:
     image: ${IDENTITYDB_IMAGE}
@@ -125,8 +125,8 @@ services:
       gateway:
         condition: service_healthy
     networks:
-      - dmz
-      - default
+      dmz:
+      default:
 
   persistence:
     image: ${PERSISTENCE_IMAGE}
@@ -175,6 +175,34 @@ services:
       zookeeper:
         condition: service_started
 
+  kafka-bridge:
+    image: ${KAFKA_BRIDGE_IMAGE}
+    container_name: kafka-bridge
+    hostname: kafka-bridge
+    entrypoint: /opt/strimzi/bin/kafka_bridge_run.sh
+    command: --config-file=config/application.properties
+    healthcheck:
+      test: curl http://localhost:8080/healthy || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    labels:
+      traefik.enable: true
+      traefik.http.routers.kafka-bridge.entrypoints: websecure
+      traefik.http.routers.kafka-bridge.rule: Host(`kafka-bridge.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.kafka-bridge.tls: true
+      traefik.http.services.kafka-bridge.loadbalancer.server.port: 8080
+    volumes:
+      - ./kafka-bridge:/opt/strimzi/config
+    depends_on:
+      kafka:
+        condition: service_started
+      gateway:
+        condition: service_healthy
+    networks:
+      dmz:
+      default:
+
   messages:
     image: ${DMAAP_IMAGE}
     container_name: messages
@@ -197,8 +225,8 @@ services:
       gateway:
         condition: service_healthy
     networks:
-      - dmz
-      - default
+      dmz:
+      default:
 
 networks:
   dmz:
