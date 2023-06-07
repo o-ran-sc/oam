@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89d51f31_500adb11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-06-07T11:23:52Z",
+      "side": 1,
+      "message": "native@node1-2 ~/workspace/oam/solution (OAM-337)$ python3.10 network/config.py \nSet O-RU-11224 True\nSet O-RU-11221 True\nSet O-RU-11222 True\nSet O-RU-11223 True\nSet O-DU-1122 True\nSet O-DU-1123 True\nnative@node1-2 ~/workspace/oam/solution (OAM-337)$ curl -k https://kafka-bridge.smo.indigo.cosmos-lab.org\n{\"bridge_version\":\"0.25.0\"}\nnative@node1-2 ~/workspace/oam/solution (OAM-337)$",
+      "revId": "e6d545562a68baea8b86be8face64f6a5c0bece8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
