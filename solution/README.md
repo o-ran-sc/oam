@@ -115,9 +115,10 @@ $ cat /etc/hosts
 
 # SMO OAM development system
 <deployment-system-ipv4>                   smo.o-ran-sc.org
-<deployment-system-ipv4>           gateway.smo.o-ran-sc.org
+<deployment-system-ipv4>           gateway.smo.o-ran-sc.org 
 <deployment-system-ipv4>          identity.smo.o-ran-sc.org
 <deployment-system-ipv4>          messages.smo.o-ran-sc.org
+<deployment-system-ipv4>      kafka-bridge.smo.o-ran-sc.org
 <deployment-system-ipv4>         odlux.oam.smo.o-ran-sc.org
 <deployment-system-ipv4>         flows.oam.smo.o-ran-sc.org
 <deployment-system-ipv4>         tests.oam.smo.o-ran-sc.org

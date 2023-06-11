@@ -8,11 +8,11 @@
         "env": []
     },
     {
-        "id": "c5746e29f53f72ce",
+        "id": "db7b8dca98eba850",
         "type": "tab",
         "label": "Message Topics",
         "disabled": false,
-        "info": "Subscribes to Kafka topics",
+        "info": "Subscribes to kafka topics using the strimzi kafka bridge implementation. \n",
         "env": []
     },
     {
@@ -277,7 +277,7 @@
         ],
         "repeat": "3",
         "crontab": "",
-        "once": true,
+        "once": false,
         "onceDelay": 0.1,
         "topic": "notifyHeartbeat",
         "payload": "",
@@ -1631,38 +1631,9 @@
         ]
     },
     {
-        "id": "910dfec7eb74df65",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "pnfRegistration",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "60",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "pnfRegistration",
-        "payload": "",
-        "payloadType": "date",
-        "x": 240,
-        "y": 80,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "562063a080cb99d6",
+        "id": "a2d14719998c5951",
         "type": "debug",
-        "z": "c5746e29f53f72ce",
+        "z": "db7b8dca98eba850",
         "name": "eventData",
         "active": true,
         "tosidebar": true,
@@ -1672,16 +1643,15 @@
         "targetType": "msg",
         "statusVal": "payload.length",
         "statusType": "msg",
-        "x": 1170,
-        "y": 220,
+        "x": 770,
+        "y": 520,
         "wires": []
     },
     {
-        "id": "172060688d87f510",
+        "id": "393ee0aac0784928",
         "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "notifyHeartbeat",
+        "z": "db7b8dca98eba850",
+        "name": "Get Topics",
         "props": [
             {
                 "p": "payload"
@@ -1693,55 +1663,26 @@
         ],
         "repeat": "5",
         "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "notifyHeartbeat",
-        "payload": "",
-        "payloadType": "date",
-        "x": 230,
-        "y": 400,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "311c3b5d3d73fc24",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "notifyFileReady",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "notifyFileReady",
+        "topic": "get",
         "payload": "",
         "payloadType": "date",
-        "x": 240,
-        "y": 480,
+        "x": 130,
+        "y": 520,
         "wires": [
             [
-                "e5f66f4bd6777ca0"
+                "f8d2934457eb7030"
             ]
         ]
     },
     {
-        "id": "5437e3fdfca300c9",
+        "id": "9745e4eaaad146b5",
         "type": "http request",
-        "z": "c5746e29f53f72ce",
+        "z": "db7b8dca98eba850",
         "name": "",
         "method": "GET",
-        "ret": "txt",
+        "ret": "obj",
         "paytoqs": "ignore",
         "url": "",
         "tls": "7b2f4859e5963695",
@@ -1751,168 +1692,66 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 850,
-        "y": 220,
+        "x": 470,
+        "y": 520,
         "wires": [
             [
-                "dc576b6355478428"
+                "ec4917fbcca1ea55"
             ]
         ]
     },
     {
-        "id": "dc576b6355478428",
+        "id": "ec4917fbcca1ea55",
         "type": "function",
-        "z": "c5746e29f53f72ce",
+        "z": "db7b8dca98eba850",
         "name": "Provider",
-        "func": "const string = msg.payload;\nconst array = JSON.parse(string);\nif (Array.isArray(array)) {\n    msg.payload = array.map( (item) => {\n        if (typeof item === 'string' || item instanceof String) {\n            return JSON.parse(item);\n        }\n    });\n} else {\n    msg.payload = array;\n}\nglobal.set('topicData', msg.payload)\nreturn msg;",
+        "func": "global.set('topicData', msg.payload)\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1020,
-        "y": 220,
+        "x": 620,
+        "y": 520,
         "wires": [
             [
-                "562063a080cb99d6"
+                "a2d14719998c5951"
             ]
         ]
     },
     {
-        "id": "e5f66f4bd6777ca0",
+        "id": "f8d2934457eb7030",
         "type": "function",
-        "z": "c5746e29f53f72ce",
+        "z": "db7b8dca98eba850",
         "name": "http-preparation",
-        "func": "const protocol = env.get('MESSAGES_PROTOCOL');\nconst host = env.get('MESSAGES_HOST');\nconst port = env.get('MESSAGES_PORT');;\nconst base = protocol + '://' + host + ':' + port;\n\nconst path = 'events';\nconst urlMapping = {\n    pnfRegistration: 'unauthenticated.VES_PNFREG_OUTPUT',\n    heartbeat: 'unauthenticated.SEC_HEARTBEAT_OUTPUT',\n    fault: 'unauthenticated.SEC_FAULT_OUTPUT',\n    o1NotifyPnfRegistration: 'unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT',\n    oRanScDuHelloWorldPmStreaming: 'unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT',\n    notifyHeartbeat: 'unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT',\n    notifyFileReady: 'unauthenticated.VES_FILE_READY_OUTPUT',\n    notifyFilePreparationError: 'unauthenticated.VES_FILE_READY_OUTPUT',\n    oRanOpenfrontManagementPlane: 'unauthenticated.VES_O_RAN_SC_OPENFRONTHAUL_OUTPUT',\n    notifyNewAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyChangedAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyChangedAlarmGeneral: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyAckStateChanged: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyCorrelatedNotificationChanged: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyComments: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyClearedAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyAlarmListRebuilt: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyPotentialFaultyAlarmList: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT'\n};\nconst longPolling = '?timeout=60000'\nconst urlTopic = urlMapping[msg.topic] || msg.topic.replace(':', '-');\nmsg.url = [base, path, urlTopic, '1', '1'].join('/') + longPolling;\nreturn msg;",
+        "func": "const protocol = env.get('KAFKA_BRIDGE_PROTOCOL');\nconst host = env.get('KAFKA_BRIDGE_HOST');\nconst port = env.get('KAFKA_BRIDGE_PORT');;\nconst base = protocol + '://' + host + ':' + port;\nconst group = env.get('KAFKA_BRIDGE_CONSUMER_GROUP');\nconst name = env.get('KAFKA_BRIDGE_CONSUMER_NAME');\n\nconst urlMapping = {\n    pnfRegistration: 'unauthenticated.VES_PNFREG_OUTPUT',\n    heartbeat: 'unauthenticated.SEC_HEARTBEAT_OUTPUT',\n    fault: 'unauthenticated.SEC_FAULT_OUTPUT',\n    o1NotifyPnfRegistration: 'unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT',\n    oRanScDuHelloWorldPmStreaming: 'unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT',\n    notifyHeartbeat: 'unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT',\n    notifyFileReady: 'unauthenticated.VES_FILE_READY_OUTPUT',\n    notifyFilePreparationError: 'unauthenticated.VES_FILE_READY_OUTPUT',\n    oRanOpenfrontManagementPlane: 'unauthenticated.VES_O_RAN_SC_OPENFRONTHAUL_OUTPUT',\n    notifyNewAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyChangedAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyChangedAlarmGeneral: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyAckStateChanged: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyCorrelatedNotificationChanged: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyComments: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyClearedAlarm: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyAlarmListRebuilt: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT',\n    notifyPotentialFaultyAlarmList: 'unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT'\n};\n\nmsg.url = [base, 'consumers', group, 'instances', name, 'records'].join('/');\nmsg.headers = {\n    accept: 'application/vnd.kafka.json.v2+json'\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
-        "y": 220,
+        "x": 300,
+        "y": 520,
         "wires": [
             [
-                "5437e3fdfca300c9"
+                "9745e4eaaad146b5"
             ]
         ]
     },
     {
-        "id": "42275e9c12f8e52b",
+        "id": "c82c06ee1b7fad77",
         "type": "comment",
-        "z": "c5746e29f53f72ce",
-        "name": "from O-RAN-SC",
-        "info": "",
-        "x": 100,
-        "y": 220,
-        "wires": []
-    },
-    {
-        "id": "e07fa97ebc66dce0",
-        "type": "comment",
-        "z": "c5746e29f53f72ce",
-        "name": "from ONAP",
+        "z": "db7b8dca98eba850",
+        "name": "Get Records",
         "info": "",
         "x": 90,
-        "y": 40,
+        "y": 480,
         "wires": []
     },
     {
-        "id": "44b8c2cc138777f1",
-        "type": "comment",
-        "z": "c5746e29f53f72ce",
-        "name": "from SA5 R-18 branch",
-        "info": "",
-        "x": 120,
-        "y": 360,
-        "wires": []
-    },
-    {
-        "id": "4480e5473a65a757",
+        "id": "6cc496f1420404b3",
         "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "oRanScDuHelloWorldPmStreaming",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "oRanScDuHelloWorldPmStreaming",
-        "payload": "",
-        "payloadType": "date",
-        "x": 180,
-        "y": 300,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "52f22ee054e5b4ac",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "o1NotifyPnfRegistration",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o1NotifyPnfRegistration",
-        "payload": "",
-        "payloadType": "date",
-        "x": 220,
-        "y": 260,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "3051f52553efaaa4",
-        "type": "http request",
-        "z": "c5746e29f53f72ce",
-        "name": "",
-        "method": "GET",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "7b2f4859e5963695",
-        "persist": true,
-        "proxy": "",
-        "insecureHTTPParser": true,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 850,
-        "y": 180,
-        "wires": [
-            [
-                "dc576b6355478428"
-            ]
-        ]
-    },
-    {
-        "id": "0acceacb99b7981a",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
+        "z": "db7b8dca98eba850",
         "name": "Topics?",
         "props": [
             {
@@ -1925,1166 +1764,43 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
+        "once": true,
+        "onceDelay": "0.8",
         "topic": "topics",
         "payload": "",
         "payloadType": "date",
-        "x": 530,
-        "y": 180,
-        "wires": [
-            [
-                "e4ec70e46406674f"
-            ]
-        ]
-    },
-    {
-        "id": "34b7ac222692e06d",
-        "type": "comment",
-        "z": "c5746e29f53f72ce",
-        "name": "from OpenFronthaul Management-Plane",
-        "info": "",
-        "x": 580,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "25a3eca83bbc3489",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "o-ran-supervision:supervision-notification",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "60",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-supervision:supervision-notification",
-        "payload": "",
-        "payloadType": "date",
-        "x": 620,
-        "y": 1040,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "0194d014ef8f6c5e",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "o-ran-file-management:file-upload-notification",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-file-management:file-upload-notification",
-        "payload": "",
-        "payloadType": "date",
-        "x": 630,
-        "y": 760,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "775aacf9e2cc0285",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "o-ran-file-management:file-download-event",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-file-management:file-download-event",
-        "payload": "",
-        "payloadType": "date",
-        "x": 620,
-        "y": 720,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "3e3be17a65a7d1bf",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-ald-port:dc-enabled-status-change",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-ald-port:dc-enabled-status-change",
-        "payload": "",
-        "payloadType": "date",
-        "x": 620,
-        "y": 320,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "665c45e5ccd1c9cb",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-ald-port:overcurrent-report",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-ald-port:overcurrent-report",
-        "payload": "",
-        "payloadType": "date",
-        "x": 590,
-        "y": 360,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "5520ce3b83578f17",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-antenna-calibration:antenna-calibration-coordinated",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-antenna-calibration:antenna-calibration-coordinated",
-        "payload": "",
-        "payloadType": "date",
-        "x": 670,
+        "x": 120,
         "y": 400,
         "wires": [
             [
-                "e5f66f4bd6777ca0"
+                "7a931d124e3fdc64"
             ]
         ]
     },
     {
-        "id": "fda3090fb4f1e9d4",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-antenna-calibration:antenna-calibration-multiple-time-resource-params",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-antenna-calibration:antenna-calibration-multiple-time-resource-params",
-        "payload": "",
-        "payloadType": "date",
-        "x": 730,
-        "y": 440,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "2551bb6c9746a7c2",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-antenna-calibration:antenna-calibration-required",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-antenna-calibration:antenna-calibration-required",
-        "payload": "",
-        "payloadType": "date",
-        "x": 660,
-        "y": 480,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "0dcc72d0235e6336",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-antenna-calibration:antenna-calibration-result",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-antenna-calibration:antenna-calibration-result",
-        "payload": "",
-        "payloadType": "date",
-        "x": 650,
-        "y": 520,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "0abafa5c1a4ebd33",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-beamforming:beamforming-information-update",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-beamforming:beamforming-information-update",
-        "payload": "",
-        "payloadType": "date",
-        "x": 650,
-        "y": 560,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "d74c5f1885485d8c",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-beamforming:capability-group-beamforming-information-update",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-beamforming:capability-group-beamforming-information-update",
-        "payload": "",
-        "payloadType": "date",
-        "x": 700,
-        "y": 600,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "8d755b355a3d5557",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-beamforming:predefined-beam-tilt-offset-complete",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-beamforming:predefined-beam-tilt-offset-complete",
-        "payload": "",
-        "payloadType": "date",
-        "x": 660,
-        "y": 640,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6ebe4693c580ae00",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-externalio:external-input-change",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-externalio:external-input-change",
-        "payload": "",
-        "payloadType": "date",
-        "x": 610,
-        "y": 680,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "89144928a6ead625",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-fm:alarm-notif",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-fm:alarm-notif",
-        "payload": "",
-        "payloadType": "date",
-        "x": 550,
-        "y": 800,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "8ebca0cd456a9763",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-laa-operations:measurement-result",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-laa-operations:measurement-result",
-        "payload": "",
-        "payloadType": "date",
-        "x": 620,
-        "y": 840,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "4778511387bc7449",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-performance-management:measurement-result-stats",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-performance-management:measurement-result-stats",
-        "payload": "",
-        "payloadType": "date",
-        "x": 670,
-        "y": 880,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "c106623d629fbe54",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-software-management:activation-event",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-software-management:activation-event",
-        "payload": "",
-        "payloadType": "date",
-        "x": 630,
-        "y": 920,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "4db0e5b915d76ddb",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-software-management:download-event",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-software-management:download-event",
-        "payload": "",
-        "payloadType": "date",
-        "x": 630,
-        "y": 960,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "8d3fab47729a807d",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-software-management:install-event",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-software-management:install-event",
-        "payload": "",
-        "payloadType": "date",
-        "x": 620,
-        "y": 1000,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "7ac87519cb59151d",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-sync:gnss-state-change",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-sync:gnss-state-change",
-        "payload": "",
-        "payloadType": "date",
-        "x": 580,
-        "y": 1080,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "55725b18e27c1a27",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-sync:ptp-state-change",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-sync:ptp-state-change",
-        "payload": "",
-        "payloadType": "date",
-        "x": 580,
-        "y": 1120,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "dde01e699dec844f",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-sync:synce-state-change",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-sync:synce-state-change",
-        "payload": "",
-        "payloadType": "date",
-        "x": 590,
-        "y": 1160,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "5457d995823e58f6",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-sync:synchronization-state-change",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-sync:synchronization-state-change",
-        "payload": "",
-        "payloadType": "date",
-        "x": 620,
-        "y": 1200,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "ca9f765b3838d5ff",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-trace:trace-log-generated",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-trace:trace-log-generated",
-        "payload": "",
-        "payloadType": "date",
-        "x": 590,
-        "y": 1240,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "0a837c4beaa140e0",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-uplane-conf:rx-array-carriers-state-change",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-uplane-conf:rx-array-carriers-state-change",
-        "payload": "",
-        "payloadType": "date",
-        "x": 640,
-        "y": 1320,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "3dfb5349f08c5ea9",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-troubleshooting:troubleshooting-log-generated",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-troubleshooting:troubleshooting-log-generated",
-        "payload": "",
-        "payloadType": "date",
-        "x": 650,
-        "y": 1280,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "030a6e7e6371402e",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "d": true,
-        "name": "o-ran-uplane-conf:tx-array-carriers-state-change",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "o-ran-uplane-conf:tx-array-carriers-state-change",
-        "payload": "",
-        "payloadType": "date",
-        "x": 640,
-        "y": 1360,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "d932661ae80274a1",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "notifyNewAlarm",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "notifyNewAlarm",
-        "payload": "",
-        "payloadType": "date",
-        "x": 240,
-        "y": 600,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "c4337f08252203ec",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "notifyChangedAlarm",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "notifyChangedAlarm",
-        "payload": "",
-        "payloadType": "date",
-        "x": 230,
-        "y": 640,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "62048992a866405d",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "notifyChangedAlarmGeneral",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "notifyChangedAlarmGeneral",
-        "payload": "",
-        "payloadType": "date",
-        "x": 200,
-        "y": 680,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "353e0a6e1e693ae5",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "notifyAckStateChanged",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "notifyAckStateChanged",
-        "payload": "",
-        "payloadType": "date",
-        "x": 220,
-        "y": 720,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "3879e3d1320f1459",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "notifyCorrelatedNotificationChanged",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "notifyCorrelatedNotificationChanged",
-        "payload": "",
-        "payloadType": "date",
-        "x": 180,
-        "y": 760,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "ea314b13220c8f40",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "notifyComments",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "notifyComments",
-        "payload": "",
-        "payloadType": "date",
-        "x": 240,
-        "y": 800,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "407c7befca74d24b",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "notifyClearedAlarm",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "notifyClearedAlarm",
-        "payload": "",
-        "payloadType": "date",
-        "x": 230,
-        "y": 840,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "c054dd03a80a4e48",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "notifyAlarmListRebuilt",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "notifyAlarmListRebuilt",
-        "payload": "",
-        "payloadType": "date",
-        "x": 220,
-        "y": 880,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "5c8b20a14ea5863a",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "notifyPotentialFaultyAlarmList",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "notifyPotentialFaultyAlarmList",
-        "payload": "",
-        "payloadType": "date",
-        "x": 200,
-        "y": 920,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "f5d7d173f1ac5213",
-        "type": "comment",
-        "z": "c5746e29f53f72ce",
-        "name": "TS28532_FaultMnS.yaml",
-        "info": "",
-        "x": 130,
-        "y": 560,
-        "wires": []
-    },
-    {
-        "id": "c6687553f38611cd",
-        "type": "comment",
-        "z": "c5746e29f53f72ce",
-        "name": "TS28532_FileDataReportingMnS.yaml",
-        "info": "",
-        "x": 170,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "64720217524b2f2c",
-        "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "notifyFilePreparationError",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "notifyFilePreparationError",
-        "payload": "",
-        "payloadType": "date",
-        "x": 210,
-        "y": 520,
-        "wires": [
-            [
-                "e5f66f4bd6777ca0"
-            ]
-        ]
-    },
-    {
-        "id": "e4ec70e46406674f",
+        "id": "7a931d124e3fdc64",
         "type": "function",
-        "z": "c5746e29f53f72ce",
+        "z": "db7b8dca98eba850",
         "name": "http-preparation",
-        "func": "const protocol = env.get('MESSAGES_PROTOCOL');\nconst host = env.get('MESSAGES_HOST');\nconst port = env.get('MESSAGES_PORT');\nconst base = protocol + '://' + host + ':' + port;\nconst path = msg.topic;\nmsg.url = [base, path].join('/');\nreturn msg;",
+        "func": "const protocol = env.get('KAFKA_BRIDGE_PROTOCOL');\nconst host = env.get('KAFKA_BRIDGE_HOST');\nconst port = env.get('KAFKA_BRIDGE_PORT');\nconst base = protocol + '://' + host + ':' + port;\nconst path = msg.topic;\nmsg.url = [base, path].join('/');\nmsg.method = 'get';\nmsg.headers = {\n    accept: 'application/vnd.kafka.v2+json'\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 680,
-        "y": 180,
+        "x": 340,
+        "y": 400,
         "wires": [
             [
-                "3051f52553efaaa4"
+                "53aae16b268527f7"
             ]
         ]
     },
     {
-        "id": "58232148f55eafc9",
+        "id": "051acf7693d4d457",
         "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "heartbeat (deprecated)",
+        "z": "db7b8dca98eba850",
+        "name": "Do Subscription",
         "props": [
             {
                 "p": "payload"
@@ -3094,26 +1810,163 @@
                 "vt": "str"
             }
         ],
-        "repeat": "60",
+        "repeat": "",
         "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "heartbeat",
+        "once": true,
+        "onceDelay": "0.6",
+        "topic": "subscription",
         "payload": "",
         "payloadType": "date",
-        "x": 210,
+        "x": 140,
+        "y": 300,
+        "wires": [
+            [
+                "a72e6d0ab9261954"
+            ]
+        ]
+    },
+    {
+        "id": "a72e6d0ab9261954",
+        "type": "function",
+        "z": "db7b8dca98eba850",
+        "name": "http-preparation",
+        "func": "const protocol = env.get('KAFKA_BRIDGE_PROTOCOL');\nconst host = env.get('KAFKA_BRIDGE_HOST');\nconst port = env.get('KAFKA_BRIDGE_PORT');\nconst base = protocol + '://' + host + ':' + port;\nconst group = env.get('KAFKA_BRIDGE_CONSUMER_GROUP');\nconst name = env.get('KAFKA_BRIDGE_CONSUMER_NAME');\nmsg.url = [base, 'consumers', group, 'instances', name, msg.topic].join('/');\nmsg.method = 'post';\nmsg.headers = {\n    'content-type': 'application/vnd.kafka.v2+json',\n    accept: 'application/vnd.kafka.v2+json'\n}\nmsg.payload = {\n    \"topics\": [\"unauthenticated.VES_O1_NOTIFY_PNF_REGISTRATION_OUTPUT\", \"unauthenticated.SEC_HEARTBEAT_OUTPUT\", \"unauthenticated.VES_O_RAN_SC_HELLO_WORLD_PM_STREAMING_OUTPUT\", \"unauthenticated.VES_PNFREG_OUTPUT\", \"unauthenticated.VES_FILE_READY_OUTPUT\", \"o-ran-file-management-file-download-event\", \"bridge-quickstart-topic\", \"o-ran-file-management-file-upload-notification\", \"o-ran-supervision-supervision-notification\", \"unauthenticated.SEC_3GPP_FAULTSUPERVISION_OUTPUT\", \"my-topic\", \"unauthenticated.SEC_3GPP_HEARTBEAT_OUTPUT\", \"unauthenticated.SEC_FAULT_OUTPUT\"]\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 300,
+        "wires": [
+            [
+                "53aae16b268527f7"
+            ]
+        ]
+    },
+    {
+        "id": "53aae16b268527f7",
+        "type": "http request",
+        "z": "db7b8dca98eba850",
+        "name": "http request",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "7b2f4859e5963695",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": true,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 590,
+        "y": 300,
+        "wires": [
+            [
+                "025484501aa58b31"
+            ]
+        ]
+    },
+    {
+        "id": "025484501aa58b31",
+        "type": "debug",
+        "z": "db7b8dca98eba850",
+        "name": "Response",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "statusCode",
+        "statusType": "msg",
+        "x": 770,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "2bcd1fcc0cb4f747",
+        "type": "inject",
+        "z": "db7b8dca98eba850",
+        "name": "healthy?",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "healthy",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "4b695d52e3231b6b"
+            ]
+        ]
+    },
+    {
+        "id": "4b695d52e3231b6b",
+        "type": "function",
+        "z": "db7b8dca98eba850",
+        "name": "http-preparation",
+        "func": "const protocol = env.get('KAFKA_BRIDGE_PROTOCOL');\nconst host = env.get('KAFKA_BRIDGE_HOST');\nconst port = env.get('KAFKA_BRIDGE_PORT');\nconst base = protocol + '://' + host + ':' + port;\nmsg.url = [base, msg.topic].join('/');\nmsg.method = 'get';\nmsg.headers = {\n    accept: 'application/json'\n}\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 200,
+        "wires": [
+            [
+                "53aae16b268527f7"
+            ]
+        ]
+    },
+    {
+        "id": "2d834fde764e3443",
+        "type": "inject",
+        "z": "db7b8dca98eba850",
+        "name": "ready?",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.2",
+        "topic": "ready",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
         "y": 120,
         "wires": [
             [
-                "e5f66f4bd6777ca0"
+                "4b695d52e3231b6b"
             ]
         ]
     },
     {
-        "id": "23cf0bc0546d281b",
+        "id": "7bbff4bdad2683f0",
         "type": "inject",
-        "z": "c5746e29f53f72ce",
-        "name": "fault (deprecated)",
+        "z": "db7b8dca98eba850",
+        "name": "Schema?",
         "props": [
             {
                 "p": "payload"
@@ -3123,20 +1976,155 @@
                 "vt": "str"
             }
         ],
-        "repeat": "60",
+        "repeat": "",
         "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "fault",
+        "once": true,
+        "onceDelay": "0.4",
+        "topic": "openapi",
         "payload": "",
         "payloadType": "date",
-        "x": 230,
+        "x": 120,
+        "y": 200,
+        "wires": [
+            [
+                "4b695d52e3231b6b"
+            ]
+        ]
+    },
+    {
+        "id": "1b322733222d5c1d",
+        "type": "inject",
+        "z": "db7b8dca98eba850",
+        "name": "Version?",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.3",
+        "topic": " ",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
         "y": 160,
         "wires": [
             [
-                "e5f66f4bd6777ca0"
+                "4b695d52e3231b6b"
             ]
         ]
+    },
+    {
+        "id": "12e182c0bee28aad",
+        "type": "inject",
+        "z": "db7b8dca98eba850",
+        "name": "CreateConsumer",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.5",
+        "topic": "consumers",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 260,
+        "wires": [
+            [
+                "46c33603561bf711"
+            ]
+        ]
+    },
+    {
+        "id": "46c33603561bf711",
+        "type": "function",
+        "z": "db7b8dca98eba850",
+        "name": "http-preparation",
+        "func": "const protocol = env.get('KAFKA_BRIDGE_PROTOCOL');\nconst host = env.get('KAFKA_BRIDGE_HOST');\nconst port = env.get('KAFKA_BRIDGE_PORT');\nconst base = protocol + '://' + host + ':' + port;\nconst group = env.get('KAFKA_BRIDGE_CONSUMER_GROUP');\nconst name = env.get('KAFKA_BRIDGE_CONSUMER_NAME');\nmsg.url = [base, msg.topic, group].join('/');\nmsg.method = 'post';\nmsg.headers = {\n    'content-type': 'application/vnd.kafka.v2+json',\n    accept: 'application/vnd.kafka.v2+json'\n}\nmsg.payload = {\n    name: name,\n    format: 'json',\n    'auto.offset.reset': 'earliest',\n    'enable.auto.commit': true,\n    'fetch.min.bytes': 1,\n    'consumer.request.timeout.ms': 30000,\n    'isolation.level': 'read_uncommitted'\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 260,
+        "wires": [
+            [
+                "53aae16b268527f7"
+            ]
+        ]
+    },
+    {
+        "id": "63c336487e6e0eb9",
+        "type": "inject",
+        "z": "db7b8dca98eba850",
+        "name": "Get Subscription",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.7",
+        "topic": "subscription",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 340,
+        "wires": [
+            [
+                "b0f5987ab4bd1256"
+            ]
+        ]
+    },
+    {
+        "id": "b0f5987ab4bd1256",
+        "type": "function",
+        "z": "db7b8dca98eba850",
+        "name": "http-preparation",
+        "func": "const protocol = env.get('KAFKA_BRIDGE_PROTOCOL');\nconst host = env.get('KAFKA_BRIDGE_HOST');\nconst port = env.get('KAFKA_BRIDGE_PORT');\nconst base = protocol + '://' + host + ':' + port;\nconst group = env.get('KAFKA_BRIDGE_CONSUMER_GROUP');\nconst name = env.get('KAFKA_BRIDGE_CONSUMER_NAME');\nmsg.url = [base, 'consumers', group, 'instances', name, msg.topic].join('/');\nmsg.method = 'get';\nmsg.headers = {\n    accept: 'application/vnd.kafka.v2+json'\n}\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 340,
+        "wires": [
+            [
+                "53aae16b268527f7"
+            ]
+        ]
+    },
+    {
+        "id": "ccf49a001b3e92d2",
+        "type": "comment",
+        "z": "db7b8dca98eba850",
+        "name": "Preparation",
+        "info": "",
+        "x": 90,
+        "y": 40,
+        "wires": []
     },
     {
         "id": "c5648c1528804847",
@@ -3252,7 +2240,7 @@
         "type": "function",
         "z": "7ba02ed596e8cde5",
         "name": "Consumer (new Data?)",
-        "func": "// read topic data from global context\nconst topicData = global.get('topicData');\n// init result as array\nlet result = [];\nif (Array.isArray(topicData)) {\n    result = topicData.filter(event => {\n        return event.event.commonEventHeader.stndDefinedNamespace === 'o-ran-supervision:supervision-notification';\n    }).map(event => {\n        return event.event.commonEventHeader.sourceName;;\n    });\n}\nmsg.payload = result;\nglobal.set('topicData', []);\nreturn msg; ",
+        "func": "// read topic data from global context\nconst topicData = global.get('topicData');\n// init result as array\nlet result = [];\nif (Array.isArray(topicData)) {\n    result = topicData.filter(event => {\n        return event.value.event.commonEventHeader.stndDefinedNamespace === 'o-ran-supervision:supervision-notification';\n    }).map(event => {\n        return event.value.event.commonEventHeader.sourceName;;\n    });\n}\nmsg.payload = result;\nglobal.set('topicData', []);\nreturn msg; ",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
