@@ -9,6 +9,8 @@ services:
         - BASEIMAGE=${FLOWS_IMAGE}
     container_name: flows
     hostname: flows
+    extra_hosts:
+      - "flows.oam.${SOLUTION_DOMAIN}:${HOST_IP}"
     environment:
       APP_VENDOR: ${APP_VENDOR}
       APP_SOURCE: ${APP_SOURCE}
@@ -27,7 +29,11 @@ services:
       MESSAGES_PROTOCOL: https
       MESSAGES_HOST: messages.${SOLUTION_DOMAIN}
       MESSAGES_PORT: 443
-
+      KAFKA_BRIDGE_PROTOCOL: https
+      KAFKA_BRIDGE_HOST: kafka-bridge.${SOLUTION_DOMAIN}
+      KAFKA_BRIDGE_PORT: 443
+      KAFKA_BRIDGE_CONSUMER_GROUP: app
+      KAFKA_BRIDGE_CONSUMER_NAME: message-consumer
     labels:
       traefik.enable: true
       traefik.http.routers.flows.entrypoints: websecure
