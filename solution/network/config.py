@@ -36,7 +36,7 @@ dockerFilter = subprocess.check_output("docker ps --format '{{.Names}}'", shell=
 containers = dockerFilter.splitlines()
 
 mapping = dict({"ntsim-ng-o-ru": "O-RU", "ntsim-ng-o-du": "O-DU"})
-base = get_environment_variable('SDN_CONTROLLER_PROTOCOL') + '://' + get_environment_variable('SDNC_DCN_HOST')
+base = get_environment_variable('SDN_CONTROLLER_PROTOCOL') + '://' + get_environment_variable('SDNC_OAM_HOST')
 username = get_environment_variable('ADMIN_USERNAME')
 password = get_environment_variable('ADMIN_PASSWORD')
 
