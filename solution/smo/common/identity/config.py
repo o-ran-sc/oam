@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-################################################################################
-# Copyright 2021 highstreet technologies GmbH
+#############################################################################
+# Copyright 2023 highstreet technologies GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ warnings.filterwarnings('ignore', message='Unverified HTTPS request')
 
 def get_environment_variable(name):
     configs = Properties()
-    path = pathlib.Path( os.path.dirname(os.path.abspath(__file__)) )
+    path = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
     env_file = str(path.parent.absolute()) + '/.env'
     with open(env_file, "rb") as read_prop:
         configs.load(read_prop)
@@ -62,12 +62,12 @@ def load_arguments(args: List[str]) -> tuple:
 
 
 def isReady(timeoutSeconds=180):
-    url = getBaseUrl();
+    url = getBaseUrl()
     while timeoutSeconds > 0:
         try:
             response = requests.get(url, verify=False, headers={})
         except:
-            pass
+            response = None
         if response is not None and response.status_code == 200:
             return True
         time.sleep(1)
@@ -79,6 +79,8 @@ def getBaseUrl():
     return get_environment_variable("IDENTITY_PROVIDER_URL")
 
 # Request a token for further communication
+
+
 def getToken():
     url = base + '/realms/master/protocol/openid-connect/token'
     headers = {
@@ -204,10 +206,10 @@ def createUsers(token, realmConfig, authConfig):
                 "value": password,
                 "temporary": True
             }
-      ],
-      "requiredActions": [
-        "UPDATE_PASSWORD"
-      ]
+        ],
+        "requiredActions": [
+            "UPDATE_PASSWORD"
+        ]
     }
     createUser(token, realmConfig, systemUser)
 
@@ -218,7 +220,8 @@ def addUserRole(user: dict, role: dict, options: dict):
     url = options['url'] + '/' + user['id'] + '/role-mappings/realm'
     try:
         response = requests.post(url, verify=False, json=[
-                                 {'id': role['id'], 'name':role['name']}], headers=options['headers'])
+                                 {'id': role['id'], 'name':role['name']}],
+                                 headers=options['headers'])
     except requests.exceptions.Timeout:
         sys.exit('HTTP request failed, please check you internet connection.')
     except requests.exceptions.TooManyRedirects:
@@ -234,6 +237,7 @@ def addUserRole(user: dict, role: dict, options: dict):
               user['username'], role['name'], 'failed!\n', response.text)
 
 # searches for the role of a given user
+
 
 def findRole(username: str, authConfig: dict, realmConfig: dict) -> dict:
     roleName = 'administration'
