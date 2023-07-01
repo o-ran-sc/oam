@@ -203,6 +203,29 @@ services:
       dmz:
       default:
 
+  topology:
+    image: "${O_RAN_SC_TOPOLOGY_IMAGE}"
+    container_name: topology
+    hostname: topology
+    healthcheck:
+      test: curl -u ${ADMIN_USERNAME}:${ADMIN_USERNAME} http://localhost:8181 || exit 1
+      start_period: 30s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+        - ./topology/tapi-common-operational.json:/opt/dev/deploy/data/tapi-common-operational.json
+        - ./topology/tapi-common-running.json:/opt/dev/deploy/data/tapi-common-running.json
+    labels:
+      traefik.enable: true
+      traefik.http.routers.topology.entrypoints: websecure
+      traefik.http.routers.topology.rule: Host(`topology.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.topology.tls: true
+      traefik.http.services.topology.loadbalancer.server.port: 8181
+    networks:
+      dmz:
+      default:
+
   messages:
     image: ${DMAAP_IMAGE}
     container_name: messages
