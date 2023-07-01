@@ -46,7 +46,7 @@ services:
     container_name: controller
     hostname: controller
     extra_hosts:
-      - "controller.dcn.smo.o-ran-sc.org:${HOST_IP}"
+      - "controller.dcn.${SOLUTION_DOMAIN}:${HOST_IP}"
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:${SDNC_REST_PORT}/ready || exit 1
       start_period: 60s
