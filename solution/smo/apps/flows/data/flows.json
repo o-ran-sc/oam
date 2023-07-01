@@ -248,8 +248,8 @@
         "type": "debug",
         "z": "51e83a0892da060e",
         "name": "ves-message-data",
-        "active": true,
-        "tosidebar": false,
+        "active": false,
+        "tosidebar": true,
         "console": true,
         "tostatus": true,
         "complete": "payload",
@@ -1643,15 +1643,15 @@
         "targetType": "msg",
         "statusVal": "payload.length",
         "statusType": "msg",
-        "x": 770,
-        "y": 520,
+        "x": 790,
+        "y": 580,
         "wires": []
     },
     {
         "id": "393ee0aac0784928",
         "type": "inject",
         "z": "db7b8dca98eba850",
-        "name": "Get Topics",
+        "name": "Get Data",
         "props": [
             {
                 "p": "payload"
@@ -1661,15 +1661,15 @@
                 "vt": "str"
             }
         ],
-        "repeat": "5",
+        "repeat": "60",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "get",
         "payload": "",
         "payloadType": "date",
-        "x": 130,
-        "y": 520,
+        "x": 150,
+        "y": 580,
         "wires": [
             [
                 "f8d2934457eb7030"
@@ -1692,8 +1692,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 470,
-        "y": 520,
+        "x": 490,
+        "y": 580,
         "wires": [
             [
                 "ec4917fbcca1ea55"
@@ -1711,8 +1711,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 520,
+        "x": 640,
+        "y": 580,
         "wires": [
             [
                 "a2d14719998c5951"
@@ -1730,8 +1730,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 300,
-        "y": 520,
+        "x": 320,
+        "y": 580,
         "wires": [
             [
                 "9745e4eaaad146b5"
@@ -1745,7 +1745,7 @@
         "name": "Get Records",
         "info": "",
         "x": 90,
-        "y": 480,
+        "y": 540,
         "wires": []
     },
     {
@@ -2125,6 +2125,54 @@
         "x": 90,
         "y": 40,
         "wires": []
+    },
+    {
+        "id": "892cacf32948fe41",
+        "type": "function",
+        "z": "db7b8dca98eba850",
+        "name": "http-preparation",
+        "func": "const protocol = env.get('KAFKA_BRIDGE_PROTOCOL');\nconst host = env.get('KAFKA_BRIDGE_HOST');\nconst port = env.get('KAFKA_BRIDGE_PORT');\nconst base = protocol + '://' + host + ':' + port;\nconst group = env.get('KAFKA_BRIDGE_CONSUMER_GROUP');\nconst name = env.get('KAFKA_BRIDGE_CONSUMER_NAME');\nmsg.url = [base, msg.topic, group, 'instances', name].join('/');\nmsg.method = 'delete';\nmsg.headers = {\n    'content-type': 'application/vnd.kafka.v2+json',\n    accept: 'application/vnd.kafka.v2+json'\n}\nmsg.payload = null\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 460,
+        "wires": [
+            [
+                "53aae16b268527f7"
+            ]
+        ]
+    },
+    {
+        "id": "ca171245ae7b6184",
+        "type": "inject",
+        "z": "db7b8dca98eba850",
+        "name": "DeleteConsumer",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "0.5",
+        "topic": "consumers",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 460,
+        "wires": [
+            [
+                "892cacf32948fe41"
+            ]
+        ]
     },
     {
         "id": "c5648c1528804847",
