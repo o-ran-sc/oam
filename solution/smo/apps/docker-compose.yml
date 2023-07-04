@@ -45,6 +45,50 @@ services:
     networks:
       dmz:
 
+  tests:
+    image: ${TESTS_IMAGE}
+    privileged: true
+    user: root
+    container_name: tests
+    hostname: tests
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock:ro
+     - ./jenkins:/var/jenkins_home
+    labels:
+      traefik.enable: true
+      traefik.http.routers.tests.entrypoints: websecure
+      traefik.http.routers.tests.rule: Host(`tests.oam.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.tests.tls: true
+      traefik.http.services.tests.loadbalancer.server.port: 8080
+    networks:
+      dmz:
+
+  wireshark:
+    image: "${WIRESHARK_IMAGE}"
+    container_name: wireshark
+    cap_add:
+      - NET_ADMIN
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./wireshark:/config
+    # no port mappbecause of network mode host.
+    # ports:
+    #   - 3000:3000
+    restart: unless-stopped
+    # labels:
+    #   traefik.enable: true
+    #   traefik.http.routers.wireshark.entrypoints: websecure
+    #   traefik.http.routers.wireshark.rule: Host(`wireshark.oam.${SOLUTION_DOMAIN}`)
+    #   traefik.http.routers.wireshark.tls: true
+    #   traefik.http.services.wireshark.loadbalancer.server.port: 3000
+    # networks:
+    #   dmz:
+    #   dcn:
+
 networks:
   dmz:
     external: true
