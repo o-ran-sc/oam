@@ -57,10 +57,10 @@ services:
       - --providers.docker.network=${TRAEFIK_NETWORK_NAME}
       - --providers.docker.exposedByDefault=false
       - --providers.docker.watch=true
-      - --providers.file.filename=/middleware.yml
+      - --providers.file.filename=/middleware.yaml
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./gateway/conf/middleware.yml:/middleware.yml:ro
+      - ./gateway/conf/middleware.yaml:/middleware.yaml:ro
       - ./gateway/conf/.htpasswd:/.htpasswd:ro
     labels:
       traefik.enable: true
