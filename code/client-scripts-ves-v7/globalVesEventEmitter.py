@@ -81,7 +81,7 @@ def getInitData(domain, stndBody=''):
   result['interface']= "urn:ietf:params:xml:ns:yang:ietf-interfaces:interfaces/interface/name='O-RAN-SC-OAM'"
 
   # Read config
-  with open('config.yml', 'r') as stream:
+  with open('config.yaml', 'r') as stream:
     try:
         result['config']= yaml.safe_load(stream)
     except yaml.YAMLError as exc:
