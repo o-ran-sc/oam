@@ -158,14 +158,14 @@ docker-compose file and its configurations.::
    ├── network
    │   ├── .env
    │   ├── config.py
-   │   ├── docker-compose.yml
+   │   ├── docker-compose.yaml
    │   │
    │   ├── ntsim-ng-o-du
    │   └── ntsim-ng-o-ru
    └── smo
       ├── common
       │   ├── .env
-      │   ├── docker-compose.yml
+      │   ├── docker-compose.yaml
       │   │
       │   ├── dmaap
       │   ├── docker
@@ -174,7 +174,7 @@ docker-compose file and its configurations.::
       │   └── zookeeper
       └── oam
          ├── .env
-         ├── docker-compose.yml
+         ├── docker-compose.yaml
          │
          ├── web
          ├── controller
@@ -201,11 +201,11 @@ The tested configuration uses the following external https ports:
 Please note that it is necessary to configure first the identity service,
 before starting further docker images.
 
-The several docker-compose yml files must be started in the right order as listed below:
+The several docker-compose yaml files must be started in the right order as listed below:
 
 First the SMO common services must be started::
 
-   docker-compose -f smo/common/docker-compose.yml up -d
+   docker-compose -f smo/common/docker-compose.yaml up -d
    python smo/common/identity/config.py
 
 The python script configure the users within the identity service (keycloak).
@@ -214,7 +214,7 @@ The identity service implemented by Keycloak is configured in a way that the use
 
 In a second step the OAM specific service can be started: ::
 
-   docker-compose -f smo/oam/docker-compose.yml up -d
+   docker-compose -f smo/oam/docker-compose.yaml up -d
 
 Looking into the ONAP SDN-R logs will give you the startup procedure.::
 
@@ -227,12 +227,12 @@ The startup was successful when you see the following line: ::
 
 If you see the login page (https://sdnc-web:8453) you are good to go and can start the (simulated) network.::
 
-   docker-compose -f network/docker-compose.yml up -d
+   docker-compose -f network/docker-compose.yaml up -d
 
 
 Usually the first ves:event gets lost. Please restart the O-DU docker container(s) to send a second ves:pnfRegistration.::
 
-   docker-compose -f network/docker-compose.yml restart ntsim-ng-o-du-1122
+   docker-compose -f network/docker-compose.yaml restart ntsim-ng-o-du-1122
    python network/config.py
 
 
@@ -272,9 +272,9 @@ Terminate solution
 
 To stop all container please respect the following order::
 
-   docker-compose -f network/docker-compose.yml down
-   docker-compose -f smo/oam/docker-compose.yml down
-   docker-compose -f smo/common/docker-compose.yml down
+   docker-compose -f network/docker-compose.yaml down
+   docker-compose -f smo/oam/docker-compose.yaml down
+   docker-compose -f smo/common/docker-compose.yaml down
 
 Cleanup
 ^^^^^^^

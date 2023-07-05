@@ -137,16 +137,16 @@ The following commands should be invoked. More detailed can be found in the
 next chapters.
 
 ```
-docker compose -f smo/common/docker-compose.yml up -d
+docker compose -f smo/common/docker-compose.yaml up -d
 python smo/common/identity/config.py
 
-docker compose -f smo/oam/docker-compose.yml up -d
-docker compose -f smo/apps/docker-compose.yml up -d
+docker compose -f smo/oam/docker-compose.yaml up -d
+docker compose -f smo/apps/docker-compose.yaml up -d
 
 # wait until the cpu load is low again
 
-docker compose -f network/docker-compose.yml up -d
-docker compose -f network/docker-compose.yml restart ntsim-ng-o-du-1122 ntsim-ng-o-du-1123
+docker compose -f network/docker-compose.yaml up -d
+docker compose -f network/docker-compose.yaml restart ntsim-ng-o-du-1122 ntsim-ng-o-du-1123
 python network/config.py
 ```
 
@@ -163,10 +163,10 @@ nano network/.env
 Please note that it is necessary to configure first the identity service,
 before starting further docker images.
 
-The several docker-compose yml files must be started in the right order as listed below:
+The several docker-compose yaml files must be started in the right order as listed below:
 
 ```
-docker compose -f smo/common/docker-compose.yml up -d
+docker compose -f smo/common/docker-compose.yaml up -d
 python smo/common/identity/config.py
 ```
 
@@ -175,7 +175,7 @@ A system user (%USER) is also created with administration rights.
 
 
 ```
-docker compose -f smo/oam/docker-compose.yml up -d
+docker compose -f smo/oam/docker-compose.yaml up -d
 ```
 
 Looking into the ONAP SDN-R logs will give you the startup procedure.
@@ -187,13 +187,13 @@ docker logs -f controller
 If you see the login page (https://odlux.oam.smo.o-ran-sc.org) you are good to go and can start the (simulated) network.
 
 ```
-docker compose -f network/docker-compose.yml up -d
+docker compose -f network/docker-compose.yaml up -d
 ```
 
 Usually the first ves:event gets lost. Please restart the O-DU docker container(s) to send a second ves:pnfRegistration.
 
 ```
-docker compose -f network/docker-compose.yml restart ntsim-ng-o-du-1122
+docker compose -f network/docker-compose.yaml restart ntsim-ng-o-du-1122
 python network/config.py
 ```
 
@@ -258,10 +258,10 @@ In case of trouble, please update the commands with your customized '.env' file.
 To stop all container please respect the following order
 
 ```
-docker compose -f network/docker-compose.yml down
-docker compose -f smo/apps/docker-compose.yml down
-docker compose -f smo/oam/docker-compose.yml down
-docker compose -f smo/common/docker-compose.yml down
+docker compose -f network/docker-compose.yaml down
+docker compose -f smo/apps/docker-compose.yaml down
+docker compose -f smo/oam/docker-compose.yaml down
+docker compose -f smo/common/docker-compose.yaml down
 ```
 
 ### Cleanup
@@ -288,7 +288,7 @@ docker rm -f $(docker ps -aq)
 ```
 $ docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}" 
 NAMES     IMAGE     STATUS
-$ docker compose -f smo/common/docker-compose.yml up -d
+$ docker compose -f smo/common/docker-compose.yaml up -d
 [+] Running 9/9
  ✔ Network smo            Created                                                                                                                                                                  0.1s 
  ✔ Network dmz            Created                                                                                                                                                                  0.1s 
@@ -309,17 +309,17 @@ User role jargo.fett supervision created!
 User role leia.organa administration created!
 User role luke.skywalker provision created!
 User role r2.d2 administration created!
-$ docker compose -f smo/oam/docker-compose.yml up -d
+$ docker compose -f smo/oam/docker-compose.yaml up -d
 [+] Running 4/4
  ✔ Network oam              Created                                                                                                                                                                0.1s 
  ✔ Container controller     Healthy                                                                                                                                                               83.4s 
  ✔ Container ves-collector  Started                                                                                                                                                                1.2s 
  ✔ Container odlux          Started                                                                                                                                                               84.0s 
-$ docker compose -f smo/apps/docker-compose.yml up -d
+$ docker compose -f smo/apps/docker-compose.yaml up -d
 WARN[0000] Found orphan containers ([odlux controller ves-collector]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up. 
 [+] Running 1/1
  ✔ Container flows  Started                                                                                                                                                                        0.9s 
-$ docker compose -f network/docker-compose.yml up -d
+$ docker compose -f network/docker-compose.yaml up -d
 WARN[0000] Found orphan containers ([flows odlux controller ves-collector]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up. 
 [+] Running 6/6
  ✔ Container ntsim-ng-o-du-1123   Started                                                                                                                                                          2.6s 
@@ -328,7 +328,7 @@ WARN[0000] Found orphan containers ([flows odlux controller ves-collector]) for 
  ✔ Container ntsim-ng-o-ru-11224  Started                                                                                                                                                          1.9s 
  ✔ Container ntsim-ng-o-du-1122   Started                                                                                                                                                          2.4s 
  ✔ Container ntsim-ng-o-ru-11222  Started                                                                                                                                                          2.3s 
-$ docker compose -f network/docker-compose.yml restart ntsim-ng-o-du-1122 ntsim-ng-o-du-1123
+$ docker compose -f network/docker-compose.yaml restart ntsim-ng-o-du-1122 ntsim-ng-o-du-1123
 [+] Running 2/2
  ✔ Container ntsim-ng-o-du-1122  Started                                                                                                                                                           2.8s 
  ✔ Container ntsim-ng-o-du-1123  Started                                                                                                                                                           2.9s 
