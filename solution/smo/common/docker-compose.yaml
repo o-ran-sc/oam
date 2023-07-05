@@ -49,8 +49,8 @@ services:
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.websecure.address=:443
-      - --entrypoints.websecure.http.tls.domains[0].main=gateway.${SOLUTION_DOMAIN}
-      - --entrypoints.websecure.http.tls.domains[0].sans=*.${SOLUTION_DOMAIN}
+      - --entrypoints.websecure.http.tls.domains[0].main=gateway.${HTTP_DOMAIN}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${HTTP_DOMAIN}
       - --entrypoints.ssh-netconf-callhome.address=:4334
       - --entrypoints.tls-netconf-callhome.address=:4335
       - --providers.docker.endpoint=unix:///var/run/docker.sock
@@ -65,7 +65,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.middlewares.traefik-auth.basicauth.usersfile: .htpasswd
-      traefik.http.routers.gateway.rule: Host(`gateway.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.gateway.rule: Host(`gateway.${HTTP_DOMAIN}`)
       traefik.http.routers.gateway.entrypoints: websecure
       traefik.http.routers.gateway.service: api@internal
       traefik.http.routers.gateway.middlewares: strip
@@ -116,7 +116,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.identity.entrypoints: websecure
-      traefik.http.routers.identity.rule: Host(`identity.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.identity.rule: Host(`identity.${HTTP_DOMAIN}`)
       traefik.http.routers.identity.tls: true
       traefik.http.services.identity.loadbalancer.server.port: 8080
     depends_on:
@@ -189,7 +189,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.kafka-bridge.entrypoints: websecure
-      traefik.http.routers.kafka-bridge.rule: Host(`kafka-bridge.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.kafka-bridge.rule: Host(`kafka-bridge.${HTTP_DOMAIN}`)
       traefik.http.routers.kafka-bridge.tls: true
       traefik.http.services.kafka-bridge.loadbalancer.server.port: 8080
     volumes:
@@ -219,7 +219,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.topology.entrypoints: websecure
-      traefik.http.routers.topology.rule: Host(`topology.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.topology.rule: Host(`topology.${HTTP_DOMAIN}`)
       traefik.http.routers.topology.tls: true
       traefik.http.services.topology.loadbalancer.server.port: 8181
     networks:
@@ -239,7 +239,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.messages.entrypoints: websecure
-      traefik.http.routers.messages.rule: Host(`messages.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.messages.rule: Host(`messages.${HTTP_DOMAIN}`)
       traefik.http.routers.messages.tls: true
       traefik.http.services.messages.loadbalancer.server.port: 3904
     depends_on:

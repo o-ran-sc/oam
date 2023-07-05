@@ -10,34 +10,34 @@ services:
     container_name: flows
     hostname: flows
     extra_hosts:
-      - "flows.oam.${SOLUTION_DOMAIN}:${HOST_IP}"
+      - "flows.oam.${HTTP_DOMAIN}:${HOST_IP}"
     environment:
       APP_VENDOR: ${APP_VENDOR}
       APP_SOURCE: ${APP_SOURCE}
       APP_NETWORK_FUNCTION_ID: ${APP_NETWORK_FUNCTION_ID}
       SDN_CONTROLLER_PROTOCOL: https
-      SDN_CONTROLLER_HOST: controller.dcn.${SOLUTION_DOMAIN}
+      SDN_CONTROLLER_HOST: controller.dcn.${HTTP_DOMAIN}
       SDN_CONTROLLER_PORT: 443
       SDN_CONTROLLER_USERNAME: ${ADMIN_USERNAME}
       SDN_CONTROLLER_PASSWORD: ${ADMIN_PASSWORD}
       VES_ENDPOINT_PROTOCOL: https
-      VES_ENDPOINT_HOST: ves-collector.dcn.${SOLUTION_DOMAIN}
+      VES_ENDPOINT_HOST: ves-collector.dcn.${HTTP_DOMAIN}
       VES_ENDPOINT_PORT: 443
       VES_ENDPOINT_AUTH_METHOD: ${VES_ENDPOINT_AUTH_METHOD}
       VES_ENDPOINT_USERNAME: ${VES_ENDPOINT_USERNAME}
       VES_ENDPOINT_PASSWORD: ${VES_ENDPOINT_PASSWORD}
       MESSAGES_PROTOCOL: https
-      MESSAGES_HOST: messages.${SOLUTION_DOMAIN}
+      MESSAGES_HOST: messages.${HTTP_DOMAIN}
       MESSAGES_PORT: 443
       KAFKA_BRIDGE_PROTOCOL: https
-      KAFKA_BRIDGE_HOST: kafka-bridge.${SOLUTION_DOMAIN}
+      KAFKA_BRIDGE_HOST: kafka-bridge.${HTTP_DOMAIN}
       KAFKA_BRIDGE_PORT: 443
       KAFKA_BRIDGE_CONSUMER_GROUP: app
       KAFKA_BRIDGE_CONSUMER_NAME: message-consumer
     labels:
       traefik.enable: true
       traefik.http.routers.flows.entrypoints: websecure
-      traefik.http.routers.flows.rule: Host(`flows.oam.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.flows.rule: Host(`flows.oam.${HTTP_DOMAIN}`)
       traefik.http.routers.flows.tls: true
       traefik.http.services.flows.loadbalancer.server.port: 1880
     volumes:
@@ -57,7 +57,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.tests.entrypoints: websecure
-      traefik.http.routers.tests.rule: Host(`tests.oam.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.tests.rule: Host(`tests.oam.${HTTP_DOMAIN}`)
       traefik.http.routers.tests.tls: true
       traefik.http.services.tests.loadbalancer.server.port: 8080
     networks:
@@ -82,7 +82,7 @@ services:
     # labels:
     #   traefik.enable: true
     #   traefik.http.routers.wireshark.entrypoints: websecure
-    #   traefik.http.routers.wireshark.rule: Host(`wireshark.oam.${SOLUTION_DOMAIN}`)
+    #   traefik.http.routers.wireshark.rule: Host(`wireshark.oam.${HTTP_DOMAIN}`)
     #   traefik.http.routers.wireshark.tls: true
     #   traefik.http.services.wireshark.loadbalancer.server.port: 3000
     # networks:

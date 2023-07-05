@@ -31,7 +31,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.sdnc-web.entrypoints: websecure
-      traefik.http.routers.sdnc-web.rule: Host(`odlux.oam.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.sdnc-web.rule: Host(`odlux.oam.${HTTP_DOMAIN}`)
       traefik.http.routers.sdnc-web.tls: true
       traefik.http.services.sdnc-web.loadbalancer.server.port: ${SDNC_WEB_PORT}
     depends_on:
@@ -46,7 +46,7 @@ services:
     container_name: controller
     hostname: controller
     extra_hosts:
-      - "controller.dcn.${SOLUTION_DOMAIN}:${HOST_IP}"
+      - "controller.dcn.${HTTP_DOMAIN}:${HOST_IP}"
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:${SDNC_REST_PORT}/ready || exit 1
       start_period: 60s
@@ -71,7 +71,7 @@ services:
       A1_ADAPTER_NORTHBOUND: false
       JAVA_OPTS: -Xms256m -Xmx4g
       IDENTITY_PROVIDER_URL: ${IDENTITY_PROVIDER_URL}
-      SDNC_WEB_URL: https://odlux.oam.${SOLUTION_DOMAIN}
+      SDNC_WEB_URL: https://odlux.oam.${HTTP_DOMAIN}
       SDNR_VES_COLLECTOR_ENABLED: true
       SDNR_VES_COLLECTOR_TLS_ENABLED: false
       SDNR_VES_COLLECTOR_TRUST_ALL_CERTS: true
@@ -92,7 +92,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.controller.entrypoints: websecure
-      traefik.http.routers.controller.rule: Host(`controller.dcn.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.controller.rule: Host(`controller.dcn.${HTTP_DOMAIN}`)
       traefik.http.routers.controller.tls: true
       traefik.http.services.controller.loadbalancer.server.port: ${SDNC_REST_PORT}
 
@@ -120,7 +120,7 @@ services:
     container_name: ves-collector
     hostname: ves-collector
     extra_hosts:
-      - "ves-collector.dcn.${SOLUTION_DOMAIN}:${HOST_IP}"
+      - "ves-collector.dcn.${HTTP_DOMAIN}:${HOST_IP}"
     healthcheck:
       test: curl -k -u ${VES_ENDPOINT_USERNAME}:${VES_ENDPOINT_PASSWORD} ${VES_ENDPOINT_PROTOCOL}://localhost:${VES_ENDPOINT_PORT} || exit 1
       start_period: 1s
@@ -135,7 +135,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.ves.entrypoints: websecure
-      traefik.http.routers.ves.rule: Host(`ves-collector.dcn.${SOLUTION_DOMAIN}`)
+      traefik.http.routers.ves.rule: Host(`ves-collector.dcn.${HTTP_DOMAIN}`)
       traefik.http.routers.ves.tls: true
       traefik.http.services.ves.loadbalancer.server.port: ${VES_ENDPOINT_PORT}
     networks:

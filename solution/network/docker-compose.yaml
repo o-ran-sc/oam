@@ -55,8 +55,8 @@ x-topo-env: &topo_env
 x-nf: &common_nf
     stop_grace_period: 5m
     extra_hosts:
-      - "controller.dcn.${GATEWAY_DOMAIN}:${HOST_IP}"
-      - "ves-collector.dcn.${GATEWAY_DOMAIN}:${HOST_IP}"
+      - "controller.dcn.${HTTP_DOMAIN}:${HOST_IP}"
+      - "ves-collector.dcn.${HTTP_DOMAIN}:${HOST_IP}"
     cap_add:
     - SYS_ADMIN
     - SYS_PTRACE
