@@ -23,6 +23,7 @@ import json
 import time
 import getpass
 import requests
+import re
 import warnings
 from jproperties import Properties
 from typing import List
@@ -36,7 +37,17 @@ def get_environment_variable(name):
     env_file = str(path.parent.absolute()) + '/.env'
     with open(env_file, "rb") as read_prop:
         configs.load(read_prop)
-    return configs.get(name).data
+    value = configs.get(name).data
+
+    regex = r"\$\{([^\}]+)\}"
+    matches = re.finditer(regex, value)
+    while True:
+        match = next(matches, None)
+        if match is None:
+            break
+        inner = get_environment_variable(match.group(1))
+        value = value.replace("${" + match.group(1) + "}", inner )
+    return value
 
 
 def load_arguments(args: List[str]) -> tuple:
@@ -63,6 +74,7 @@ def load_arguments(args: List[str]) -> tuple:
 
 def isReady(timeoutSeconds=180):
     url = getBaseUrl()
+    print(f'url={url}')
     while timeoutSeconds > 0:
         try:
             response = requests.get(url, verify=False, headers={})
