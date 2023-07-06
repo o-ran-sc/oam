@@ -19,6 +19,7 @@
 import os
 import sys
 import json
+import re
 import requests
 import subprocess
 import pathlib
@@ -26,11 +27,21 @@ from jproperties import Properties
 
 def get_environment_variable(name):
     configs = Properties()
-    path = pathlib.Path( os.path.dirname(os.path.abspath(__file__)) )
+    path = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
     env_file = str(path.absolute()) + '/.env'
     with open(env_file, "rb") as read_prop:
         configs.load(read_prop)
-    return configs.get(name).data
+    value = configs.get(name).data
+
+    regex = r"\$\{([^\}]+)\}"
+    matches = re.finditer(regex, value)
+    while True:
+        match = next(matches, None)
+        if match is None:
+            break
+        inner = get_environment_variable(match.group(1))
+        value = value.replace("${" + match.group(1) + "}", inner )
+    return value
 
 dockerFilter = subprocess.check_output("docker ps --format '{{.Names}}'", shell=True)
 containers = dockerFilter.splitlines()
