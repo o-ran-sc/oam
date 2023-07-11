@@ -12,7 +12,7 @@
             "stdout": "log/netopeer-stdout.log",
             "stderr": "log/netopeer-stderr.log"
         },
-    
+
         "ntsim-network-function": {
             "path": "/opt/dev/ntsim-ng/ntsim-ng",
             "args": ["-w/opt/dev/ntsim-ng", "-f"],
@@ -45,7 +45,7 @@
             "o-ran-shared-cell",
             "nts-network-function"
         ],
-        
+
         "default-list-instances": 2,
         "custom-list-instances" : [
             {"/ietf-interfaces:interfaces/interface": 4}
@@ -59,7 +59,7 @@
     },
 
     "datastore-populate-rules": {
-        "random-generation-enabled": true,
+        "random-generation-enabled": false,
 
         "pre-generated-operational-data": [
             "../deploy/data/ietf-hardware-operational.json",
@@ -67,8 +67,7 @@
         ],
         "pre-generated-running-data": [
             "../deploy/data/ietf-hardware-running.json",
-            "../deploy/data/ietf-interfaces-running.xml",
-            "/opt/dev/deploy/data/nts-network-function-running.xml"
+            "../deploy/data/ietf-interfaces-running.xml"
         ]
     },
 
@@ -82,7 +81,7 @@
                 "severity"  : "CRITICAL",
                 "date-time" : "$$time$$",
                 "specific-problem" : "Interface Fault",
-                
+
                 "fault-id": "30",
                 "fault-severity" : "CRITICAL",
                 "affected-object" : "$$hostname$$",
