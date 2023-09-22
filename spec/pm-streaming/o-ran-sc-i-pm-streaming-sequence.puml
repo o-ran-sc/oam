@@ -45,15 +45,13 @@ sdnr-> mr: Connected!
 mr -> pmCoord: Connection to NF established
 pmCoord -> sdnr: PM Job Creation
 sdnr -> nf: <<NETCONF/TLS>> PM Job Creation
-nf -> sdnr: PM Job Created
+nf -> sdnr: PM Job Created\nincludes http target for stream establishment
 sdnr -> pmCoord: PM Job Created
 
 == PM Data Streaming ==
 
-alt not needed, because streamTarget of the PM Job is the ConnectionId value
-  nf -> pmCollect : <<HTTP/TLS>> establish Streaming Connection
-  pmCollect -> nf : <<HTTP/TLS>> Connection Established returns ConnectionId (wss:url)
-end 
+nf -> pmCollect : <<HTTP/TLS>> establish Streaming Connection \nincludes mapping from streamId to jobId
+pmCollect -> nf : <<HTTP/TLS>> Connection Established returns ConnectionId (wss:url)
 
 loop while performance job is active
   trigger -> sdnr: <<RESTCONF/TLS>> Trigger PM stream,\nwhen UEs are entering, leaving the cell
