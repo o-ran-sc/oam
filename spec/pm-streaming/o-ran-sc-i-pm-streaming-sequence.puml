@@ -5,37 +5,58 @@
 ' https://creativecommons.org/licenses/by/4.0/deed.en
 
 @startuml o-ran-sc-i-pm-streaming-sequence
-title Performance Data Streaming
+title 
+  Performance Measurement Data flows 
+  stream based and 3GPP xml file based
+end title
+
+' format
 autonumber 1 1 "<b>[00]"
 hide unlinked
+hide stereotype
+skinparam backgroundColor #fefefe
+skinparam roundcorner 15
 
+skinparam participant {
+    BackgroundColor<< NONRTRIC >> green
+    FontColor<< NONRTRIC >> #eeeeee
+}
+
+skinparam database {
+    BackgroundColor<< NONRTRIC >> green
+    FontColor<< NONRTRIC >> green
+}
+' end format
+
+' the sequence diagram
 box "App layer" #LightBlue
   participant "rApp" as rApp
 end box
 
 box "NONRTRIC" #GoldenRod
-  participant "Information Coordinator Service (DME)" as dmeICS #Green
+  participant "Information Coordinator Service (DME)" as dmeICS << NONRTRIC >>
 end box
+
 box "NONRTRIC RAN PM" #gold
-  participant "PM (File) Collector" as pmDFC #Green
-  participant "PM Data Converter" as pmConvert #Green
-  participant "PM Data Producer (Streamed)" as pmProducer #Green
-  participant "PM Data Influx Producer/Consumer" as pmInflux #Green
-  database "PM Datastore (S3)" as pmDb #Green
-  database "PM Datastore (InfluxDB)" as pmDbInflux #Green
+  participant "PM (File) Collector" as pmDFC << NONRTRIC >>
+  participant "PM Data Converter" as pmConvert << NONRTRIC >>
+  participant "PM Data Producer (Streamed)" as pmProducer << NONRTRIC >>
+  participant "PM Data Influx Producer/Consumer" as pmInflux << NONRTRIC >>
+  database "PM Datastore (S3)" as pmDb << NONRTRIC >>
+  database "PM Datastore (InfluxDB)" as pmDbInflux << NONRTRIC >>
 end box
 
 box "SMO OAM" #gold
   participant "Message Router / Kafka" as mr
-  participant "OAM PM Coordination" as pmCoord
+  participant "PM Coordination" as pmCoord
   participant "PM (Stream) Collector" as pmCollectStream #LightGreen
   participant "VES Collector" as ves
   participant "OAM Controller" as sdnr
 end box
 
 box "Network Topology Simulation" #LightPink
-  participant "NetworkFunction\n2401 NTSims" as nf
-  participant "PM File\nCreator Sim" as pmFileCreator #Green
+  participant "NetworkFunction\nNTSims" as nf
+  participant "PM File\nCreator Sim" as pmFileCreator << NONRTRIC >>  
 end box
 
 box "Simulation" #LightBlue
@@ -61,7 +82,7 @@ else  Managed PM jobs on NFs
   pmCoord -> sdnr : PM Job Creation
   sdnr -> nf : <<NETCONF/TLS>> PM Job Creation <O1-CM>
 end
-nf -> sdnr : PM Job Created\nincludes http target for stream establishment <O1-CM  (O1-PM?)>
+nf -> sdnr : PM Job Created\nincludes http target for stream establishment <O1-CM>
 sdnr -> pmCoord : PM Job Created
 
 == PM Data Streaming ==
@@ -69,12 +90,12 @@ sdnr -> pmCoord : PM Job Created
 nf -> pmCollectStream : <<HTTP/TLS>> establish Streaming Connection \nincludes mapping from streamId to jobId <O1-PM>
 pmCollectStream -> nf : <<HTTP/TLS>> Connection Established returns ConnectionId (wss:url) <O1-PM>
 trigger -> sdnr : <<RESTCONF/TLS>> Trigger PM stream (Periodic?),\nwhen UEs are entering, leaving the cell <SIM>
-note left of nf : PM reporting happens continuously/periodicly, not triggered by specific events ? 
+note left of nf : PM reporting happens continuously/periodically, not triggered by specific events ? 
 loop while PM job is active in NF
   sdnr -> nf : <<NETCONF/TLS>> trigger <SIM>
-  note left of nf : PM reporting happens continuously/periodicly. Not sure what is this trigger ? 
-  nf -> pmCollectStream : <<WebSocket>> report PM data via stream unit (wss:url) <O1-PM?>
-  pmCollectStream -> pmDb : store pm data (XML or GPB)
+  note left of nf : PM reporting happens continuously/periodically. Not sure what is this trigger ? 
+  nf -> pmCollectStream : <<WebSocket>> report PM data via stream unit (wss:url) <O1-PM>
+  pmCollectStream -> pmDb : store pm data (3GPP-XMLformat)
   pmCollectStream -> mr : PM Data (raw) available
 end
 
@@ -88,7 +109,7 @@ else Managed PM jobs on NFs
   pmCoord -> pmCoord : analyze subscription
   pmCoord -> sdnr : PM Job Creation
   sdnr -> nf : <<NETCONF/TLS>> PM Job Creation <O1-CM>
-  nf -> sdnr : PM Job Created <O1-CM  (O1-PM?)>
+  nf -> sdnr : PM Job Created <O1-CM>
   sdnr -> pmCoord : PM Job Created
 end
 
@@ -107,7 +128,7 @@ end
 
 loop while PM Job is active in NF
   mr -> pmConvert : PM Data (raw) available
-  pmConvert -> pmDb : Collect raw (XML? GPB?) PM Data
+  pmConvert -> pmDb : Collect raw (3GPP-XMLformat) PM Data
   pmConvert -> pmConvert : Covert PM data to JSON
   pmConvert -> pmDb : Store pm data (json)
   pmConvert -> mr : PM Data (json) available
@@ -117,7 +138,7 @@ end
 
 loop while PM Job is active in NF
   mr -> pmConvert : PM Data (raw) available
-  pmConvert -> pmDb : Collect raw (XML? GPB?) PM Data
+  pmConvert -> pmDb : Collect raw (3GPP-XML format) PM Data
   pmConvert -> pmConvert : Covert PM data to JSON
   pmConvert -> pmDb : Store pm data (json)
   pmConvert -> mr : PM Data (json) available
@@ -160,7 +181,7 @@ loop while PM Job is active in NF
     end group
     note over rApp, pmProducer : DME  coordinates between DME Producer/Consumer
     dmeICS -> pmProducer : Job/subscription created - includes job parameters
-    activate pmproducer
+    activate pmProducer
     loop while data available / continuous
       pmInflux -> pmDb :  retrieve appropriate pm data (json)
       pmInflux -> pmDbInflux :  store appropriate pm data (json)
@@ -169,14 +190,14 @@ loop while PM Job is active in NF
           mr -> pmProducer : PM Data (json) available
       end
     end loop 
-    deactivate pmproducer
+    deactivate pmProducer
     deactivate rApp
   end opt
 
   group #a0a0a090 <color #red>TBC</color>
     ' Currently AIMLFMW does not act as a DME consumer to read the InfluxDB. It reads it direct 
     ' According to the 'current' specs that is fine - AIMLFW is not an 'rApp' 
-    ' Howeever, as the Disaggregated SMo work prgressed it will need to use DME. 
+    ' However, as the Disaggregated SMo work progressed it will need to use DME. 
     opt RAN PM Data (R1-PM 'stored ranpm' datatype) is consumed by rApp from influxDB producer
       group #a0a0a090 <color #red>TBC</color>
         note over rApp, dmeICS : rApp creates 'stored ranpm' subscription (DME Consumer)
@@ -199,12 +220,6 @@ end loop
 ' What happens when PM job on NF is removed? (And How?)
 ' Should DME job be automatically removed?   
 
-' End Diagram
-' Format
 right footer Copyright 2023 O-RAN-SC Projects NONRTRIC, SIM, OAM\lThis work is licensed under a Creative Commons Attribution 4.0\l International License.\lSPDX-License-Identifier: CC-BY-4.0\n2023-09-21 | o-ran-sc.org oam project | Thanks to PlantUML!
-
-skinparam backgroundColor #fefefe
-'skinparam handwritten true
-skinparam roundcorner 15
 
 @enduml
