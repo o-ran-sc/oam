@@ -1,0 +1,79 @@
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' 
+' Copyright 2021 highstreet technologies GmbH
+' This work is licensed under a Creative Commons Attribution 4.0 International License.
+' SPDX-License-Identifier: CC-BY-4.0
+' https://creativecommons.org/licenses/by/4.0/deed.en
+
+@startuml o-ran-sc-i-pm-streaming-sequence
+title Performance Data Streaming
+autonumber 1 1 "<b>[00]"
+
+box "App layer" #LightBlue
+  participant "rApp" as rApp
+end box
+
+box "SMO OAM" #gold
+  participant "Message Router" as mr
+  database "PM Database" as pmDb
+  participant "PM Coordination" as pmCoord
+  participant "PM Collector" as pmCollect
+  participant "VES Collector" as ves
+  
+  participant "OAM Controller" as sdnr
+end box
+
+box "Network" #LightPink
+  participant "NetworkFunction\n2401 NTSims" as nf
+end box
+
+box "Simulation" #LightBlue
+  participant "PM Trigger App" as trigger
+end box
+
+== init ==
+rApp -> mr: pm data streaming subscription
+mr -> pmCoord:  pm data streaming subscription
+pmCoord -> pmCoord: analyze subscription
+nf -> ves: <<HTTP/TLS>> VES pnfRegistration
+ves -> mr: forward VES pnfRegistration
+mr -> sdnr: grep VES pnfRegistration
+sdnr -> sdnr: create Mount Point
+sdnr -> nf: <<NETCONF/TLS>> establish connection 
+sdnr-> mr: Connected!
+
+== PM JOB Configuration ==
+mr -> pmCoord: Connection to NF established
+pmCoord -> sdnr: PM Job Creation
+sdnr -> nf: <<NETCONF/TLS>> PM Job Creation
+nf -> sdnr: PM Job Created
+sdnr -> pmCoord: PM Job Created
+
+== PM Data Streaming ==
+
+alt not needed, because streamTarget of the PM Job is the ConnectionId value
+  nf -> pmCollect : <<HTTP/TLS>> establish Streaming Connection
+  pmCollect -> nf : <<HTTP/TLS>> Connection Established returns ConnectionId (wss:url)
+end 
+
+loop while performance job is active
+  trigger -> sdnr: <<RESTCONF/TLS>> Trigger PM stream,\nwhen UEs are entering, leaving the cell
+  sdnr -> nf: <<NETCONF/TLS>> trigger
+  nf -> pmCollect : <<WebSocket>> report PM data via stream unit (wss:url)
+  pmCollect -> pmCollect: convert GPB into json (or SQL)
+  pmCollect -> pmDb: store pm data
+  pmCollect -> mr: inform about new pm data (don't send data - to be discussed)\n{jobId,sender,pm-database-query-command}
+  mr -> rApp: new PM data available!
+  rApp -> pmDb: GET new (filtered) PM data 
+  rApp <- pmDb: send new (filtered) PM data
+
+end
+
+' End Diagram
+' Format
+right footer <img:https://media-exp1.licdn.com/dms/image/C560BAQH0qSJJi67N4g/company-logo_200_200/0/1606867328974?e=2159024400&v=beta&t=OybMqHsK24YCp_WeGC10qJWJp-tsHu2GnjuF5gEeGSM{scale=0.2}> \lCopyright 2023 highstreet technologies USA Corp.\lThis work is licensed under a Creative Commons Attribution 4.0\l International License.\lSPDX-License-Identifier: CC-BY-4.0\n2023-08-13 | o-ran-sc.org oam project | Thanks to PlantUML!
+
+skinparam backgroundColor #fefefe
+'skinparam handwritten true
+skinparam roundcorner 15
+
+@enduml
