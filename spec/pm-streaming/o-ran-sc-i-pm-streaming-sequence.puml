@@ -124,7 +124,7 @@ loop while PM job is active in NF
   pmDFC -> mr : PM Data (raw) available
 end
 
-== PM Data Convertion (Common) ==
+== PM Data Conversion (Common) ==
 
 loop while PM Job is active in NF
   mr -> pmConvert : PM Data (raw) available
@@ -150,7 +150,7 @@ loop while PM Job is active in NF
   opt RAN PM Data (R1-PM 'streamed ranpm' datatype) is streamed to rApp
     note over pmProducer, dmeICS :  Init RAN PM Data Producer registration with DME (DME Producer)
     pmProducer -> dmeICS : Register data 'streamed ranpm' type (if not already registered)
-    pmProducer -> dmeICS : Register as 'streamed ranpm' producder
+    pmProducer -> dmeICS : Register as 'streamed ranpm' producer
     note over rApp, dmeICS : rApp creates 'streamed ranpm' subscription (DME Consumer)
     rApp -> dmeICS : Register data 'streamed ranpm' type (if not already registered)
     rApp -> dmeICS :  Create subscription/job for 'streamed ranpm' data 
@@ -173,7 +173,7 @@ loop while PM Job is active in NF
     note over pmInflux, dmeICS :  Init RAN PM Data Producer registration with DME (DME Producer)
     pmInflux -> dmeICS : Register data 'stored ranpm' type (if not already registered)
     group #a0a0a090 <color #red>TBC</color>
-      pmInflux -> dmeICS : Register as 'stored ranpm' producder
+      pmInflux -> dmeICS : Register as 'stored ranpm' producer
       note over rApp, dmeICS : rApp creates 'stored ranpm' subscription (DME Consumer)
       rApp -> dmeICS : Register data 'stored ranpm' type (if not already registered)
       rApp -> dmeICS :  Create subscription/job for 'streamed ranpm' data 
@@ -195,7 +195,7 @@ loop while PM Job is active in NF
   end opt
 
   group #a0a0a090 <color #red>TBC</color>
-    ' Currently AIMLFMW does not act as a DME consumer to read the InfluxDB. It reads it direct 
+    ' Currently AIMLFW does not act as a DME consumer to read the InfluxDB. It reads it direct 
     ' According to the 'current' specs that is fine - AIMLFW is not an 'rApp' 
     ' However, as the Disaggregated SMo work progressed it will need to use DME. 
     opt RAN PM Data (R1-PM 'stored ranpm' datatype) is consumed by rApp from influxDB producer
