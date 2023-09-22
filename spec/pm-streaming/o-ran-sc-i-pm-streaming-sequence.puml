@@ -1,5 +1,5 @@
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' 
-' Copyright 2021 highstreet technologies GmbH
+' Copyright 2023 O-RAN-SC Projects NONRTRIC, SIM, OAM
 ' This work is licensed under a Creative Commons Attribution 4.0 International License.
 ' SPDX-License-Identifier: CC-BY-4.0
 ' https://creativecommons.org/licenses/by/4.0/deed.en
@@ -7,23 +7,35 @@
 @startuml o-ran-sc-i-pm-streaming-sequence
 title Performance Data Streaming
 autonumber 1 1 "<b>[00]"
+hide unlinked
 
 box "App layer" #LightBlue
   participant "rApp" as rApp
 end box
 
+box "NONRTRIC" #GoldenRod
+  participant "Information Coordinator Service (DME)" as dmeICS #Green
+end box
+box "NONRTRIC RAN PM" #gold
+  participant "PM (File) Collector" as pmDFC #Green
+  participant "PM Data Converter" as pmConvert #Green
+  participant "PM Data Producer (Streamed)" as pmProducer #Green
+  participant "PM Data Influx Producer/Consumer" as pmInflux #Green
+  database "PM Datastore (S3)" as pmDb #Green
+  database "PM Datastore (InfluxDB)" as pmDbInflux #Green
+end box
+
 box "SMO OAM" #gold
-  participant "Message Router" as mr
-  database "PM Database" as pmDb
-  participant "PM Coordination" as pmCoord
-  participant "PM Collector" as pmCollect
+  participant "Message Router / Kafka" as mr
+  participant "OAM PM Coordination" as pmCoord
+  participant "PM (Stream) Collector" as pmCollectStream #LightGreen
   participant "VES Collector" as ves
-  
   participant "OAM Controller" as sdnr
 end box
 
-box "Network" #LightPink
+box "Network Topology Simulation" #LightPink
   participant "NetworkFunction\n2401 NTSims" as nf
+  participant "PM File\nCreator Sim" as pmFileCreator #Green
 end box
 
 box "Simulation" #LightBlue
@@ -31,44 +43,165 @@ box "Simulation" #LightBlue
 end box
 
 == init ==
-rApp -> mr: pm data streaming subscription
-mr -> pmCoord:  pm data streaming subscription
-pmCoord -> pmCoord: analyze subscription
-nf -> ves: <<HTTP/TLS>> VES pnfRegistration
-ves -> mr: forward VES pnfRegistration
-mr -> sdnr: grep VES pnfRegistration
-sdnr -> sdnr: create Mount Point
-sdnr -> nf: <<NETCONF/TLS>> establish connection 
-sdnr-> mr: Connected!
+nf -> ves : <<HTTP/TLS>> VES pnfRegistration <O1>
+ves -> mr : forward VES pnfRegistration
+mr -> sdnr : grep VES pnfRegistration
+sdnr -> sdnr : create Mount Point
+sdnr -> nf : <<NETCONF/TLS>> establish connection <O1-CM>
+sdnr -> mr : Connected!
+mr -> pmCoord : Connection to NF established
 
-== PM JOB Configuration ==
-mr -> pmCoord: Connection to NF established
-pmCoord -> sdnr: PM Job Creation
-sdnr -> nf: <<NETCONF/TLS>> PM Job Creation
-nf -> sdnr: PM Job Created\nincludes http target for stream establishment
-sdnr -> pmCoord: PM Job Created
+== Stream-based PM JOB Configuration ==
+alt Unmanaged PM jobs on NFs
+  rApp -> sdnr : configure PM data streaming subscription <R1-OAM(tbc)>
+  sdnr -> nf : <<NETCONF/TLS>> PM Job Creation <O1-CM>
+else  Managed PM jobs on NFs
+  rApp -> pmCoord : configure PM data streaming subscription <R1-OAM(tbc)>
+  pmCoord -> pmCoord : analyze subscription
+  pmCoord -> sdnr : PM Job Creation
+  sdnr -> nf : <<NETCONF/TLS>> PM Job Creation <O1-CM>
+end
+nf -> sdnr : PM Job Created\nincludes http target for stream establishment <O1-CM  (O1-PM?)>
+sdnr -> pmCoord : PM Job Created
 
 == PM Data Streaming ==
 
-nf -> pmCollect : <<HTTP/TLS>> establish Streaming Connection \nincludes mapping from streamId to jobId
-pmCollect -> nf : <<HTTP/TLS>> Connection Established returns ConnectionId (wss:url)
-
-loop while performance job is active
-  trigger -> sdnr: <<RESTCONF/TLS>> Trigger PM stream,\nwhen UEs are entering, leaving the cell
-  sdnr -> nf: <<NETCONF/TLS>> trigger
-  nf -> pmCollect : <<WebSocket>> report PM data via stream unit (wss:url)
-  pmCollect -> pmCollect: convert GPB into json (or SQL)
-  pmCollect -> pmDb: store pm data
-  pmCollect -> mr: inform about new pm data (don't send data - to be discussed)\n{jobId,sender,pm-database-query-command}
-  mr -> rApp: new PM data available!
-  rApp -> pmDb: GET new (filtered) PM data 
-  rApp <- pmDb: send new (filtered) PM data
-
+nf -> pmCollectStream : <<HTTP/TLS>> establish Streaming Connection \nincludes mapping from streamId to jobId <O1-PM>
+pmCollectStream -> nf : <<HTTP/TLS>> Connection Established returns ConnectionId (wss:url) <O1-PM>
+trigger -> sdnr : <<RESTCONF/TLS>> Trigger PM stream (Periodic?),\nwhen UEs are entering, leaving the cell <SIM>
+note left of nf : PM reporting happens continuously/periodicly, not triggered by specific events ? 
+loop while PM job is active in NF
+  sdnr -> nf : <<NETCONF/TLS>> trigger <SIM>
+  note left of nf : PM reporting happens continuously/periodicly. Not sure what is this trigger ? 
+  nf -> pmCollectStream : <<WebSocket>> report PM data via stream unit (wss:url) <O1-PM?>
+  pmCollectStream -> pmDb : store pm data (XML or GPB)
+  pmCollectStream -> mr : PM Data (raw) available
 end
+
+== File-based PM Job Configuration ==
+
+alt Unmanaged PM jobs on NFs
+  rApp -> sdnr : configure file-based PM data subscription <R1-OAM(tbc)>
+  sdnr -> nf : <<NETCONF/TLS>> PM Job Creation <O1-CM>
+else Managed PM jobs on NFs
+  rApp -> pmCoord : configure file-based PM data subscription <R1-OAM(tbc)>
+  pmCoord -> pmCoord : analyze subscription
+  pmCoord -> sdnr : PM Job Creation
+  sdnr -> nf : <<NETCONF/TLS>> PM Job Creation <O1-CM>
+  nf -> sdnr : PM Job Created <O1-CM  (O1-PM?)>
+  sdnr -> pmCoord : PM Job Created
+end
+
+== PM Data File Collection ==
+
+loop while PM job is active in NF
+  nf -> ves : File-Ready <O1-PM>
+  ves -> mr :  File-Ready
+  mr -> pmDFC :  File-Ready
+  pmDFC -> nf : <<(S)FTP/FTPS/SCP/TLS>> Collect/Transfer File <O1-PM>
+  pmDFC -> pmDb : store pm data (XML)
+  pmDFC -> mr : PM Data (raw) available
+end
+
+== PM Data Convertion (Common) ==
+
+loop while PM Job is active in NF
+  mr -> pmConvert : PM Data (raw) available
+  pmConvert -> pmDb : Collect raw (XML? GPB?) PM Data
+  pmConvert -> pmConvert : Covert PM data to JSON
+  pmConvert -> pmDb : Store pm data (json)
+  pmConvert -> mr : PM Data (json) available
+end
+
+== DME Data Producers & Consumers (Common) ==
+
+loop while PM Job is active in NF
+  mr -> pmConvert : PM Data (raw) available
+  pmConvert -> pmDb : Collect raw (XML? GPB?) PM Data
+  pmConvert -> pmConvert : Covert PM data to JSON
+  pmConvert -> pmDb : Store pm data (json)
+  pmConvert -> mr : PM Data (json) available
+end
+
+== DME Data Producers & Consumers <<R1 DME>>==
+loop while PM Job is active in NF
+
+  opt RAN PM Data (R1-PM 'streamed ranpm' datatype) is streamed to rApp
+    note over pmProducer, dmeICS :  Init RAN PM Data Producer registration with DME (DME Producer)
+    pmProducer -> dmeICS : Register data 'streamed ranpm' type (if not already registered)
+    pmProducer -> dmeICS : Register as 'streamed ranpm' producder
+    note over rApp, dmeICS : rApp creates 'streamed ranpm' subscription (DME Consumer)
+    rApp -> dmeICS : Register data 'streamed ranpm' type (if not already registered)
+    rApp -> dmeICS :  Create subscription/job for 'streamed ranpm' data 
+    activate rApp
+    note over rApp, pmProducer : DME  coordinates between DME Producer/Consumer
+    dmeICS -> pmProducer : Job/subscription created - includes job parameters
+    loop while data available / continuous
+      pmProducer -> pmDb :  retrieve appropriate pm data (json)
+      pmProducer -[#Blue]> mr : data: (type : 'streamed ranpm')
+      mr -[#Blue]> rApp: data : (type : 'streamed ranpm')
+      opt wait for new data
+          mr -> pmProducer : PM Data (json) available
+      end
+    end loop 
+    deactivate rApp
+  end opt
+
+
+  opt RAN PM Data (R1-PM 'stored ranpm' datatype) is produced by influxDB producer
+    note over pmInflux, dmeICS :  Init RAN PM Data Producer registration with DME (DME Producer)
+    pmInflux -> dmeICS : Register data 'stored ranpm' type (if not already registered)
+    group #a0a0a090 <color #red>TBC</color>
+      pmInflux -> dmeICS : Register as 'stored ranpm' producder
+      note over rApp, dmeICS : rApp creates 'stored ranpm' subscription (DME Consumer)
+      rApp -> dmeICS : Register data 'stored ranpm' type (if not already registered)
+      rApp -> dmeICS :  Create subscription/job for 'streamed ranpm' data 
+      activate rApp
+    end group
+    note over rApp, pmProducer : DME  coordinates between DME Producer/Consumer
+    dmeICS -> pmProducer : Job/subscription created - includes job parameters
+    activate pmproducer
+    loop while data available / continuous
+      pmInflux -> pmDb :  retrieve appropriate pm data (json)
+      pmInflux -> pmDbInflux :  store appropriate pm data (json)
+      pmInflux -> mr : data available: (type : 'stored ranpm')
+      opt wait for new data
+          mr -> pmProducer : PM Data (json) available
+      end
+    end loop 
+    deactivate pmproducer
+    deactivate rApp
+  end opt
+
+  group #a0a0a090 <color #red>TBC</color>
+    ' Currently AIMLFMW does not act as a DME consumer to read the InfluxDB. It reads it direct 
+    ' According to the 'current' specs that is fine - AIMLFW is not an 'rApp' 
+    ' Howeever, as the Disaggregated SMo work prgressed it will need to use DME. 
+    opt RAN PM Data (R1-PM 'stored ranpm' datatype) is consumed by rApp from influxDB producer
+      group #a0a0a090 <color #red>TBC</color>
+        note over rApp, dmeICS : rApp creates 'stored ranpm' subscription (DME Consumer)
+        rApp -> dmeICS : Register data 'stored ranpm' type (if not already registered)
+        rApp -> dmeICS :  Create subscription/job for 'streamed ranpm' data 
+        activate rApp
+      end group
+      loop while data available / continuous
+        rApp -> pmDbInflux :  retrieve appropriate pm data (json)
+        opt wait for new data
+            mr -> rApp : data available: (type : 'stored ranpm')
+        end
+      end loop 
+      deactivate rApp
+    end opt
+  end group
+
+end loop 
+
+' What happens when PM job on NF is removed? (And How?)
+' Should DME job be automatically removed?   
 
 ' End Diagram
 ' Format
-right footer <img:https://media-exp1.licdn.com/dms/image/C560BAQH0qSJJi67N4g/company-logo_200_200/0/1606867328974?e=2159024400&v=beta&t=OybMqHsK24YCp_WeGC10qJWJp-tsHu2GnjuF5gEeGSM{scale=0.2}> \lCopyright 2023 highstreet technologies USA Corp.\lThis work is licensed under a Creative Commons Attribution 4.0\l International License.\lSPDX-License-Identifier: CC-BY-4.0\n2023-08-13 | o-ran-sc.org oam project | Thanks to PlantUML!
+right footer Copyright 2023 O-RAN-SC Projects NONRTRIC, SIM, OAM\lThis work is licensed under a Creative Commons Attribution 4.0\l International License.\lSPDX-License-Identifier: CC-BY-4.0\n2023-09-21 | o-ran-sc.org oam project | Thanks to PlantUML!
 
 skinparam backgroundColor #fefefe
 'skinparam handwritten true
