@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://highstreet-technologies.com/network-generator/configuration.schema.json",
+  "title": "Configuration",
+  "description": "This schema validates the initial configuration for the network generator application.",
+  "type": "object",
+  "required": [
+    "network",
+    "output-folder",
+    "generation-tasks"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "network": {
+      "description": "Defines the network and its topology to be generated.",
+      "$ref": "#/$defs/network"
+    },
+    "output-folder": {
+      "description":"The relative path (folder name only) of the directory, where the generated files are stored.",
+      "type": "string"
+    },
+    "generation-tasks": {
+      "description": "Defines the files to be generated.",
+      "$ref": "#/$defs/generation-tasks"
+    }
+  },
+  "$defs": {
+    "network": {
+      "title": "network",
+      "type": "object",
+      "required": [
+        "name",
+        "pattern"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "The name as identification for humans. For the pattern explanation, please see: https://regex101.com/r/3ER25H/1",
+          "type": "string",
+          "pattern": "^[a-zA-Z]{1}[\\S]{0,254}$"
+        },
+        "pattern": {
+          "description": "A description of the relations between O-RAN functions.",
+          "$ref": "#/$defs/pattern"
+        }
+      }
+    },
+    "pattern": {
+      "description": "A description of the relations between O-RAN functions.",
+      "title": "pattern",
+      "type": "object",
+      "required": [
+        "tower",
+        "smo",
+        "near-rt-ric",
+        "o-ran-cu",
+        "o-ran-du",
+        "o-ran-ru",
+        "nr-cell-du"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "tower": {
+          "description": "A 'tower' offers mounting positions of O-RUs.",
+          "title": "tower",
+          "type": "object",
+          "required": [
+            "representation",
+            "cellAngle"
+          ],
+          "properties": {
+            "representation": {
+              "description": "A fixed value for information only.",
+              "type": "string",
+              "enum": [
+                "hexagon"
+              ]
+            },
+            "cellAngle": {
+              "description": "The area covered by an NRCellDU around the tower in grad.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 360,
+              "exclusiveMinimum": true
+            }
+          }
+        },
+        "smo": {
+          "description": "Definition of the relation to SMO children.",
+          "title": "Service Management and Orchestration",
+          "type": "object",
+          "required": [
+            "five-g-core-count",
+            "near-rt-ric-spiral-radius",
+            "o-could-resource-pool-count"
+          ],
+          "properties": {
+            "five-g-core-count": {
+              "description": "The number of 5G-Cores controlled by SMO.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "near-rt-ric-spiral-radius": {
+              "description": "The spiral radius of hexagons within an hexagon grid defines the number of Near-RT-RICs and the geographical coverage of the SMO.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "o-could-resource-pool-count": {
+              "description": "Number of O-RAN O-Cloud resource pools managed by O2-controller of the SMO.",
+              "type": "integer",
+              "enum": [
+                1,
+                7,
+                19,
+                37
+              ]
+            }
+          }
+        },
+        "near-rt-ric": {
+          "description": "Definition of the relation to Near-RT-Ric children.",
+          "title": "near-rt-ric",
+          "type": "object",
+          "required": [
+            "o-ran-cu-spiral-radius"
+          ],
+          "properties": {
+            "o-ran-cu-spiral-radius": {
+              "description": "The spiral radius of hexagons within an hexagon grid defines the number of O-RAN CUs and the geographical coverage of the SMO.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            }
+          }
+        },
+        "o-ran-cu": {
+          "description": "Definition of the relation to O-RAN-RU children.",
+          "title": "o-ran-cu",
+          "type": "object",
+          "required": [
+            "tower-spiral-radius"
+          ],
+          "properties": {
+            "tower-spiral-radius": {
+              "description": "The spiral radius of hexagons within an hexagon grid defines the number of towers and the geographical coverage of the SMO.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            }
+          }
+        },
+        "o-ran-du": {
+          "description": "Definition of the relation to O-RAN-DU children.",
+          "title": "o-ran-du",
+          "type": "object",
+          "required": [
+            "fronthaul-gateway-count",
+            "o-ran-ru-count"
+          ],
+          "properties": {
+            "fronthaul-gateway-count": {
+              "description": "Number of fronthaul gateway connected to an O-RAN-DU.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "o-ran-ru-count": {
+              "description": "Number of O-RAN-RUs managed by an O-RAN-DU.",
+              "type": "integer",
+              "enum": [
+                1,
+                7,
+                19,
+                37
+              ]
+            }
+          }
+        },
+        "o-ran-ru": {
+          "description": "Definition of the relation to O-RAN-RU children.",
+          "title": "o-ran-ru",
+          "type": "object",
+          "required": [
+            "nr-cell-du-count"
+          ],
+          "properties": {
+            "nr-cell-du-count": {
+              "description": "Number of 3GPP:NRCellDUs managed by an O-RAN-RU.",
+              "type": "integer",
+              "enum": [
+                1,
+                3
+              ]
+            }
+          }
+        },
+        "nr-cell-du": {
+          "description": "Definition of the relation to 3GPP:NRCellDU children.",
+          "title": "nr-cell-du",
+          "type": "object",
+          "required": [
+            "sector-count"
+          ],
+          "properties": {
+            "sector-count": {
+              "description": "Number of sectors managed by an 3GPP:NRCellDUs.",
+              "type": "integer",
+              "enum": [
+                1,
+                3
+              ]
+            }
+          }
+        }
+      }
+    },
+    "generation-tasks":{
+      "title": "generation-tasks",
+      "type": "object",
+      "required": [
+        "topology",
+        "svg",
+        "kml"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "topology": {
+          "description": "If true, an ietf-network-topology file will be generated.",
+          "type": "boolean"
+        },
+        "svg": {
+          "description": "If true, a kml file will be generated.",
+          "type": "boolean"
+        },
+        "kml": {
+          "description": "If true, a svg file will be generated.",
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
