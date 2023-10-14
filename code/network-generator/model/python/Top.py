@@ -56,7 +56,7 @@ class ITop:
 
 
 # Define the Top class
-class Top(ITop):
+class Top(ABC, ITop):
     def __init__(self, data=None):
         self._id = data.id if data and data.id else str(uuid.uuid4())
         self._name = (
