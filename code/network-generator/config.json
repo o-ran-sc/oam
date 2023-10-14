@@ -1,6 +1,11 @@
 {
   "network": {
-    "name": "o-ran-topology",
+    "name": "o-ran-network",
+    "center": {
+      "latitude": 52.26937,
+      "longitude": 13.01366,
+      "aboveMeanSeaLevel": 50
+    },
     "pattern": {
       "tower": {
         "representation": "hexagon",
