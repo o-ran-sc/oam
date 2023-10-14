@@ -17,21 +17,42 @@
 """
 Module as entry point to generate an ietf topology json
 """
+import os
 import sys
 
-from model.python.Countries import Country
-from model.python.TypeDefinitions import AddressType
-from model.python.ORanFunction import ORanFunction
+from view.network_viewer import NetworkViewer
+from controller.network_generator import NetworkGenerator
 from controller.parameter_validator import ParameterValidator
 
 validator: ParameterValidator = ParameterValidator(sys.argv)
 
 if validator.is_valid():
-    address: AddressType = {
-        "country": Country.Germany
-    }
-    o_ran_function = ORanFunction({"address":address})
-    print(o_ran_function)
-    print("yippy")
+    configuration = validator.configuration()
+    generator = NetworkGenerator(configuration['network'])
+    network = generator.generate()
+    viewer = NetworkViewer(network)
+
+    output_folder:str = configuration['output-folder']
+    # If folder doesn't exist, then create it.
+    if not os.path.isdir(output_folder):
+        os.makedirs(output_folder)
+        
+    name: str = configuration['network']['name']
+
+    # topology json
+    if configuration['generation-tasks']['topology'] is True:
+        filename: str = output_folder + "/" + name + "-operational.json"
+        viewer.json().save(filename)
+
+    # svg xml
+    if configuration['generation-tasks']['svg'] is True:
+        filename: str = output_folder + "/" + name + ".svg"
+        viewer.svg(filename)
+
+    # kml xml
+    if configuration['generation-tasks']['kml'] is True:
+        filename: str = output_folder + "/" + name + ".kml"
+        viewer.kml(filename)
+
 else:
     print(validator.error_message())
