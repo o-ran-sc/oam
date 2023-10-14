@@ -15,7 +15,7 @@
 #!/usr/bin/python
 
 """
-An abstract Class for O-RAN Functions
+An abstract Class for O-RAN Objects
 """
 from abc import ABC, abstractmethod
 from typing import Dict
@@ -27,8 +27,8 @@ from model.python.TypeDefinitions import (
 from model.python.GeoLocation import GeoLocation
 
 
-# Define the "IORanFunction" interface
-class IORanFunction(ITop):
+# Define the "IORanObject" interface
+class IORanObject(ITop):
     def __init__(
         self,
         address: AddressType = None,
@@ -42,9 +42,9 @@ class IORanFunction(ITop):
         self.url = url
 
 
-# Define an abstract O-RAN Function class
-class ORanFunction(ABC, Top, IORanFunction):
-    def __init__(self, of: IORanFunction = None, **kwargs):
+# Define an abstract O-RAN Object class
+class ORanObject(Top, IORanObject):
+    def __init__(self, of: IORanObject = None, **kwargs):
         super().__init__(**kwargs)
         self.address = of["address"] if of and "address" in of else None
         self.geoLocation = (
