@@ -16,7 +16,7 @@
       "$ref": "#/$defs/network"
     },
     "output-folder": {
-      "description":"The relative path (folder name only) of the directory, where the generated files are stored.",
+      "description": "The relative path (folder name only) of the directory, where the generated files are stored.",
       "type": "string"
     },
     "generation-tasks": {
@@ -30,6 +30,7 @@
       "type": "object",
       "required": [
         "name",
+        "center",
         "pattern"
       ],
       "additionalProperties": false,
@@ -39,14 +40,49 @@
           "type": "string",
           "pattern": "^[a-zA-Z]{1}[\\S]{0,254}$"
         },
+        "center": {
+          "description": "Defines the geographical center of the Radio Access Network.",
+          "$ref": "#/$defs/geoLocation"
+        },
         "pattern": {
-          "description": "A description of the relations between O-RAN functions.",
+          "description": "A description of the relations between O-RAN Objects.",
           "$ref": "#/$defs/pattern"
         }
       }
     },
+    "geoLocation": {
+      "description": "Describes a geographical location.",
+      "title": "geoLocation",
+      "type": "object",
+      "required": [
+        "latitude",
+        "longitude",
+        "aboveMeanSeaLevel"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "latitude": {
+          "description": "The latitude of the geographical location in decimal degrees. Please note 0.00001° is about 1.11m.",
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "description": "The longitude of the geographical location in decimal degrees. Please note 0.00001° is about 1.11m.",
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "aboveMeanSeaLevel": {
+          "description": "The height of the geographical location in meters.",
+          "type": "number",
+          "minimum": -20,
+          "maximum": 1000
+        }
+      }
+    },
     "pattern": {
-      "description": "A description of the relations between O-RAN functions.",
+      "description": "A description of the relations between O-RAN Objects.",
       "title": "pattern",
       "type": "object",
       "required": [
@@ -216,7 +252,7 @@
         }
       }
     },
-    "generation-tasks":{
+    "generation-tasks": {
       "title": "generation-tasks",
       "type": "object",
       "required": [
