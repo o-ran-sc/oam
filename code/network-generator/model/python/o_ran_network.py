@@ -17,8 +17,8 @@
 Module for a class representing a O-RAN Network
 """
 from typing import Any, Dict, List
-from model.python.Tower import Tower
-from model.python.ORanObject import IORanObject, ORanObject
+from model.python.tower import Tower
+from model.python.o_ran_object import IORanObject, ORanObject
 import xml.etree.ElementTree as ET
 
 

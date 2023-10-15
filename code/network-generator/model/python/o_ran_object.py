@@ -20,11 +20,11 @@ An abstract Class for O-RAN Objects
 from abc import ABC, abstractmethod
 from typing import Dict
 
-from model.python.Top import ITop, Top
-from model.python.TypeDefinitions import (
+from model.python.top import ITop, Top
+from model.python.type_definitions import (
     AddressType,
 )
-from model.python.GeoLocation import GeoLocation
+from model.python.geo_location import GeoLocation
 
 
 # Define the "IORanObject" interface

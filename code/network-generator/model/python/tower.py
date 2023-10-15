@@ -19,8 +19,8 @@ A Class representing a Tower to mount O-RAN RUx
 """
 from typing import Any, Dict
 
-from model.python.ORanObject import IORanObject
-from model.python.ORanNode import ORanNode
+from model.python.o_ran_object import IORanObject
+from model.python.o_ran_node import ORanNode
 
 
 # Define an abstract O-RAN Node class

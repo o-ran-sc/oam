@@ -19,7 +19,7 @@ An abstract Class for O-RAN TerminationPoint
 """
 from abc import abstractmethod
 from typing import Any, Dict
-from model.python.ORanObject import ORanObject
+from model.python.o_ran_object import ORanObject
 
 # Define an abstract O-RAN Node class
 class ORanTerminationPoint(ORanObject):

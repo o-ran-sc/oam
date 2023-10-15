@@ -20,7 +20,7 @@ An abstract Class for all classes
 import uuid
 from abc import ABC, abstractmethod
 from typing import Optional, Dict, Union
-from model.python.TypeDefinitions import (
+from model.python.type_definitions import (
     AddressType,
     AdministrativeState,
     OperationalState,
@@ -29,7 +29,7 @@ from model.python.TypeDefinitions import (
     LifeCycleState,
     AlarmState,
 )
-from model.python.GeoLocation import GeoLocation
+from model.python.geo_location import GeoLocation
 
 
 # Define the ITop interface

@@ -19,7 +19,7 @@ An abstract Class for O-RAN Node
 """
 from abc import abstractmethod
 from typing import Any, Dict
-from model.python.ORanObject import IORanObject, ORanObject
+from model.python.o_ran_object import IORanObject, ORanObject
 
 # Define an abstract O-RAN Node class
 class ORanNode(ORanObject):
