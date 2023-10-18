@@ -17,8 +17,13 @@
 Module for a class representing a O-RAN Network
 """
 from typing import Any, Dict, List
+
+from model.python.o_ran_smo import ORanSmo
+from model.python.o_ran_spiral_radius_profile import SpiralRadiusProfile
 from model.python.tower import Tower
 from model.python.o_ran_object import IORanObject, ORanObject
+import model.python.hexagon as Hexagon
+from model.python.hexagon import Hex, Layout, Point
 import xml.etree.ElementTree as ET
 
 
@@ -31,10 +36,37 @@ class ORanNetwork(ORanObject):
     def __init__(self, configuration: Dict[str, Any], of: IORanObject = None, **kwargs):
         super().__init__(of, **kwargs)
         self.__configuration = configuration
-        self.__towers: List[Tower] = []
-
+        self.name = configuration["name"]
         center = configuration["center"]
-        self.__towers.append(Tower(center))
+        size = configuration["pattern"]["o-ran-ru"]["max-reach"]
+        layout = Layout(
+            Hexagon.layout_flat, Point(size, size), Point(0, 0)
+        )  # 1 pixel = 1 meter
+        spiral_radius_profile = SpiralRadiusProfile(
+            {
+                "oRanSmoSpiralRadiusOfNearRtRics": configuration["pattern"]["smo"][
+                    "near-rt-ric-spiral-radius"
+                ],
+                "oRanNearRtRicSpiralRadiusOfOCus": configuration["pattern"][
+                    "near-rt-ric"
+                ]["o-ran-cu-spiral-radius"],
+                "oRanCuSpiralRadiusOfODus": configuration["pattern"]["o-ran-cu"][
+                    "o-ran-du-spiral-radius"
+                ],
+                "oRanDuSpiralRadiusOfTowers": configuration["pattern"]["o-ran-du"][
+                    "tower-spiral-radius"
+                ],
+            }
+        )
+        self._o_ran_smo = ORanSmo(
+            {
+                "name": "SMO",
+                "geoLocation": center,
+                "layout": layout,
+                "spiralRadiusProfile": spiral_radius_profile,
+                "parent": self,
+            }
+        )
 
     # getter
     def configuration(self) -> Dict[str, Dict]:
@@ -46,7 +78,7 @@ class ORanNetwork(ORanObject):
 
     def __appendNodes(self):
         result: List[Dict[str, Any]] = []
-        for tower in self.__towers:
+        for tower in self._o_ran_smo.towers:
             result.append(tower.toTopology())
         return result
 
@@ -64,10 +96,20 @@ class ORanNetwork(ORanObject):
         }
 
     def toKml(self):
-        root: Element = ET.Element("kml", xmlns="http://www.opengis.net/kml/2.2")
+        root: ET.Element = ET.Element("kml", xmlns="http://www.opengis.net/kml/2.2")
         document = ET.SubElement(root, "Document")
         open = ET.SubElement(document, "open")
         open.text = "1"
+        name = ET.SubElement(document, "name")
+        name.text = self.name
+        folder = ET.SubElement(document, "Folder")
+        open = ET.SubElement(folder, "open")
+        open.text = "1"
+        name = ET.SubElement(folder, "name")
+        name.text = "Towers"
+        for tower in self._o_ran_smo.towers:
+            folder.append(tower.toKml())
+
         return root
 
     def toSvg(self):
