@@ -18,6 +18,7 @@ Provides functions to convert the Network into different formats
 """
 
 import json
+from typing import Dict
 from model.python.o_ran_network import ORanNetwork
 import xml.etree.ElementTree as ET
 
@@ -99,9 +100,21 @@ class NetworkViewer:
         :type filename: string
         """
         root = self.__network.toKml()
-        style = ET.Element("style")
-        style.text = self.readStylesFromFile()
-        root.append(style)
+        with open('view/kml.styles.json') as kml_styles:
+            styles:Dict[str,Dict] = json.load(kml_styles)
+            for key, value in styles.items():
+                # add style
+                style = ET.Element("Style",{"id":key})
+                line_style = ET.SubElement(style, "LineStyle")
+                color = ET.SubElement(line_style, "color")
+                color.text = value['stroke']['color']
+                width = ET.SubElement(line_style, "width")
+                width.text = value['stroke']['width']
+                poly_style = ET.SubElement(style, "PolyStyle")
+                fill = ET.SubElement(poly_style, "color")
+                fill.text = value['fill']['color']
+                root.findall(".//Document")[0].append(style)
+
         ET.ElementTree(root).write(filename,
                                       encoding="utf-8",
                                       xml_declaration=True
