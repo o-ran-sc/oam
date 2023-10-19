@@ -45,19 +45,48 @@ class Tower(ORanNode, ITower):
         name.text = self.name
         style: ET.Element = ET.SubElement(placemark, "styleUrl")
         style.text = "#" + self.__class__.__name__
-        polygon: ET.Element = ET.SubElement(placemark, "Polygon")
+        multi_geometry: ET.Element = ET.SubElement(placemark, "MultiGeometry")
+        polygon: ET.Element = ET.SubElement(multi_geometry, "Polygon")
         outer_boundary: ET.Element = ET.SubElement(polygon, "outerBoundaryIs")
         linear_ring: ET.Element = ET.SubElement(outer_boundary, "LinearRing")
         coordinates: ET.Element = ET.SubElement(linear_ring, "coordinates")
         points: list[Point] = Hexagon.polygon_corners(self.layout, self.position)
         points.append(points[0])
-
         method = GeoLocation(self.geoLocation).point_to_geo_location
-        geo_locations: list[GeoLocation] = map(method, points)
-        text:list[str] = []
-        for geo_location in list(geo_locations):
-            text.append(f"{geo_location.longitude},{geo_location.latitude},{geo_location.aboveMeanSeaLevel}")
+        geo_locations: list[GeoLocation] = list(map(method, points))
+        text: list[str] = []
+        for geo_location in geo_locations:
+            text.append(
+                f"{geo_location.longitude},{geo_location.latitude},{geo_location.aboveMeanSeaLevel}"
+            )
         coordinates.text = " ".join(text)
+
+        # cells
+        cell_angle = self.parent.parent.parent.parent.parent.configuration()["pattern"][
+            "o-ran-ru"
+        ]["cell-angle"]
+        for index in range(int(360 / cell_angle)):
+            line: ET.Element = ET.SubElement(multi_geometry, "LineString")
+            tessellate: ET.Element = ET.SubElement(line, "tessellate")
+            tessellate.text = "1"
+            coordinates: ET.Element = ET.SubElement(line, "coordinates")
+            
+            intersect: Point = Point(
+                points[2 * index].x - points[2 * index + 1].x / 2,
+                points[2 * index].y - points[2 * index + 1].y / 2,
+            )
+            intersect_geo_location: GeoLocation = GeoLocation(
+                self.geoLocation
+            ).point_to_geo_location(intersect)
+            text: list[str] = []
+            text.append(
+                f"{intersect_geo_location.longitude},{intersect_geo_location.latitude},{intersect_geo_location.aboveMeanSeaLevel}"
+            )
+            text.append(
+                f"{self.geoLocation['longitude']},{self.geoLocation['latitude']},{self.geoLocation['aboveMeanSeaLevel']}"
+            )
+            coordinates.text = " ".join(text)
+
         return placemark
 
     def toSvg(self):
