@@ -17,10 +17,14 @@
 """
 A Class representing an O-RAN distributed unit (ORanDu)
 """
+import model.python.hexagon as Hexagon
+from model.python.hexagon import Hex
+from model.python.cube import Cube
 from model.python.tower import Tower
 from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
 import xml.etree.ElementTree as ET
+
 
 # Define the "IORanDu" interface
 class IORanDu(IORanObject):
@@ -32,34 +36,41 @@ class IORanDu(IORanObject):
 class ORanDu(ORanNode, IORanDu):
     def __init__(self, o_ran_du_data: IORanDu = None, **kwargs):
         super().__init__(o_ran_du_data, **kwargs)
-        self._towers: list(ORanDu) = self._calculate_towers()
+        self._towers: list[Tower] = self._calculate_towers()
 
-    def _calculate_towers(self):
+    def _calculate_towers(self) -> list[Tower]:
         hex_ring_radius: int = self.spiralRadiusProfile.oRanDuSpiralRadiusOfTowers
-        index: int = 0
-        s: str = "00" + str(index)
-        name: str = "Tower-" + s[len(s) - 2 : len(s)]
-        result : list(Tower) = []
-        result.append(
-            Tower(
-                {
-                    "name": name,
-                    "geoLocation": self.geoLocation,
-                    "position": self.position,
-                    "layout": self.layout,
-                    "spiralRadiusProfile": self.spiralRadiusProfile,
-                    "parent": self
-                }
+        hex_list: list[Hex] = Cube.spiral(self.position, hex_ring_radius)
+        result: list[Tower] = []
+        for index, hex in enumerate(hex_list):
+            s: str = "00" + str(index)
+            name: str = "-".join(
+                [self.name.replace("DU", "Tower"), s[len(s) - 2 : len(s)]]
             )
-        )
+            network_center: dict = self.parent.parent.parent.parent.center
+            newGeo = Hexagon.hex_to_geo_location(
+                self.layout, hex, network_center
+            ).json()
+            result.append(
+                Tower(
+                    {
+                        "name": name,
+                        "geoLocation": newGeo,
+                        "position": hex,
+                        "layout": self.layout,
+                        "spiralRadiusProfile": self.spiralRadiusProfile,
+                        "parent": self,
+                    }
+                )
+            )
         return result
 
     @property
-    def towers(self):
+    def towers(self) -> list[Tower]:
         return self._towers
-    
-    def toKml(self):
+
+    def toKml(self) -> None:
         return None
 
-    def toSvg(self):
+    def toSvg(self) -> None:
         return None
