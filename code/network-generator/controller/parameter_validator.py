@@ -19,7 +19,6 @@ Module containing a class for parameter validation
 import os
 import os.path
 import json
-from typing import Dict, Union
 import jsonschema
 
 
@@ -30,10 +29,12 @@ class ParameterValidator:
 
     __config_file: str = "config.json"
     __configuration: dict = {}
-    __configuration_schema_file: str = os.path.dirname(os.path.realpath(
-        __file__)) + "/../model/jsonSchema/configuration.schema.json"
+    __configuration_schema_file: str = (
+        os.path.dirname(os.path.realpath(__file__))
+        + "/../model/jsonSchema/configuration.schema.json"
+    )
     __config_schema: dict = {}
-    __error_messsage: str = ""
+    __error_message: str = ""
     __is_valid: bool = False
 
     # constructor
@@ -55,7 +56,8 @@ class ParameterValidator:
             with open(self.__configuration_schema_file) as content:
                 self.__config_schema = json.load(content)
         self.__is_valid = self.__is_json_valid(
-            self.__configuration, self.__config_schema)
+            self.__configuration, self.__config_schema
+        )
 
     def configuration_file(self) -> str:
         """
@@ -64,17 +66,17 @@ class ParameterValidator:
         """
         return self.__config_file
 
-    def configuration(self) -> Dict[str, Union[str, Dict[str, int]]]:
+    def configuration(self) -> dict[str, str | dict[str, int]]:
         """
         Getter for the configuration as input parameter.
-        :return Init configuration as Dict.
+        :return Init configuration as dict.
         """
         return self.__configuration
 
     def is_valid(self) -> bool:
         """
         Getter for the validation result.
-        :return Init configuration as Dict.
+        :return Init configuration as dict.
         """
         return self.__is_valid
 
@@ -82,9 +84,9 @@ class ParameterValidator:
         """
         Getter for the error message after validation process or an empty sting,
         when configuration is valid.
-        :return Errormessage as string.
+        :return Error message as string.
         """
-        return self.__error_messsage
+        return self.__error_message
 
     # private
 
@@ -94,8 +96,8 @@ class ParameterValidator:
         """
         try:
             jsonschema.validate(instance=json_data, schema=json_schema)
-            self.__error_messsage = ""
+            self.__error_message = ""
         except jsonschema.exceptions.ValidationError as err:
-            self.__error_messsage = err
+            self.__error_message = err
             return False
         return True
