@@ -36,12 +36,12 @@ class ORanNearRtRic(ORanNode, IORanNearRtRic):
         super().__init__(o_ran_near_rt_ric_data, **kwargs)
         self._o_ran_cus: list(ORanCu) = self._calculate_o_ran_cus()
 
-    def _calculate_o_ran_cus(self):
+    def _calculate_o_ran_cus(self) -> list[ORanCu]:
         hex_ring_radius: int = self.spiralRadiusProfile.oRanNearRtRicSpiralRadiusOfOCus
         index: int = 0
         s: str = "00" + str(index)
         name: str = "O-RAN-CU-" + s[len(s) - 2 : len(s)]
-        result: list(ORanCu) = []
+        result: list[ORanCu] = []
         result.append(
             ORanCu(
                 {
@@ -57,19 +57,19 @@ class ORanNearRtRic(ORanNode, IORanNearRtRic):
         return result
 
     @property
-    def o_ran_cus(self):
+    def o_ran_cus(self) -> list[ORanCu]:
         return self._o_ran_cus
 
     @property
-    def towers(self):
-        result: list(Tower) = []
+    def towers(self) -> list[Tower]:
+        result: list[Tower] = []
         for cu in self.o_ran_cus:
             for tower in cu.towers:
                 result.append(tower)
         return result
 
-    def toKml(self):
+    def toKml(self) -> None:
         return None
 
-    def toSvg(self):
+    def toSvg(self) -> None:
         return None

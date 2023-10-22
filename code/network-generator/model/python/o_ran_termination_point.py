@@ -18,8 +18,9 @@
 An abstract Class for O-RAN TerminationPoint
 """
 from abc import abstractmethod
-from typing import Any, Dict
+from typing import Any
 from model.python.o_ran_object import ORanObject
+
 
 # Define an abstract O-RAN Node class
 class ORanTerminationPoint(ORanObject):
@@ -27,13 +28,5 @@ class ORanTerminationPoint(ORanObject):
         super().__init__(**kwargs)
 
     def toTopology(self):
-        result: Dict[str, Any] = {"tp-id": self.name}
+        result: dict[str, Any] = {"tp-id": self.name}
         return result
-
-    @abstractmethod
-    def toKml(self):
-        pass
-
-    @abstractmethod
-    def toSvg(self):
-        pass

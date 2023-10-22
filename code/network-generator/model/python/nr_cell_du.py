@@ -21,6 +21,7 @@ from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
 import xml.etree.ElementTree as ET
 
+
 # Define the "INrCellDu" interface
 class INrCellDu(IORanObject):
     def __init__(self, **kwargs):
@@ -32,8 +33,8 @@ class NrCellDu(ORanNode, INrCellDu):
     def __init__(self, o_ran_smo_data: INrCellDu = None, **kwargs):
         super().__init__(o_ran_smo_data, **kwargs)
 
-    def toKml(self):
+    def toKml(self) -> None:
         return None
 
-    def toSvg(self):
+    def toSvg(self) -> None:
         return None

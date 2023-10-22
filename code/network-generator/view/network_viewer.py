@@ -18,7 +18,7 @@ Provides functions to convert the Network into different formats
 """
 
 import json
-from typing import Dict
+from typing import Any
 from model.python.o_ran_network import ORanNetwork
 import xml.etree.ElementTree as ET
 
@@ -27,6 +27,7 @@ class NetworkViewer:
     """
     This class contains all functions converting the Network into different formats
     """
+
     __network: ORanNetwork = None
 
     # constructor
@@ -35,35 +36,34 @@ class NetworkViewer:
 
     # json format
 
-    def json(self) -> 'NetworkViewer':
+    def json(self) -> "NetworkViewer":
         """
         Getter returns the class as json object
         :return The class itself, as it is json serializable
         """
         return self
 
-    def show_as_json(self) -> dict:
+    def show_as_json(self) -> dict[str, Any]:
         """
         Method printing the class in json format.
         """
         print(self.__network.json())
 
-    def show(self):
+    def show(self) -> None:
         """
         Method printing the network
         """
         print(self.__network)
 
-    def save(self, filename: str):
+    def save(self, filename: str) -> None:
         """
         Method saving the class content to a file in json format.
         :param filename: A valid path to a file on the system.
         :type filename: string
         """
-        with open(filename, "w", encoding='utf-8') as json_file:
+        with open(filename, "w", encoding="utf-8") as json_file:
             output = self.__network.toTopology()
-            json.dump(output, json_file,
-                      ensure_ascii=False, indent=2)
+            json.dump(output, json_file, ensure_ascii=False, indent=2)
             print("File '" + filename + "' saved!")
 
     def readStylesFromFile(self) -> str:
@@ -71,11 +71,11 @@ class NetworkViewer:
         Method reading the css styles from known file
         return: content of the file as string
         """
-        with open('view/svg.style.css') as styles:
+        with open("view/svg.style.css") as styles:
             content = styles.read()
             return content
 
-    def svg(self, filename: str):
+    def svg(self, filename: str) -> None:
         """
         Method saving the class content to a file in xml/svg format.
 
@@ -86,13 +86,10 @@ class NetworkViewer:
         style = ET.Element("style")
         style.text = self.readStylesFromFile()
         root.findall(".//desc")[0].append(style)
-        ET.ElementTree(root).write(filename,
-                                      encoding="utf-8",
-                                      xml_declaration=True
-                                      )
+        ET.ElementTree(root).write(filename, encoding="utf-8", xml_declaration=True)
         print("File '" + filename + "' saved!")
 
-    def kml(self, filename: str):
+    def kml(self, filename: str) -> None:
         """
         Method saving the class content to a file in xml/kml format.
 
@@ -100,23 +97,20 @@ class NetworkViewer:
         :type filename: string
         """
         root = self.__network.toKml()
-        with open('view/kml.styles.json') as kml_styles:
-            styles:Dict[str,Dict] = json.load(kml_styles)
+        with open("view/kml.styles.json") as kml_styles:
+            styles: dict[str, dict] = json.load(kml_styles)
             for key, value in styles.items():
                 # add style
-                style = ET.Element("Style",{"id":key})
+                style = ET.Element("Style", {"id": key})
                 line_style = ET.SubElement(style, "LineStyle")
                 color = ET.SubElement(line_style, "color")
-                color.text = value['stroke']['color']
+                color.text = value["stroke"]["color"]
                 width = ET.SubElement(line_style, "width")
-                width.text = value['stroke']['width']
+                width.text = value["stroke"]["width"]
                 poly_style = ET.SubElement(style, "PolyStyle")
                 fill = ET.SubElement(poly_style, "color")
-                fill.text = value['fill']['color']
+                fill.text = value["fill"]["color"]
                 root.findall(".//Document")[0].append(style)
 
-        ET.ElementTree(root).write(filename,
-                                      encoding="utf-8",
-                                      xml_declaration=True
-                                      )
+        ET.ElementTree(root).write(filename, encoding="utf-8", xml_declaration=True)
         print("File '" + filename + "' saved!")

@@ -16,14 +16,14 @@
 """
 Module for a class representing a O-RAN Network
 """
-from typing import Any, Dict, List
+from typing import Any
 
 from model.python.o_ran_smo import ORanSmo
 from model.python.o_ran_spiral_radius_profile import SpiralRadiusProfile
-from model.python.tower import Tower
 from model.python.o_ran_object import IORanObject, ORanObject
 import model.python.hexagon as Hexagon
-from model.python.hexagon import Hex, Layout, Point
+from model.python.hexagon import Layout
+from model.python.point import Point
 import xml.etree.ElementTree as ET
 
 
@@ -33,11 +33,11 @@ class ORanNetwork(ORanObject):
     """
 
     # constructor
-    def __init__(self, configuration: Dict[str, Any], of: IORanObject = None, **kwargs):
+    def __init__(self, configuration: dict[str, Any], of: IORanObject = None, **kwargs):
         super().__init__(of, **kwargs)
         self.__configuration = configuration
         self.name = configuration["name"]
-        center = configuration["center"]
+        self.center = configuration["center"]
         size = configuration["pattern"]["o-ran-ru"]["max-reach"]
         layout = Layout(
             Hexagon.layout_flat, Point(size, size), Point(0, 0)
@@ -61,7 +61,7 @@ class ORanNetwork(ORanObject):
         self._o_ran_smo = ORanSmo(
             {
                 "name": "SMO",
-                "geoLocation": center,
+                "geoLocation": self.center,
                 "layout": layout,
                 "spiralRadiusProfile": spiral_radius_profile,
                 "parent": self,
@@ -69,20 +69,20 @@ class ORanNetwork(ORanObject):
         )
 
     # getter
-    def configuration(self) -> Dict[str, Dict]:
+    def configuration(self) -> dict[str, dict]:
         """
         Getter for a json object representing the O-RAN Network.
         :return O-RAN Network as json object.
         """
         return self.__configuration
 
-    def __appendNodes(self):
-        result: List[Dict[str, Any]] = []
+    def __appendNodes(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = []
         for tower in self._o_ran_smo.towers:
             result.append(tower.toTopology())
         return result
 
-    def toTopology(self):
+    def toTopology(self) -> dict[str, Any]:
         return {
             "ietf-network:networks": {
                 "network": [
@@ -95,7 +95,7 @@ class ORanNetwork(ORanObject):
             }
         }
 
-    def toKml(self):
+    def toKml(self) -> ET.Element:
         root: ET.Element = ET.Element("kml", xmlns="http://www.opengis.net/kml/2.2")
         document = ET.SubElement(root, "Document")
         open = ET.SubElement(document, "open")
@@ -112,12 +112,12 @@ class ORanNetwork(ORanObject):
 
         return root
 
-    def toSvg(self):
+    def toSvg(self) -> ET.Element:
         """
         Getter for a xml/svg Element object representing the Network.
         :return Network as SVG object.
         """
-        root: Element = ET.Element(
+        root: ET.Element = ET.Element(
             "svg",
             # width=str(self.__svg_width()),
             # height=str(self.__svg_height()),

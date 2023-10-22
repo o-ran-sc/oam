@@ -19,7 +19,7 @@ An abstract Class for all classes
 """
 import uuid
 from abc import ABC, abstractmethod
-from typing import Optional, Dict, Union
+from typing import Any
 from model.python.type_definitions import (
     AddressType,
     AdministrativeState,
@@ -57,7 +57,7 @@ class ITop:
 
 # Define the Top class
 class Top(ABC, ITop):
-    def __init__(self, data=None):
+    def __init__(self, data: [dict[str, Any] | None] = None):
         self._id = data.id if data and data.id else str(uuid.uuid4())
         self._name = (
             data.name if data and data.name else " ".join(["Name", "of", self._id])
@@ -77,81 +77,77 @@ class Top(ABC, ITop):
             if data and data.lifeCycleState
             else LifeCycleState.PLANNED
         )
-        self._alarmState = (
-            data.alarmState if data and data.alarmState else 0
-        )
+        self._alarmState = data.alarmState if data and data.alarmState else 0
         self._usageState = (
             data.usageState if data and data.usageState else UsageState.UNUSED
         )
-        self._utilization = (
-            data.utilization if data and data.utilization else 0
-        )
+        self._utilization = data.utilization if data and data.utilization else 0
 
     @property
-    def id(self):
+    def id(self) -> str:
         return self._id
 
     @id.setter
-    def id(self, value):
+    def id(self, value: str):
         self._id = value
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
 
     @name.setter
-    def name(self, value):
+    def name(self, value: str):
         self._name = value
 
     @property
-    def administrativeState(self):
+    def administrativeState(self) -> AdministrativeState:
         return self._administrativeState
 
     @administrativeState.setter
-    def administrativeState(self, value):
+    def administrativeState(self, value: AdministrativeState):
         self._administrativeState = value
 
     @property
-    def operationalState(self):
+    def operationalState(self) -> OperationalState:
         return self._operationalState
 
     @operationalState.setter
-    def operationalState(self, value):
+    def operationalState(self, value: OperationalState):
         self._operationalState = value
 
     @property
-    def lifeCycleState(self):
+    def lifeCycleState(self) -> LifeCycleState:
         return self._lifeCycleState
 
     @lifeCycleState.setter
-    def lifeCycleState(self, value):
+    def lifeCycleState(self, value: LifeCycleState):
         self._lifeCycleState = value
 
     @property
-    def alarmState(self):
+    def alarmState(self) -> AlarmState:
         return self._alarmState
 
     @alarmState.setter
-    def alarmState(self, value):
+    def alarmState(self, value: AlarmState):
         self._alarmState = value
 
     @property
-    def usageState(self):
+    def usageState(self) -> UsageState:
         return self._usageState
 
     @usageState.setter
-    def usageState(self, value):
+    def usageState(self, value: UsageState):
         self._usageState = value
 
     @property
-    def utilization(self):
+    def utilization(self) -> Utilization:
         return self._utilization
 
     @utilization.setter
-    def utilization(self, value):
+    def utilization(self, value: Utilization):
         self._utilization = value
 
-    def json(self):
+    def json(self) -> dict[str, Any]:
         return {
             "id": self.id,
             "name": self.name,
@@ -163,5 +159,5 @@ class Top(ABC, ITop):
             "utilization": self.utilization,
         }
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.json())

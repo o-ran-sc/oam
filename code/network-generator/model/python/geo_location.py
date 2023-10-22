@@ -18,7 +18,7 @@
 A collection of TypeDefinitions for a geographical location
 """
 import math
-from model.python.hexagon import Point
+from model.python.point import Point
 
 
 class IGeoLocationData:
@@ -35,7 +35,7 @@ class IGeoLocation:
         self.longitude = longitude
         self.aboveMeanSeaLevel = aboveMeanSeaLevel
 
-    def __str__(self):
+    def __str__(self)-> str:
         return f'lat : {self.latitude} : lon : {self.longitude} : amsl : {self.aboveMeanSeaLevel}'
 
 
@@ -51,11 +51,11 @@ class GeoLocation(IGeoLocation):
         )
 
     @property
-    def equatorialRadius(self):
+    def equatorialRadius(self) -> int:
         return GeoLocation._equatorialRadius
 
     @property
-    def polarRadius(self):
+    def polarRadius(self)-> int:
         return GeoLocation._polarRadius
 
     def set_latitude(self, value: float):
@@ -68,14 +68,14 @@ class GeoLocation(IGeoLocation):
             raise ValueError('Invalid longitude. Longitude must be between -180 and 180.')
         self.longitude = value
 
-    def json(self):
+    def json(self) -> dict[str, float]:
         return {
             "latitude": self.latitude, 
             "longitude": self.longitude, 
             "aboveMeanSeaLevel": self.aboveMeanSeaLevel,      
         }
     
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.json())
     
     def point_to_geo_location(self, point:Point):

@@ -34,14 +34,14 @@ class IORanSmo(IORanObject):
 class ORanSmo(ORanNode, IORanSmo):
     def __init__(self, o_ran_smo_data: IORanSmo = None, **kwargs):
         super().__init__(o_ran_smo_data, **kwargs)
-        self._o_ran_near_rt_rics: list(ORanNearRtRic) = self._calculate_near_rt_rics()
+        self._o_ran_near_rt_rics: list[ORanNearRtRic] = self._calculate_near_rt_rics()
 
-    def _calculate_near_rt_rics(self):
+    def _calculate_near_rt_rics(self) -> list[ORanNearRtRic]:
         hex_ring_radius: int = self.spiralRadiusProfile.oRanSmoSpiralRadiusOfNearRtRics
         index: int = 0
         s: str = "00" + str(index)
         name: str = "Ric-" + s[len(s) - 2 : len(s)]
-        result: list(ORanNearRtRic) = []
+        result: list[ORanNearRtRic] = []
         result.append(
             ORanNearRtRic(
                 {
@@ -62,19 +62,19 @@ class ORanSmo(ORanNode, IORanSmo):
     # });
 
     @property
-    def o_ran_near_rt_rics(self):
+    def o_ran_near_rt_rics(self) -> list[ORanNearRtRic]:
         return self._o_ran_near_rt_rics
-    
+
     @property
-    def towers(self):
-        result: list(Tower) = []
+    def towers(self) -> list[Tower]:
+        result: list[Tower] = []
         for ric in self.o_ran_near_rt_rics:
             for tower in ric.towers:
                 result.append(tower)
         return result
 
-    def toKml(self):
+    def toKml(self) -> None:
         return None
 
-    def toSvg(self):
+    def toSvg(self) -> None:
         return None

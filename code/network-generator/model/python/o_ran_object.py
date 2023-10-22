@@ -18,10 +18,8 @@
 An abstract Class for O-RAN Objects
 """
 from abc import abstractmethod
-from typing import Dict
-
+from typing import Any
 from model.python.top import ITop, Top
-from model.python.geo_location import GeoLocation
 
 
 # Define the "IORanObject" interface
@@ -35,21 +33,13 @@ class ORanObject(Top, IORanObject):
     def __init__(self, of: IORanObject = None, **kwargs):
         super().__init__(**kwargs)
 
-    def json(self):
-        result: Dict = super().json()
+    def json(self) -> dict[str, Any]:
+        result: dict[str, Any] = super().json()
         return result
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.json())
 
     @abstractmethod
-    def toTopology(self):
-        pass
-
-    @abstractmethod
-    def toKml(self):
-        pass
-
-    @abstractmethod
-    def toSvg(self):
+    def toTopology(self) -> dict[str, Any]:
         pass

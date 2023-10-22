@@ -20,11 +20,13 @@ A collection of TypeDefinitions
 from enum import Enum
 from model.python.countries import Country
 
+
 # Define AdministrativeState enum
 class AdministrativeState(Enum):
-    LOCKED = 'locked'
-    UNLOCKED = 'unlocked'
-    SHUTTING_DOWN = 'shutting down'
+    LOCKED = "locked"
+    UNLOCKED = "unlocked"
+    SHUTTING_DOWN = "shutting down"
+
 
 # Define AlarmState type
 AlarmState = int
@@ -37,27 +39,31 @@ AddressType = {
     "city": str,
     "zip": str,
     "state": str,
-    "country": Country
+    "country": Country,
 }
+
 
 # Define OperationalState enum
 class OperationalState(Enum):
-    ENABLED = 'enabled'
-    DISABLED = 'disabled'
+    ENABLED = "enabled"
+    DISABLED = "disabled"
+
 
 # Define LifeCycleState enum
 class LifeCycleState(Enum):
-    PLANNED = 'planned'
-    ORDERED = 'ordered'
-    INSTALLED = 'installed'
-    COMMISSIONED = 'commissioned'
-    TO_BE_DESTROYED = 'to be destroyed'
-    DESTROYED = 'destroyed'
+    PLANNED = "planned"
+    ORDERED = "ordered"
+    INSTALLED = "installed"
+    COMMISSIONED = "commissioned"
+    TO_BE_DESTROYED = "to be destroyed"
+    DESTROYED = "destroyed"
+
 
 # Define UsageState enum
 class UsageState(Enum):
-    USED = 'used'
-    UNUSED = 'unused'
+    USED = "used"
+    UNUSED = "unused"
+
 
 # Define Enumerate type
 def Enumerate(N, Acc=None):
@@ -67,9 +73,11 @@ def Enumerate(N, Acc=None):
         return Acc[-1]
     return Enumerate(N, Acc + [len(Acc)])
 
+
 # Define Range type
-def Range(F, T):
+def Range(F, T) -> list[int]:
     return [i for i in range(F, T + 1)]
+
 
 # Define Procent and Utilization types
 Procent = Range(0, 100)

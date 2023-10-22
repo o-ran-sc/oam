@@ -23,6 +23,7 @@ from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
 import xml.etree.ElementTree as ET
 
+
 # Define the "IORanCu" interface
 class IORanCu(IORanObject):
     def __init__(self, **kwargs):
@@ -33,14 +34,14 @@ class IORanCu(IORanObject):
 class ORanCu(ORanNode, IORanCu):
     def __init__(self, o_ran_cu_data: IORanCu = None, **kwargs):
         super().__init__(o_ran_cu_data, **kwargs)
-        self._o_ran_dus: list(ORanCu) = self._calculate_o_ran_dus()
+        self._o_ran_dus: list[ORanCu] = self._calculate_o_ran_dus()
 
-    def _calculate_o_ran_dus(self):
+    def _calculate_o_ran_dus(self) -> list[ORanDu]:
         hex_ring_radius: int = self.spiralRadiusProfile.oRanCuSpiralRadiusOfODus
         index: int = 0
         s: str = "00" + str(index)
         name: str = "O-RAN-DU-" + s[len(s) - 2 : len(s)]
-        result: list(ORanDu) = []
+        result: list[ORanDu] = []
         result.append(
             ORanDu(
                 {
@@ -49,26 +50,26 @@ class ORanCu(ORanNode, IORanCu):
                     "position": self.position,
                     "layout": self.layout,
                     "spiralRadiusProfile": self.spiralRadiusProfile,
-                    "parent": self
+                    "parent": self,
                 }
             )
         )
         return result
-    
+
     @property
-    def o_ran_dus(self):
+    def o_ran_dus(self) -> list[ORanDu]:
         return self._o_ran_dus
 
     @property
-    def towers(self):
-        result: list(Tower) = []
+    def towers(self) -> list[Tower]:
+        result: list[Tower] = []
         for du in self.o_ran_dus:
             for tower in du.towers:
                 result.append(tower)
         return result
 
-    def toKml(self):
+    def toKml(self) -> None:
         return None
 
-    def toSvg(self):
+    def toSvg(self) -> None:
         return None
