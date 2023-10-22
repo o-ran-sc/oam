@@ -22,47 +22,43 @@ import collections
 import math
 from typing import NamedTuple
 
+from model.python.point import Point
+from model.python.geo_location import GeoLocation
 
-class Point(NamedTuple):
-    x: float
-    y: float
-
-    def __str__(self):
-        return f"{self.x},{self.y}"
 
 class Hex:
-    def __init__(self, q:int, r:int, s:int):
+    def __init__(self, q: int, r: int, s: int):
         if round(q + r + s) != 0:
             raise ValueError("The sum of q, r, and s must be 0.")
         self.q = q
         self.r = r
         self.s = s
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"q: {self.q}, r: {self.r}, s: {self.s}"
 
 
-def hex_add(a: Hex, b: Hex):
+def hex_add(a: Hex, b: Hex) -> Hex:
     return Hex(a.q + b.q, a.r + b.r, a.s + b.s)
 
 
-def hex_subtract(a: Hex, b: Hex):
+def hex_subtract(a: Hex, b: Hex) -> Hex:
     return Hex(a.q - b.q, a.r - b.r, a.s - b.s)
 
 
-def hex_scale(a: Hex, k: int):
+def hex_scale(a: Hex, k: int) -> Hex:
     return Hex(a.q * k, a.r * k, a.s * k)
 
 
-def hex_rotate_left(a):
+def hex_rotate_left(a) -> Hex:
     return Hex(-a.s, -a.q, -a.r)
 
 
-def hex_rotate_right(a):
+def hex_rotate_right(a) -> Hex:
     return Hex(-a.r, -a.s, -a.q)
 
 
-hex_directions = [
+hex_directions: list[Hex] = [
     Hex(1, 0, -1),
     Hex(1, -1, 0),
     Hex(0, -1, 1),
@@ -72,15 +68,15 @@ hex_directions = [
 ]
 
 
-def hex_direction(direction):
+def hex_direction(direction: int) -> Hex:
     return hex_directions[direction]
 
 
-def hex_neighbor(hex: Hex, direction):
+def hex_neighbor(hex: Hex, direction: int) -> Hex:
     return hex_add(hex, hex_direction(direction))
 
 
-hex_diagonals = [
+hex_diagonals: list[Hex] = [
     Hex(2, -1, -1),
     Hex(1, -2, 1),
     Hex(-1, -1, 2),
@@ -90,19 +86,19 @@ hex_diagonals = [
 ]
 
 
-def hex_diagonal_neighbor(hex: Hex, direction):
+def hex_diagonal_neighbor(hex: Hex, direction: int) -> Hex:
     return hex_add(hex, hex_diagonals[direction])
 
 
-def hex_length(hex: Hex):
+def hex_length(hex: Hex) -> int:
     return (abs(hex.q) + abs(hex.r) + abs(hex.s)) // 2
 
 
-def hex_distance(a: Hex, b: Hex):
+def hex_distance(a: Hex, b: Hex) -> int:
     return hex_length(hex_subtract(a, b))
 
 
-def hex_round(hex: Hex):
+def hex_round(hex: Hex) -> Hex:
     qi = int(round(hex.q))
     ri = int(round(hex.r))
     si = int(round(hex.s))
@@ -119,17 +115,17 @@ def hex_round(hex: Hex):
     return Hex(qi, ri, si)
 
 
-def hex_lerp(a: Hex, b: Hex, t: int):  # linearly interpolation
+def hex_lerp(a: Hex, b: Hex, t: int) -> Hex:  # linearly interpolation
     return Hex(
         a.q * (1.0 - t) + b.q * t, a.r * (1.0 - t) + b.r * t, a.s * (1.0 - t) + b.s * t
     )
 
 
-def hex_linedraw(a: Hex, b: Hex):
+def hex_linedraw(a: Hex, b: Hex) -> list[hex]:
     N = hex_distance(a, b)
     a_nudge = Hex(a.q + 1e-06, a.r + 1e-06, a.s - 2e-06)
     b_nudge = Hex(b.q + 1e-06, b.r + 1e-06, b.s - 2e-06)
-    results = []
+    results: list[hex] = []
     step = 1.0 / max(N, 1)
     for i in range(0, N + 1):
         results.append(hex_round(hex_lerp(a_nudge, b_nudge, step * i)))
@@ -138,11 +134,11 @@ def hex_linedraw(a: Hex, b: Hex):
 
 OffsetCoord = collections.namedtuple("OffsetCoord", ["col", "row"])
 
-EVEN = 1
-ODD = -1
+EVEN: int = 1
+ODD: int = -1
 
 
-def qoffset_from_cube(offset: int, hex: Hex):
+def qoffset_from_cube(offset: int, hex: Hex) -> OffsetCoord:
     col = hex.q
     row = hex.r + (hex.q + offset * (hex.q & 1)) // 2
     if offset != EVEN and offset != ODD:
@@ -150,7 +146,7 @@ def qoffset_from_cube(offset: int, hex: Hex):
     return OffsetCoord(col, row)
 
 
-def qoffset_to_cube(offset: int, hex: Hex):
+def qoffset_to_cube(offset: int, hex: Hex) -> Hex:
     q = hex.col
     r = hex.row - (hex.col + offset * (hex.col & 1)) // 2
     s = -q - r
@@ -159,7 +155,7 @@ def qoffset_to_cube(offset: int, hex: Hex):
     return Hex(q, r, s)
 
 
-def roffset_from_cube(offset: int, hex: Hex):
+def roffset_from_cube(offset: int, hex: Hex) -> OffsetCoord:
     col = hex.q + (hex.r + offset * (hex.r & 1)) // 2
     row = hex.r
     if offset != EVEN and offset != ODD:
@@ -167,7 +163,7 @@ def roffset_from_cube(offset: int, hex: Hex):
     return OffsetCoord(col, row)
 
 
-def roffset_to_cube(offset: int, hex: Hex):
+def roffset_to_cube(offset: int, hex: Hex) -> Hex:
     q = hex.col - (hex.row + offset * (hex.row & 1)) // 2
     r = hex.row
     s = -q - r
@@ -185,14 +181,14 @@ def qdoubled_from_cube(hex: Hex):
     return DoubledCoord(col, row)
 
 
-def qdoubled_to_cube(hex: Hex):
+def qdoubled_to_cube(hex: Hex) -> Hex:
     q = hex.col
     r = (hex.row - hex.col) // 2
     s = -q - r
     return Hex(q, r, s)
 
 
-def rdoubled_from_cube(hex: Hex):
+def rdoubled_from_cube(hex: Hex) -> DoubledCoord:
     col = 2 * hex.q + hex.r
     row = hex.r
     return DoubledCoord(col, row)
@@ -217,7 +213,7 @@ class Layout(NamedTuple):
     origin: Point
 
 
-layout_pointy = Orientation(
+layout_pointy: Orientation = Orientation(
     math.sqrt(3.0),
     math.sqrt(3.0) / 2.0,
     0.0,
@@ -228,7 +224,7 @@ layout_pointy = Orientation(
     2.0 / 3.0,
     0.5,
 )
-layout_flat = Orientation(
+layout_flat: Orientation = Orientation(
     3.0 / 2.0,
     0.0,
     math.sqrt(3.0) / 2.0,
@@ -241,7 +237,7 @@ layout_flat = Orientation(
 )
 
 
-def hex_to_pixel(layout: Layout, hex: Hex):
+def hex_to_pixel(layout: Layout, hex: Hex) -> Point:
     M = layout.orientation
     size = layout.size
     origin = layout.origin
@@ -250,7 +246,7 @@ def hex_to_pixel(layout: Layout, hex: Hex):
     return Point(x + origin.x, y + origin.y)
 
 
-def pixel_to_hex(layout: Layout, p: Point):
+def pixel_to_hex(layout: Layout, p: Point) -> Hex:
     M = layout.orientation
     size = layout.size
     origin = layout.origin
@@ -260,20 +256,27 @@ def pixel_to_hex(layout: Layout, p: Point):
     return Hex(q, r, -q - r)
 
 
-def hex_corner_offset(layout: Layout, corner: int):
+def hex_corner_offset(layout: Layout, corner: int) -> Point:
     M = layout.orientation
     size = layout.size
     angle = 2.0 * math.pi * (M.start_angle - corner) / 6.0
     return Point(size.x * math.cos(angle), size.y * math.sin(angle))
 
 
-def polygon_corners(layout: Layout, hex: Hex):
+def polygon_corners(layout: Layout, hex: Hex) -> list[Point]:
     corners: list[Point] = []
     center = hex_to_pixel(layout, hex)
     for i in range(0, 6):
         offset = hex_corner_offset(layout, i)
         corners.append(Point(center.x + offset.x, center.y + offset.y))
     return corners
+
+
+def hex_to_geo_location(
+    layout: Layout, hex: Hex, reference: GeoLocation
+) -> GeoLocation:
+    hexPoint: Point = hex_to_pixel(layout, hex)
+    return GeoLocation(reference).point_to_geo_location(hexPoint)
 
 
 # Tests
