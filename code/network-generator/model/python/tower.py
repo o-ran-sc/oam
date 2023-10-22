@@ -17,29 +17,19 @@
 """
 A Class representing a Tower to mount O-RAN RUx
 """
-from typing import Any, Dict
-
 import model.python.hexagon as Hexagon
-from model.python.hexagon import Hex, Layout, Point
+from model.python.point import Point
 from model.python.geo_location import GeoLocation
-
-from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
 import xml.etree.ElementTree as ET
 
 
-# Define the "ITower" interface
-class ITower(IORanObject):
-    def __init__(self, layout: Layout, hex: Hex = None, **kwargs):
-        super().__init__(**kwargs)
-
-
 # Define an abstract O-RAN Node class
-class Tower(ORanNode, ITower):
-    def __init__(self, tower_data: ITower = None, **kwargs):
-        super().__init__(tower_data, **kwargs)
+class Tower(ORanNode):
+    # def __init__(self, **kwargs):
+    #     super().__init__(**kwargs)
 
-    def toKml(self):
+    def toKml(self) -> ET.Element:
         placemark: ET.Element = ET.Element("Placemark")
         name: ET.Element = ET.SubElement(placemark, "name")
         name.text = self.name
@@ -50,9 +40,12 @@ class Tower(ORanNode, ITower):
         outer_boundary: ET.Element = ET.SubElement(polygon, "outerBoundaryIs")
         linear_ring: ET.Element = ET.SubElement(outer_boundary, "LinearRing")
         coordinates: ET.Element = ET.SubElement(linear_ring, "coordinates")
+
         points: list[Point] = Hexagon.polygon_corners(self.layout, self.position)
         points.append(points[0])
-        method = GeoLocation(self.geoLocation).point_to_geo_location
+        method = GeoLocation(
+            self.parent.parent.parent.parent.geoLocation
+        ).point_to_geo_location
         geo_locations: list[GeoLocation] = list(map(method, points))
         text: list[str] = []
         for geo_location in geo_locations:
@@ -70,13 +63,13 @@ class Tower(ORanNode, ITower):
             tessellate: ET.Element = ET.SubElement(line, "tessellate")
             tessellate.text = "1"
             coordinates: ET.Element = ET.SubElement(line, "coordinates")
-            
+
             intersect: Point = Point(
-                points[2 * index].x - points[2 * index + 1].x / 2,
-                points[2 * index].y - points[2 * index + 1].y / 2,
+                (points[2 * index+2].x + points[2 * index + 1].x) / 2,
+                (points[2 * index+2].y + points[2 * index + 1].y) / 2,
             )
             intersect_geo_location: GeoLocation = GeoLocation(
-                self.geoLocation
+                self.parent.parent.parent.parent.geoLocation
             ).point_to_geo_location(intersect)
             text: list[str] = []
             text.append(
@@ -89,5 +82,5 @@ class Tower(ORanNode, ITower):
 
         return placemark
 
-    def toSvg(self):
+    def toSvg(self) -> None:
         return None
