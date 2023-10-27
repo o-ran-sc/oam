@@ -15,19 +15,54 @@
 #!/usr/bin/python
 
 """
-A Class representing a Tower to mount O-RAN RUx
+A Class representing a Tower to mount O-RAN RUs
+It can be interpreted as 'resource pool' for physical network
+functions.
 """
+from model.python.o_ran_object import IORanObject
+from model.python.o_ran_ru import IORanRu, ORanRu
 import model.python.hexagon as Hexagon
 from model.python.point import Point
 from model.python.geo_location import GeoLocation
 from model.python.o_ran_node import ORanNode
 import xml.etree.ElementTree as ET
 
+# Define the "IORanDu" interface
+class ITower(IORanObject):
+    def __init__(self, o_ran_ru_count: int, **kwargs):
+        super().__init__(**kwargs)
+        self._o_ran_ru_count = o_ran_ru_count
 
-# Define an abstract O-RAN Node class
+# Implement a concrete O-RAN Node class
 class Tower(ORanNode):
-    # def __init__(self, **kwargs):
-    #     super().__init__(**kwargs)
+
+    def __init__(self, tower_data: ITower = None, **kwargs):
+        super().__init__(tower_data, **kwargs)
+        self._o_ran_ru_count = tower_data["oRanRuCount"] if tower_data and "oRanRuCount" in tower_data else 3
+        self._o_ran_rus: list[ORanRu] = self._create_o_ran_rus()
+
+    def _create_o_ran_rus(self) -> list [ORanRu]:
+        result : list [ORanRu] = []
+        for index in range(self._o_ran_ru_count):
+            s: str = "00" + str(index)
+            name: str = "-".join(
+                [self.name.replace("Tower", "RU"), s[len(s) - 2 : len(s)]]
+            )
+            cell_count: int = self.parent.parent.parent.parent.parent.configuration()['pattern']["o-ran-ru"]["nr-cell-du-count"]
+            result.append(
+                ORanRu(
+                    {
+                        "name": name,
+                        "geoLocation": self.geoLocation,
+                        "position": self.position,
+                        "layout": self.layout,
+                        "spiralRadiusProfile": self.spiralRadiusProfile,
+                        "parent": self,
+                        "cellCount": cell_count
+                    }
+                )
+            )
+        return result
 
     def toKml(self) -> ET.Element:
         placemark: ET.Element = ET.Element("Placemark")

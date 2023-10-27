@@ -20,7 +20,7 @@ A Class representing an O-RAN distributed unit (ORanDu)
 import model.python.hexagon as Hexagon
 from model.python.hexagon import Hex
 from model.python.cube import Cube
-from model.python.tower import Tower
+from model.python.o_ran_ru import ORanRu
 from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
 import xml.etree.ElementTree as ET
@@ -28,31 +28,30 @@ import xml.etree.ElementTree as ET
 
 # Define the "IORanDu" interface
 class IORanDu(IORanObject):
-    def __init__(self, **kwargs):
+    def __init__(self, o_ran_ru_count: int, **kwargs):
         super().__init__(**kwargs)
+        self._o_ran_ru_count = o_ran_ru_count
 
 
 # Define an abstract O-RAN Node class
 class ORanDu(ORanNode, IORanDu):
     def __init__(self, o_ran_du_data: IORanDu = None, **kwargs):
         super().__init__(o_ran_du_data, **kwargs)
-        self._towers: list[Tower] = self._calculate_towers()
+        self._o_ran_rus: list[ORanRu] = self._calculate_o_ran_rus()
 
-    def _calculate_towers(self) -> list[Tower]:
-        hex_ring_radius: int = self.spiralRadiusProfile.oRanDuSpiralRadiusOfTowers
-        hex_list: list[Hex] = Cube.spiral(self.position, hex_ring_radius)
-        result: list[Tower] = []
-        for index, hex in enumerate(hex_list):
+    def _calculate_o_ran_rus(self) -> list[ORanRu]:
+        result: list[ORanRu] = []
+        for index in range(self._o_ran_ru_count):
             s: str = "00" + str(index)
             name: str = "-".join(
-                [self.name.replace("DU", "Tower"), s[len(s) - 2 : len(s)]]
+                [self.name.replace("DU", "RU"), s[len(s) - 2 : len(s)]]
             )
             network_center: dict = self.parent.parent.parent.parent.center
             newGeo = Hexagon.hex_to_geo_location(
                 self.layout, hex, network_center
             ).json()
             result.append(
-                Tower(
+                ORanRu(
                     {
                         "name": name,
                         "geoLocation": newGeo,
@@ -66,8 +65,8 @@ class ORanDu(ORanNode, IORanDu):
         return result
 
     @property
-    def towers(self) -> list[Tower]:
-        return self._towers
+    def o_ran_rus(self) -> list[ORanRu]:
+        return self._o_ran_rus
 
     def toKml(self) -> ET.Element:
         o_ran_du: ET.Element = ET.Element("Folder")

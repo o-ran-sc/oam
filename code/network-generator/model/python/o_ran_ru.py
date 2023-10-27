@@ -24,14 +24,16 @@ import xml.etree.ElementTree as ET
 
 # Define the "IORanRu" interface
 class IORanRu(IORanObject):
-    def __init__(self, **kwargs):
+    def __init__(self, cell_count: int, **kwargs):
         super().__init__(**kwargs)
+        self._cell_count = cell_count
 
 
 # Define an abstract O-RAN Node class
 class ORanRu(ORanNode, IORanRu):
-    def __init__(self, o_ran_smo_data: IORanRu = None, **kwargs):
-        super().__init__(o_ran_smo_data, **kwargs)
+    def __init__(self, o_ran_ru_data: IORanRu = None, **kwargs):
+        super().__init__(o_ran_ru_data, **kwargs)
+        self._cell_count = o_ran_ru_data["cellCount"] if o_ran_ru_data and "cellCount" in o_ran_ru_data else 1
 
     def toKml(self) -> None:
         return None
