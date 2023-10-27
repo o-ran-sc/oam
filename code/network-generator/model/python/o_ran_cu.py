@@ -17,6 +17,9 @@
 """
 A Class representing an O-RAN centralized unit (ORanCu)
 """
+from model.python.cube import Cube
+from model.python.hexagon import Hex
+import model.python.hexagon as Hexagon
 from model.python.o_ran_du import ORanDu
 from model.python.tower import Tower
 from model.python.o_ran_object import IORanObject
@@ -38,23 +41,31 @@ class ORanCu(ORanNode, IORanCu):
 
     def _calculate_o_ran_dus(self) -> list[ORanDu]:
         hex_ring_radius: int = self.spiralRadiusProfile.oRanCuSpiralRadiusOfODus
-        index: int = 0
-        s: str = "00" + str(index)
-        name: str = "O-RAN-DU-" + s[len(s) - 2 : len(s)]
+        hex_list: list[Hex] = self.spiralRadiusProfile.oRanDuSpiral(self.position, hex_ring_radius)
         result: list[ORanDu] = []
-        result.append(
-            ORanDu(
-                {
-                    "name": name,
-                    "geoLocation": self.geoLocation,
-                    "position": self.position,
-                    "layout": self.layout,
-                    "spiralRadiusProfile": self.spiralRadiusProfile,
-                    "parent": self,
-                }
+        for index, hex in enumerate(hex_list):
+            s: str = "00" + str(index)
+            name: str = "-".join(
+                [self.name.replace("CU", "DU"), s[len(s) - 2 : len(s)]]
             )
-        )
+            network_center: dict = self.parent.parent.parent.center
+            newGeo = Hexagon.hex_to_geo_location(
+                self.layout, hex, network_center
+            ).json()
+            result.append(
+                ORanDu(
+                    {
+                        "name": name,
+                        "geoLocation": newGeo,
+                        "position": hex,
+                        "layout": self.layout,
+                        "spiralRadiusProfile": self.spiralRadiusProfile,
+                        "parent": self,
+                    }
+                )
+            )
         return result
+
 
     @property
     def o_ran_dus(self) -> list[ORanDu]:
@@ -68,8 +79,16 @@ class ORanCu(ORanNode, IORanCu):
                 result.append(tower)
         return result
 
-    def toKml(self) -> None:
-        return None
+    def toKml(self) -> ET.Element:
+        o_ran_cu: ET.Element = ET.Element("Folder")
+        open: ET.Element = ET.SubElement(o_ran_cu, "open")
+        open.text = "1"
+        name: ET.Element = ET.SubElement(o_ran_cu, "name")
+        name.text = self.name
+        for o_ran_du in self.o_ran_dus:
+            o_ran_cu.append(o_ran_du.toKml())
+        return o_ran_cu
+
 
     def toSvg(self) -> None:
         return None

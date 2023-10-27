@@ -21,6 +21,8 @@ from model.python.tower import Tower
 from model.python.o_ran_near_rt_ric import ORanNearRtRic
 from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
+from model.python.hexagon import Hex
+import model.python.hexagon as Hexagon
 import xml.etree.ElementTree as ET
 
 
@@ -38,28 +40,32 @@ class ORanSmo(ORanNode, IORanSmo):
 
     def _calculate_near_rt_rics(self) -> list[ORanNearRtRic]:
         hex_ring_radius: int = self.spiralRadiusProfile.oRanSmoSpiralRadiusOfNearRtRics
-        index: int = 0
-        s: str = "00" + str(index)
-        name: str = "Ric-" + s[len(s) - 2 : len(s)]
-        result: list[ORanNearRtRic] = []
-        result.append(
-            ORanNearRtRic(
-                {
-                    "name": name,
-                    "geoLocation": self.geoLocation,
-                    "position": self.position,
-                    "layout": self.layout,
-                    "spiralRadiusProfile": self.spiralRadiusProfile,
-                    "parent": self,
-                }
-            )
+        hex_list: list[Hex] = self.spiralRadiusProfile.oRanNearRtRicSpiral(
+            self.position, hex_ring_radius
         )
+        result: list[ORanNearRtRic] = []
+        for index, hex in enumerate(hex_list):
+            s: str = "00" + str(index)
+            name: str = "-".join(
+                [self.name.replace("SMO", "NearRtRic"), s[len(s) - 2 : len(s)]]
+            )
+            network_center: dict = self.parent.center
+            newGeo = Hexagon.hex_to_geo_location(
+                self.layout, hex, network_center
+            ).json()
+            result.append(
+                ORanNearRtRic(
+                    {
+                        "name": name,
+                        "geoLocation": newGeo,
+                        "position": hex,
+                        "layout": self.layout,
+                        "spiralRadiusProfile": self.spiralRadiusProfile,
+                        "parent": self,
+                    }
+                )
+            )
         return result
-
-    # return this.spiralProfile.oRanNearRtRicSpiral(this.position, hexRingRadius).map((hex, index) => {
-    #   const name: string = 'Ric-' + ('00' + index).slice(-2);
-    #   return new ORanNearRtRic({ name: name, position: hex, layout: this.layout, spiralProfile: this.spiralProfile, parent: this });
-    # });
 
     @property
     def o_ran_near_rt_rics(self) -> list[ORanNearRtRic]:
@@ -73,8 +79,15 @@ class ORanSmo(ORanNode, IORanSmo):
                 result.append(tower)
         return result
 
-    def toKml(self) -> None:
-        return None
+    def toKml(self) -> ET.Element:
+        smo: ET.Element = ET.Element("Folder")
+        open: ET.Element = ET.SubElement(smo, "open")
+        open.text = "1"
+        name: ET.Element = ET.SubElement(smo, "name")
+        name.text = self.name
+        for ric in self.o_ran_near_rt_rics:
+            smo.append(ric.toKml())
+        return smo
 
     def toSvg(self) -> None:
         return None

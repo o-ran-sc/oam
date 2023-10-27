@@ -21,6 +21,8 @@ from model.python.tower import Tower
 from model.python.o_ran_cu import ORanCu
 from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
+from model.python.hexagon import Hex
+import model.python.hexagon as Hexagon
 import xml.etree.ElementTree as ET
 
 
@@ -38,22 +40,31 @@ class ORanNearRtRic(ORanNode, IORanNearRtRic):
 
     def _calculate_o_ran_cus(self) -> list[ORanCu]:
         hex_ring_radius: int = self.spiralRadiusProfile.oRanNearRtRicSpiralRadiusOfOCus
-        index: int = 0
-        s: str = "00" + str(index)
-        name: str = "O-RAN-CU-" + s[len(s) - 2 : len(s)]
-        result: list[ORanCu] = []
-        result.append(
-            ORanCu(
-                {
-                    "name": name,
-                    "geoLocation": self.geoLocation,
-                    "position": self.position,
-                    "layout": self.layout,
-                    "spiralRadiusProfile": self.spiralRadiusProfile,
-                    "parent": self,
-                }
-            )
+        hex_list: list[Hex] = self.spiralRadiusProfile.oRanCuSpiral(
+            self.position, hex_ring_radius
         )
+        result: list[ORanCu] = []
+        for index, hex in enumerate(hex_list):
+            s: str = "00" + str(index)
+            name: str = "-".join(
+                [self.name.replace("NearRtRic", "CU"), s[len(s) - 2 : len(s)]]
+            )
+            network_center: dict = self.parent.parent.center
+            newGeo = Hexagon.hex_to_geo_location(
+                self.layout, hex, network_center
+            ).json()
+            result.append(
+                ORanCu(
+                    {
+                        "name": name,
+                        "geoLocation": newGeo,
+                        "position": hex,
+                        "layout": self.layout,
+                        "spiralRadiusProfile": self.spiralRadiusProfile,
+                        "parent": self
+                    }
+                )
+            )
         return result
 
     @property
@@ -68,8 +79,15 @@ class ORanNearRtRic(ORanNode, IORanNearRtRic):
                 result.append(tower)
         return result
 
-    def toKml(self) -> None:
-        return None
+    def toKml(self) -> ET.Element:
+        ric: ET.Element = ET.Element("Folder")
+        open: ET.Element = ET.SubElement(ric, "open")
+        open.text = "1"
+        name: ET.Element = ET.SubElement(ric, "name")
+        name.text = self.name
+        for o_ran_cu in self.o_ran_cus:
+            ric.append(o_ran_cu.toKml())
+        return ric
 
     def toSvg(self) -> None:
         return None
