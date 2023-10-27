@@ -15,46 +15,47 @@
 #!/usr/bin/python
 
 """
-A Class representing an O-RAN centralized unit (ORanCu)
-and at the same time a location for an O-Cloud resource pool
+A Class representing an O-RAN O-Cloud resource pool for O-RAN distributed units (ORanDu)
+By default all O-RAN-DUs associated with the towers around  are deployed here.
+Maybe dedicated hardware is required to host O-DUs, but it is expected 
+that the O-Cloud mechanism and concepts can be applied here.
 """
-from model.python.cube import Cube
-from model.python.hexagon import Hex
 import model.python.hexagon as Hexagon
-from model.python.o_ran_cloud_du import ORanCloudDu
+from model.python.hexagon import Hex
+from model.python.cube import Cube
 from model.python.tower import Tower
 from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
 import xml.etree.ElementTree as ET
 
 
-# Define the "IORanCu" interface
-class IORanCu(IORanObject):
+# Define the "IORanDu" interface
+class IORanCloudDu(IORanObject):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
 
-# Define an abstract O-RAN Node class
-class ORanCu(ORanNode, IORanCu):
-    def __init__(self, o_ran_cu_data: IORanCu = None, **kwargs):
-        super().__init__(o_ran_cu_data, **kwargs)
-        self._o_ran_cloud_dus: list[ORanCu] = self._calculate_o_ran_dus()
+# Implements a concrete O-RAN Node class
+class ORanCloudDu(ORanNode, IORanCloudDu):
+    def __init__(self, o_ran_du_data: IORanCloudDu = None, **kwargs):
+        super().__init__(o_ran_du_data, **kwargs)
+        self._towers: list[Tower] = self._calculate_towers()
 
-    def _calculate_o_ran_dus(self) -> list[ORanCloudDu]:
-        hex_ring_radius: int = self.spiralRadiusProfile.oRanCuSpiralRadiusOfODus
-        hex_list: list[Hex] = self.spiralRadiusProfile.oRanDuSpiral(self.position, hex_ring_radius)
-        result: list[ORanCloudDu] = []
+    def _calculate_towers(self) -> list[Tower]:
+        hex_ring_radius: int = self.spiralRadiusProfile.oRanDuSpiralRadiusOfTowers
+        hex_list: list[Hex] = Cube.spiral(self.position, hex_ring_radius)
+        result: list[Tower] = []
         for index, hex in enumerate(hex_list):
             s: str = "00" + str(index)
             name: str = "-".join(
-                [self.name.replace("CU", "O-Cloud-DU"), s[len(s) - 2 : len(s)]]
+                [self.name.replace("O-Cloud-DU", "Tower"), s[len(s) - 2 : len(s)]]
             )
-            network_center: dict = self.parent.parent.parent.center
+            network_center: dict = self.parent.parent.parent.parent.center
             newGeo = Hexagon.hex_to_geo_location(
                 self.layout, hex, network_center
             ).json()
             result.append(
-                ORanCloudDu(
+                Tower(
                     {
                         "name": name,
                         "geoLocation": newGeo,
@@ -67,29 +68,19 @@ class ORanCu(ORanNode, IORanCu):
             )
         return result
 
-
-    @property
-    def o_ran_cloud_dus(self) -> list[ORanCloudDu]:
-        return self._o_ran_cloud_dus
-
     @property
     def towers(self) -> list[Tower]:
-        result: list[Tower] = []
-        for du in self.o_ran_cloud_dus:
-            for tower in du.towers:
-                result.append(tower)
-        return result
+        return self._towers
 
     def toKml(self) -> ET.Element:
-        o_ran_cu: ET.Element = ET.Element("Folder")
-        open: ET.Element = ET.SubElement(o_ran_cu, "open")
+        o_ran__cloud_du: ET.Element = ET.Element("Folder")
+        open: ET.Element = ET.SubElement(o_ran__cloud_du, "open")
         open.text = "1"
-        name: ET.Element = ET.SubElement(o_ran_cu, "name")
+        name: ET.Element = ET.SubElement(o_ran__cloud_du, "name")
         name.text = self.name
-        for o_ran_du in self.o_ran_cloud_dus:
-            o_ran_cu.append(o_ran_du.toKml())
-        return o_ran_cu
-
+        for tower in self.towers:
+            o_ran__cloud_du.append(tower.toKml())
+        return o_ran__cloud_du
 
     def toSvg(self) -> None:
         return None
