@@ -60,7 +60,7 @@ class ORanNetwork(ORanObject):
         )
         self._o_ran_smo = ORanSmo(
             {
-                "name": "SMO",
+                "name": "O-RAN-SMO",
                 "geoLocation": self.center,
                 "layout": layout,
                 "spiralRadiusProfile": spiral_radius_profile,
@@ -98,17 +98,12 @@ class ORanNetwork(ORanObject):
     def toKml(self) -> ET.Element:
         root: ET.Element = ET.Element("kml", xmlns="http://www.opengis.net/kml/2.2")
         document = ET.SubElement(root, "Document")
-        open = ET.SubElement(document, "open")
+        open: ET.Element = ET.SubElement(document, "open")
         open.text = "1"
-        name = ET.SubElement(document, "name")
+        name: ET.Element = ET.SubElement(document, "name")
         name.text = self.name
-        folder = ET.SubElement(document, "Folder")
-        open = ET.SubElement(folder, "open")
-        open.text = "1"
-        name = ET.SubElement(folder, "name")
-        name.text = "Towers"
-        for tower in self._o_ran_smo.towers:
-            folder.append(tower.toKml())
+
+        document.append(self._o_ran_smo.toKml())
 
         return root
 

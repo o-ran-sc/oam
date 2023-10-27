@@ -69,8 +69,15 @@ class ORanDu(ORanNode, IORanDu):
     def towers(self) -> list[Tower]:
         return self._towers
 
-    def toKml(self) -> None:
-        return None
+    def toKml(self) -> ET.Element:
+        o_ran_du: ET.Element = ET.Element("Folder")
+        open: ET.Element = ET.SubElement(o_ran_du, "open")
+        open.text = "1"
+        name: ET.Element = ET.SubElement(o_ran_du, "name")
+        name.text = self.name
+        for tower in self.towers:
+            o_ran_du.append(tower.toKml())
+        return o_ran_du
 
     def toSvg(self) -> None:
         return None
