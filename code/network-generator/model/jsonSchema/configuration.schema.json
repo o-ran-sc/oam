@@ -218,13 +218,31 @@
           "title": "o-ran-ru",
           "type": "object",
           "required": [
-            "nr-cell-du-count",
-            "cell-angle",
-            "max-reach"
+            "nr-cell-du-count"
           ],
           "properties": {
             "nr-cell-du-count": {
               "description": "Number of 3GPP:NRCellDUs managed by an O-RAN-RU.",
+              "type": "integer",
+              "enum": [
+                1,
+                3
+              ]
+            }
+          }
+        },
+        "nr-cell-du": {
+          "description": "Definition of the relation to 3GPP:NRCellDU children.",
+          "title": "nr-cell-du",
+          "type": "object",
+          "required": [
+            "sector-count",
+            "cell-angle",
+            "max-reach"
+          ],
+          "properties": {
+            "sector-count": {
+              "description": "Number of sectors managed by an 3GPP:NRCellDUs.",
               "type": "integer",
               "enum": [
                 1,
@@ -243,24 +261,6 @@
               "type": "integer",
               "minimum": 15,
               "maximum": 600
-            }
-          }
-        },
-        "nr-cell-du": {
-          "description": "Definition of the relation to 3GPP:NRCellDU children.",
-          "title": "nr-cell-du",
-          "type": "object",
-          "required": [
-            "sector-count"
-          ],
-          "properties": {
-            "sector-count": {
-              "description": "Number of sectors managed by an 3GPP:NRCellDUs.",
-              "type": "integer",
-              "enum": [
-                1,
-                3
-              ]
             }
           }
         }
