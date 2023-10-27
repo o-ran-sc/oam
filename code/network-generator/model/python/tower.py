@@ -55,9 +55,7 @@ class Tower(ORanNode):
         coordinates.text = " ".join(text)
 
         # cells
-        cell_angle = self.parent.parent.parent.parent.parent.configuration()["pattern"][
-            "o-ran-ru"
-        ]["cell-angle"]
+        cell_angle = self.parent.parent.parent.parent.parent.configuration()["pattern"]["nr-cell-du"]["cell-angle"]
         for index in range(int(360 / cell_angle)):
             line: ET.Element = ET.SubElement(multi_geometry, "LineString")
             tessellate: ET.Element = ET.SubElement(line, "tessellate")

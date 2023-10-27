@@ -1,4 +1,4 @@
 {
-  "Railway":{"stroke":{"color":"ff00ccff", "width":"3"},"fill":{"color":"ff00ccff"}},
-  "Tower":{"stroke":{"color":"ffffcc00", "width":"3"},"fill":{"color":"22ffcc00"}}
+  "Railway":{"stroke":{"color":"ff00ccff", "width":"2"},"fill":{"color":"ff00ccff"}},
+  "Tower":{"stroke":{"color":"ffffcc00", "width":"2"},"fill":{"color":"22ffcc00"}}
 }        

@@ -38,7 +38,7 @@ class ORanNetwork(ORanObject):
         self.__configuration = configuration
         self.name = configuration["name"]
         self.center = configuration["center"]
-        size = configuration["pattern"]["o-ran-ru"]["max-reach"]
+        size = configuration["pattern"]["nr-cell-du"]["max-reach"]
         layout = Layout(
             Hexagon.layout_flat, Point(size, size), Point(0, 0)
         )  # 1 pixel = 1 meter
