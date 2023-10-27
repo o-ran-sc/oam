@@ -2,8 +2,8 @@
   "network": {
     "name": "o-ran-network",
     "center": {
-      "latitude": 52.4996182,
-      "longitude": 13.3289033,
+      "latitude": 40.535,
+      "longitude": -74.447,
       "aboveMeanSeaLevel": 50
     },
     "pattern": {
@@ -27,12 +27,12 @@
         "o-ran-ru-count": 1
       },
       "o-ran-ru": {
-        "nr-cell-du-count": 1,
-        "cell-angle": 120,
-        "max-reach": 600
+        "nr-cell-du-count": 1
       },
       "nr-cell-du": {
-        "sector-count": 1
+        "sector-count": 1,
+        "cell-angle": 120,
+        "max-reach": 400
       }
     }
   },
