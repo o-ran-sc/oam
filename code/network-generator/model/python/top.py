@@ -58,30 +58,32 @@ class ITop:
 # Define the Top class
 class Top(ABC, ITop):
     def __init__(self, data: [dict[str, Any] | None] = None):
-        self._id = data.id if data and data.id else str(uuid.uuid4())
+        self._id = data["id"] if data and "id" in data else str(uuid.uuid4())
         self._name = (
-            data.name if data and data.name else " ".join(["Name", "of", self._id])
+            data["name"]
+            if data and "name" in data
+            else " ".join(["Name", "of", self._id])
         )
         self._administrativeState = (
-            data.administrativeState
-            if data and data.administrativeState
+            data["administrativeState"]
+            if data and "administrativeState" in data
             else AdministrativeState.LOCKED
         )
         self._operationalState = (
-            data.operationalState
-            if data and data.operationalState
+            data["operationalState"]
+            if data and "operationalState" in data
             else OperationalState.DISABLED
         )
         self._lifeCycleState = (
-            data.lifeCycleState
-            if data and data.lifeCycleState
+            data["lifeCycleState"]
+            if data and "lifeCycleState" in data
             else LifeCycleState.PLANNED
         )
-        self._alarmState = data.alarmState if data and data.alarmState else 0
+        self._alarmState = data["alarmState"] if data and "alarmState" in data else 0
         self._usageState = (
-            data.usageState if data and data.usageState else UsageState.UNUSED
+            data["usageState"] if data and "usageState" in data else UsageState.UNUSED
         )
-        self._utilization = data.utilization if data and data.utilization else 0
+        self._utilization = data["utilization"] if data and "utilization" in data else 0
 
     @property
     def id(self) -> str:
