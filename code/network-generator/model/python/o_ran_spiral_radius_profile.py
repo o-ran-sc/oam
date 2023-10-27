@@ -19,6 +19,7 @@ from typing import Any
 
 from model.python.cube import Cube
 from model.python.hexagon import Hex
+import model.python.hexagon as Hexagon
 
 
 class SpiralRadiusProfile:
@@ -107,12 +108,12 @@ class SpiralRadiusProfile:
 
     @nrDuCellsPerSector.setter
     def nrDuCellsPerSector(self, value: int):
-        self._nrDuCellsPerSector = value
+        self._nrDuCellsPerSector: int = value
 
     def oRanDuDirections(self) -> list[Hex]:
-        q = 2 * self._oRanDuSpiralRadiusOfTowers + 1
-        r = -self._oRanDuSpiralRadiusOfTowers - 1
-        s = -q - r
+        q: int = 2 * self._oRanDuSpiralRadiusOfTowers + 1
+        r: int = -self._oRanDuSpiralRadiusOfTowers - 1
+        s: int = -q - r
         return [
             Hex(q, r, s),
             Hex(-s, -q, -r),
@@ -123,7 +124,7 @@ class SpiralRadiusProfile:
         ]
 
     def oRanDuNeighbor(self, cube: Cube, direction: int):
-        return Hex.add(cube, self.oRanDuDirections[direction])
+        return Hexagon.hex_add(cube, self.oRanDuDirections()[direction])
 
     def oRanDuRing(self, center: Hex, radius: int) -> list[Hex]:
         if radius <= 0:
@@ -131,76 +132,120 @@ class SpiralRadiusProfile:
                 "Invalid radius. The radius around the hex center must be greater than 0 rings."
             )
         results: list[Hex] = []
-        hex = Hex.add(center, Hex.scale(self.oRanDuDirections[4], radius))
+        hex: Hex = Hexagon.hex_add(
+            center, Hexagon.hex_scale(self.oRanDuDirections()[4], radius)
+        )
         for i in range(6):
             for j in range(radius):
                 results.append(hex)
                 hex = self.oRanDuNeighbor(hex, i)
         return results
 
-    def oRanDuSpiral(self, center: Hex, radius: int) -> list[Hex]:
+    def oRanDuSpiral(self, o_ran_du_center: Hex, radius: int) -> list[Hex]:
+        result: list[Hex] = [o_ran_du_center]
+        for k in range(1, radius + 1):
+            result.extend(self.oRanDuRing(o_ran_du_center, k))
+        return result
+
+    def oRanCuDirections(self) -> list[Hex]:
+        q: int = (
+            2 * self.oRanCuSpiralRadiusOfODus
+            + 3 * self.oRanCuSpiralRadiusOfODus * self.oRanDuSpiralRadiusOfTowers
+            + self.oRanDuSpiralRadiusOfTowers
+            + 1
+        )
+        r: int = self.oRanDuSpiralRadiusOfTowers - self.oRanCuSpiralRadiusOfODus
+        s: int = -q - r
+        return [
+            Hex(+q, +r, +s),
+            Hex(-s, -q, -r),
+            Hex(+r, +s, +q),
+            Hex(-q, -r, -s),
+            Hex(+s, +q, +r),
+            Hex(-r, -s, -q),
+        ]
+
+    def oRanCuNeighbor(self, cube: Hex, direction: int) -> list[Hex]:
+        return Hexagon.hex_add(cube, self.oRanCuDirections()[direction])
+
+    def oRanCuRing(self, center: Hex, radius: int):
+        if not (radius > 0):
+            raise ValueError(
+                "Invalid radius. The radius around the hex center must be greater than 0 rings."
+            )
+
+        results: list[Hex] = []
+        hex: Hex = Hexagon.hex_add(
+            center, Hexagon.hex_scale(self.oRanCuDirections()[4], radius)
+        )
+        for i in range(6):
+            for j in range(radius):
+                results.append(hex)
+                hex = self.oRanCuNeighbor(hex, i)
+        return results
+
+    def oRanCuSpiral(self, center: Hex, radius: int) -> list[Hex]:
         result: list[Hex] = [center]
         for k in range(1, radius + 1):
-            result.extend(self.oRanDuRing(center, k))
+            result += self.oRanCuRing(center, k)
         return result
 
     def oRanNearRtRicDirections(self) -> list[Hex]:
-        q0 = (
+        q0: int = (
             2 * self.oRanCuSpiralRadiusOfODus
-            + 3 * self.oRanCuSpiralRadiusOfODus * self.oRanDuSpiralRadiusOfORus
-            + self.oRanDuSpiralRadiusOfORus
+            + 3 * self.oRanCuSpiralRadiusOfODus * self.oRanDuSpiralRadiusOfTowers
+            + self.oRanDuSpiralRadiusOfTowers
             + 1
         )
-        r0 = self.oRanDuSpiralRadiusOfORus - self.oRanCuSpiralRadiusOfODus
+        r0: int = self.oRanDuSpiralRadiusOfTowers - self.oRanCuSpiralRadiusOfODus
 
-        q = 3 * q0 - self.oRanNearRtRicSpiralRadiusOfOCus
-        r = -r0 - self.oRanNearRtRicSpiralRadiusOfOCus
+        q: int = 3 * q0 - self.oRanNearRtRicSpiralRadiusOfOCus
+        r: int = -r0 - self.oRanNearRtRicSpiralRadiusOfOCus
 
-        profile_id = self.id[2:-1]
-
+        profile_id: str = self.id[0 : len(self.id)-1]
         if profile_id in {"111", "112", "113", "114"}:
-            q = 21 + 14 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
-            r = -7 * self.oRanNearRtRicSpiralRadiusOfOCus
+            q: int = 21 + 14 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            r: int = -7 * self.oRanNearRtRicSpiralRadiusOfOCus
         elif profile_id in {"121", "122", "123", "124"}:
-            q = 25 + 13 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
-            r = 9 + 10 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            q: int = 25 + 13 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            r: int = 9 + 10 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
         elif profile_id in {"131", "132"}:
-            q = 49 + 30 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
-            r = -21 - 34 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            q: int = 49 + 30 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            r: int = -21 - 34 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
         elif profile_id == "133":
-            q = 74
-            r = 37
+            q: int = 74
+            r: int = 37
         elif profile_id == "134":
-            q = 93
-            r = 50
+            q: int = 93
+            r: int = 50
         elif profile_id in {"211", "212", "213", "214"}:
-            q = 34 + 23 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
-            r = -10 * self.oRanNearRtRicSpiralRadiusOfOCus - 1
+            q: int = 34 + 23 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            r: int = -10 * self.oRanNearRtRicSpiralRadiusOfOCus - 1
         elif profile_id in {"221", "222", "223", "224"}:
-            q = 57 + 38 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
-            r = -19 * self.oRanNearRtRicSpiralRadiusOfOCus
+            q: int = 57 + 38 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            r: int = -19 * self.oRanNearRtRicSpiralRadiusOfOCus
         elif profile_id in {"231", "232", "233", "234"}:
-            q = 80 + 53 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
-            r = -28 * self.oRanNearRtRicSpiralRadiusOfOCus - 1
+            q: int = 80 + 53 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            r: int = -28 * self.oRanNearRtRicSpiralRadiusOfOCus - 1
         elif profile_id in {"241", "242", "243", "244"}:
-            q = 103 + 68 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
-            r = -39 * self.oRanNearRtRicSpiralRadiusOfOCus + 2 * (
+            q: int = 103 + 68 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            r: int = -39 * self.oRanNearRtRicSpiralRadiusOfOCus + 2 * (
                 self.oRanNearRtRicSpiralRadiusOfOCus - 1
             )
         elif profile_id in {"311", "312", "313", "314"}:
-            q = 47 + 32 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
-            r = -11 - 13 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            q: int = 47 + 32 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            r: int = -11 - 13 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
         elif profile_id in {"321", "322", "323", "324"}:
-            q = 79 + 53 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
-            r = -24 - 25 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            q: int = 79 + 53 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            r: int = -24 - 25 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
         elif profile_id in {"331", "332", "333", "334"}:
-            q = 111 + 75 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
-            r = -37 - 37 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            q: int = 111 + 75 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
+            r: int = -37 - 37 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
         else:
             # Handle the default case or raise a warning
             pass
 
-        s = -q - r
+        s: int = -q - r
         return [
             Hex(q, r, s),
             Hex(-s, -q, -r),
@@ -209,3 +254,28 @@ class SpiralRadiusProfile:
             Hex(s, q, r),
             Hex(-r, -s, -q),
         ]
+
+    def oRanNearRtRicNeighbor(self, cube: Hex, direction: int):
+        return Hexagon.hex_add(cube, self.oRanNearRtRicDirections()[direction])
+
+    def oRanNearRtRicRing(self, center: Hex, radius: int) -> list[Hex]:
+        if not (radius > 0):
+            raise ValueError(
+                "Invalid radius. The radius around the hex center must be greater than 0 rings."
+            )
+
+        results: list[Hex] = []
+        hex: Hex = Hexagon.hex_add(
+            center, Hexagon.hex_scale(self.oRanNearRtRicDirections()[4], radius)
+        )
+        for i in range(6):
+            for j in range(radius):
+                results.append(hex)
+                hex = self.oRanNearRtRicNeighbor(hex, i)
+        return results
+
+    def oRanNearRtRicSpiral(self, center: Hex, radius: int) -> list[Hex]:
+        result: list[Hex] = [center]
+        for k in range(1, radius + 1):
+            result += self.oRanNearRtRicRing(center, k)
+        return result
