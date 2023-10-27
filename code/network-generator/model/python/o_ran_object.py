@@ -31,7 +31,7 @@ class IORanObject(ITop):
 # Define an abstract O-RAN Object class
 class ORanObject(Top, IORanObject):
     def __init__(self, of: IORanObject = None, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(of, **kwargs)
 
     def json(self) -> dict[str, Any]:
         result: dict[str, Any] = super().json()
