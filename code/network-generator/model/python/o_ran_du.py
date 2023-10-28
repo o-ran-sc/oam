@@ -37,36 +37,9 @@ class IORanDu(IORanObject):
 class ORanDu(ORanNode, IORanDu):
     def __init__(self, o_ran_du_data: IORanDu = None, **kwargs):
         super().__init__(o_ran_du_data, **kwargs)
-        self._o_ran_rus: list[ORanRu] = self._calculate_o_ran_rus()
-
-    def _calculate_o_ran_rus(self) -> list[ORanRu]:
-        result: list[ORanRu] = []
-        for index in range(self._o_ran_ru_count):
-            s: str = "00" + str(index)
-            name: str = "-".join(
-                [self.name.replace("DU", "RU"), s[len(s) - 2 : len(s)]]
-            )
-            network_center: dict = self.parent.parent.parent.parent.center
-            newGeo = Hexagon.hex_to_geo_location(
-                self.layout, hex, network_center
-            ).json()
-            result.append(
-                ORanRu(
-                    {
-                        "name": name,
-                        "geoLocation": newGeo,
-                        "position": hex,
-                        "layout": self.layout,
-                        "spiralRadiusProfile": self.spiralRadiusProfile,
-                        "parent": self,
-                    }
-                )
-            )
-        return result
-
-    @property
-    def o_ran_rus(self) -> list[ORanRu]:
-        return self._o_ran_rus
+        self._o_ran_ru_count = (
+            o_ran_du_data["oRanRuCount"] if o_ran_du_data and "oRanRuCount" in o_ran_du_data else 1
+        )
 
     def toKml(self) -> ET.Element:
         o_ran_du: ET.Element = ET.Element("Folder")
