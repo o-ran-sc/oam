@@ -86,8 +86,8 @@ class ORanCu(ORanNode, IORanCu):
         open.text = "1"
         name: ET.Element = ET.SubElement(o_ran_cu, "name")
         name.text = self.name
-        for o_ran_du in self.o_ran_cloud_dus:
-            o_ran_cu.append(o_ran_du.toKml())
+        for o_ran_cloud_du in self.o_ran_cloud_dus:
+            o_ran_cu.append(o_ran_cloud_du.toKml())
         return o_ran_cu
 
 

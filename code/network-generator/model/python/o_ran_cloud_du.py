@@ -73,14 +73,14 @@ class ORanCloudDu(ORanNode, IORanCloudDu):
         return self._towers
 
     def toKml(self) -> ET.Element:
-        o_ran__cloud_du: ET.Element = ET.Element("Folder")
-        open: ET.Element = ET.SubElement(o_ran__cloud_du, "open")
+        o_ran_cloud_du: ET.Element = ET.Element("Folder")
+        open: ET.Element = ET.SubElement(o_ran_cloud_du, "open")
         open.text = "1"
-        name: ET.Element = ET.SubElement(o_ran__cloud_du, "name")
+        name: ET.Element = ET.SubElement(o_ran_cloud_du, "name")
         name.text = self.name
         for tower in self.towers:
-            o_ran__cloud_du.append(tower.toKml())
-        return o_ran__cloud_du
+            o_ran_cloud_du.append(tower.toKml())
+        return o_ran_cloud_du
 
     def toSvg(self) -> None:
         return None
