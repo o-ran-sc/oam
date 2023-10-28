@@ -20,12 +20,10 @@ It can be interpreted as 'resource pool' for physical network
 functions.
 """
 from model.python.o_ran_object import IORanObject
-from model.python.o_ran_ru import IORanRu, ORanRu
-import model.python.hexagon as Hexagon
-from model.python.point import Point
-from model.python.geo_location import GeoLocation
+from model.python.o_ran_ru import ORanRu
 from model.python.o_ran_node import ORanNode
 import xml.etree.ElementTree as ET
+
 
 # Define the "IORanDu" interface
 class ITower(IORanObject):
@@ -33,22 +31,33 @@ class ITower(IORanObject):
         super().__init__(**kwargs)
         self._o_ran_ru_count = o_ran_ru_count
 
+
 # Implement a concrete O-RAN Node class
 class Tower(ORanNode):
-
     def __init__(self, tower_data: ITower = None, **kwargs):
         super().__init__(tower_data, **kwargs)
-        self._o_ran_ru_count = tower_data["oRanRuCount"] if tower_data and "oRanRuCount" in tower_data else 3
+        self._o_ran_ru_count = (
+            tower_data["oRanRuCount"]
+            if tower_data and "oRanRuCount" in tower_data
+            else 3
+        )
         self._o_ran_rus: list[ORanRu] = self._create_o_ran_rus()
 
-    def _create_o_ran_rus(self) -> list [ORanRu]:
-        result : list [ORanRu] = []
+    def _create_o_ran_rus(self) -> list[ORanRu]:
+        result: list[ORanRu] = []
         for index in range(self._o_ran_ru_count):
             s: str = "00" + str(index)
             name: str = "-".join(
                 [self.name.replace("Tower", "RU"), s[len(s) - 2 : len(s)]]
             )
-            cell_count: int = self.parent.parent.parent.parent.parent.configuration()['pattern']["o-ran-ru"]["nr-cell-du-count"]
+            cell_count: int = self.parent.parent.parent.parent.parent.configuration()[
+                "pattern"
+            ]["o-ran-ru"]["nr-cell-du-count"]
+            cell_angle : int = self.parent.parent.parent.parent.parent.configuration()[
+                "pattern"
+            ]["nr-cell-du"]["cell-angle"]
+            ru_angle: int = cell_count * cell_angle
+            ru_azimuth: int = index * ru_angle
             result.append(
                 ORanRu(
                     {
@@ -58,62 +67,28 @@ class Tower(ORanNode):
                         "layout": self.layout,
                         "spiralRadiusProfile": self.spiralRadiusProfile,
                         "parent": self,
-                        "cellCount": cell_count
+                        "cellCount": cell_count,
+                        "ruAngle": ru_angle,
+                        "ruAzimuth": ru_azimuth,
                     }
                 )
             )
         return result
 
+    @property
+    def o_ran_rus(self) -> list[ORanRu]:
+        return self._o_ran_rus
+
     def toKml(self) -> ET.Element:
-        placemark: ET.Element = ET.Element("Placemark")
-        name: ET.Element = ET.SubElement(placemark, "name")
+        tower: ET.Element = ET.Element("Folder")
+        open: ET.Element = ET.SubElement(tower, "open")
+        open.text = "1"
+        name: ET.Element = ET.SubElement(tower, "name")
         name.text = self.name
-        style: ET.Element = ET.SubElement(placemark, "styleUrl")
-        style.text = "#" + self.__class__.__name__
-        multi_geometry: ET.Element = ET.SubElement(placemark, "MultiGeometry")
-        polygon: ET.Element = ET.SubElement(multi_geometry, "Polygon")
-        outer_boundary: ET.Element = ET.SubElement(polygon, "outerBoundaryIs")
-        linear_ring: ET.Element = ET.SubElement(outer_boundary, "LinearRing")
-        coordinates: ET.Element = ET.SubElement(linear_ring, "coordinates")
+        for o_ran_ru in self.o_ran_rus:
+            tower.append(o_ran_ru.toKml())
+        return tower
 
-        points: list[Point] = Hexagon.polygon_corners(self.layout, self.position)
-        points.append(points[0])
-        method = GeoLocation(
-            self.parent.parent.parent.parent.geoLocation
-        ).point_to_geo_location
-        geo_locations: list[GeoLocation] = list(map(method, points))
-        text: list[str] = []
-        for geo_location in geo_locations:
-            text.append(
-                f"{geo_location.longitude},{geo_location.latitude},{geo_location.aboveMeanSeaLevel}"
-            )
-        coordinates.text = " ".join(text)
-
-        # cells
-        cell_angle = self.parent.parent.parent.parent.parent.configuration()["pattern"]["nr-cell-du"]["cell-angle"]
-        for index in range(int(360 / cell_angle)):
-            line: ET.Element = ET.SubElement(multi_geometry, "LineString")
-            tessellate: ET.Element = ET.SubElement(line, "tessellate")
-            tessellate.text = "1"
-            coordinates: ET.Element = ET.SubElement(line, "coordinates")
-
-            intersect: Point = Point(
-                (points[2 * index+2].x + points[2 * index + 1].x) / 2,
-                (points[2 * index+2].y + points[2 * index + 1].y) / 2,
-            )
-            intersect_geo_location: GeoLocation = GeoLocation(
-                self.parent.parent.parent.parent.geoLocation
-            ).point_to_geo_location(intersect)
-            text: list[str] = []
-            text.append(
-                f"{intersect_geo_location.longitude},{intersect_geo_location.latitude},{intersect_geo_location.aboveMeanSeaLevel}"
-            )
-            text.append(
-                f"{self.geoLocation['longitude']},{self.geoLocation['latitude']},{self.geoLocation['aboveMeanSeaLevel']}"
-            )
-            coordinates.text = " ".join(text)
-
-        return placemark
 
     def toSvg(self) -> None:
         return None
