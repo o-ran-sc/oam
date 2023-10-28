@@ -19,22 +19,84 @@ A Class representing a 3GPP new radio cell du (NrCellDu)
 """
 from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
+import model.python.hexagon as Hexagon
+from model.python.point import Point
+from model.python.geo_location import GeoLocation
 import xml.etree.ElementTree as ET
 
 
 # Define the "INrCellDu" interface
 class INrCellDu(IORanObject):
-    def __init__(self, **kwargs):
+    def __init__(self, cell_angel: int, azimuth: int, **kwargs):
         super().__init__(**kwargs)
+        self._cell_angle = cell_angle
+        self._azimuth = azimuth
 
 
 # Define an abstract O-RAN Node class
 class NrCellDu(ORanNode, INrCellDu):
-    def __init__(self, o_ran_smo_data: INrCellDu = None, **kwargs):
-        super().__init__(o_ran_smo_data, **kwargs)
+    def __init__(self, cell_data: INrCellDu = None, **kwargs):
+        super().__init__(cell_data, **kwargs)
+        self._cell_angle = (
+            cell_data["cellAngle"] if cell_data and "cellAngle" in cell_data else 120
+        )
+        self._azimuth = (
+            cell_data["azimuth"] if cell_data and "azimuth" in cell_data else 0
+        )
 
-    def toKml(self) -> None:
-        return None
+    def toKml(self) -> ET.Element:
+        placemark: ET.Element = ET.Element("Placemark")
+        name: ET.Element = ET.SubElement(placemark, "name")
+        name.text = self.name
+        style: ET.Element = ET.SubElement(placemark, "styleUrl")
+        style.text = "#" + self.__class__.__name__
+        multi_geometry: ET.Element = ET.SubElement(placemark, "MultiGeometry")
+        polygon: ET.Element = ET.SubElement(multi_geometry, "Polygon")
+        outer_boundary: ET.Element = ET.SubElement(polygon, "outerBoundaryIs")
+        linear_ring: ET.Element = ET.SubElement(outer_boundary, "LinearRing")
+        coordinates: ET.Element = ET.SubElement(linear_ring, "coordinates")
+
+        points: list[Point] = Hexagon.polygon_corners(self.layout, self.position)
+        method = GeoLocation(
+            self.parent.parent.parent.parent.parent.parent.geoLocation
+        ).point_to_geo_location
+        geo_locations: list[GeoLocation] = list(map(method, points))
+        text: list[str] = []
+
+
+        index: int = 1 + int(self._azimuth/self._cell_angle) 
+        network_center:GeoLocation =  GeoLocation(self.parent.parent.parent.parent.parent.parent.geoLocation)
+
+        intersect1: Point = Point(
+            (points[(2 * index +1) % 6].x + points[(2 * index +2) % 6].x) / 2,
+            (points[(2 * index +1) % 6].y + points[(2 * index +2) % 6].y) / 2,
+        )
+        intersect_geo_location1: GeoLocation = network_center.point_to_geo_location(intersect1)
+        
+        intersect2: Point = Point(
+            (points[(2 * index +3) % 6].x + points[(2 * index +4) % 6].x) / 2,
+            (points[(2 * index +3) % 6].y + points[(2 * index +4) % 6].y) / 2,
+        )
+        intersect_geo_location2: GeoLocation = network_center.point_to_geo_location(intersect2)
+
+        tower:GeoLocation =  GeoLocation(self.geoLocation)
+
+        cell_polygon: list[GeoLocation] = []
+        cell_polygon.append(tower)
+        cell_polygon.append(intersect_geo_location1)
+        cell_polygon.append(geo_locations[(2 * index + 2) % 6])
+        cell_polygon.append(geo_locations[(2 * index + 3) % 6])
+        cell_polygon.append(intersect_geo_location2)
+        # close polygon
+        cell_polygon.append(tower)
+        
+        for geo_location in cell_polygon:
+            text.append(
+                f"{'%.6f' % geo_location.longitude},{'%.6f' % geo_location.latitude},{'%.6f' % geo_location.aboveMeanSeaLevel}"
+            )
+        coordinates.text = " ".join(text)
+
+        return placemark
 
     def toSvg(self) -> None:
         return None
