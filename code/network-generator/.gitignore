@@ -18,7 +18,6 @@
 distribution
 docs
 tests
-Makefile
 Manifest.in
 mkdocs.yaml
 requirements-test.txt
