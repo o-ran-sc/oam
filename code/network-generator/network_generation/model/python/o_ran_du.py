@@ -18,9 +18,9 @@
 A Class representing an O-RAN distributed unit (ORanDu)
 """
 from typing import overload
-from model.python.o_ran_object import IORanObject
-from model.python.o_ran_node import ORanNode
-from model.python.o_ran_termination_point import ORanTerminationPoint
+from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_node import ORanNode
+from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
 import xml.etree.ElementTree as ET
 
 

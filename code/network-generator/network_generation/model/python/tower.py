@@ -20,10 +20,10 @@ It can be interpreted as 'resource pool' for physical network
 functions.
 """
 from typing import overload
-from model.python.o_ran_object import IORanObject
-from model.python.o_ran_ru import ORanRu
-from model.python.o_ran_node import ORanNode
-from model.python.o_ran_termination_point import ORanTerminationPoint
+from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_ru import ORanRu
+from network_generation.model.python.o_ran_node import ORanNode
+from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
 import xml.etree.ElementTree as ET
 
 

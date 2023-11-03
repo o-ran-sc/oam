@@ -18,7 +18,7 @@
 A collection of TypeDefinitions for a geographical location
 """
 import math
-from model.python.point import Point
+from network_generation.model.python.point import Point
 
 
 class IGeoLocationData:

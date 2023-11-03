@@ -16,12 +16,12 @@
 """
 Module for a class representing a O-RAN Network
 """
-from model.python.o_ran_smo import ORanSmo
-from model.python.o_ran_spiral_radius_profile import SpiralRadiusProfile
-from model.python.o_ran_object import IORanObject, ORanObject
-import model.python.hexagon as Hexagon
-from model.python.hexagon import Layout
-from model.python.point import Point
+from network_generation.model.python.o_ran_smo import ORanSmo
+from network_generation.model.python.o_ran_spiral_radius_profile import SpiralRadiusProfile
+from network_generation.model.python.o_ran_object import IORanObject, ORanObject
+import network_generation.model.python.hexagon as Hexagon
+from network_generation.model.python.hexagon import Layout
+from network_generation.model.python.point import Point
 import xml.etree.ElementTree as ET
 
 

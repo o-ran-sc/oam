@@ -14,9 +14,9 @@
 
 #!/usr/bin/python
 
-from model.python.cube import Cube
-from model.python.hexagon import Hex
-import model.python.hexagon as Hexagon
+from network_generation.model.python.cube import Cube
+from network_generation.model.python.hexagon import Hex
+import network_generation.model.python.hexagon as Hexagon
 
 
 class SpiralRadiusProfile:

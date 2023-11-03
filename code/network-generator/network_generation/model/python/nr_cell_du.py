@@ -19,12 +19,12 @@ A Class representing a 3GPP new radio cell du (NrCellDu)
 """
 from typing import overload
 
-from model.python.o_ran_termination_point import ORanTerminationPoint
-from model.python.o_ran_object import IORanObject
-from model.python.o_ran_node import ORanNode
-import model.python.hexagon as Hexagon
-from model.python.point import Point
-from model.python.geo_location import GeoLocation
+from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
+from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_node import ORanNode
+import network_generation.model.python.hexagon as Hexagon
+from network_generation.model.python.point import Point
+from network_generation.model.python.geo_location import GeoLocation
 import xml.etree.ElementTree as ET
 
 

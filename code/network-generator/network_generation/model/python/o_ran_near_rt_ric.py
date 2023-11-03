@@ -18,13 +18,13 @@
 A Class representing an O-RAN Near real-time intelligent controller (ORanNearRtRic)
 """
 from typing import overload
-from model.python.tower import Tower
-from model.python.o_ran_cu import ORanCu
-from model.python.o_ran_object import IORanObject
-from model.python.o_ran_node import ORanNode
-from model.python.o_ran_termination_point import ORanTerminationPoint
-from model.python.hexagon import Hex
-import model.python.hexagon as Hexagon
+from network_generation.model.python.tower import Tower
+from network_generation.model.python.o_ran_cu import ORanCu
+from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_node import ORanNode
+from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
+from network_generation.model.python.hexagon import Hex
+import network_generation.model.python.hexagon as Hexagon
 import xml.etree.ElementTree as ET
 
 

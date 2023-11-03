@@ -21,14 +21,14 @@ from abc import abstractmethod, abstractproperty
 from typing import Any
 import xml.etree.ElementTree as ET
 import json
-from model.python.geo_location import GeoLocation
-from model.python.o_ran_object import IORanObject, ORanObject
-import model.python.hexagon as Hexagon
-from model.python.hexagon import Hex, Layout
-from model.python.point import Point
-from model.python.o_ran_spiral_radius_profile import SpiralRadiusProfile
-from model.python.o_ran_termination_point import ORanTerminationPoint
-from model.python.type_definitions import (
+from network_generation.model.python.geo_location import GeoLocation
+from network_generation.model.python.o_ran_object import IORanObject, ORanObject
+import network_generation.model.python.hexagon as Hexagon
+from network_generation.model.python.hexagon import Hex, Layout
+from network_generation.model.python.point import Point
+from network_generation.model.python.o_ran_spiral_radius_profile import SpiralRadiusProfile
+from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
+from network_generation.model.python.type_definitions import (
     AddressType,
 )
 

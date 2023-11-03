@@ -17,7 +17,7 @@
 """
 An abstract Class for O-RAN Objects
 """
-from model.python.top import ITop, Top
+from network_generation.model.python.top import ITop, Top
 
 
 # Define the "IORanObject" interface

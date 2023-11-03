@@ -15,7 +15,7 @@
 # inspired by http://www.redblobgames.com/grids/hexagons/
 
 #!/usr/bin/python
-from model.python.hexagon import Hex
+from network_generation.model.python.hexagon import Hex
 
 
 class Cube:

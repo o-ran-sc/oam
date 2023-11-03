@@ -18,7 +18,7 @@
 A collection of TypeDefinitions
 """
 from enum import Enum
-from model.python.countries import Country
+from network_generation.model.python.countries import Country
 
 
 # Define AdministrativeState enum

@@ -22,8 +22,8 @@ import collections
 import math
 from typing import NamedTuple
 
-from model.python.point import Point
-from model.python.geo_location import GeoLocation
+from network_generation.model.python.point import Point
+from network_generation.model.python.geo_location import GeoLocation
 
 
 class Hex:

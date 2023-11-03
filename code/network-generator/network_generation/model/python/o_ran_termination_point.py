@@ -18,7 +18,7 @@
 An abstract Class for O-RAN TerminationPoint
 """
 from abc import abstractmethod
-from model.python.o_ran_object import IORanObject, ORanObject
+from network_generation.model.python.o_ran_object import IORanObject, ORanObject
 
 
 # Define the "IORanObject" interface

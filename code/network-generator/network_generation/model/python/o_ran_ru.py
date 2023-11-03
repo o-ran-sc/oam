@@ -19,11 +19,11 @@ A Class representing an O-RAN radio unit (ORanRu)
 """
 from typing import overload
 
-from model.python.o_ran_du import ORanDu
-from model.python.o_ran_termination_point import ORanTerminationPoint
-from model.python.nr_cell_du import NrCellDu
-from model.python.o_ran_object import IORanObject
-from model.python.o_ran_node import ORanNode
+from network_generation.model.python.o_ran_du import ORanDu
+from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
+from network_generation.model.python.nr_cell_du import NrCellDu
+from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_node import ORanNode
 import xml.etree.ElementTree as ET
 
 

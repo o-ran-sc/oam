@@ -19,14 +19,14 @@ A Class representing an O-RAN centralized unit (ORanCu)
 and at the same time a location for an O-Cloud resource pool
 """
 from typing import overload
-from model.python.cube import Cube
-from model.python.hexagon import Hex
-import model.python.hexagon as Hexagon
-from model.python.o_ran_cloud_du import ORanCloudDu
-from model.python.tower import Tower
-from model.python.o_ran_object import IORanObject
-from model.python.o_ran_node import ORanNode
-from model.python.o_ran_termination_point import ORanTerminationPoint
+from network_generation.model.python.cube import Cube
+from network_generation.model.python.hexagon import Hex
+import network_generation.model.python.hexagon as Hexagon
+from network_generation.model.python.o_ran_cloud_du import ORanCloudDu
+from network_generation.model.python.tower import Tower
+from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_node import ORanNode
+from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
 import xml.etree.ElementTree as ET
 
 

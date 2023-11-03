@@ -19,7 +19,7 @@ An abstract Class for all classes
 """
 import uuid
 from abc import ABC
-from model.python.type_definitions import (
+from network_generation.model.python.type_definitions import (
     AdministrativeState,
     OperationalState,
     UsageState,

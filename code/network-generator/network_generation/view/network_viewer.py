@@ -18,7 +18,7 @@ Provides functions to convert the Network into different formats
 """
 
 import json
-from model.python.o_ran_network import ORanNetwork
+from network_generation.model.python.o_ran_network import ORanNetwork
 import xml.etree.ElementTree as ET
 
 
@@ -70,7 +70,7 @@ class NetworkViewer:
         Method reading the css styles from known file
         return: content of the file as string
         """
-        with open("view/svg.style.css") as styles:
+        with open("network_generation/view/svg.style.css") as styles:
             content = styles.read()
             return content
 
@@ -96,7 +96,7 @@ class NetworkViewer:
         :type filename: string
         """
         root = self.__network.toKml()
-        with open("view/kml.styles.json") as kml_styles:
+        with open("network_generation/view/kml.styles.json") as kml_styles:
             styles: dict[str, dict] = json.load(kml_styles)
             for key, value in styles.items():
                 # add style

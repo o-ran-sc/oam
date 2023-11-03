@@ -17,7 +17,7 @@
 Module containing the Generator class.
 """
 
-from model.python.o_ran_network import ORanNetwork
+from network_generation.model.python.o_ran_network import ORanNetwork
 
 
 class NetworkGenerator:
