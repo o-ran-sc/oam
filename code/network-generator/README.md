@@ -28,7 +28,7 @@ Please follow the libyang [installation instructions](https://github.com/CESNET/
 ## Usage 
 
 ```
-python3 network_generator.py config.json
+python3 -m network_generation config.json
 ```
 
 ## Output
