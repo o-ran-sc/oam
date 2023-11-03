@@ -15,8 +15,8 @@
 # This temporary gitignore just hides code artifacts which are not ready to 
 # be published now. 
 
-./distribution/
-./docs/
-./network_generation/
-./tests/
+distribution
+docs
+network_generation
+tests
 
