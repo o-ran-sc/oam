@@ -17,7 +17,6 @@
 
 distribution
 docs
-network_generation
 tests
 Makefile
 Manifest.in
