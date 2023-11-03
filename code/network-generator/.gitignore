@@ -19,4 +19,9 @@ distribution
 docs
 network_generation
 tests
+Makefile
+Manifest.in
+mkdocs.yaml
+requirements-test.txt
+setup.py
 
