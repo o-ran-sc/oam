@@ -14,16 +14,13 @@
 
 #!/usr/bin/python
 
-from dataclasses import dataclass
-from typing import Any
-
 from model.python.cube import Cube
 from model.python.hexagon import Hex
 import model.python.hexagon as Hexagon
 
 
 class SpiralRadiusProfile:
-    def __init__(self, data: [dict[str, Any] | None] = None):
+    def __init__(self, data: [dict[str, dict] | None] = None):
         self._oRanSmoSpiralRadiusOfNearRtRics = (
             data.get("oRanSmoSpiralRadiusOfNearRtRics", 1) if data else 1
         )

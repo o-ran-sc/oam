@@ -17,12 +17,10 @@
 """
 A Class representing an O-RAN distributed unit (ORanDu)
 """
-import model.python.hexagon as Hexagon
-from model.python.hexagon import Hex
-from model.python.cube import Cube
-from model.python.o_ran_ru import ORanRu
+from typing import overload
 from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
+from model.python.o_ran_termination_point import ORanTerminationPoint
 import xml.etree.ElementTree as ET
 
 
@@ -41,6 +39,35 @@ class ORanDu(ORanNode, IORanDu):
             o_ran_du_data["oRanRuCount"] if o_ran_du_data and "oRanRuCount" in o_ran_du_data else 1
         )
 
+    @property
+    def termination_points(self) -> list[ORanTerminationPoint]:
+        result: list[ORanTerminationPoint] = super().termination_points
+        phy_tp: str = "-".join([self.name, "phy".upper()])
+        result.append(ORanTerminationPoint({"id": phy_tp, "name": phy_tp}))
+        for interface in ["e2", "o1", "ofhm", "ofhc", "ofhu","ofhs"]:
+            id:str = "-".join([self.name, interface.upper()])
+            result.append(ORanTerminationPoint({"id": id, "name":id, "supporter": phy_tp, "parent":self}))
+        return result
+
+    def to_topology_nodes(self) -> list[dict[str, dict]]:
+        result: list[dict[str, dict]] = super().to_topology_nodes()
+        return result
+
+    def to_topology_links(self) -> list[dict[str, dict]]:
+        result: list[dict[str, dict]] = super().to_topology_links()
+        for interface in ["e2", "o1"]:
+            link_id: str = "".join([interface, ":", self.name, "<->", self.parent.name])
+            source_tp: str = "-".join([self.name, interface.upper()])
+            dest_tp: str = "-".join([self.parent.name, interface.upper()])
+            result.append(
+                {
+                    "link-id": link_id,
+                    "source": {"source-node": self.name, "source-tp": source_tp},
+                    "destination": {"dest-node": self.parent.name, "dest-tp": dest_tp},
+                }
+            )
+        return result
+    
     def toKml(self) -> ET.Element:
         o_ran_du: ET.Element = ET.Element("Folder")
         open: ET.Element = ET.SubElement(o_ran_du, "open")

@@ -17,8 +17,6 @@
 """
 An abstract Class for O-RAN Objects
 """
-from abc import abstractmethod
-from typing import Any
 from model.python.top import ITop, Top
 
 
@@ -33,13 +31,9 @@ class ORanObject(Top, IORanObject):
     def __init__(self, of: IORanObject = None, **kwargs):
         super().__init__(of, **kwargs)
 
-    def json(self) -> dict[str, Any]:
-        result: dict[str, Any] = super().json()
+    def json(self) -> dict[str, dict]:
+        result: dict[str, dict] = super().json()
         return result
 
     def __str__(self) -> str:
         return str(self.json())
-
-    @abstractmethod
-    def toTopology(self) -> dict[str, Any]:
-        pass

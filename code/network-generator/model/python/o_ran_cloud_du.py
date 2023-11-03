@@ -20,12 +20,14 @@ By default all O-RAN-DUs associated with the towers around  are deployed here.
 Maybe dedicated hardware is required to host O-DUs, but it is expected 
 that the O-Cloud mechanism and concepts can be applied here.
 """
+from typing import overload
 import model.python.hexagon as Hexagon
 from model.python.hexagon import Hex
 from model.python.cube import Cube
 from model.python.tower import Tower
 from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
+from model.python.o_ran_termination_point import ORanTerminationPoint
 import xml.etree.ElementTree as ET
 
 
@@ -72,6 +74,28 @@ class ORanCloudDu(ORanNode, IORanCloudDu):
     def towers(self) -> list[Tower]:
         return self._towers
 
+    @property
+    def termination_points(self) -> list[ORanTerminationPoint]:
+        result: list[ORanTerminationPoint] = super().termination_points
+        phy_tp: str = "-".join([self.name, "phy".upper()])
+        result.append(ORanTerminationPoint({"id": phy_tp, "name": phy_tp}))
+        for interface in ["o2"]:
+            id:str = "-".join([self.name, interface.upper()])
+            result.append(ORanTerminationPoint({"id": id, "name":id, "supporter": phy_tp, "parent":self}))
+        return result
+
+    def to_topology_nodes(self) -> list[dict[str, dict]]:
+        result: list[dict[str, dict]] = super().to_topology_nodes()
+        for tower in self.towers:
+            result.extend(tower.to_topology_nodes())    
+        return result
+
+    def to_topology_links(self) -> list[dict[str, dict]]:
+        result: list[dict[str, dict]] = super().to_topology_links()
+        for tower in self.towers:
+            result.extend(tower.to_topology_links())    
+        return result
+    
     def toKml(self) -> ET.Element:
         o_ran_cloud_du: ET.Element = ET.Element("Folder")
         open: ET.Element = ET.SubElement(o_ran_cloud_du, "open")

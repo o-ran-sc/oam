@@ -18,7 +18,6 @@ Provides functions to convert the Network into different formats
 """
 
 import json
-from typing import Any
 from model.python.o_ran_network import ORanNetwork
 import xml.etree.ElementTree as ET
 
@@ -43,7 +42,7 @@ class NetworkViewer:
         """
         return self
 
-    def show_as_json(self) -> dict[str, Any]:
+    def show_as_json(self) -> dict[str, dict]:
         """
         Method printing the class in json format.
         """
@@ -62,7 +61,7 @@ class NetworkViewer:
         :type filename: string
         """
         with open(filename, "w", encoding="utf-8") as json_file:
-            output = self.__network.toTopology()
+            output:dict[str, dict] = self.__network.to_topology()
             json.dump(output, json_file, ensure_ascii=False, indent=2)
             print("File '" + filename + "' saved!")
 

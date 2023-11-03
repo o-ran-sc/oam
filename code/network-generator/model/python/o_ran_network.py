@@ -16,8 +16,6 @@
 """
 Module for a class representing a O-RAN Network
 """
-from typing import Any
-
 from model.python.o_ran_smo import ORanSmo
 from model.python.o_ran_spiral_radius_profile import SpiralRadiusProfile
 from model.python.o_ran_object import IORanObject, ORanObject
@@ -33,7 +31,7 @@ class ORanNetwork(ORanObject):
     """
 
     # constructor
-    def __init__(self, configuration: dict[str, Any], of: IORanObject = None, **kwargs):
+    def __init__(self, configuration: dict[str, dict], of: IORanObject = None, **kwargs):
         super().__init__(of, **kwargs)
         self.__configuration = configuration
         self.name = configuration["name"]
@@ -76,25 +74,21 @@ class ORanNetwork(ORanObject):
         """
         return self.__configuration
 
-    def __appendNodes(self) -> list[dict[str, Any]]:
-        result: list[dict[str, Any]] = []
-        for tower in self._o_ran_smo.towers:
-            result.append(tower.toTopology())
-        return result
-
-    def toTopology(self) -> dict[str, Any]:
+    def to_topology(self) -> dict[str, dict]:
+        nodes: dict[str, dict] = self._o_ran_smo.to_topology_nodes()
+        links: dict[str, dict] = self._o_ran_smo.to_topology_links()
         return {
             "ietf-network:networks": {
                 "network": [
                     {
                         "network-id": self.id,
-                        "node": self.__appendNodes(),
-                        "ietf-network-topology:link": [],
+                        "node": nodes,
+                        "ietf-network-topology:link": links,
                     }
                 ],
             }
         }
-
+        
     def toKml(self) -> ET.Element:
         root: ET.Element = ET.Element("kml", xmlns="http://www.opengis.net/kml/2.2")
         document = ET.SubElement(root, "Document")

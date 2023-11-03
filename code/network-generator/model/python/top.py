@@ -18,10 +18,8 @@
 An abstract Class for all classes
 """
 import uuid
-from abc import ABC, abstractmethod
-from typing import Any
+from abc import ABC
 from model.python.type_definitions import (
-    AddressType,
     AdministrativeState,
     OperationalState,
     UsageState,
@@ -29,7 +27,6 @@ from model.python.type_definitions import (
     LifeCycleState,
     AlarmState,
 )
-from model.python.geo_location import GeoLocation
 
 
 # Define the ITop interface
@@ -57,7 +54,7 @@ class ITop:
 
 # Define the Top class
 class Top(ABC, ITop):
-    def __init__(self, data: [dict[str, Any] | None] = None):
+    def __init__(self, data: [dict[str, dict] | None] = None):
         self._id = data["id"] if data and "id" in data else str(uuid.uuid4())
         self._name = (
             data["name"]
@@ -149,7 +146,7 @@ class Top(ABC, ITop):
     def utilization(self, value: Utilization):
         self._utilization = value
 
-    def json(self) -> dict[str, Any]:
+    def json(self) -> dict[str, dict]:
         return {
             "id": self.id,
             "name": self.name,

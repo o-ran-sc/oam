@@ -18,6 +18,7 @@
 A Class representing an O-RAN centralized unit (ORanCu)
 and at the same time a location for an O-Cloud resource pool
 """
+from typing import overload
 from model.python.cube import Cube
 from model.python.hexagon import Hex
 import model.python.hexagon as Hexagon
@@ -25,6 +26,7 @@ from model.python.o_ran_cloud_du import ORanCloudDu
 from model.python.tower import Tower
 from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
+from model.python.o_ran_termination_point import ORanTerminationPoint
 import xml.etree.ElementTree as ET
 
 
@@ -78,6 +80,32 @@ class ORanCu(ORanNode, IORanCu):
         for du in self.o_ran_cloud_dus:
             for tower in du.towers:
                 result.append(tower)
+        return result
+
+    @property
+    def termination_points(self) -> list[ORanTerminationPoint]:
+        result: list[ORanTerminationPoint] = super().termination_points
+        phy_tp: str = "-".join([self.name, "phy".upper()])
+        result.append({"tp-id": phy_tp, "name": phy_tp})
+        for interface in ["e2", "o1"]:
+            id:str = "-".join([self.name, interface.upper()])
+            result.append(ORanTerminationPoint({"id": id, "name":id, "supporter": phy_tp, "parent":self}))
+        return result
+
+    def to_topology_nodes(self) -> list[dict[str, dict]]:
+        result: list[dict[str, dict]] = super().to_topology_nodes()
+        # for o_ran_du in self.o_ran_dus: # TODO
+        #     result.extend(o_ran_du.to_topology_nodes())
+        for o_ran_cloud_du in self.o_ran_cloud_dus:
+            result.extend(o_ran_cloud_du.to_topology_nodes())    
+        return result
+
+    def to_topology_links(self) -> list[dict[str, dict]]:
+        result: list[dict[str, dict]] = super().to_topology_links()
+        # for o_ran_du in self.o_ran_dus:
+            # result.extend(o_ran_du.to_topology_links())
+        for o_ran_cloud_du in self.o_ran_cloud_dus:
+            result.extend(o_ran_cloud_du.to_topology_links())    
         return result
 
     def toKml(self) -> ET.Element:

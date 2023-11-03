@@ -17,11 +17,13 @@
 """
 A Class representing an O-RAN Service Management and Orchestration Framework (SMO)
 """
+from typing import overload
 from model.python.tower import Tower
 from model.python.o_ran_near_rt_ric import ORanNearRtRic
 from model.python.o_ran_object import IORanObject
 from model.python.o_ran_node import ORanNode
 from model.python.hexagon import Hex
+from model.python.o_ran_termination_point import ORanTerminationPoint
 import model.python.hexagon as Hexagon
 import xml.etree.ElementTree as ET
 
@@ -67,9 +69,20 @@ class ORanSmo(ORanNode, IORanSmo):
             )
         return result
 
+
     @property
     def o_ran_near_rt_rics(self) -> list[ORanNearRtRic]:
         return self._o_ran_near_rt_rics
+
+    @property
+    def termination_points(self) -> list[ORanTerminationPoint]:
+        result: list[ORanTerminationPoint] = super().termination_points
+        phy_tp: str = "-".join([self.name, "phy".upper()])
+        result.append(ORanTerminationPoint({"id": phy_tp, "name": phy_tp}))
+        for interface in ["a1", "o1", "o2"]:
+            id:str = "-".join([self.name, interface.upper()])
+            result.append(ORanTerminationPoint({"id": id, "name":id, "supporter": phy_tp, "parent":self}))
+        return result
 
     @property
     def towers(self) -> list[Tower]:
@@ -77,6 +90,18 @@ class ORanSmo(ORanNode, IORanSmo):
         for ric in self.o_ran_near_rt_rics:
             for tower in ric.towers:
                 result.append(tower)
+        return result
+
+    def to_topology_nodes(self) -> list[dict[str, dict]]:
+        result: list[dict[str, dict]] = super().to_topology_nodes()
+        for ric in self.o_ran_near_rt_rics:
+            result.extend(ric.to_topology_nodes())
+        return result
+
+    def to_topology_links(self) -> list[dict[str, dict]]:
+        result: list[dict[str, dict]] = [] # super().to_topology_links()
+        for ric in self.o_ran_near_rt_rics:
+            result.extend(ric.to_topology_links())
         return result
 
     def toKml(self) -> ET.Element:

@@ -17,9 +17,10 @@
 """
 An abstract Class for O-RAN Node
 """
-from abc import abstractmethod
+from abc import abstractmethod, abstractproperty
 from typing import Any
 import xml.etree.ElementTree as ET
+import json
 from model.python.geo_location import GeoLocation
 from model.python.o_ran_object import IORanObject, ORanObject
 import model.python.hexagon as Hexagon
@@ -76,7 +77,7 @@ class ORanNode(ORanObject, IORanNode):
             else SpiralRadiusProfile()
         )
         self.parent = of["parent"] if of and "parent" in of else None
-        self._terminationPoints = []
+        self._termination_points: list[ORanTerminationPoint] = []
 
     @property
     def address(self) -> str:
@@ -134,11 +135,11 @@ class ORanNode(ORanObject, IORanNode):
     def parent(self, value: Any):
         self._parent = value
 
-    @property
-    def terminationPoints(self) -> list[ORanTerminationPoint]:
-        return self._terminationPoints
+    @abstractproperty
+    def termination_points(self) -> list[ORanTerminationPoint]:
+        return self._termination_points
 
-    def json(self) -> dict[str, Any]:
+    def json(self) -> dict[str, dict]:
         result: dict = super().json()
         result["address"] = self.address
         result["geoLocation"] = self.geoLocation
@@ -148,11 +149,33 @@ class ORanNode(ORanObject, IORanNode):
         result["parent"] = self.parent
         return result
 
-    def toTopology(self) -> dict[str, Any]:
-        result: dict[str, Any] = {
+    @abstractmethod
+    def to_topology_nodes(self) -> list[dict[str, dict]]:
+        tps: list[dict[str, dict]] = []
+        for tp in self.termination_points:
+            if str(type(tp)) == "<class 'model.python.o_ran_termination_point.ORanTerminationPoint'>":
+                tps.append(tp.to_topology())
+
+        result: list[dict[str, dict]] = []
+        result.append({
             "node-id": self.name,
-            "ietf-network-topology:termination-point": self.terminationPoints,
-        }
+            "ietf-network-topology:termination-point": tps,
+        })
+        return result
+
+    @abstractmethod
+    def to_topology_links(self) -> list[dict[str, dict]]:
+        result: list[dict[str, dict]] = []
+        source_tp: str = "-".join([self.name, "phy".upper()])
+        dest_tp: str = "-".join([self.parent.name, "phy".upper()])
+        if self.parent and not "Tower" in source_tp and not "Tower" in dest_tp:
+            link_id: str = "".join(["phy", ":", self.name, "<->", self.parent.name])
+            link = {
+                "link-id": link_id,
+                "source": {"source-node": self.name, "source-tp": source_tp},
+                "destination": {"dest-node": self.parent.name, "dest-tp": dest_tp},
+            }
+            result.append(link)
         return result
 
     @abstractmethod
