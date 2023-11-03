@@ -31,7 +31,7 @@ class ParameterValidator:
     __configuration: dict = {}
     __configuration_schema_file: str = (
         os.path.dirname(os.path.realpath(__file__))
-        + "/../model/jsonSchema/configuration.schema.json"
+        + "/model/jsonSchema/configuration.schema.json"
     )
     __config_schema: dict = {}
     __error_message: str = ""

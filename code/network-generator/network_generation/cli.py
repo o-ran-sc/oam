@@ -33,8 +33,8 @@ import os
 import sys
 
 from network_generation.view.network_viewer import NetworkViewer
-from network_generation.controller.network_generator import NetworkGenerator
-from network_generation.controller.parameter_validator import ParameterValidator
+from network_generation.base import NetworkGenerator
+from network_generation.parameter_validator import ParameterValidator
 
 def main():  # pragma: no cover
     """
@@ -43,7 +43,6 @@ def main():  # pragma: no cover
 
     """
     validator: ParameterValidator = ParameterValidator(sys.argv)
-    print("I'm in", sys.argv)
 
     if validator.is_valid():
         configuration = validator.configuration()

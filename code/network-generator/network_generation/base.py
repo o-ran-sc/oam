@@ -20,5 +20,35 @@ network_generation base module.
 This is the principal module of the network_generation project.
 """
 
+from network_generation.model.python.o_ran_network import ORanNetwork
+
 # example constant variable
 NAME = "network_generation"
+
+class NetworkGenerator:
+    """
+    Class containing all methods to generate a network.
+    The generation process is influenced by a configuration in json format.
+    """
+
+    __configuration: dict = {}
+
+    # constructor
+    def __init__(self, configuration: dict):
+        self.__configuration = configuration
+
+    # getters
+    def configuration(self) -> dict:
+        """
+        Getter returning the object configuration
+        :return A NetworkGenerator configuration
+        """
+        return self.__configuration
+
+    # returns a JSON serializable object
+    def generate(self) -> ORanNetwork:
+        """
+        Method to start the generation process.
+        :return The ORanNetwork object.
+        """
+        return ORanNetwork(self.configuration())
