@@ -19,13 +19,14 @@ An abstract Class for all classes
 """
 import uuid
 from abc import ABC
+
 from network_generation.model.python.type_definitions import (
     AdministrativeState,
+    AlarmState,
+    LifeCycleState,
     OperationalState,
     UsageState,
     Utilization,
-    LifeCycleState,
-    AlarmState,
 )
 
 
@@ -76,11 +77,17 @@ class Top(ABC, ITop):
             if data and "lifeCycleState" in data
             else LifeCycleState.PLANNED
         )
-        self._alarmState = data["alarmState"] if data and "alarmState" in data else 0
-        self._usageState = (
-            data["usageState"] if data and "usageState" in data else UsageState.UNUSED
+        self._alarmState = (
+            data["alarmState"] if data and "alarmState" in data else 0
         )
-        self._utilization = data["utilization"] if data and "utilization" in data else 0
+        self._usageState = (
+            data["usageState"]
+            if data and "usageState" in data
+            else UsageState.UNUSED
+        )
+        self._utilization = (
+            data["utilization"] if data and "utilization" in data else 0
+        )
 
     @property
     def id(self) -> str:

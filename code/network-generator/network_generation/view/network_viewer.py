@@ -18,8 +18,9 @@ Provides functions to convert the Network into different formats
 """
 
 import json
-from network_generation.model.python.o_ran_network import ORanNetwork
 import xml.etree.ElementTree as ET
+
+from network_generation.model.python.o_ran_network import ORanNetwork
 
 
 class NetworkViewer:
@@ -61,7 +62,7 @@ class NetworkViewer:
         :type filename: string
         """
         with open(filename, "w", encoding="utf-8") as json_file:
-            output:dict[str, dict] = self.__network.to_topology()
+            output: dict[str, dict] = self.__network.to_topology()
             json.dump(output, json_file, ensure_ascii=False, indent=2)
             print("File '" + filename + "' saved!")
 
@@ -85,7 +86,9 @@ class NetworkViewer:
         style = ET.Element("style")
         style.text = self.readStylesFromFile()
         root.findall(".//desc")[0].append(style)
-        ET.ElementTree(root).write(filename, encoding="utf-8", xml_declaration=True)
+        ET.ElementTree(root).write(
+            filename, encoding="utf-8", xml_declaration=True
+        )
         print("File '" + filename + "' saved!")
 
     def kml(self, filename: str) -> None:
@@ -111,5 +114,7 @@ class NetworkViewer:
                 fill.text = value["fill"]["color"]
                 root.findall(".//Document")[0].append(style)
 
-        ET.ElementTree(root).write(filename, encoding="utf-8", xml_declaration=True)
+        ET.ElementTree(root).write(
+            filename, encoding="utf-8", xml_declaration=True
+        )
         print("File '" + filename + "' saved!")

@@ -17,15 +17,18 @@
 """
 A Class representing an O-RAN Near real-time intelligent controller (ORanNearRtRic)
 """
-from typing import overload
-from network_generation.model.python.tower import Tower
-from network_generation.model.python.o_ran_cu import ORanCu
-from network_generation.model.python.o_ran_object import IORanObject
-from network_generation.model.python.o_ran_node import ORanNode
-from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
-from network_generation.model.python.hexagon import Hex
-import network_generation.model.python.hexagon as Hexagon
 import xml.etree.ElementTree as ET
+from typing import overload
+
+import network_generation.model.python.hexagon as Hexagon
+from network_generation.model.python.hexagon import Hex
+from network_generation.model.python.o_ran_cu import ORanCu
+from network_generation.model.python.o_ran_node import ORanNode
+from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_termination_point import (
+    ORanTerminationPoint,
+)
+from network_generation.model.python.tower import Tower
 
 
 # Define the "IORanNearRtRic" interface
@@ -36,12 +39,16 @@ class IORanNearRtRic(IORanObject):
 
 # Define an abstract O-RAN Node class
 class ORanNearRtRic(ORanNode, IORanNearRtRic):
-    def __init__(self, o_ran_near_rt_ric_data: IORanNearRtRic = None, **kwargs):
+    def __init__(
+        self, o_ran_near_rt_ric_data: IORanNearRtRic = None, **kwargs
+    ):
         super().__init__(o_ran_near_rt_ric_data, **kwargs)
         self._o_ran_cus: list[ORanCu] = self._calculate_o_ran_cus()
 
     def _calculate_o_ran_cus(self) -> list[ORanCu]:
-        hex_ring_radius: int = self.spiralRadiusProfile.oRanNearRtRicSpiralRadiusOfOCus
+        hex_ring_radius: int = (
+            self.spiralRadiusProfile.oRanNearRtRicSpiralRadiusOfOCus
+        )
         hex_list: list[Hex] = self.spiralRadiusProfile.oRanCuSpiral(
             self.position, hex_ring_radius
         )
@@ -63,7 +70,7 @@ class ORanNearRtRic(ORanNode, IORanNearRtRic):
                         "position": hex,
                         "layout": self.layout,
                         "spiralRadiusProfile": self.spiralRadiusProfile,
-                        "parent": self
+                        "parent": self,
                     }
                 )
             )
@@ -87,8 +94,12 @@ class ORanNearRtRic(ORanNode, IORanNearRtRic):
         phy_tp: str = "-".join([self.name, "phy".upper()])
         result.append({"tp-id": phy_tp, "name": phy_tp})
         for interface in ["a1", "o1", "o2", "e2"]:
-            id:str = "-".join([self.name, interface.upper()])
-            result.append(ORanTerminationPoint({"id": id, "name":id, "supporter": phy_tp, "parent":self}))
+            id: str = "-".join([self.name, interface.upper()])
+            result.append(
+                ORanTerminationPoint(
+                    {"id": id, "name": id, "supporter": phy_tp, "parent": self}
+                )
+            )
         return result
 
     def to_topology_nodes(self) -> list[dict[str, dict]]:
@@ -102,7 +113,7 @@ class ORanNearRtRic(ORanNode, IORanNearRtRic):
         for o_ran_cu in self.o_ran_cus:
             result.extend(o_ran_cu.to_topology_links())
         return result
-    
+
     def toKml(self) -> ET.Element:
         ric: ET.Element = ET.Element("Folder")
         open: ET.Element = ET.SubElement(ric, "open")

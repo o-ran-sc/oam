@@ -16,14 +16,14 @@
 
 #!/usr/bin/python
 
-from __future__ import division
-from __future__ import print_function
+from __future__ import division, print_function
+
 import collections
 import math
 from typing import NamedTuple
 
-from network_generation.model.python.point import Point
 from network_generation.model.python.geo_location import GeoLocation
+from network_generation.model.python.point import Point
 
 
 class Hex:
@@ -117,7 +117,9 @@ def hex_round(hex: Hex) -> Hex:
 
 def hex_lerp(a: Hex, b: Hex, t: int) -> Hex:  # linearly interpolation
     return Hex(
-        a.q * (1.0 - t) + b.q * t, a.r * (1.0 - t) + b.r * t, a.s * (1.0 - t) + b.s * t
+        a.q * (1.0 - t) + b.q * t,
+        a.r * (1.0 - t) + b.r * t,
+        a.s * (1.0 - t) + b.s * t,
     )
 
 
@@ -202,7 +204,8 @@ def rdoubled_to_cube(hex: Hex):
 
 
 Orientation = collections.namedtuple(
-    "Orientation", ["f0", "f1", "f2", "f3", "b0", "b1", "b2", "b3", "start_angle"]
+    "Orientation",
+    ["f0", "f1", "f2", "f3", "b0", "b1", "b2", "b3", "start_angle"],
 )
 
 
@@ -315,7 +318,9 @@ def equal_hex_array(name, a, b):
 def test_hex_arithmetic():
     equal_hex("hex_add", Hex(4, -10, 6), hex_add(Hex(1, -3, 2), Hex(3, -7, 4)))
     equal_hex(
-        "hex_subtract", Hex(-2, 4, -2), hex_subtract(Hex(1, -3, 2), Hex(3, -7, 4))
+        "hex_subtract",
+        Hex(-2, 4, -2),
+        hex_subtract(Hex(1, -3, 2), Hex(3, -7, 4)),
     )
 
 
@@ -328,7 +333,9 @@ def test_hex_neighbor():
 
 
 def test_hex_diagonal():
-    equal_hex("hex_diagonal", Hex(-1, -1, 2), hex_diagonal_neighbor(Hex(1, -2, 1), 3))
+    equal_hex(
+        "hex_diagonal", Hex(-1, -1, 2), hex_diagonal_neighbor(Hex(1, -2, 1), 3)
+    )
 
 
 def test_hex_distance():
@@ -336,11 +343,15 @@ def test_hex_distance():
 
 
 def test_hex_rotate_right():
-    equal_hex("hex_rotate_right", hex_rotate_right(Hex(1, -3, 2)), Hex(3, -2, -1))
+    equal_hex(
+        "hex_rotate_right", hex_rotate_right(Hex(1, -3, 2)), Hex(3, -2, -1)
+    )
 
 
 def test_hex_rotate_left():
-    equal_hex("hex_rotate_left", hex_rotate_left(Hex(1, -3, 2)), Hex(-2, -1, 3))
+    equal_hex(
+        "hex_rotate_left", hex_rotate_left(Hex(1, -3, 2)), Hex(-2, -1, 3)
+    )
 
 
 def test_hex_round():
@@ -396,9 +407,13 @@ def test_hex_linedraw():
 def test_layout():
     h = Hex(3, 4, -7)
     flat = Layout(layout_flat, Point(10.0, 15.0), Point(35.0, 71.0))
-    equal_hex("layout", h, hex_round(pixel_to_hex(flat, hex_to_pixel(flat, h))))
+    equal_hex(
+        "layout", h, hex_round(pixel_to_hex(flat, hex_to_pixel(flat, h)))
+    )
     pointy = Layout(layout_pointy, Point(10.0, 15.0), Point(35.0, 71.0))
-    equal_hex("layout", h, hex_round(pixel_to_hex(pointy, hex_to_pixel(pointy, h))))
+    equal_hex(
+        "layout", h, hex_round(pixel_to_hex(pointy, hex_to_pixel(pointy, h)))
+    )
 
 
 def test_offset_roundtrip():
@@ -415,10 +430,14 @@ def test_offset_roundtrip():
         qoffset_from_cube(EVEN, qoffset_to_cube(EVEN, b)),
     )
     equal_hex(
-        "conversion_roundtrip odd-q", a, qoffset_to_cube(ODD, qoffset_from_cube(ODD, a))
+        "conversion_roundtrip odd-q",
+        a,
+        qoffset_to_cube(ODD, qoffset_from_cube(ODD, a)),
     )
     equal_offsetcoord(
-        "conversion_roundtrip odd-q", b, qoffset_from_cube(ODD, qoffset_to_cube(ODD, b))
+        "conversion_roundtrip odd-q",
+        b,
+        qoffset_from_cube(ODD, qoffset_to_cube(ODD, b)),
     )
     equal_hex(
         "conversion_roundtrip even-r",
@@ -431,10 +450,14 @@ def test_offset_roundtrip():
         roffset_from_cube(EVEN, roffset_to_cube(EVEN, b)),
     )
     equal_hex(
-        "conversion_roundtrip odd-r", a, roffset_to_cube(ODD, roffset_from_cube(ODD, a))
+        "conversion_roundtrip odd-r",
+        a,
+        roffset_to_cube(ODD, roffset_from_cube(ODD, a)),
     )
     equal_offsetcoord(
-        "conversion_roundtrip odd-r", b, roffset_from_cube(ODD, roffset_to_cube(ODD, b))
+        "conversion_roundtrip odd-r",
+        b,
+        roffset_from_cube(ODD, roffset_to_cube(ODD, b)),
     )
 
 
@@ -453,10 +476,14 @@ def test_offset_from_cube():
 
 def test_offset_to_cube():
     equal_hex(
-        "offset_to_cube even-", Hex(1, 2, -3), qoffset_to_cube(EVEN, OffsetCoord(1, 3))
+        "offset_to_cube even-",
+        Hex(1, 2, -3),
+        qoffset_to_cube(EVEN, OffsetCoord(1, 3)),
     )
     equal_hex(
-        "offset_to_cube odd-q", Hex(1, 2, -3), qoffset_to_cube(ODD, OffsetCoord(1, 2))
+        "offset_to_cube odd-q",
+        Hex(1, 2, -3),
+        qoffset_to_cube(ODD, OffsetCoord(1, 2)),
     )
 
 
@@ -464,16 +491,24 @@ def test_doubled_roundtrip():
     a = Hex(3, 4, -7)
     b = DoubledCoord(1, -3)
     equal_hex(
-        "conversion_roundtrip doubled-q", a, qdoubled_to_cube(qdoubled_from_cube(a))
+        "conversion_roundtrip doubled-q",
+        a,
+        qdoubled_to_cube(qdoubled_from_cube(a)),
     )
     equal_doubledcoord(
-        "conversion_roundtrip doubled-q", b, qdoubled_from_cube(qdoubled_to_cube(b))
+        "conversion_roundtrip doubled-q",
+        b,
+        qdoubled_from_cube(qdoubled_to_cube(b)),
     )
     equal_hex(
-        "conversion_roundtrip doubled-r", a, rdoubled_to_cube(rdoubled_from_cube(a))
+        "conversion_roundtrip doubled-r",
+        a,
+        rdoubled_to_cube(rdoubled_from_cube(a)),
     )
     equal_doubledcoord(
-        "conversion_roundtrip doubled-r", b, rdoubled_from_cube(rdoubled_to_cube(b))
+        "conversion_roundtrip doubled-r",
+        b,
+        rdoubled_from_cube(rdoubled_to_cube(b)),
     )
 
 
@@ -492,10 +527,14 @@ def test_doubled_from_cube():
 
 def test_doubled_to_cube():
     equal_hex(
-        "doubled_to_cube doubled-q", Hex(1, 2, -3), qdoubled_to_cube(DoubledCoord(1, 5))
+        "doubled_to_cube doubled-q",
+        Hex(1, 2, -3),
+        qdoubled_to_cube(DoubledCoord(1, 5)),
     )
     equal_hex(
-        "doubled_to_cube doubled-r", Hex(1, 2, -3), rdoubled_to_cube(DoubledCoord(4, 2))
+        "doubled_to_cube doubled-r",
+        Hex(1, 2, -3),
+        rdoubled_to_cube(DoubledCoord(4, 2)),
     )
 
 

@@ -17,19 +17,23 @@
 """
 A Class representing an O-RAN radio unit (ORanRu)
 """
+import xml.etree.ElementTree as ET
 from typing import overload
 
-from network_generation.model.python.o_ran_du import ORanDu
-from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
 from network_generation.model.python.nr_cell_du import NrCellDu
-from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_du import ORanDu
 from network_generation.model.python.o_ran_node import ORanNode
-import xml.etree.ElementTree as ET
+from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_termination_point import (
+    ORanTerminationPoint,
+)
 
 
 # Define the "IORanRu" interface
 class IORanRu(IORanObject):
-    def __init__(self, cell_count: int, ru_angle: int, ru_azimuth: int, **kwargs):
+    def __init__(
+        self, cell_count: int, ru_angle: int, ru_azimuth: int, **kwargs
+    ):
         super().__init__(**kwargs)
         self._cell_count = cell_count
         self._ru_angle = ru_angle
@@ -70,9 +74,9 @@ class ORanRu(ORanNode, IORanRu):
     def _create_cells(self) -> list[NrCellDu]:
         result: list[NrCellDu] = []
         cell_angle: int = (
-            self.parent.parent.parent.parent.parent.parent.configuration()["pattern"][
-                "nr-cell-du"
-            ]["cell-angle"]
+            self.parent.parent.parent.parent.parent.parent.configuration()[
+                "pattern"
+            ]["nr-cell-du"]["cell-angle"]
         )
         for index in range(self._cell_count):
             s: str = "00" + str(index)
@@ -129,14 +133,22 @@ class ORanRu(ORanNode, IORanRu):
         result: list[dict[str, dict]] = super().to_topology_links()
         result.extend(self.oRanDu.to_topology_links())
         for interface in ["phy", "ofhm", "ofhc", "ofhu", "ofhs"]:
-            link_id: str = "".join([interface, ":", self.name, "<->", self.oRanDu.name])
+            link_id: str = "".join(
+                [interface, ":", self.name, "<->", self.oRanDu.name]
+            )
             source_tp: str = "-".join([self.name, interface.upper()])
             dest_tp: str = "-".join([self.oRanDu.name, interface.upper()])
             result.append(
                 {
                     "link-id": link_id,
-                    "source": {"source-node": self.name, "source-tp": source_tp},
-                    "destination": {"dest-node": self.oRanDu.name, "dest-tp": dest_tp},
+                    "source": {
+                        "source-node": self.name,
+                        "source-tp": source_tp,
+                    },
+                    "destination": {
+                        "dest-node": self.oRanDu.name,
+                        "dest-tp": dest_tp,
+                    },
                 }
             )
         return result

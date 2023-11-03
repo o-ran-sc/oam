@@ -20,15 +20,18 @@ By default all O-RAN-DUs associated with the towers around  are deployed here.
 Maybe dedicated hardware is required to host O-DUs, but it is expected 
 that the O-Cloud mechanism and concepts can be applied here.
 """
-from typing import overload
-import network_generation.model.python.hexagon as Hexagon
-from network_generation.model.python.hexagon import Hex
-from network_generation.model.python.cube import Cube
-from network_generation.model.python.tower import Tower
-from network_generation.model.python.o_ran_object import IORanObject
-from network_generation.model.python.o_ran_node import ORanNode
-from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
 import xml.etree.ElementTree as ET
+from typing import overload
+
+import network_generation.model.python.hexagon as Hexagon
+from network_generation.model.python.cube import Cube
+from network_generation.model.python.hexagon import Hex
+from network_generation.model.python.o_ran_node import ORanNode
+from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_termination_point import (
+    ORanTerminationPoint,
+)
+from network_generation.model.python.tower import Tower
 
 
 # Define the "IORanDu" interface
@@ -44,13 +47,18 @@ class ORanCloudDu(ORanNode, IORanCloudDu):
         self._towers: list[Tower] = self._calculate_towers()
 
     def _calculate_towers(self) -> list[Tower]:
-        hex_ring_radius: int = self.spiralRadiusProfile.oRanDuSpiralRadiusOfTowers
+        hex_ring_radius: int = (
+            self.spiralRadiusProfile.oRanDuSpiralRadiusOfTowers
+        )
         hex_list: list[Hex] = Cube.spiral(self.position, hex_ring_radius)
         result: list[Tower] = []
         for index, hex in enumerate(hex_list):
             s: str = "00" + str(index)
             name: str = "-".join(
-                [self.name.replace("O-Cloud-DU", "Tower"), s[len(s) - 2 : len(s)]]
+                [
+                    self.name.replace("O-Cloud-DU", "Tower"),
+                    s[len(s) - 2 : len(s)],
+                ]
             )
             network_center: dict = self.parent.parent.parent.parent.center
             newGeo = Hexagon.hex_to_geo_location(
@@ -80,22 +88,26 @@ class ORanCloudDu(ORanNode, IORanCloudDu):
         phy_tp: str = "-".join([self.name, "phy".upper()])
         result.append(ORanTerminationPoint({"id": phy_tp, "name": phy_tp}))
         for interface in ["o2"]:
-            id:str = "-".join([self.name, interface.upper()])
-            result.append(ORanTerminationPoint({"id": id, "name":id, "supporter": phy_tp, "parent":self}))
+            id: str = "-".join([self.name, interface.upper()])
+            result.append(
+                ORanTerminationPoint(
+                    {"id": id, "name": id, "supporter": phy_tp, "parent": self}
+                )
+            )
         return result
 
     def to_topology_nodes(self) -> list[dict[str, dict]]:
         result: list[dict[str, dict]] = super().to_topology_nodes()
         for tower in self.towers:
-            result.extend(tower.to_topology_nodes())    
+            result.extend(tower.to_topology_nodes())
         return result
 
     def to_topology_links(self) -> list[dict[str, dict]]:
         result: list[dict[str, dict]] = super().to_topology_links()
         for tower in self.towers:
-            result.extend(tower.to_topology_links())    
+            result.extend(tower.to_topology_links())
         return result
-    
+
     def toKml(self) -> ET.Element:
         o_ran_cloud_du: ET.Element = ET.Element("Folder")
         open: ET.Element = ET.SubElement(o_ran_cloud_du, "open")

@@ -16,13 +16,19 @@
 """
 Module for a class representing a O-RAN Network
 """
-from network_generation.model.python.o_ran_smo import ORanSmo
-from network_generation.model.python.o_ran_spiral_radius_profile import SpiralRadiusProfile
-from network_generation.model.python.o_ran_object import IORanObject, ORanObject
+import xml.etree.ElementTree as ET
+
 import network_generation.model.python.hexagon as Hexagon
 from network_generation.model.python.hexagon import Layout
+from network_generation.model.python.o_ran_object import (
+    IORanObject,
+    ORanObject,
+)
+from network_generation.model.python.o_ran_smo import ORanSmo
+from network_generation.model.python.o_ran_spiral_radius_profile import (
+    SpiralRadiusProfile,
+)
 from network_generation.model.python.point import Point
-import xml.etree.ElementTree as ET
 
 
 class ORanNetwork(ORanObject):
@@ -31,7 +37,9 @@ class ORanNetwork(ORanObject):
     """
 
     # constructor
-    def __init__(self, configuration: dict[str, dict], of: IORanObject = None, **kwargs):
+    def __init__(
+        self, configuration: dict[str, dict], of: IORanObject = None, **kwargs
+    ):
         super().__init__(of, **kwargs)
         self.__configuration = configuration
         self.name = configuration["name"]
@@ -42,18 +50,18 @@ class ORanNetwork(ORanObject):
         )  # 1 pixel = 1 meter
         spiral_radius_profile = SpiralRadiusProfile(
             {
-                "oRanSmoSpiralRadiusOfNearRtRics": configuration["pattern"]["smo"][
-                    "near-rt-ric-spiral-radius"
-                ],
+                "oRanSmoSpiralRadiusOfNearRtRics": configuration["pattern"][
+                    "smo"
+                ]["near-rt-ric-spiral-radius"],
                 "oRanNearRtRicSpiralRadiusOfOCus": configuration["pattern"][
                     "near-rt-ric"
                 ]["o-ran-cu-spiral-radius"],
-                "oRanCuSpiralRadiusOfODus": configuration["pattern"]["o-ran-cu"][
-                    "o-ran-du-spiral-radius"
-                ],
-                "oRanDuSpiralRadiusOfTowers": configuration["pattern"]["o-ran-du"][
-                    "tower-spiral-radius"
-                ],
+                "oRanCuSpiralRadiusOfODus": configuration["pattern"][
+                    "o-ran-cu"
+                ]["o-ran-du-spiral-radius"],
+                "oRanDuSpiralRadiusOfTowers": configuration["pattern"][
+                    "o-ran-du"
+                ]["tower-spiral-radius"],
             }
         )
         self._o_ran_smo = ORanSmo(
@@ -88,9 +96,11 @@ class ORanNetwork(ORanObject):
                 ],
             }
         }
-        
+
     def toKml(self) -> ET.Element:
-        root: ET.Element = ET.Element("kml", xmlns="http://www.opengis.net/kml/2.2")
+        root: ET.Element = ET.Element(
+            "kml", xmlns="http://www.opengis.net/kml/2.2"
+        )
         document = ET.SubElement(root, "Document")
         open: ET.Element = ET.SubElement(document, "open")
         open.text = "1"

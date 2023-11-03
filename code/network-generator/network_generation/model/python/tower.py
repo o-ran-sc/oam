@@ -19,12 +19,15 @@ A Class representing a Tower to mount O-RAN RUs
 It can be interpreted as 'resource pool' for physical network
 functions.
 """
+import xml.etree.ElementTree as ET
 from typing import overload
+
+from network_generation.model.python.o_ran_node import ORanNode
 from network_generation.model.python.o_ran_object import IORanObject
 from network_generation.model.python.o_ran_ru import ORanRu
-from network_generation.model.python.o_ran_node import ORanNode
-from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
-import xml.etree.ElementTree as ET
+from network_generation.model.python.o_ran_termination_point import (
+    ORanTerminationPoint,
+)
 
 
 # Define the "IORanDu" interface
@@ -52,12 +55,16 @@ class Tower(ORanNode):
             name: str = "-".join(
                 [self.name.replace("Tower", "RU"), s[len(s) - 2 : len(s)]]
             )
-            cell_count: int = self.parent.parent.parent.parent.parent.configuration()[
-                "pattern"
-            ]["o-ran-ru"]["nr-cell-du-count"]
-            cell_angle : int = self.parent.parent.parent.parent.parent.configuration()[
-                "pattern"
-            ]["nr-cell-du"]["cell-angle"]
+            cell_count: int = (
+                self.parent.parent.parent.parent.parent.configuration()[
+                    "pattern"
+                ]["o-ran-ru"]["nr-cell-du-count"]
+            )
+            cell_angle: int = (
+                self.parent.parent.parent.parent.parent.configuration()[
+                    "pattern"
+                ]["nr-cell-du"]["cell-angle"]
+            )
             ru_angle: int = cell_count * cell_angle
             ru_azimuth: int = index * ru_angle
             result.append(
@@ -86,31 +93,35 @@ class Tower(ORanNode):
         result: list[ORanTerminationPoint] = super().termination_points
         phy_tp: str = "-".join([self.name, "phy".upper()])
         result.append({"tp-id": phy_tp})
-        for interface in ["e2", "o1", "ofhm", "ofhc", "ofhu","ofhs"]:
-            result.append(              {
-                "tp-id": "-".join([self.name, interface.upper()]),
-                "supporting-termination-point": [
-                  {
-                    "network-ref": type(self.parent.parent.parent.parent),
-                    "node-ref":self.name,
-                    "tp-ref": phy_tp
-                  }
-                ]
-              })
+        for interface in ["e2", "o1", "ofhm", "ofhc", "ofhu", "ofhs"]:
+            result.append(
+                {
+                    "tp-id": "-".join([self.name, interface.upper()]),
+                    "supporting-termination-point": [
+                        {
+                            "network-ref": type(
+                                self.parent.parent.parent.parent
+                            ),
+                            "node-ref": self.name,
+                            "tp-ref": phy_tp,
+                        }
+                    ],
+                }
+            )
         return result
 
     def to_topology_nodes(self) -> list[dict[str, dict]]:
         result: list[dict[str, dict]] = super().to_topology_nodes()
         for o_ran_ru in self.o_ran_rus:
-            result.extend(o_ran_ru.to_topology_nodes())    
+            result.extend(o_ran_ru.to_topology_nodes())
         return result
 
     def to_topology_links(self) -> list[dict[str, dict]]:
         result: list[dict[str, dict]] = super().to_topology_links()
         for o_ran_ru in self.o_ran_rus:
-            result.extend(o_ran_ru.to_topology_links())    
+            result.extend(o_ran_ru.to_topology_links())
         return result
-    
+
     def toKml(self) -> ET.Element:
         tower: ET.Element = ET.Element("Folder")
         open: ET.Element = ET.SubElement(tower, "open")
@@ -120,7 +131,6 @@ class Tower(ORanNode):
         for o_ran_ru in self.o_ran_rus:
             tower.append(o_ran_ru.toKml())
         return tower
-
 
     def toSvg(self) -> None:
         return None

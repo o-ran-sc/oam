@@ -17,15 +17,17 @@
 """
 A Class representing a 3GPP new radio cell du (NrCellDu)
 """
+import xml.etree.ElementTree as ET
 from typing import overload
 
-from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
-from network_generation.model.python.o_ran_object import IORanObject
-from network_generation.model.python.o_ran_node import ORanNode
 import network_generation.model.python.hexagon as Hexagon
-from network_generation.model.python.point import Point
 from network_generation.model.python.geo_location import GeoLocation
-import xml.etree.ElementTree as ET
+from network_generation.model.python.o_ran_node import ORanNode
+from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_termination_point import (
+    ORanTerminationPoint,
+)
+from network_generation.model.python.point import Point
 
 
 # Define the "INrCellDu" interface
@@ -41,7 +43,9 @@ class NrCellDu(ORanNode, INrCellDu):
     def __init__(self, cell_data: INrCellDu = None, **kwargs):
         super().__init__(cell_data, **kwargs)
         self._cell_angle = (
-            cell_data["cellAngle"] if cell_data and "cellAngle" in cell_data else 120
+            cell_data["cellAngle"]
+            if cell_data and "cellAngle" in cell_data
+            else 120
         )
         self._azimuth = (
             cell_data["azimuth"] if cell_data and "azimuth" in cell_data else 0
@@ -50,7 +54,9 @@ class NrCellDu(ORanNode, INrCellDu):
     @property
     def termination_points(self) -> list[ORanTerminationPoint]:
         result: list[ORanTerminationPoint] = super().termination_points
-        result.append(ORanTerminationPoint({"id": self.name, "name": self.name}))
+        result.append(
+            ORanTerminationPoint({"id": self.name, "name": self.name})
+        )
         return result
 
     def to_topology_nodes(self) -> list[dict[str, dict]]:
@@ -75,7 +81,9 @@ class NrCellDu(ORanNode, INrCellDu):
         linear_ring: ET.Element = ET.SubElement(outer_boundary, "LinearRing")
         coordinates: ET.Element = ET.SubElement(linear_ring, "coordinates")
 
-        points: list[Point] = Hexagon.polygon_corners(self.layout, self.position)
+        points: list[Point] = Hexagon.polygon_corners(
+            self.layout, self.position
+        )
         method = GeoLocation(
             self.parent.parent.parent.parent.parent.parent.geoLocation
         ).point_to_geo_location
@@ -88,19 +96,23 @@ class NrCellDu(ORanNode, INrCellDu):
         )
 
         intersect1: Point = Point(
-            (points[(2 * index + 1) % 6].x + points[(2 * index + 2) % 6].x) / 2,
-            (points[(2 * index + 1) % 6].y + points[(2 * index + 2) % 6].y) / 2,
+            (points[(2 * index + 1) % 6].x + points[(2 * index + 2) % 6].x)
+            / 2,
+            (points[(2 * index + 1) % 6].y + points[(2 * index + 2) % 6].y)
+            / 2,
         )
-        intersect_geo_location1: GeoLocation = network_center.point_to_geo_location(
-            intersect1
+        intersect_geo_location1: GeoLocation = (
+            network_center.point_to_geo_location(intersect1)
         )
 
         intersect2: Point = Point(
-            (points[(2 * index + 3) % 6].x + points[(2 * index + 4) % 6].x) / 2,
-            (points[(2 * index + 3) % 6].y + points[(2 * index + 4) % 6].y) / 2,
+            (points[(2 * index + 3) % 6].x + points[(2 * index + 4) % 6].x)
+            / 2,
+            (points[(2 * index + 3) % 6].y + points[(2 * index + 4) % 6].y)
+            / 2,
         )
-        intersect_geo_location2: GeoLocation = network_center.point_to_geo_location(
-            intersect2
+        intersect_geo_location2: GeoLocation = (
+            network_center.point_to_geo_location(intersect2)
         )
 
         tower: GeoLocation = GeoLocation(self.geoLocation)

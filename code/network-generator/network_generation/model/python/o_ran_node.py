@@ -17,20 +17,26 @@
 """
 An abstract Class for O-RAN Node
 """
+import json
+import xml.etree.ElementTree as ET
 from abc import abstractmethod, abstractproperty
 from typing import Any
-import xml.etree.ElementTree as ET
-import json
-from network_generation.model.python.geo_location import GeoLocation
-from network_generation.model.python.o_ran_object import IORanObject, ORanObject
+
 import network_generation.model.python.hexagon as Hexagon
+from network_generation.model.python.geo_location import GeoLocation
 from network_generation.model.python.hexagon import Hex, Layout
-from network_generation.model.python.point import Point
-from network_generation.model.python.o_ran_spiral_radius_profile import SpiralRadiusProfile
-from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
-from network_generation.model.python.type_definitions import (
-    AddressType,
+from network_generation.model.python.o_ran_object import (
+    IORanObject,
+    ORanObject,
 )
+from network_generation.model.python.o_ran_spiral_radius_profile import (
+    SpiralRadiusProfile,
+)
+from network_generation.model.python.o_ran_termination_point import (
+    ORanTerminationPoint,
+)
+from network_generation.model.python.point import Point
+from network_generation.model.python.type_definitions import AddressType
 
 
 # Define the "IORanObject" interface
@@ -65,7 +71,9 @@ class ORanNode(ORanObject, IORanNode):
             of["geoLocation"] if of and "geoLocation" in of else GeoLocation()
         )
         self.url = of["url"] if of and "url" in of else self.id
-        self.position = of["position"] if of and "position" in of else Hex(0, 0, 0)
+        self.position = (
+            of["position"] if of and "position" in of else Hex(0, 0, 0)
+        )
         self.layout = (
             of["layout"]
             if of and "layout" in of
@@ -128,7 +136,9 @@ class ORanNode(ORanObject, IORanNode):
         self._spiralRadiusProfile = value
 
     @property
-    def parent(self) -> Any:  # expected are ORanNodes and all inherits for ORanNode
+    def parent(
+        self,
+    ) -> Any:  # expected are ORanNodes and all inherits for ORanNode
         return self._parent
 
     @parent.setter
@@ -153,14 +163,19 @@ class ORanNode(ORanObject, IORanNode):
     def to_topology_nodes(self) -> list[dict[str, dict]]:
         tps: list[dict[str, dict]] = []
         for tp in self.termination_points:
-            if str(type(tp)) == "<class 'model.python.o_ran_termination_point.ORanTerminationPoint'>":
+            if (
+                str(type(tp))
+                == "<class 'model.python.o_ran_termination_point.ORanTerminationPoint'>"
+            ):
                 tps.append(tp.to_topology())
 
         result: list[dict[str, dict]] = []
-        result.append({
-            "node-id": self.name,
-            "ietf-network-topology:termination-point": tps,
-        })
+        result.append(
+            {
+                "node-id": self.name,
+                "ietf-network-topology:termination-point": tps,
+            }
+        )
         return result
 
     @abstractmethod
@@ -169,11 +184,16 @@ class ORanNode(ORanObject, IORanNode):
         source_tp: str = "-".join([self.name, "phy".upper()])
         dest_tp: str = "-".join([self.parent.name, "phy".upper()])
         if self.parent and not "Tower" in source_tp and not "Tower" in dest_tp:
-            link_id: str = "".join(["phy", ":", self.name, "<->", self.parent.name])
+            link_id: str = "".join(
+                ["phy", ":", self.name, "<->", self.parent.name]
+            )
             link = {
                 "link-id": link_id,
                 "source": {"source-node": self.name, "source-tp": source_tp},
-                "destination": {"dest-node": self.parent.name, "dest-tp": dest_tp},
+                "destination": {
+                    "dest-node": self.parent.name,
+                    "dest-tp": dest_tp,
+                },
             }
             result.append(link)
         return result

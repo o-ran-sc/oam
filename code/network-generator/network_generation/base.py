@@ -25,6 +25,7 @@ from network_generation.model.python.o_ran_network import ORanNetwork
 # example constant variable
 NAME = "network_generation"
 
+
 class NetworkGenerator:
     """
     Class containing all methods to generate a network.

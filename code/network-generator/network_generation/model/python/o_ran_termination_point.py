@@ -18,7 +18,11 @@
 An abstract Class for O-RAN TerminationPoint
 """
 from abc import abstractmethod
-from network_generation.model.python.o_ran_object import IORanObject, ORanObject
+
+from network_generation.model.python.o_ran_object import (
+    IORanObject,
+    ORanObject,
+)
 
 
 # Define the "IORanObject" interface
@@ -52,10 +56,14 @@ class ORanTerminationPoint(ORanObject, IORanTerminationPointData):
                 case "<class 'model.python.o_ran_cloud_du.ORanCloudDu'>":
                     network_ref = self.parent.parent.parent.parent.parent.id
                 case "<class 'model.python.o_ran_ru.ORanRu'>":
-                    network_ref = self.parent.parent.parent.parent.parent.parent.id
+                    network_ref = (
+                        self.parent.parent.parent.parent.parent.parent.id
+                    )
                 case _:
                     print("unknown: implement " + str(type(self.parent)))
-                    network_ref = "unknown: implement " + str(type(self.parent))
+                    network_ref = "unknown: implement " + str(
+                        type(self.parent)
+                    )
 
             result["supporting-termination-point"] = [
                 {

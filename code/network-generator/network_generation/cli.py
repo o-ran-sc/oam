@@ -25,16 +25,16 @@ Be creative! do whatever you want!
 """
 
 
-
 """
 Module as entry point to generate an ietf topology json
 """
 import os
 import sys
 
-from network_generation.view.network_viewer import NetworkViewer
 from network_generation.base import NetworkGenerator
 from network_generation.parameter_validator import ParameterValidator
+from network_generation.view.network_viewer import NetworkViewer
+
 
 def main():  # pragma: no cover
     """
@@ -46,32 +46,31 @@ def main():  # pragma: no cover
 
     if validator.is_valid():
         configuration = validator.configuration()
-        generator = NetworkGenerator(configuration['network'])
+        generator = NetworkGenerator(configuration["network"])
         network = generator.generate()
         viewer = NetworkViewer(network)
 
-        output_folder:str = configuration['output-folder']
+        output_folder: str = configuration["output-folder"]
         # If folder doesn't exist, then create it.
         if not os.path.isdir(output_folder):
             os.makedirs(output_folder)
-            
-        name: str = configuration['network']['name']
+
+        name: str = configuration["network"]["name"]
 
         # topology json
-        if configuration['generation-tasks']['topology'] is True:
+        if configuration["generation-tasks"]["topology"] is True:
             filename: str = output_folder + "/" + name + "-operational.json"
             viewer.json().save(filename)
 
         # svg xml
-        if configuration['generation-tasks']['svg'] is True:
+        if configuration["generation-tasks"]["svg"] is True:
             filename: str = output_folder + "/" + name + ".svg"
             viewer.svg(filename)
 
         # kml xml
-        if configuration['generation-tasks']['kml'] is True:
+        if configuration["generation-tasks"]["kml"] is True:
             filename: str = output_folder + "/" + name + ".kml"
             viewer.kml(filename)
 
     else:
         print(validator.error_message())
-

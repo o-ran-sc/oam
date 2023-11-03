@@ -16,9 +16,10 @@
 """
 Module containing a class for parameter validation
 """
+import json
 import os
 import os.path
-import json
+
 import jsonschema
 
 

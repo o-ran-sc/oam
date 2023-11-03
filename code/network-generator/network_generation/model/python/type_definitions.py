@@ -18,6 +18,7 @@
 A collection of TypeDefinitions
 """
 from enum import Enum
+
 from network_generation.model.python.countries import Country
 
 

@@ -17,15 +17,18 @@
 """
 A Class representing an O-RAN Service Management and Orchestration Framework (SMO)
 """
-from typing import overload
-from network_generation.model.python.tower import Tower
-from network_generation.model.python.o_ran_near_rt_ric import ORanNearRtRic
-from network_generation.model.python.o_ran_object import IORanObject
-from network_generation.model.python.o_ran_node import ORanNode
-from network_generation.model.python.hexagon import Hex
-from network_generation.model.python.o_ran_termination_point import ORanTerminationPoint
-import network_generation.model.python.hexagon as Hexagon
 import xml.etree.ElementTree as ET
+from typing import overload
+
+import network_generation.model.python.hexagon as Hexagon
+from network_generation.model.python.hexagon import Hex
+from network_generation.model.python.o_ran_near_rt_ric import ORanNearRtRic
+from network_generation.model.python.o_ran_node import ORanNode
+from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_termination_point import (
+    ORanTerminationPoint,
+)
+from network_generation.model.python.tower import Tower
 
 
 # Define the "IORanSmo" interface
@@ -38,10 +41,14 @@ class IORanSmo(IORanObject):
 class ORanSmo(ORanNode, IORanSmo):
     def __init__(self, o_ran_smo_data: IORanSmo = None, **kwargs):
         super().__init__(o_ran_smo_data, **kwargs)
-        self._o_ran_near_rt_rics: list[ORanNearRtRic] = self._calculate_near_rt_rics()
+        self._o_ran_near_rt_rics: list[
+            ORanNearRtRic
+        ] = self._calculate_near_rt_rics()
 
     def _calculate_near_rt_rics(self) -> list[ORanNearRtRic]:
-        hex_ring_radius: int = self.spiralRadiusProfile.oRanSmoSpiralRadiusOfNearRtRics
+        hex_ring_radius: int = (
+            self.spiralRadiusProfile.oRanSmoSpiralRadiusOfNearRtRics
+        )
         hex_list: list[Hex] = self.spiralRadiusProfile.oRanNearRtRicSpiral(
             self.position, hex_ring_radius
         )
@@ -69,7 +76,6 @@ class ORanSmo(ORanNode, IORanSmo):
             )
         return result
 
-
     @property
     def o_ran_near_rt_rics(self) -> list[ORanNearRtRic]:
         return self._o_ran_near_rt_rics
@@ -80,8 +86,12 @@ class ORanSmo(ORanNode, IORanSmo):
         phy_tp: str = "-".join([self.name, "phy".upper()])
         result.append(ORanTerminationPoint({"id": phy_tp, "name": phy_tp}))
         for interface in ["a1", "o1", "o2"]:
-            id:str = "-".join([self.name, interface.upper()])
-            result.append(ORanTerminationPoint({"id": id, "name":id, "supporter": phy_tp, "parent":self}))
+            id: str = "-".join([self.name, interface.upper()])
+            result.append(
+                ORanTerminationPoint(
+                    {"id": id, "name": id, "supporter": phy_tp, "parent": self}
+                )
+            )
         return result
 
     @property
@@ -99,7 +109,7 @@ class ORanSmo(ORanNode, IORanSmo):
         return result
 
     def to_topology_links(self) -> list[dict[str, dict]]:
-        result: list[dict[str, dict]] = [] # super().to_topology_links()
+        result: list[dict[str, dict]] = []  # super().to_topology_links()
         for ric in self.o_ran_near_rt_rics:
             result.extend(ric.to_topology_links())
         return result

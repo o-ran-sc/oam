@@ -14,9 +14,9 @@
 
 #!/usr/bin/python
 
+import network_generation.model.python.hexagon as Hexagon
 from network_generation.model.python.cube import Cube
 from network_generation.model.python.hexagon import Hex
-import network_generation.model.python.hexagon as Hexagon
 
 
 class SpiralRadiusProfile:
@@ -147,11 +147,15 @@ class SpiralRadiusProfile:
     def oRanCuDirections(self) -> list[Hex]:
         q: int = (
             2 * self.oRanCuSpiralRadiusOfODus
-            + 3 * self.oRanCuSpiralRadiusOfODus * self.oRanDuSpiralRadiusOfTowers
+            + 3
+            * self.oRanCuSpiralRadiusOfODus
+            * self.oRanDuSpiralRadiusOfTowers
             + self.oRanDuSpiralRadiusOfTowers
             + 1
         )
-        r: int = self.oRanDuSpiralRadiusOfTowers - self.oRanCuSpiralRadiusOfODus
+        r: int = (
+            self.oRanDuSpiralRadiusOfTowers - self.oRanCuSpiralRadiusOfODus
+        )
         s: int = -q - r
         return [
             Hex(+q, +r, +s),
@@ -190,16 +194,20 @@ class SpiralRadiusProfile:
     def oRanNearRtRicDirections(self) -> list[Hex]:
         q0: int = (
             2 * self.oRanCuSpiralRadiusOfODus
-            + 3 * self.oRanCuSpiralRadiusOfODus * self.oRanDuSpiralRadiusOfTowers
+            + 3
+            * self.oRanCuSpiralRadiusOfODus
+            * self.oRanDuSpiralRadiusOfTowers
             + self.oRanDuSpiralRadiusOfTowers
             + 1
         )
-        r0: int = self.oRanDuSpiralRadiusOfTowers - self.oRanCuSpiralRadiusOfODus
+        r0: int = (
+            self.oRanDuSpiralRadiusOfTowers - self.oRanCuSpiralRadiusOfODus
+        )
 
         q: int = 3 * q0 - self.oRanNearRtRicSpiralRadiusOfOCus
         r: int = -r0 - self.oRanNearRtRicSpiralRadiusOfOCus
 
-        profile_id: str = self.id[0 : len(self.id)-1]
+        profile_id: str = self.id[0 : len(self.id) - 1]
         if profile_id in {"111", "112", "113", "114"}:
             q: int = 21 + 14 * (self.oRanNearRtRicSpiralRadiusOfOCus - 1)
             r: int = -7 * self.oRanNearRtRicSpiralRadiusOfOCus
@@ -263,7 +271,8 @@ class SpiralRadiusProfile:
 
         results: list[Hex] = []
         hex: Hex = Hexagon.hex_add(
-            center, Hexagon.hex_scale(self.oRanNearRtRicDirections()[4], radius)
+            center,
+            Hexagon.hex_scale(self.oRanNearRtRicDirections()[4], radius),
         )
         for i in range(6):
             for j in range(radius):

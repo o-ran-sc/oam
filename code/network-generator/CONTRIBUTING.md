@@ -14,6 +14,12 @@ This instructions are for linux base systems. (Linux, MacOS, BSD, etc.)
 - Enter the directory `cd oam/code/network-generation`
 - Please see [O-RAN-SC Code Contributions Tutorial](https://wiki.o-ran-sc.org/display/ORAN/Tutorial%3A+Making+code+contributions+to+O-RAN+open+source+project)
 
+## Prerequisites
+
+```
+pip install isort
+pip install black
+```
 
 ## Setting up your own virtual environment
 
