@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da3cfcf1_4da66120",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-11-12T14:35:21Z",
+      "side": 1,
+      "message": "demx8as6@martindev ~/workspace/o-ran-sc/oam/code/network-generator/network_generation/model/yang (OAM-389)$ pyang --lint *.yang\nietf-inet-types@2021-02-22.yang:493: error: keyword \"length\" not in canonical order (see RFC 6020, Section 12)\ndemx8as6@martindev ~/workspace/o-ran-sc/oam/code/network-generator/network_generation/model/yang (OAM-389)$",
+      "revId": "32384f7633ce83c108c183cfa0952de2fc7b9063",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
