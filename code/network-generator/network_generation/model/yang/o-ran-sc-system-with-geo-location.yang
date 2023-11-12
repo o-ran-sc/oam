@@ -1,0 +1,50 @@
+module o-ran-sc-system-with-geo-location {
+  yang-version 1.1;
+  namespace "urn:o-ran-sc:yang:o-ran-sc-system-with-geo-location";
+  prefix sysgeo;
+
+  import ietf-system {
+    prefix sys;
+    reference
+      "RFC 7317: A YANG Data Model for System Management";
+  }
+  import ietf-geo-location {
+    prefix geo;
+    reference
+      "RFC 9179: A YANG Grouping for Geographic Locations";
+  }
+
+  organization
+    "O-RAN Software Community";
+  contact
+    "www.o-ran-sc.org";
+  description
+    "This module adds an optional geo-location to  ietf-system.
+
+     Copyright 2023 the O-RAN Software Community.
+
+     Licensed under the Apache License, Version 2.0 (the 'License');
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an 'AS IS' BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.";
+
+  revision 2023-11-11 {
+    description
+      "Initial version // TODO reference";
+    reference
+      "https://jira.o-ran-sc.org/browse/OAM-399";
+  }
+
+  augment "/sys:system" {
+    description
+      "Augments ietf-system with geo-location.";
+    uses geo:geo-location;
+  }
+}
