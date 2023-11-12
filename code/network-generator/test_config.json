@@ -1,0 +1,45 @@
+{
+  "network": {
+    "name": "o-ran-network",
+    "center": {
+      "latitude": 40.535,
+      "longitude": -74.447,
+      "aboveMeanSeaLevel": 50
+    },
+    "pattern": {
+      "tower": {
+        "representation": "hexagon"
+      },
+      "smo": {
+        "five-g-core-count": 1,
+        "near-rt-ric-spiral-radius": 0,
+        "o-could-resource-pool-count": 1
+      },
+      "near-rt-ric": {
+        "o-ran-cu-spiral-radius": 0
+      },
+      "o-ran-cu": {
+        "o-ran-du-spiral-radius": 0
+      },
+      "o-ran-du": {
+        "fronthaul-gateway-count": 0,
+        "tower-spiral-radius": 0,
+        "o-ran-ru-count": 1
+      },
+      "o-ran-ru": {
+        "nr-cell-du-count": 1
+      },
+      "nr-cell-du": {
+        "sector-count": 1,
+        "cell-angle": 120,
+        "max-reach": 400
+      }
+    }
+  },
+  "output-folder": "output",
+  "generation-tasks": {
+    "topology": true,
+    "svg": true,
+    "kml": true
+  }
+}
