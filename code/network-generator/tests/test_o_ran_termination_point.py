@@ -1,0 +1,46 @@
+# Copyright 2023 highstreet technologies GmbH
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from network_generation.model.python.o_ran_termination_point import (
+    ORanTerminationPoint,
+)
+from network_generation.model.python.type_definitions import (
+    AdministrativeState,
+    OperationalState,
+)
+
+
+def test_o_ran_termination_point() -> None:
+    o_ran_termination_point: ORanTerminationPoint = ORanTerminationPoint()
+    assert o_ran_termination_point.id == "O-RAN-DU-00-00-00-00-02-OFHS"
+    assert o_ran_termination_point.administrativeState.value == "locked"
+    assert o_ran_termination_point.supporter == "O-RAN-DU-00-00-00-00-02-PHY"
+    assert o_ran_termination_point.parent == 0
+    assert len(str(o_ran_termination_point)) == 337
+
+    o_ran_termination_point = ORanTerminationPoint(
+        {
+            "id": "my-id",
+            "administrativeState": AdministrativeState.UNLOCKED,
+            "operationalState": OperationalState.ENABLED,
+            "supporter": "my_personal_fan",
+            "parent": ORanTerminationPoint(),
+        }
+    )
+    assert len(o_ran_termination_point.id) == 5
+    assert o_ran_termination_point.administrativeState.value == "unlocked"
+    assert o_ran_termination_point.operationalState.value == "enabled"
+    assert o_ran_termination_point.supporter == "my_personal_fan"
+    assert type(o_ran_termination_point.parent) is int
+    assert len(str(o_ran_termination_point)) == 316
