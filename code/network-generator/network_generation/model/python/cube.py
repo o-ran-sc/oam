@@ -14,7 +14,7 @@
 #
 # inspired by http://www.redblobgames.com/grids/hexagons/
 
-#!/usr/bin/python
+# !/usr/bin/python
 from network_generation.model.python.hexagon import Hex
 
 
@@ -35,7 +35,8 @@ class Cube:
     def direction(direction: int) -> Hex:
         if direction < 0 or direction > 5:
             raise ValueError(
-                "Invalid direction. The direction value must be in the range of [0..5]."
+                "Invalid direction. The direction value must be"
+                + " in the range of [0..5]."
             )
         return Cube.direction_vectors()[direction]
 
@@ -55,7 +56,8 @@ class Cube:
     def ring(center: Hex, radius: int) -> list[Hex]:
         if not (radius > 0):
             raise ValueError(
-                "Invalid radius. The radius around the hex center must be greater than 0 rings."
+                "Invalid radius. The radius around the hex center must"
+                + " be greater than 0 rings."
             )
         results: list[Hex] = []
         hex: Hex = Cube.add(center, Cube.scale(Cube.direction(4), radius))

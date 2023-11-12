@@ -12,28 +12,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/python
+# !/usr/bin/python
 
 """
 An abstract Class for O-RAN Objects
 """
-from network_generation.model.python.top import ITop, Top
+from typing import Any, cast
 
+from network_generation.model.python.top import ITop, Top, default_value
 
 # Define the "IORanObject" interface
-class IORanObject(ITop):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+# class IORanObject(ITop):
+IORanObject = ITop
 
 
 # Define an abstract O-RAN Object class
-class ORanObject(Top, IORanObject):
-    def __init__(self, of: IORanObject = None, **kwargs):
-        super().__init__(of, **kwargs)
+class ORanObject(Top):
+    @staticmethod
+    def default() -> dict[str, Any]:
+        return cast(dict[str, Any], default_value)
 
-    def json(self) -> dict[str, dict]:
-        result: dict[str, dict] = super().json()
-        return result
+    def __init__(
+        self, data: dict[str, Any] = default(), **kwargs: dict[str, Any]
+    ) -> None:
+        super().__init__(data, **kwargs)
 
-    def __str__(self) -> str:
-        return str(self.json())
+    def json(self) -> dict[str, Any]:
+        return {
+            **super().json(),
+            "id": self.id,
+            "name": self.name,
+            "administrativeState": self.administrativeState,
+            "operationalState": self.operationalState,
+            "lifeCycleState": self.lifeCycleState,
+            "alarmState": self.alarmState,
+            "usageState": self.usageState,
+            "utilization": self.utilization,
+        }

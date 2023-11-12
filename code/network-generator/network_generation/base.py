@@ -35,7 +35,7 @@ class NetworkGenerator:
     __configuration: dict = {}
 
     # constructor
-    def __init__(self, configuration: dict):
+    def __init__(self, configuration: dict) -> None:
         self.__configuration = configuration
 
     # getters

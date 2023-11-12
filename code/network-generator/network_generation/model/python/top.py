@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/python
+# !/usr/bin/python
 
 """
 An abstract Class for all classes
 """
-import uuid
-from abc import ABC
+from abc import ABC, abstractmethod
+from typing import Any, TypedDict, cast
 
 from network_generation.model.python.type_definitions import (
     AdministrativeState,
@@ -31,70 +31,65 @@ from network_generation.model.python.type_definitions import (
 
 
 # Define the ITop interface
-class ITop:
-    def __init__(
-        self,
-        id: str = None,
-        name: str = None,
-        administrativeState: AdministrativeState = None,
-        operationalState: OperationalState = None,
-        lifeCycleState: LifeCycleState = None,
-        alarmState: AlarmState = None,
-        usageState: UsageState = None,
-        utilization: Utilization = None,
-    ):
-        self.id = id
-        self.name = name
-        self.administrativeState = administrativeState
-        self.operationalState = operationalState
-        self.lifeCycleState = lifeCycleState
-        self.alarmState = alarmState
-        self.usageState = usageState
-        self.utilization = utilization
+class ITop(TypedDict):
+    id: str
+    name: str
+    administrativeState: AdministrativeState
+    operationalState: OperationalState
+    lifeCycleState: LifeCycleState
+    alarmState: AlarmState
+    usageState: UsageState
+    utilization: Utilization
+
+
+# define default value
+default_value: ITop = {
+    "id": "be5229af-2660-4bae-8f2c-b9d0f788fad1",
+    "name": "NoName",
+    "administrativeState": AdministrativeState.LOCKED,
+    "operationalState": OperationalState.DISABLED,
+    "lifeCycleState": LifeCycleState.PLANNED,
+    "alarmState": 0,
+    "usageState": UsageState.UNUSED,
+    "utilization": 0,
+}
 
 
 # Define the Top class
-class Top(ABC, ITop):
-    def __init__(self, data: [dict[str, dict] | None] = None):
-        self._id = data["id"] if data and "id" in data else str(uuid.uuid4())
-        self._name = (
-            data["name"]
-            if data and "name" in data
-            else " ".join(["Name", "of", self._id])
-        )
-        self._administrativeState = (
-            data["administrativeState"]
-            if data and "administrativeState" in data
-            else AdministrativeState.LOCKED
-        )
-        self._operationalState = (
-            data["operationalState"]
-            if data and "operationalState" in data
-            else OperationalState.DISABLED
-        )
-        self._lifeCycleState = (
-            data["lifeCycleState"]
-            if data and "lifeCycleState" in data
-            else LifeCycleState.PLANNED
-        )
-        self._alarmState = (
-            data["alarmState"] if data and "alarmState" in data else 0
-        )
-        self._usageState = (
-            data["usageState"]
-            if data and "usageState" in data
-            else UsageState.UNUSED
-        )
-        self._utilization = (
-            data["utilization"] if data and "utilization" in data else 0
-        )
+class Top(ABC):
+    @staticmethod
+    def default() -> dict[str, Any]:
+        return cast(dict[str, Any], default_value)
+
+    def __init__(
+        self, data: dict[str, Any] = cast(dict[str, Any], default_value)
+    ) -> None:
+        super().__init__()
+        itop: ITop = self._to_itop_data(data)
+        self._id: str = itop["id"]
+        self._name: str = itop["name"]
+        self._administrativeState: AdministrativeState = itop[
+            "administrativeState"
+        ]
+        self._operationalState: OperationalState = itop["operationalState"]
+        self._lifeCycleState: LifeCycleState = itop["lifeCycleState"]
+        self._alarmState: AlarmState = itop["alarmState"]
+        self._usageState: UsageState = itop["usageState"]
+        self._utilization: Utilization = itop["utilization"]
+
+    def _to_itop_data(self, data: dict[str, Any]) -> ITop:
+        result: ITop = default_value
+        for key, key_type in ITop.__annotations__.items():
+            if key in data:
+                result[key] = data[key]  # type: ignore
+        return result
 
     @property
     def id(self) -> str:
         return self._id
 
     @id.setter
-    def id(self, value: str):
+    def id(self, value: str) -> None:
         self._id = value
 
     @property
@@ -102,7 +97,7 @@ class Top(ABC, ITop):
         return self._name
 
     @name.setter
-    def name(self, value: str):
+    def name(self, value: str) -> None:
         self._name = value
 
     @property
@@ -110,7 +105,7 @@ class Top(ABC, ITop):
         return self._administrativeState
 
     @administrativeState.setter
-    def administrativeState(self, value: AdministrativeState):
+    def administrativeState(self, value: AdministrativeState) -> None:
         self._administrativeState = value
 
     @property
@@ -118,7 +113,7 @@ class Top(ABC, ITop):
         return self._operationalState
 
     @operationalState.setter
-    def operationalState(self, value: OperationalState):
+    def operationalState(self, value: OperationalState) -> None:
         self._operationalState = value
 
     @property
@@ -126,7 +121,7 @@ class Top(ABC, ITop):
         return self._lifeCycleState
 
     @lifeCycleState.setter
-    def lifeCycleState(self, value: LifeCycleState):
+    def lifeCycleState(self, value: LifeCycleState) -> None:
         self._lifeCycleState = value
 
     @property
@@ -134,7 +129,7 @@ class Top(ABC, ITop):
         return self._alarmState
 
     @alarmState.setter
-    def alarmState(self, value: AlarmState):
+    def alarmState(self, value: AlarmState) -> None:
         self._alarmState = value
 
     @property
@@ -142,7 +137,7 @@ class Top(ABC, ITop):
         return self._usageState
 
     @usageState.setter
-    def usageState(self, value: UsageState):
+    def usageState(self, value: UsageState) -> None:
         self._usageState = value
 
     @property
@@ -150,18 +145,19 @@ class Top(ABC, ITop):
         return self._utilization
 
     @utilization.setter
-    def utilization(self, value: Utilization):
+    def utilization(self, value: Utilization) -> None:
         self._utilization = value
 
-    def json(self) -> dict[str, dict]:
+    @abstractmethod
+    def json(self) -> dict[str, Any]:
         return {
             "id": self.id,
             "name": self.name,
-            "administrativeState": self.administrativeState.value,
-            "operationalState": self.operationalState.value,
-            "lifeCycleState": self.lifeCycleState.value,
+            "administrativeState": self.administrativeState,
+            "operationalState": self.operationalState,
+            "lifeCycleState": self.lifeCycleState,
             "alarmState": self.alarmState,
-            "usageState": self.usageState.value,
+            "usageState": self.usageState,
             "utilization": self.utilization,
         }
 

@@ -14,7 +14,7 @@
 #
 # inspired by http://www.redblobgames.com/grids/hexagons/
 
-#!/usr/bin/python
+# !/usr/bin/python
 
 from __future__ import division, print_function
 

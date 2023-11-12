@@ -12,53 +12,74 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/python
+# !/usr/bin/python
 
 """
-A Class representing an O-RAN Near real-time intelligent controller (ORanNearRtRic)
+A Class representing an O-RAN Near real-time intelligent controller
+(ORanNearRtRic)
 """
 import xml.etree.ElementTree as ET
-from typing import overload
+from typing import Any, cast
 
 import network_generation.model.python.hexagon as Hexagon
+from network_generation.model.python.geo_location import GeoLocation
 from network_generation.model.python.hexagon import Hex
 from network_generation.model.python.o_ran_cu import ORanCu
-from network_generation.model.python.o_ran_node import ORanNode
-from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_node import (
+    IORanNode,
+    ORanNode,
+    default_value,
+)
 from network_generation.model.python.o_ran_termination_point import (
     ORanTerminationPoint,
 )
 from network_generation.model.python.tower import Tower
 
-
 # Define the "IORanNearRtRic" interface
-class IORanNearRtRic(IORanObject):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+IORanNearRtRic = IORanNode
 
 
 # Define an abstract O-RAN Node class
-class ORanNearRtRic(ORanNode, IORanNearRtRic):
+class ORanNearRtRic(ORanNode):
     def __init__(
-        self, o_ran_near_rt_ric_data: IORanNearRtRic = None, **kwargs
-    ):
-        super().__init__(o_ran_near_rt_ric_data, **kwargs)
+        self,
+        data: dict[str, Any] = cast(dict[str, Any], default_value),
+        **kwargs: dict[str, Any]
+    ) -> None:
+        o_ran_near_rt_ric_data: IORanNearRtRic = (
+            self._to_o_ran_near_rt_ric_data(data)
+        )
+        super().__init__(
+            cast(dict[str, Any], o_ran_near_rt_ric_data), **kwargs
+        )
         self._o_ran_cus: list[ORanCu] = self._calculate_o_ran_cus()
+
+    def _to_o_ran_near_rt_ric_data(
+        self, data: dict[str, Any]
+    ) -> IORanNearRtRic:
+        result: IORanNearRtRic = default_value
+        for key, key_type in IORanNearRtRic.__annotations__.items():
+            if key in data:
+                result[key] = data[key]  # type: ignore
+        return result
 
     def _calculate_o_ran_cus(self) -> list[ORanCu]:
         hex_ring_radius: int = (
-            self.spiralRadiusProfile.oRanNearRtRicSpiralRadiusOfOCus
+            self.parent.parent
+            .spiral_radius_profile.oRanNearRtRicSpiralRadiusOfOCus
         )
-        hex_list: list[Hex] = self.spiralRadiusProfile.oRanCuSpiral(
+        hex_list: list[
+            Hex
+        ] = self.parent.parent.spiral_radius_profile.oRanCuSpiral(
             self.position, hex_ring_radius
         )
         result: list[ORanCu] = []
         for index, hex in enumerate(hex_list):
             s: str = "00" + str(index)
             name: str = "-".join(
-                [self.name.replace("NearRtRic", "CU"), s[len(s) - 2 : len(s)]]
+                [self.name.replace("NearRtRic", "CU"), s[len(s) - 2: len(s)]]
             )
-            network_center: dict = self.parent.parent.center
+            network_center: GeoLocation = self.parent.parent.center
             newGeo = Hexagon.hex_to_geo_location(
                 self.layout, hex, network_center
             ).json()
@@ -69,7 +90,6 @@ class ORanNearRtRic(ORanNode, IORanNearRtRic):
                         "geoLocation": newGeo,
                         "position": hex,
                         "layout": self.layout,
-                        "spiralRadiusProfile": self.spiralRadiusProfile,
                         "parent": self,
                     }
                 )
@@ -88,11 +108,10 @@ class ORanNearRtRic(ORanNode, IORanNearRtRic):
                 result.append(tower)
         return result
 
-    @property
     def termination_points(self) -> list[ORanTerminationPoint]:
-        result: list[ORanTerminationPoint] = super().termination_points
+        result: list[ORanTerminationPoint] = super().termination_points()
         phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append({"tp-id": phy_tp, "name": phy_tp})
+        result.append(ORanTerminationPoint({"tp-id": phy_tp, "name": phy_tp}))
         for interface in ["a1", "o1", "o2", "e2"]:
             id: str = "-".join([self.name, interface.upper()])
             result.append(
@@ -102,14 +121,14 @@ class ORanNearRtRic(ORanNode, IORanNearRtRic):
             )
         return result
 
-    def to_topology_nodes(self) -> list[dict[str, dict]]:
-        result: list[dict[str, dict]] = super().to_topology_nodes()
+    def to_topology_nodes(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = super().to_topology_nodes()
         for o_ran_cu in self.o_ran_cus:
             result.extend(o_ran_cu.to_topology_nodes())
         return result
 
-    def to_topology_links(self) -> list[dict[str, dict]]:
-        result: list[dict[str, dict]] = super().to_topology_links()
+    def to_topology_links(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = super().to_topology_links()
         for o_ran_cu in self.o_ran_cus:
             result.extend(o_ran_cu.to_topology_links())
         return result
@@ -124,5 +143,5 @@ class ORanNearRtRic(ORanNode, IORanNearRtRic):
             ric.append(o_ran_cu.toKml())
         return ric
 
-    def toSvg(self) -> None:
-        return None
+    def toSvg(self) -> ET.Element:
+        return ET.Element("to-be-implemented")

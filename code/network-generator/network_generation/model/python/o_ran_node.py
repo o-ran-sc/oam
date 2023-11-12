@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/python
+# !/usr/bin/python
 
 """
 An abstract Class for O-RAN Node
 """
-import json
 import xml.etree.ElementTree as ET
-from abc import abstractmethod, abstractproperty
-from typing import Any
+from abc import abstractmethod
+from typing import Any, cast
 
 import network_generation.model.python.hexagon as Hexagon
+from network_generation.model.python.countries import Country
 from network_generation.model.python.geo_location import GeoLocation
 from network_generation.model.python.hexagon import Hex, Layout
 from network_generation.model.python.o_ran_object import (
@@ -41,74 +41,98 @@ from network_generation.model.python.type_definitions import AddressType
 
 # Define the "IORanObject" interface
 class IORanNode(IORanObject):
-    def __init__(
-        self,
-        address: AddressType = None,
-        geoLocation: GeoLocation = None,
-        url: str = None,
-        position: Hex = None,
-        layout: Layout = None,
-        spiralRadiusProfile: SpiralRadiusProfile = None,
-        parent=None,
-        **kwargs
-    ):
-        super().__init__(**kwargs)
-        self.address = address
-        self.geoLocation = geoLocation
-        self.url = url
-        self.position = position
-        self.layout = layout
-        self.spiralRadiusProfile = (spiralRadiusProfile,)
-        self.parent = parent
+    address: AddressType
+    geoLocation: GeoLocation
+    url: str
+    position: Hex
+    layout: Layout
+    spiralRadiusProfile: SpiralRadiusProfile
+    parent: Any
+
+
+default_address: AddressType = {
+    "street": "highstreet",
+    "building": "none",
+    "city": "heaven",
+    "room": "frist",
+    "zip": "12345",
+    "state": "none",
+    "country": Country.Germany,
+}
+default_value: IORanNode = cast(
+    IORanNode,
+    {
+        **ORanObject.default(),
+        **{
+            "address": default_address,
+            "geoLocation": GeoLocation(),
+            "url": "non-url",
+            "position": Hex(0, 0, 0),
+            "layout": Layout(Hexagon.layout_flat, Point(1, 1), Point(0, 0)),
+            "spiralRadiusProfile": SpiralRadiusProfile(),
+            "parent": None,
+        },
+    },
+)
 
 
 # Define an abstract O-RAN Node class
-class ORanNode(ORanObject, IORanNode):
-    def __init__(self, of: IORanNode = None, **kwargs):
-        super().__init__(of, **kwargs)
-        self.address = of["address"] if of and "address" in of else None
-        self.geoLocation = (
-            of["geoLocation"] if of and "geoLocation" in of else GeoLocation()
+class ORanNode(ORanObject):
+    @staticmethod
+    def default() -> dict[str, Any]:
+        return cast(dict[str, Any], default_value)
+
+    def __init__(
+        self,
+        data: dict[str, Any] = cast(dict[str, Any], default_value),
+        **kwargs: dict[str, Any]
+    ) -> None:
+        o_ran_node_data: IORanNode = self._to_o_ran_node_data(data)
+        super().__init__(cast(dict[str, Any], data), **kwargs)
+        self._address: AddressType = cast(
+            AddressType, o_ran_node_data["address"]
         )
-        self.url = of["url"] if of and "url" in of else self.id
-        self.position = (
-            of["position"] if of and "position" in of else Hex(0, 0, 0)
+        self._geo_location: GeoLocation = cast(
+            GeoLocation, o_ran_node_data["geoLocation"]
         )
-        self.layout = (
-            of["layout"]
-            if of and "layout" in of
-            else Layout(Hexagon.layout_flat, Point(1, 1), Point(0, 0))
+        self._url: str = str(o_ran_node_data["url"])
+        self._position: Hex = cast(Hex, o_ran_node_data["position"])
+        self._layout: Layout = cast(Layout, o_ran_node_data["layout"])
+        self._spiral_radius_profile: SpiralRadiusProfile = cast(
+            SpiralRadiusProfile, o_ran_node_data["spiralRadiusProfile"]
         )
-        self.spiralRadiusProfile = (
-            of["spiralRadiusProfile"]
-            if of and "spiralRadiusProfile" in of
-            else SpiralRadiusProfile()
-        )
-        self.parent = of["parent"] if of and "parent" in of else None
+        self._parent: Any = o_ran_node_data["parent"]
         self._termination_points: list[ORanTerminationPoint] = []
 
+    def _to_o_ran_node_data(self, data: dict[str, Any]) -> IORanNode:
+        result: IORanNode = default_value
+        for key, key_type in IORanNode.__annotations__.items():
+            if key in data:
+                result[key] = data[key]  # type: ignore
+        return result
+
     @property
-    def address(self) -> str:
+    def address(self) -> AddressType:
         return self._address
 
     @address.setter
-    def address(self, value: str):
+    def address(self, value: AddressType) -> None:
         self._address = value
 
     @property
-    def geoLocation(self) -> GeoLocation:
-        return self._geographicalLocation
+    def geo_location(self) -> GeoLocation:
+        return self._geo_location
 
-    @geoLocation.setter
-    def geoLocation(self, value: GeoLocation):
-        self._geographicalLocation = value
+    @geo_location.setter
+    def geo_location(self, value: GeoLocation) -> None:
+        self._geo_location = value
 
     @property
     def url(self) -> str:
         return self._url
 
     @url.setter
-    def url(self, value: str):
+    def url(self, value: str) -> None:
         self._url = value
 
     @property
@@ -116,7 +140,7 @@ class ORanNode(ORanObject, IORanNode):
         return self._position
 
     @position.setter
-    def position(self, value: Hex):
+    def position(self, value: Hex) -> None:
         self._position = value
 
     @property
@@ -124,16 +148,16 @@ class ORanNode(ORanObject, IORanNode):
         return self._layout
 
     @layout.setter
-    def layout(self, value: Layout):
+    def layout(self, value: Layout) -> None:
         self._layout = value
 
     @property
-    def spiralRadiusProfile(self) -> SpiralRadiusProfile:
-        return self._spiralRadiusProfile
+    def spiral_radius_profile(self) -> SpiralRadiusProfile:
+        return self._spiral_radius_profile
 
-    @spiralRadiusProfile.setter
-    def spiralRadiusProfile(self, value: SpiralRadiusProfile):
-        self._spiralRadiusProfile = value
+    @spiral_radius_profile.setter
+    def spiral_radius_profile(self, value: SpiralRadiusProfile) -> None:
+        self._spiral_radius_profile = value
 
     @property
     def parent(
@@ -142,34 +166,26 @@ class ORanNode(ORanObject, IORanNode):
         return self._parent
 
     @parent.setter
-    def parent(self, value: Any):
+    def parent(self, value: Any) -> None:
         self._parent = value
 
-    @abstractproperty
+    # @property
+    # @abstractmethod
     def termination_points(self) -> list[ORanTerminationPoint]:
         return self._termination_points
 
-    def json(self) -> dict[str, dict]:
-        result: dict = super().json()
-        result["address"] = self.address
-        result["geoLocation"] = self.geoLocation
-        result["url"] = self.url
-        result["layout"] = self.layout
-        result["spiralRadiusProfile"] = self.spiralRadiusProfile
-        result["parent"] = self.parent
-        return result
-
     @abstractmethod
-    def to_topology_nodes(self) -> list[dict[str, dict]]:
-        tps: list[dict[str, dict]] = []
-        for tp in self.termination_points:
+    def to_topology_nodes(self) -> list[dict[str, Any]]:
+        tps: list[dict[str, Any]] = []
+        for tp in self.termination_points():
             if (
                 str(type(tp))
-                == "<class 'model.python.o_ran_termination_point.ORanTerminationPoint'>"
+                == "<class 'model.python.o_ran_termination_point"
+                + ".ORanTerminationPoint'>"
             ):
                 tps.append(tp.to_topology())
 
-        result: list[dict[str, dict]] = []
+        result: list[dict[str, Any]] = []
         result.append(
             {
                 "node-id": self.name,
@@ -179,11 +195,11 @@ class ORanNode(ORanObject, IORanNode):
         return result
 
     @abstractmethod
-    def to_topology_links(self) -> list[dict[str, dict]]:
-        result: list[dict[str, dict]] = []
+    def to_topology_links(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = []
         source_tp: str = "-".join([self.name, "phy".upper()])
         dest_tp: str = "-".join([self.parent.name, "phy".upper()])
-        if self.parent and not "Tower" in source_tp and not "Tower" in dest_tp:
+        if self.parent and "Tower" not in source_tp and "Tower" not in dest_tp:
             link_id: str = "".join(
                 ["phy", ":", self.name, "<->", self.parent.name]
             )
@@ -203,5 +219,5 @@ class ORanNode(ORanObject, IORanNode):
         pass
 
     @abstractmethod
-    def toSvg(self) -> ET.Element | None:
+    def toSvg(self) -> ET.Element:
         pass

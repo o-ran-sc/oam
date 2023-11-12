@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/python
+# !/usr/bin/python
 """
 Module containing a class for parameter validation
 """
 import json
 import os
 import os.path
+from typing import Any
 
 import jsonschema
 
@@ -39,9 +40,8 @@ class ParameterValidator:
     __is_valid: bool = False
 
     # constructor
-    def __init__(self, args):
+    def __init__(self, args: list[str]) -> None:
         self.args = args
-
         if len(self.args) > 1:
             self.__config_file = args[1]
 
@@ -83,15 +83,17 @@ class ParameterValidator:
 
     def error_message(self) -> str:
         """
-        Getter for the error message after validation process or an empty sting,
-        when configuration is valid.
+        Getter for the error message after validation process or an
+        empty sting,  when configuration is valid.
         :return Error message as string.
         """
         return self.__error_message
 
     # private
 
-    def __is_json_valid(self, json_data, json_schema) -> bool:
+    def __is_json_valid(
+        self, json_data: dict[str, Any], json_schema: dict[str, Any]
+    ) -> bool:
         """
         Method validating json against a schema
         """

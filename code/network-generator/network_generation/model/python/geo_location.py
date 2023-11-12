@@ -12,50 +12,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/python
+# !/usr/bin/python
 
 """
 A collection of TypeDefinitions for a geographical location
 """
 import math
+from typing import Any, TypedDict, cast
+
+from typing_extensions import Required
 
 from network_generation.model.python.point import Point
 
 
-class IGeoLocationData:
-    def __init__(
-        self, latitude: float, longitude: float, aboveMeanSeaLevel: float
-    ):
-        self.latitude = latitude
-        self.longitude = longitude
-        self.aboveMeanSeaLevel = aboveMeanSeaLevel
+class IGeoLocation(TypedDict):
+    latitude: Required[float]
+    longitude: Required[float]
+    aboveMeanSeaLevel: Required[float]
 
 
-class IGeoLocation:
-    def __init__(
-        self,
-        latitude: float = 0,
-        longitude: float = 0,
-        aboveMeanSeaLevel: float = 0,
-    ):
-        self.latitude = latitude
-        self.longitude = longitude
-        self.aboveMeanSeaLevel = aboveMeanSeaLevel
-
-    def __str__(self) -> str:
-        return f"lat : {self.latitude} : lon : {self.longitude} : amsl : {self.aboveMeanSeaLevel}"
+default_value: IGeoLocation = {
+    "latitude": 0,
+    "longitude": 0,
+    "aboveMeanSeaLevel": 0,
+}
 
 
-class GeoLocation(IGeoLocation):
+class GeoLocation:
+    @staticmethod
+    def default() -> dict[str, Any]:
+        return cast(dict[str, Any], default_value)
+
     _equatorialRadius = 6378137  # meters
     _polarRadius = 6356752  # meters
 
-    def __init__(self, geoLocation: IGeoLocationData = None):
-        super().__init__(
-            geoLocation["latitude"] if geoLocation else 0,
-            geoLocation["longitude"] if geoLocation else 0,
-            geoLocation["aboveMeanSeaLevel"] if geoLocation else 0,
-        )
+    def __init__(self, data: IGeoLocation = default_value) -> None:
+        self.latitude = data["latitude"]
+        self.longitude = data["longitude"]
+        self.aboveMeanSeaLevel = data["aboveMeanSeaLevel"]
 
     @property
     def equatorialRadius(self) -> int:
@@ -65,19 +59,40 @@ class GeoLocation(IGeoLocation):
     def polarRadius(self) -> int:
         return GeoLocation._polarRadius
 
-    def set_latitude(self, value: float):
-        if not (-90 <= value <= 90):
-            raise ValueError(
-                "Invalid latitude. Latitude must be between -90 and 90."
-            )
-        self.latitude = value
+    @property
+    def latitude(self) -> float:
+        return self._latitude
 
-    def set_longitude(self, value: float):
+    @latitude.setter
+    def latitude(self, value: float) -> None:
+        if not (-90 <= value <= 90):
+            msg: str = "Invalid latitude. Latitude must be between -90 and 90."
+            raise ValueError(msg)
+        self._latitude = value
+
+    @property
+    def longitude(self) -> float:
+        return self._longitude
+
+    @longitude.setter
+    def longitude(self, value: float) -> None:
         if not (-180 <= value <= 180):
             raise ValueError(
                 "Invalid longitude. Longitude must be between -180 and 180."
             )
-        self.longitude = value
+        self._longitude = value
+
+    @property
+    def aboveMeanSeaLevel(self) -> float:
+        return self._aboveMeanSeaLevel
+
+    @aboveMeanSeaLevel.setter
+    def aboveMeanSeaLevel(self, value: float) -> None:
+        if not (-180 <= value <= 180):
+            raise ValueError(
+                "Invalid longitude. Longitude must be between -180 and 180."
+            )
+        self._aboveMeanSeaLevel = value
 
     def json(self) -> dict[str, float]:
         return {
@@ -89,22 +104,21 @@ class GeoLocation(IGeoLocation):
     def __str__(self) -> str:
         return str(self.json())
 
-    def point_to_geo_location(self, point: Point):
+    def point_to_geo_location(self, point: Point) -> Any:
         """
-        A static function which converts a point in pixels into a geographical location
-        when the self is represented as Point(0,0)
+        A static function which converts a point in pixels into a geographical
+        location when the self is represented as Point(0,0)
         @param point : The point to be converted
         returns The converted GeoLocation object.
         """
-        equatorialRadius = 6378137  # meters
-        new_lat = self.latitude + (point.y / equatorialRadius) * (
+        new_lat = self.latitude + (point.y / self.equatorialRadius) * (
             180 / math.pi
         )
-        new_lon = self.longitude + (point.x / equatorialRadius) * (
+        new_lon = self.longitude + (point.x / self.equatorialRadius) * (
             180 / math.pi
         ) / math.cos(self.latitude * math.pi / 180)
 
-        geo_location: IGeoLocationData = {
+        geo_location: IGeoLocation = {
             "longitude": new_lon,
             "latitude": new_lat,
             "aboveMeanSeaLevel": self.aboveMeanSeaLevel,

@@ -12,14 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/python
+# !/usr/bin/python
 
 """
 A collection of TypeDefinitions
 """
 from enum import Enum
+from typing import TypedDict
 
 from network_generation.model.python.countries import Country
+
+# from typing import Any, TypedDict, TypeVar
+
+
+# from network_generation.model.python.o_ran_node import IORanNode
+# from network_generation.model.python.o_ran_object import IORanObject
+# from network_generation.model.python.top import ITop
+
+# Generic Types based on inheritance
+# IORanType = TypeVar("IORanType", ITop, IORanObject, IORanNode)
 
 
 # Define AdministrativeState enum
@@ -32,16 +43,16 @@ class AdministrativeState(Enum):
 # Define AlarmState type
 AlarmState = int
 
+
 # Define Address type
-AddressType = {
-    "street": str,
-    "building": str,
-    "room": str,
-    "city": str,
-    "zip": str,
-    "state": str,
-    "country": Country,
-}
+class AddressType(TypedDict):
+    street: str
+    building: str
+    room: str
+    city: str
+    zip: str
+    state: str
+    country: Country
 
 
 # Define OperationalState enum
@@ -66,20 +77,4 @@ class UsageState(Enum):
     UNUSED = "unused"
 
 
-# Define Enumerate type
-def Enumerate(N, Acc=None):
-    if Acc is None:
-        Acc = []
-    if len(Acc) == N:
-        return Acc[-1]
-    return Enumerate(N, Acc + [len(Acc)])
-
-
-# Define Range type
-def Range(F, T) -> list[int]:
-    return [i for i in range(F, T + 1)]
-
-
-# Define Procent and Utilization types
-Procent = Range(0, 100)
-Utilization = Procent
+Utilization = int

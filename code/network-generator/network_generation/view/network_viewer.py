@@ -12,26 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/python
+# !/usr/bin/python
 """
 Provides functions to convert the Network into different formats
 """
 
 import json
 import xml.etree.ElementTree as ET
+from typing import Any
 
 from network_generation.model.python.o_ran_network import ORanNetwork
 
 
 class NetworkViewer:
     """
-    This class contains all functions converting the Network into different formats
+    This class contains all functions converting the Network into
+    different formats
     """
 
-    __network: ORanNetwork = None
-
     # constructor
-    def __init__(self, network: ORanNetwork):
+    def __init__(self, network: ORanNetwork) -> None:
         self.__network = network
 
     # json format
@@ -43,7 +43,7 @@ class NetworkViewer:
         """
         return self
 
-    def show_as_json(self) -> dict[str, dict]:
+    def show_as_json(self) -> None:
         """
         Method printing the class in json format.
         """
@@ -62,7 +62,7 @@ class NetworkViewer:
         :type filename: string
         """
         with open(filename, "w", encoding="utf-8") as json_file:
-            output: dict[str, dict] = self.__network.to_topology()
+            output: dict[str, Any] = self.__network.to_topology()
             json.dump(output, json_file, ensure_ascii=False, indent=2)
             print("File '" + filename + "' saved!")
 
@@ -106,12 +106,12 @@ class NetworkViewer:
                 style = ET.Element("Style", {"id": key})
                 line_style = ET.SubElement(style, "LineStyle")
                 color = ET.SubElement(line_style, "color")
-                color.text = value["stroke"]["color"]
+                color.text = str(value["stroke"]["color"])
                 width = ET.SubElement(line_style, "width")
-                width.text = value["stroke"]["width"]
+                width.text = str(value["stroke"]["width"])
                 poly_style = ET.SubElement(style, "PolyStyle")
                 fill = ET.SubElement(poly_style, "color")
-                fill.text = value["fill"]["color"]
+                fill.text = str(value["fill"]["color"])
                 root.findall(".//Document")[0].append(style)
 
         ET.ElementTree(root).write(

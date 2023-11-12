@@ -12,18 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/python
+# !/usr/bin/python
 
 """
 A Class representing a 3GPP new radio cell du (NrCellDu)
 """
 import xml.etree.ElementTree as ET
-from typing import overload
+from typing import Any, cast
 
 import network_generation.model.python.hexagon as Hexagon
-from network_generation.model.python.geo_location import GeoLocation
-from network_generation.model.python.o_ran_node import ORanNode
-from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.geo_location import (
+    GeoLocation,
+    IGeoLocation,
+)
+from network_generation.model.python.o_ran_node import IORanNode, ORanNode
 from network_generation.model.python.o_ran_termination_point import (
     ORanTerminationPoint,
 )
@@ -31,42 +33,54 @@ from network_generation.model.python.point import Point
 
 
 # Define the "INrCellDu" interface
-class INrCellDu(IORanObject):
-    def __init__(self, cell_angel: int, azimuth: int, **kwargs):
-        super().__init__(**kwargs)
-        self._cell_angle = cell_angel
-        self._azimuth = azimuth
+class INrCellDu(IORanNode):
+    cell_angle: int
+    azimuth: int
+
+
+default_value: INrCellDu = cast(
+    INrCellDu,
+    {
+        **ORanNode.default(),
+        **{"cellAngle": 120, "azimuth": 120},
+    },
+)
 
 
 # Define an abstract O-RAN Node class
-class NrCellDu(ORanNode, INrCellDu):
-    def __init__(self, cell_data: INrCellDu = None, **kwargs):
-        super().__init__(cell_data, **kwargs)
-        self._cell_angle = (
-            cell_data["cellAngle"]
-            if cell_data and "cellAngle" in cell_data
-            else 120
-        )
-        self._azimuth = (
-            cell_data["azimuth"] if cell_data and "azimuth" in cell_data else 0
-        )
+class NrCellDu(ORanNode):
+    def __init__(
+        self,
+        data: dict[str, Any] = cast(dict[str, Any], default_value),
+        **kwargs: dict[str, Any]
+    ) -> None:
+        cell_data: INrCellDu = self._to_cell_data(data)
+        super().__init__(cast(dict[str, Any], cell_data), **kwargs)
+        self._cell_angle: int = int(str(cell_data["cellAngle"]))
+        self._azimuth: int = int(str(cell_data["azimuth"]))
 
-    @property
+    def _to_cell_data(self, data: dict[str, Any]) -> INrCellDu:
+        result: INrCellDu = default_value
+        for key, key_type in INrCellDu.__annotations__.items():
+            if key in data:
+                result[key] = data[key]  # type: ignore
+        return result
+
     def termination_points(self) -> list[ORanTerminationPoint]:
-        result: list[ORanTerminationPoint] = super().termination_points
+        result: list[ORanTerminationPoint] = super().termination_points()
         result.append(
             ORanTerminationPoint({"id": self.name, "name": self.name})
         )
         return result
 
-    def to_topology_nodes(self) -> list[dict[str, dict]]:
+    def to_topology_nodes(self) -> list[dict[str, Any]]:
         # a cell is not a node it is a Termination Point
-        result: list[dict[str, dict]] = []  # super().to_topology_nodes()
+        result: list[dict[str, Any]] = []  # super().to_topology_nodes()
         return result
 
-    def to_topology_links(self) -> list[dict[str, dict]]:
+    def to_topology_links(self) -> list[dict[str, Any]]:
         # as a cell is not a node, it does not have links
-        result: list[dict[str, dict]] = []  # super().to_topology_links()
+        result: list[dict[str, Any]] = []  # super().to_topology_links()
         return result
 
     def toKml(self) -> ET.Element:
@@ -84,15 +98,16 @@ class NrCellDu(ORanNode, INrCellDu):
         points: list[Point] = Hexagon.polygon_corners(
             self.layout, self.position
         )
-        method = GeoLocation(
-            self.parent.parent.parent.parent.parent.parent.geoLocation
-        ).point_to_geo_location
+        method = (
+            self.parent.parent.parent.parent.parent.parent
+            .geo_location.point_to_geo_location
+        )
         geo_locations: list[GeoLocation] = list(map(method, points))
         text: list[str] = []
 
         index: int = 1 + int(self._azimuth / self._cell_angle)
-        network_center: GeoLocation = GeoLocation(
-            self.parent.parent.parent.parent.parent.parent.geoLocation
+        network_center: GeoLocation = (
+            self.parent.parent.parent.parent.parent.parent.geo_location
         )
 
         intersect1: Point = Point(
@@ -115,7 +130,8 @@ class NrCellDu(ORanNode, INrCellDu):
             network_center.point_to_geo_location(intersect2)
         )
 
-        tower: GeoLocation = GeoLocation(self.geoLocation)
+        tower: GeoLocation = GeoLocation(cast(IGeoLocation, self.geo_location))
+        # TODO: Why a cast is required
 
         cell_polygon: list[GeoLocation] = []
         cell_polygon.append(tower)
@@ -126,13 +142,17 @@ class NrCellDu(ORanNode, INrCellDu):
         # close polygon
         cell_polygon.append(tower)
 
-        for geo_location in cell_polygon:
-            text.append(
-                f"{'%.6f' % geo_location.longitude},{'%.6f' % geo_location.latitude},{'%.6f' % geo_location.aboveMeanSeaLevel}"
-            )
+        for gl in cell_polygon:
+            index += 1
+            strs: list[str] = [
+                str("%.6f" % float(gl.longitude)),
+                str("%.6f" % float(gl.latitude)),
+                str("%.6f" % float(gl.aboveMeanSeaLevel)),
+            ]
+            text.append(",".join(strs))
         coordinates.text = " ".join(text)
 
         return placemark
 
-    def toSvg(self) -> None:
-        return None
+    def toSvg(self) -> ET.Element:
+        return ET.Element("to-be-implemented")

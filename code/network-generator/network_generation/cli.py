@@ -14,29 +14,21 @@
 
 # inspired by https://github.com/rochacbruno/python-project-template
 
-"""CLI interface for network_generation project.
-
-Be creative! do whatever you want!
-
-- Install click or typer and create a CLI app
-- Use builtin argparse
-- Start a web application
-- Import things from your .base module
-"""
-
-
-"""
-Module as entry point to generate an ietf topology json
-"""
 import os
 import sys
 
 from network_generation.base import NetworkGenerator
+from network_generation.model.python.o_ran_network import ORanNetwork
 from network_generation.parameter_validator import ParameterValidator
 from network_generation.view.network_viewer import NetworkViewer
 
+"""
+CLI interface for network_generation project.
+Module as entry point to generate an ietf topology json
+"""
 
-def main():  # pragma: no cover
+
+def main() -> None:  # pragma: no cover
     """
     The main function executes on commands:
     `python -m network_generation`.
@@ -45,10 +37,12 @@ def main():  # pragma: no cover
     validator: ParameterValidator = ParameterValidator(sys.argv)
 
     if validator.is_valid():
-        configuration = validator.configuration()
-        generator = NetworkGenerator(configuration["network"])
-        network = generator.generate()
-        viewer = NetworkViewer(network)
+        configuration: dict = validator.configuration()
+        generator: NetworkGenerator = NetworkGenerator(
+            configuration["network"]
+        )
+        network: ORanNetwork = generator.generate()
+        viewer: NetworkViewer = NetworkViewer(network)
 
         output_folder: str = configuration["output-folder"]
         # If folder doesn't exist, then create it.
@@ -56,20 +50,21 @@ def main():  # pragma: no cover
             os.makedirs(output_folder)
 
         name: str = configuration["network"]["name"]
+        filename: str = ""
 
         # topology json
         if configuration["generation-tasks"]["topology"] is True:
-            filename: str = output_folder + "/" + name + "-operational.json"
+            filename = output_folder + "/" + name + "-operational.json"
             viewer.json().save(filename)
 
         # svg xml
         if configuration["generation-tasks"]["svg"] is True:
-            filename: str = output_folder + "/" + name + ".svg"
+            filename = output_folder + "/" + name + ".svg"
             viewer.svg(filename)
 
         # kml xml
         if configuration["generation-tasks"]["kml"] is True:
-            filename: str = output_folder + "/" + name + ".kml"
+            filename = output_folder + "/" + name + ".kml"
             viewer.kml(filename)
 
     else:

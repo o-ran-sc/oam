@@ -12,86 +12,101 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/python
+# !/usr/bin/python
 
 """
 A Class representing an O-RAN radio unit (ORanRu)
 """
 import xml.etree.ElementTree as ET
-from typing import overload
+from typing import Any, cast
 
 from network_generation.model.python.nr_cell_du import NrCellDu
 from network_generation.model.python.o_ran_du import ORanDu
-from network_generation.model.python.o_ran_node import ORanNode
-from network_generation.model.python.o_ran_object import IORanObject
+from network_generation.model.python.o_ran_node import IORanNode, ORanNode
 from network_generation.model.python.o_ran_termination_point import (
     ORanTerminationPoint,
 )
 
 
 # Define the "IORanRu" interface
-class IORanRu(IORanObject):
-    def __init__(
-        self, cell_count: int, ru_angle: int, ru_azimuth: int, **kwargs
-    ):
-        super().__init__(**kwargs)
-        self._cell_count = cell_count
-        self._ru_angle = ru_angle
-        self._ru_azimuth = ru_azimuth
+class IORanRu(IORanNode):
+    cellCount: int
+    ruAngle: int
+    ruAzimuth: int
+
+
+default_value: IORanRu = cast(
+    IORanRu,
+    {
+        **ORanNode.default(),
+        **{"cellCount": 1, "ruAngle": 120, "ruAzimuth": 0},
+    },
+)
 
 
 # Define an abstract O-RAN Node class
-class ORanRu(ORanNode, IORanRu):
-    def __init__(self, o_ran_ru_data: IORanRu = None, **kwargs):
-        super().__init__(o_ran_ru_data, **kwargs)
-        self._cell_count = (
-            o_ran_ru_data["cellCount"]
+class ORanRu(ORanNode):
+    def __init__(
+        self,
+        data: dict[str, Any] = cast(dict[str, Any], default_value),
+        **kwargs: dict[str, Any]
+    ) -> None:
+        o_ran_ru_data: IORanRu = self._to_o_ran_ru_data(data)
+        super().__init__(cast(dict[str, Any], o_ran_ru_data), **kwargs)
+        self._cell_count: int = (
+            int(str(o_ran_ru_data["cellCount"]))
             if o_ran_ru_data and "cellCount" in o_ran_ru_data
             else 1
         )
-        self._ru_angle = (
-            o_ran_ru_data["ruAngle"]
+        self._ru_angle: int = (
+            int(str(o_ran_ru_data["ruAngle"]))
             if o_ran_ru_data and "ruAngle" in o_ran_ru_data
             else 120
         )
-        self._ru_azimuth = (
-            o_ran_ru_data["ruAzimuth"]
+        self._ru_azimuth: int = (
+            int(str(o_ran_ru_data["ruAzimuth"]))
             if o_ran_ru_data and "ruAzimuth" in o_ran_ru_data
             else 0
         )
         self._cells: list[NrCellDu] = self._create_cells()
         name: str = self.name.replace("RU", "DU")
-        self._oRanDu: ORanDu = ORanDu(
-            {
-                "name": name,
-                "geoLocation": self.parent.geoLocation,
-                "position": self.parent.position,
-                "layout": self.layout,
-                "parent": self.parent.parent.parent,
-            }
-        )
+
+        o_ran_du_data: dict[str, Any] = {
+            "name": name,
+            "geoLocation": self.parent.geo_location,
+            "position": self.parent.position,
+            "layout": self.layout,
+            "parent": self.parent.parent.parent,
+        }
+        self._oRanDu: ORanDu = ORanDu(o_ran_du_data)
+
+    def _to_o_ran_ru_data(self, data: dict[str, Any]) -> IORanRu:
+        result: IORanRu = default_value
+        for key, key_type in IORanRu.__annotations__.items():
+            if key in data:
+                result[key] = data[key]  # type: ignore
+        return result
 
     def _create_cells(self) -> list[NrCellDu]:
         result: list[NrCellDu] = []
         cell_angle: int = (
-            self.parent.parent.parent.parent.parent.parent.configuration()[
+            self.parent.parent.parent.parent.parent.parent.configuration[
                 "pattern"
             ]["nr-cell-du"]["cell-angle"]
         )
         for index in range(self._cell_count):
             s: str = "00" + str(index)
             name: str = "-".join(
-                [self.name.replace("RU", "NRCellDu"), s[len(s) - 2 : len(s)]]
+                [self.name.replace("RU", "NRCellDu"), s[len(s) - 2: len(s)]]
             )
             azimuth: int = index * cell_angle + self._ru_azimuth
             result.append(
                 NrCellDu(
                     {
                         "name": name,
-                        "geoLocation": self.geoLocation,
+                        "geoLocation": self.geo_location,
                         "position": self.position,
                         "layout": self.layout,
-                        "spiralRadiusProfile": self.spiralRadiusProfile,
                         "parent": self,
                         "cellAngle": cell_angle,
                         "azimuth": azimuth,
@@ -108,9 +123,8 @@ class ORanRu(ORanNode, IORanRu):
     def oRanDu(self) -> ORanDu:
         return self._oRanDu
 
-    @property
     def termination_points(self) -> list[ORanTerminationPoint]:
-        result: list[ORanTerminationPoint] = super().termination_points
+        result: list[ORanTerminationPoint] = super().termination_points()
         phy_tp: str = "-".join([self.name, "phy".upper()])
         result.append(ORanTerminationPoint({"id": phy_tp, "name": phy_tp}))
         for interface in ["ofhm", "ofhc", "ofhu", "ofhs"]:
@@ -121,16 +135,16 @@ class ORanRu(ORanNode, IORanRu):
                 )
             )
         for cell in self.cells:
-            result.extend(cell.termination_points)
+            result.extend(cell.termination_points())
         return result
 
-    def to_topology_nodes(self) -> list[dict[str, dict]]:
-        result: list[dict[str, dict]] = super().to_topology_nodes()
+    def to_topology_nodes(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = super().to_topology_nodes()
         result.extend(self.oRanDu.to_topology_nodes())
         return result
 
-    def to_topology_links(self) -> list[dict[str, dict]]:
-        result: list[dict[str, dict]] = super().to_topology_links()
+    def to_topology_links(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = super().to_topology_links()
         result.extend(self.oRanDu.to_topology_links())
         for interface in ["phy", "ofhm", "ofhc", "ofhu", "ofhs"]:
             link_id: str = "".join(
@@ -163,5 +177,5 @@ class ORanRu(ORanNode, IORanRu):
             o_ran_ru.append(cell.toKml())
         return o_ran_ru
 
-    def toSvg(self) -> None:
-        return None
+    def toSvg(self) -> ET.Element:
+        return ET.Element("to-be-implemented")
