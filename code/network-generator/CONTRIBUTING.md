@@ -19,6 +19,11 @@ This instructions are for linux base systems. (Linux, MacOS, BSD, etc.)
 ```
 pip install isort
 pip install black
+pip install mypy
+pip install flake8
+pip install pytest
+pip install coverage
+pip install pytest-cov
 ```
 
 ## Setting up your own virtual environment

@@ -24,8 +24,8 @@ install:          ## Install the project in dev mode.
 	@echo "Don't forget to run 'make virtualenv' if you got errors."
 	$(ENV_PREFIX)pip install -e .[test]
 
-.PHONY: fmt
-fmt:              ## Format code using black & isort.
+.PHONY: format
+format:              ## Format code using black & isort.
 	$(ENV_PREFIX)isort network_generation/
 	$(ENV_PREFIX)black -l 79 network_generation/
 	$(ENV_PREFIX)black -l 79 tests/
@@ -33,9 +33,10 @@ fmt:              ## Format code using black & isort.
 .PHONY: lint
 lint:             ## Run pep8, black, mypy linters.
 	$(ENV_PREFIX)flake8 network_generation/
+	$(ENV_PREFIX)flake8 tests/
 	$(ENV_PREFIX)black -l 79 --check network_generation/
 	$(ENV_PREFIX)black -l 79 --check tests/
-	$(ENV_PREFIX)mypy --ignore-missing-imports network_generation/
+	$(ENV_PREFIX)mypy --ignore-missing-imports --disallow-untyped-defs --check-untyped-def network_generation/
 
 .PHONY: test
 test: lint        ## Run tests and generate coverage report.
