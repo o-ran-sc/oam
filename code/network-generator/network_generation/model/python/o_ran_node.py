@@ -178,12 +178,7 @@ class ORanNode(ORanObject):
     def to_topology_nodes(self) -> list[dict[str, Any]]:
         tps: list[dict[str, Any]] = []
         for tp in self.termination_points():
-            if (
-                str(type(tp))
-                == "<class 'model.python.o_ran_termination_point"
-                + ".ORanTerminationPoint'>"
-            ):
-                tps.append(tp.to_topology())
+            tps.append(tp.to_topology())
 
         result: list[dict[str, Any]] = []
         result.append(
