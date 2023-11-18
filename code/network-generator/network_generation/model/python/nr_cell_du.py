@@ -1,4 +1,4 @@
-# Copyright 2023 highstreet technologies GmbH
+# Copyright 2023 highstreet technologies USA CORP.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,7 +42,11 @@ default_value: INrCellDu = cast(
     INrCellDu,
     {
         **ORanNode.default(),
-        **{"cellAngle": 120, "azimuth": 120},
+        **{
+            "cellAngle": 120,
+            "cellScaleFactorForHandoverArea": 0,
+            "azimuth": 120,
+        },
     },
 )
 
@@ -57,6 +61,9 @@ class NrCellDu(ORanNode):
         cell_data: INrCellDu = self._to_cell_data(data)
         super().__init__(cast(dict[str, Any], cell_data), **kwargs)
         self._cell_angle: int = int(str(cell_data["cellAngle"]))
+        self._cell_scale_factor: int = int(
+            str(cell_data["cellScaleFactorForHandoverArea"])
+        )
         self._azimuth: int = int(str(cell_data["azimuth"]))
 
     def _to_cell_data(self, data: dict[str, Any]) -> INrCellDu:
@@ -65,6 +72,30 @@ class NrCellDu(ORanNode):
             if key in data:
                 result[key] = data[key]  # type: ignore
         return result
+
+    @property
+    def cell_angle(self) -> int:
+        return self._cell_angle
+
+    @cell_angle.setter
+    def cell_angle(self, value: int) -> None:
+        self._cell_angle = value
+
+    @property
+    def cell_scale_factor(self) -> int:
+        return self._cell_scale_factor
+
+    @cell_scale_factor.setter
+    def cell_scale_factor(self, value: int) -> None:
+        self._cell_scale_factor = value
+
+    @property
+    def azimuth(self) -> int:
+        return self._azimuth
+
+    @azimuth.setter
+    def azimuth(self, value: int) -> None:
+        self.azimuth = value
 
     def termination_points(self) -> list[ORanTerminationPoint]:
         result: list[ORanTerminationPoint] = super().termination_points()
@@ -151,6 +182,9 @@ class NrCellDu(ORanNode):
             ]
             text.append(",".join(strs))
         coordinates.text = " ".join(text)
+
+        if self.cell_scale_factor > 0:
+            print("hallo")
 
         return placemark
 

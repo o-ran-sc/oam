@@ -32,6 +32,7 @@
       "nr-cell-du": {
         "sector-count": 1,
         "cell-angle": 120,
+        "cell-scale-factor-for-handover-area": 20,
         "max-reach": 400
       }
     }

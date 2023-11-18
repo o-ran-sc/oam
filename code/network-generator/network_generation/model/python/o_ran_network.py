@@ -62,7 +62,18 @@ class ORanNetwork(ORanObject):
             IGeoLocation, configuration["center"]
         )
 
-        size: int = int(configuration["pattern"]["nr-cell-du"]["max-reach"])
+        size: int = int(
+            int(configuration["pattern"]["nr-cell-du"]["max-reach"])
+            / (
+                1
+                + int(
+                    configuration["pattern"]["nr-cell-du"][
+                        "cell-scale-factor-for-handover-area"
+                    ]
+                )
+                / 100
+            )
+        )
         layout = Layout(
             Hexagon.layout_flat, Point(size, size), Point(0, 0)
         )  # 1 pixel = 1 meter

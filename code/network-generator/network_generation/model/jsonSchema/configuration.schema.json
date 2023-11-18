@@ -238,6 +238,7 @@
           "required": [
             "sector-count",
             "cell-angle",
+            "cell-scale-factor-for-handover-area",
             "max-reach"
           ],
           "properties": {
@@ -254,7 +255,13 @@
               "type": "integer",
               "minimum": 0,
               "maximum": 360,
-              "exclusiveMinimum": true
+              "exclusiveMinimum": 0
+            },
+            "cell-scale-factor-for-handover-area": {
+              "description": "A factor to increase the cell polygon for handover areas in procent [%]",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 50
             },
             "max-reach": {
               "description": "The maximal distance a UE can reach the cell in meters. The value also defines the radius around a tower where UEs may select a NRCellDU of an O-RAN-RU mounted at this tower.",
