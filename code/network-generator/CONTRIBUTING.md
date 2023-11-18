@@ -17,13 +17,7 @@ This instructions are for linux base systems. (Linux, MacOS, BSD, etc.)
 ## Prerequisites
 
 ```
-pip install isort
-pip install black
-pip install mypy
-pip install flake8
-pip install pytest
-pip install coverage
-pip install pytest-cov
+sudo apt install python3.10-venv
 ```
 
 ## Setting up your own virtual environment

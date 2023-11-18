@@ -1,5 +1,5 @@
 .ONESHELL:
-ENV_PREFIX=$(shell python3 -c "if __import__('pathlib').Path('.venv/bin/pip').exists(): print('.venv/bin/')")
+ENV_PREFIX=$(shell python -c "if __import__('pathlib').Path('.venv/bin/pip').exists(): print('.venv/bin/')")
 USING_POETRY=$(shell grep "tool.poetry" pyproject.toml && echo "yes")
 
 .PHONY: help
@@ -25,7 +25,7 @@ install:          ## Install the project in dev mode.
 	$(ENV_PREFIX)pip install -e .[test]
 
 .PHONY: format
-format:              ## Format code using black & isort.
+format:           ## Format code using black & isort.
 	$(ENV_PREFIX)isort network_generation/
 	$(ENV_PREFIX)black -l 79 network_generation/
 	$(ENV_PREFIX)black -l 79 tests/
