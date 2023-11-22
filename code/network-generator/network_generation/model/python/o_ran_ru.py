@@ -89,11 +89,15 @@ class ORanRu(ORanNode):
 
     def _create_cells(self) -> list[NrCellDu]:
         result: list[NrCellDu] = []
-        cell_angle: int = (
-            self.parent.parent.parent.parent.parent.parent.configuration[
-                "pattern"
-            ]["nr-cell-du"]["cell-angle"]
+        cell_config: dict = (
+            self.parent.parent.parent.parent.parent.parent
+            .configuration["pattern"]["nr-cell-du"]
         )
+        cell_angle: int = cell_config["cell-angle"]
+        cell_scale_factor: int = (
+            cell_config["cellScaleFactorForHandoverArea"]
+        )
+        maxReach: int = cell_config["maxReach"]
         for index in range(self._cell_count):
             s: str = "00" + str(index)
             name: str = "-".join(
@@ -109,6 +113,8 @@ class ORanRu(ORanNode):
                         "layout": self.layout,
                         "parent": self,
                         "cellAngle": cell_angle,
+                        "cellScaleFactorForHandoverArea": cell_scale_factor,
+                        "maxReach": maxReach,
                         "azimuth": azimuth,
                     }
                 )
