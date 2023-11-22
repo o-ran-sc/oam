@@ -1,6 +1,6 @@
 {
   "network": {
-    "name": "o-ran-network",
+    "name": "O-RAN-TEST-Network",
     "center": {
       "latitude": 40.535,
       "longitude": -74.447,
@@ -11,34 +11,34 @@
         "representation": "hexagon"
       },
       "smo": {
-        "five-g-core-count": 1,
-        "near-rt-ric-spiral-radius": 0,
-        "o-could-resource-pool-count": 1
+        "fiveCCoreCount": 1,
+        "nearRtRicSpiralRadius": 0,
+        "oCloudResourcePoolCount": 1
       },
-      "near-rt-ric": {
-        "o-ran-cu-spiral-radius": 0
+      "nearRtRic": {
+        "oRanCuSpiralRadius": 0
       },
-      "o-ran-cu": {
-        "o-ran-du-spiral-radius": 0
+      "oRanCu": {
+        "oRanDuSpiralRadius": 0
       },
-      "o-ran-du": {
-        "fronthaul-gateway-count": 0,
-        "tower-spiral-radius": 0,
-        "o-ran-ru-count": 1
+      "oRanDu": {
+        "fronthaulGatewayCount": 0,
+        "towerSpiralRadius": 0,
+        "oRanRuCount": 1
       },
-      "o-ran-ru": {
-        "nr-cell-du-count": 1
+      "oRanRu": {
+        "nrCellDuCount": 1
       },
-      "nr-cell-du": {
-        "sector-count": 1,
-        "cell-angle": 120,
+      "nrCellDu": {
+        "sectorCount": 1,
+        "cellAngle": 120,
         "cellScaleFactorForHandoverArea": 20,
         "maxReach": 400
       }
     }
   },
-  "output-folder": "output",
-  "generation-tasks": {
+  "outputFolder": "output",
+  "generationTasks": {
     "topology": true,
     "svg": true,
     "kml": true
