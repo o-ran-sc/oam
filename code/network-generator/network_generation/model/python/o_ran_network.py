@@ -63,12 +63,12 @@ class ORanNetwork(ORanObject):
         )
 
         size: int = int(
-            int(configuration["pattern"]["nr-cell-du"]["max-reach"])
+            int(configuration["pattern"]["nr-cell-du"]["maxReach"])
             / (
                 1
                 + int(
                     configuration["pattern"]["nr-cell-du"][
-                        "cell-scale-factor-for-handover-area"
+                        "cellScaleFactorForHandoverArea"
                     ]
                 )
                 / 100
