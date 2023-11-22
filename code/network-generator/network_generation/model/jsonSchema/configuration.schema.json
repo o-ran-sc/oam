@@ -6,8 +6,8 @@
   "type": "object",
   "required": [
     "network",
-    "output-folder",
-    "generation-tasks"
+    "outputFolder",
+    "generationTasks"
   ],
   "additionalProperties": false,
   "properties": {
@@ -15,13 +15,13 @@
       "description": "Defines the network and its topology to be generated.",
       "$ref": "#/$defs/network"
     },
-    "output-folder": {
+    "outputFolder": {
       "description": "The relative path (folder name only) of the directory, where the generated files are stored.",
       "type": "string"
     },
-    "generation-tasks": {
+    "generationTasks": {
       "description": "Defines the files to be generated.",
-      "$ref": "#/$defs/generation-tasks"
+      "$ref": "#/$defs/generationTasks"
     }
   },
   "$defs": {
@@ -88,11 +88,11 @@
       "required": [
         "tower",
         "smo",
-        "near-rt-ric",
-        "o-ran-cu",
-        "o-ran-du",
-        "o-ran-ru",
-        "nr-cell-du"
+        "nearRtRic",
+        "oRanCu",
+        "oRanDu",
+        "oRanRu",
+        "nrCellDu"
       ],
       "additionalProperties": false,
       "properties": {
@@ -118,24 +118,24 @@
           "title": "Service Management and Orchestration",
           "type": "object",
           "required": [
-            "five-g-core-count",
-            "near-rt-ric-spiral-radius",
-            "o-could-resource-pool-count"
+            "fiveGCoreCount",
+            "nearRtRicSpiralRadius",
+            "oCloudResourcePoolCount"
           ],
           "properties": {
-            "five-g-core-count": {
+            "fiveGCoreCount": {
               "description": "The number of 5G-Cores controlled by SMO.",
               "type": "integer",
               "minimum": 0,
               "maximum": 1
             },
-            "near-rt-ric-spiral-radius": {
-              "description": "The spiral radius of hexagons within an hexagon grid defines the number of Near-RT-RICs and the geographical coverage of the SMO.",
+            "nearRtRicSpiralRadius": {
+              "description": "The spiral radius of hexagons within an hexagon grid defines the number of nearRtRics and the geographical coverage of the SMO.",
               "type": "integer",
               "minimum": 0,
               "maximum": 3
             },
-            "o-could-resource-pool-count": {
+            "oCloudResourcePoolCount": {
               "description": "Number of O-RAN O-Cloud resource pools managed by O2-controller of the SMO.",
               "type": "integer",
               "enum": [
@@ -147,15 +147,15 @@
             }
           }
         },
-        "near-rt-ric": {
-          "description": "Definition of the relation to Near-RT-Ric children.",
-          "title": "near-rt-ric",
+        "nearRtRic": {
+          "description": "Definition of the relation to nearRtRic children.",
+          "title": "nearRtRic",
           "type": "object",
           "required": [
-            "o-ran-cu-spiral-radius"
+            "oRanCuSpiralRadius"
           ],
           "properties": {
-            "o-ran-cu-spiral-radius": {
+            "oRanCuSpiralRadius": {
               "description": "The spiral radius of hexagons within a hexagon grid defines the number of O-RAN CUs and the geographical coverage of the SMO.",
               "type": "integer",
               "minimum": 0,
@@ -163,15 +163,15 @@
             }
           }
         },
-        "o-ran-cu": {
-          "description": "Definition of the relation to O-RAN-CU children.",
-          "title": "o-ran-cu",
+        "oRanCu": {
+          "description": "Definition of the relation to oRanCu children.",
+          "title": "oRanCu",
           "type": "object",
           "required": [
-            "o-ran-du-spiral-radius"
+            "oRanDuSpiralRadius"
           ],
           "properties": {
-            "o-ran-du-spiral-radius": {
+            "oRanDuSpiralRadius": {
               "description": "The spiral radius of hexagons within a hexagon grid defines the number of O-RAN DUs and the geographical coverage of the SMO.",
               "type": "integer",
               "minimum": 0,
@@ -179,30 +179,30 @@
             }
           }
         },
-        "o-ran-du": {
-          "description": "Definition of the relation to O-RAN-DU children.",
-          "title": "o-ran-du",
+        "oRanDu": {
+          "description": "Definition of the relation to oRanDU children.",
+          "title": "oRanDu",
           "type": "object",
           "required": [
-            "tower-spiral-radius",
-            "fronthaul-gateway-count",
-            "o-ran-ru-count"
+            "towerSpiralRadius",
+            "fronthaulGatewayCount",
+            "oRanRuCount"
           ],
           "properties": {
-            "tower-spiral-radius": {
-              "description": "The spiral radius of hexagons within an hexagon grid defines the number of towers and the geographical coverage of the O-RAN-DU. This means that center tower offers the O-Cloud resource pool for the surrounding towers and its O-RAN-RUs.",
+            "towerSpiralRadius": {
+              "description": "The spiral radius of hexagons within an hexagon grid defines the number of towers and the geographical coverage of the oRanDU. This means that center tower offers the O-Cloud resource pool for the surrounding towers and its oRanRus.",
               "type": "integer",
               "minimum": 0,
               "maximum": 3
             },
-            "fronthaul-gateway-count": {
-              "description": "Number of fronthaul gateway connected to an O-RAN-DU.",
+            "fronthaulGatewayCount": {
+              "description": "Number of fronthaul gateway connected to an oRanDU.",
               "type": "integer",
               "minimum": 0,
               "maximum": 1
             },
-            "o-ran-ru-count": {
-              "description": "Number of O-RAN-RUs managed by an O-RAN-DU.",
+            "oRanRuCount": {
+              "description": "Number of oRanRus managed by an oRanDU.",
               "type": "integer",
               "enum": [
                 1,
@@ -213,16 +213,16 @@
             }
           }
         },
-        "o-ran-ru": {
-          "description": "Definition of the relation to O-RAN-RU children.",
-          "title": "o-ran-ru",
+        "oRanRu": {
+          "description": "Definition of the relation to oRanRu children.",
+          "title": "oRanRu",
           "type": "object",
           "required": [
-            "nr-cell-du-count"
+            "nrCellDuCount"
           ],
           "properties": {
-            "nr-cell-du-count": {
-              "description": "Number of 3GPP:NRCellDUs managed by an O-RAN-RU.",
+            "nrCellDuCount": {
+              "description": "Number of 3GPP:NRCellDUs managed by an oRanRu.",
               "type": "integer",
               "enum": [
                 1,
@@ -231,18 +231,18 @@
             }
           }
         },
-        "nr-cell-du": {
+        "nrCellDu": {
           "description": "Definition of the relation to 3GPP:NRCellDU children.",
-          "title": "nr-cell-du",
+          "title": "nrCellDu",
           "type": "object",
           "required": [
-            "sector-count",
-            "cell-angle",
+            "sectorCount",
+            "cellAngle",
             "cellScaleFactorForHandoverArea",
             "maxReach"
           ],
           "properties": {
-            "sector-count": {
+            "sectorCount": {
               "description": "Number of sectors managed by an 3GPP:NRCellDUs.",
               "type": "integer",
               "enum": [
@@ -250,7 +250,7 @@
                 3
               ]
             },
-            "cell-angle": {
+            "cellAngle": {
               "description": "The area covered by an NRCellDU around the tower in grad.",
               "type": "integer",
               "minimum": 0,
@@ -264,7 +264,7 @@
               "maximum": 50
             },
             "maxReach": {
-              "description": "The maximal distance a UE can reach the cell in meters. The value also defines the radius around a tower where UEs may select a NRCellDU of an O-RAN-RU mounted at this tower.",
+              "description": "The maximal distance a UE can reach the cell in meters. The value also defines the radius around a tower where UEs may select a NRCellDU of an oRanRu mounted at this tower.",
               "type": "integer",
               "minimum": 15,
               "maximum": 600
@@ -273,8 +273,8 @@
         }
       }
     },
-    "generation-tasks": {
-      "title": "generation-tasks",
+    "generationTasks": {
+      "title": "generationTasks",
       "type": "object",
       "required": [
         "topology",
