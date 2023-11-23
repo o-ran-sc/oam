@@ -63,11 +63,11 @@ class ORanNetwork(ORanObject):
         )
 
         size: int = int(
-            int(configuration["pattern"]["nr-cell-du"]["maxReach"])
+            int(configuration["pattern"]["nrCellDu"]["maxReach"])
             / (
                 1
                 + int(
-                    configuration["pattern"]["nr-cell-du"][
+                    configuration["pattern"]["nrCellDu"][
                         "cellScaleFactorForHandoverArea"
                     ]
                 )
@@ -81,16 +81,16 @@ class ORanNetwork(ORanObject):
             {
                 "oRanSmoSpiralRadiusOfNearRtRics": configuration["pattern"][
                     "smo"
-                ]["near-rt-ric-spiral-radius"],
+                ]["nearRtRicSpiralRadius"],
                 "oRanNearRtRicSpiralRadiusOfOCus": configuration["pattern"][
-                    "near-rt-ric"
-                ]["o-ran-cu-spiral-radius"],
+                    "nearRtRic"
+                ]["oRanCuSpiralRadius"],
                 "oRanCuSpiralRadiusOfODus": configuration["pattern"][
-                    "o-ran-cu"
-                ]["o-ran-du-spiral-radius"],
+                    "oRanCu"
+                ]["oRanDuSpiralRadius"],
                 "oRanDuSpiralRadiusOfTowers": configuration["pattern"][
-                    "o-ran-du"
-                ]["tower-spiral-radius"],
+                    "oRanDu"
+                ]["towerSpiralRadius"],
             }
         )
         self._o_ran_smo = ORanSmo(

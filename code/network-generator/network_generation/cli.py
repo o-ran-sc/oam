@@ -44,26 +44,26 @@ def main() -> None:  # pragma: no cover
         network: ORanNetwork = generator.generate()
         viewer: NetworkViewer = NetworkViewer(network)
 
-        output_folder: str = configuration["output-folder"]
+        output_folder: str = configuration["outputFolder"]
         # If folder doesn't exist, then create it.
         if not os.path.isdir(output_folder):
             os.makedirs(output_folder)
 
-        name: str = configuration["network"]["name"]
+        name: str = str(configuration["network"]["name"]).lower()
         filename: str = ""
 
         # topology json
-        if configuration["generation-tasks"]["topology"] is True:
+        if configuration["generationTasks"]["topology"] is True:
             filename = output_folder + "/" + name + "-operational.json"
             viewer.json().save(filename)
 
         # svg xml
-        if configuration["generation-tasks"]["svg"] is True:
+        if configuration["generationTasks"]["svg"] is True:
             filename = output_folder + "/" + name + ".svg"
             viewer.svg(filename)
 
         # kml xml
-        if configuration["generation-tasks"]["kml"] is True:
+        if configuration["generationTasks"]["kml"] is True:
             filename = output_folder + "/" + name + ".kml"
             viewer.kml(filename)
 

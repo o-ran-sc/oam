@@ -112,7 +112,9 @@ class NrCellDu(ORanNode):
 
     def termination_points(self) -> list[ORanTerminationPoint]:
         result: list[ORanTerminationPoint] = super().termination_points()
-        result.append(ORanTerminationPoint({"id": self.name, "name": self.name}))
+        result.append(ORanTerminationPoint(
+            {"id": self.name, "name": self.name}
+        ))
         return result
 
     def to_topology_nodes(self) -> list[dict[str, Any]]:
@@ -137,9 +139,12 @@ class NrCellDu(ORanNode):
         linear_ring: ET.Element = ET.SubElement(outer_boundary, "LinearRing")
         coordinates: ET.Element = ET.SubElement(linear_ring, "coordinates")
 
-        points: list[Point] = Hexagon.polygon_corners(self.layout, self.position)
+        points: list[Point] = Hexagon.polygon_corners(
+            self.layout, self.position
+        )
         method = (
-            self.parent.parent.parent.parent.parent.parent.geo_location.point_to_geo_location
+            self.parent.parent.parent.parent.parent.parent
+            .geo_location.point_to_geo_location
         )
         geo_locations: list[GeoLocation] = list(map(method, points))
         text: list[str] = []
@@ -149,19 +154,23 @@ class NrCellDu(ORanNode):
             self.parent.parent.parent.parent.parent.parent.geo_location
         )
 
+        p1: int = (2 * index + 1) % 6
+        p2: int = (2 * index + 2) % 6
         intersect1: Point = Point(
-            (points[(2 * index + 1) % 6].x + points[(2 * index + 2) % 6].x) / 2,
-            (points[(2 * index + 1) % 6].y + points[(2 * index + 2) % 6].y) / 2,
+            (points[p1].x + points[p2].x) / 2,
+            (points[p1].y + points[p2].y) / 2,
         )
-        intersect_geo_location1: GeoLocation = network_center.point_to_geo_location(
+        intersect_gl1: GeoLocation = network_center.point_to_geo_location(
             intersect1
         )
 
+        p3: int = (2 * index + 3) % 6
+        p4: int = (2 * index + 4) % 6
         intersect2: Point = Point(
-            (points[(2 * index + 3) % 6].x + points[(2 * index + 4) % 6].x) / 2,
-            (points[(2 * index + 3) % 6].y + points[(2 * index + 4) % 6].y) / 2,
+            (points[p3].x + points[p4].x) / 2,
+            (points[p3].y + points[p4].y) / 2,
         )
-        intersect_geo_location2: GeoLocation = network_center.point_to_geo_location(
+        intersect_gl2: GeoLocation = network_center.point_to_geo_location(
             intersect2
         )
 
@@ -170,10 +179,10 @@ class NrCellDu(ORanNode):
 
         cell_polygon: list[GeoLocation] = []
         cell_polygon.append(tower)
-        cell_polygon.append(intersect_geo_location1)
+        cell_polygon.append(intersect_gl1)
         cell_polygon.append(geo_locations[(2 * index + 2) % 6])
         cell_polygon.append(geo_locations[(2 * index + 3) % 6])
-        cell_polygon.append(intersect_geo_location2)
+        cell_polygon.append(intersect_gl2)
         # close polygon
         cell_polygon.append(tower)
 
@@ -187,26 +196,22 @@ class NrCellDu(ORanNode):
         coordinates.text = " ".join(text)
 
         if self.cell_scale_factor > 0:
-            scaled_polygon: ET.Element = ET.SubElement(multi_geometry, "Polygon")
-            scaled_outer_boundary: ET.Element = ET.SubElement(scaled_polygon, "outerBoundaryIs")
-            scaled_linear_ring: ET.Element = ET.SubElement(scaled_outer_boundary, "LinearRing")
-            scaled_coordinates: ET.Element = ET.SubElement(scaled_linear_ring, "coordinates")
+            scaled_polygon: ET.Element = ET.SubElement(
+                multi_geometry, "Polygon")
+            scaled_outer_boundary: ET.Element = ET.SubElement(
+                scaled_polygon, "outerBoundaryIs")
+            scaled_linear_ring: ET.Element = ET.SubElement(
+                scaled_outer_boundary, "LinearRing")
+            scaled_coordinates: ET.Element = ET.SubElement(
+                scaled_linear_ring, "coordinates")
 
             arc: float = self.azimuth * math.pi / 180
-            meterToDegree: float = 2 * math.pi * GeoLocation().equatorialRadius / 360
-            translateX: float = (
-                self.layout.size.x
-                * (self.cell_scale_factor / 100)
-                * math.sin(arc)
-            )
-            translateY: float = (
-                self.layout.size.y
-                * (self.cell_scale_factor / 100)
-                * math.cos(arc)
+            meterToDegree: float = (
+                2 * math.pi * GeoLocation().equatorialRadius / 360
             )
             centerX: float = self.layout.size.x * 0.5 * math.sin(arc)
             centerY: float = self.layout.size.y * 0.5 * math.cos(arc)
-            cell_center : GeoLocation = GeoLocation(
+            cell_center: GeoLocation = GeoLocation(
                 {
                     "latitude": tower.latitude + centerY / meterToDegree,
                     "longitude": tower.longitude + centerX / meterToDegree,
@@ -217,8 +222,12 @@ class NrCellDu(ORanNode):
             text = []
             for gl in cell_polygon:
                 scale: float = 1 + self.cell_scale_factor / 100
-                lng_new: float = ( 1 * scale * (gl.longitude - cell_center.longitude) ) + cell_center.longitude
-                lat_new: float = ( 1 * scale * ( gl.latitude - cell_center.latitude ) ) + cell_center.latitude
+                lng_new: float = (
+                    1 * scale * (gl.longitude - cell_center.longitude)
+                ) + cell_center.longitude
+                lat_new: float = (
+                    1 * scale * (gl.latitude - cell_center.latitude)
+                ) + cell_center.latitude
                 scaled_strs: list[str] = [
                     str("%.6f" % float(lng_new)),
                     str("%.6f" % float(lat_new)),

@@ -91,9 +91,9 @@ class ORanRu(ORanNode):
         result: list[NrCellDu] = []
         cell_config: dict = (
             self.parent.parent.parent.parent.parent.parent
-            .configuration["pattern"]["nr-cell-du"]
+            .configuration["pattern"]["nrCellDu"]
         )
-        cell_angle: int = cell_config["cell-angle"]
+        cell_angle: int = cell_config["cellAngle"]
         cell_scale_factor: int = (
             cell_config["cellScaleFactorForHandoverArea"]
         )

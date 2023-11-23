@@ -83,37 +83,33 @@ class ORanTerminationPoint(ORanObject):
 
     def to_topology(self) -> dict[str, Any]:
         result: dict[str, Any] = {"tp-id": self.name}
-        # TODO
-        # if self.supporter:
-        #     network_ref: str = ""
-        #     match self.parent.__qualname__:
-        #         case ORanSmo.__qualname__:
-        #             network_ref = self.parent.parent.id
-        # case "<class 'model.python.o_ran_smo.ORanSmo'>":
-        #     network_ref = self.parent.parent.id
-        # case "<class 'model.python.o_ran_near_rt_ric.ORanNearRtRic'>":
-        #     network_ref = self.parent.parent.parent.id
-        # case "<class 'model.python.o_ran_cu.ORanCu'>":
-        #     network_ref = self.parent.parent.parent.parent.id
-        # case "<class 'model.python.o_ran_du.ORanDu'>":
-        #     network_ref = self.parent.parent.parent.parent.parent.id
-        # case "<class 'model.python.o_ran_cloud_du.ORanCloudDu'>":
-        #     network_ref = self.parent.parent.parent.parent.parent.id
-        # case "<class 'model.python.o_ran_ru.ORanRu'>":
-        #     network_ref = (
-        #         self.parent.parent.parent.parent.parent.parent.id
-        #     )
-        #     case _:
-        #         print("unknown: implement " + str(type(self.parent)))
-        #         network_ref = "unknown: implement " + str(
-        #             type(self.parent)
-        #         )
+        if self.supporter and type(self.parent) is not int:
+            network_ref: str = ""
+            match str(type(self.parent)):
+                case "<class 'model.python.o_ran_smo.ORanSmo'>":
+                    network_ref = self.parent.parent.id
+                case "<class 'model.python.o_ran_near_rt_ric.ORanNearRtRic'>":
+                    network_ref = self.parent.parent.parent.id
+                case "<class 'model.python.o_ran_cu.ORanCu'>":
+                    network_ref = self.parent.parent.parent.parent.id
+                case "<class 'model.python.o_ran_du.ORanDu'>":
+                    network_ref = self.parent.parent.parent.parent.parent.id
+                case "<class 'model.python.o_ran_cloud_du.ORanCloudDu'>":
+                    network_ref = self.parent.parent.parent.parent.parent.id
+                case "<class 'model.python.o_ran_ru.ORanRu'>":
+                    network_ref = (
+                        self.parent.parent.parent.parent.parent.parent.id
+                    )
+                case _:
+                    print("unknown: implement " + str(type(self.parent)))
+                    network_ref = "unknown: implement " + str(
+                        type(self.parent))
 
-        # result["supporting-termination-point"] = [
-        #     {
-        #         "network-ref": network_ref,
-        #         "node-ref": self.parent.name,
-        #         "tp-ref": self.supporter,
-        #     }
-        # ]
+            result["supporting-termination-point"] = [
+                {
+                    "network-ref": network_ref,
+                    "node-ref": self.parent.name,
+                    "tp-ref": self.supporter,
+                }
+            ]
         return result

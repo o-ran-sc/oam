@@ -29,7 +29,7 @@ from network_generation.model.python.o_ran_termination_point import (
 )
 
 
-# Define the "IORanDu" interface
+# Define the "IoRanDu" interface
 class ITower(IORanNode):
     o_ran_ru_count: int
 
@@ -78,12 +78,12 @@ class Tower(ORanNode):
             cell_count: int = (
                 self.parent.parent.parent.parent.parent.configuration[
                     "pattern"
-                ]["o-ran-ru"]["nr-cell-du-count"]
+                ]["oRanRu"]["nrCellDuCount"]
             )
             cell_angle: int = (
                 self.parent.parent.parent.parent.parent.configuration[
                     "pattern"
-                ]["nr-cell-du"]["cell-angle"]
+                ]["nrCellDu"]["cellAngle"]
             )
             ru_angle: int = cell_count * cell_angle
             ru_azimuth: int = index * ru_angle
