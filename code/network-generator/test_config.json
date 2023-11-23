@@ -11,7 +11,7 @@
         "representation": "hexagon"
       },
       "smo": {
-        "fiveCCoreCount": 1,
+        "fiveGCoreCount": 1,
         "nearRtRicSpiralRadius": 0,
         "oCloudResourcePoolCount": 1
       },
