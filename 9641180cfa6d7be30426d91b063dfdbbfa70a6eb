@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9672d04a_7020d0fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2023-12-17T12:55:22Z",
+      "side": 1,
+      "message": "---------- coverage: platform linux, python 3.10.12-final-0 ----------\nName                                                             Stmts   Miss  Cover\n------------------------------------------------------------------------------------\nnetwork_generation/__init__.py                                       0      0   100%\nnetwork_generation/__main__.py                                       1      0   100%\nnetwork_generation/base.py                                          11      0   100%\nnetwork_generation/cli.py                                            7      0   100%\nnetwork_generation/model/python/countries.py                       199      0   100%\nnetwork_generation/model/python/cube.py                             37     18    51%\nnetwork_generation/model/python/geo_location.py                     60      6    90%\nnetwork_generation/model/python/hexagon.py                         146     15    90%\nnetwork_generation/model/python/nr_cell_du.py                      123     70    43%\nnetwork_generation/model/python/o_ran_cloud_du.py                   65      9    86%\nnetwork_generation/model/python/o_ran_cu.py                         72     14    81%\nnetwork_generation/model/python/o_ran_du.py                         47      7    85%\nnetwork_generation/model/python/o_ran_near_rt_ric.py                72     14    81%\nnetwork_generation/model/python/o_ran_network.py                    62     17    73%\nnetwork_generation/model/python/o_ran_node.py                      112     12    89%\nnetwork_generation/model/python/o_ran_object.py                     12      0   100%\nnetwork_generation/model/python/o_ran_ru.py                         81      9    89%\nnetwork_generation/model/python/o_ran_smo.py                        73     14    81%\nnetwork_generation/model/python/o_ran_spiral_radius_profile.py     169     59    65%\nnetwork_generation/model/python/o_ran_termination_point.py          56     20    64%\nnetwork_generation/model/python/point.py                             7      0   100%\nnetwork_generation/model/python/top.py                              88      8    91%\nnetwork_generation/model/python/tower.py                            63      9    86%\nnetwork_generation/model/python/type_definitions.py                 31      0   100%\nnetwork_generation/parameter_validator.py                           42      2    95%\nnetwork_generation/view/network_viewer.py                           66     49    26%\n------------------------------------------------------------------------------------\nTOTAL                                                             1702    352    79%\n\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d 28 passed in 1.26s \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d",
+      "revId": "9641180cfa6d7be30426d91b063dfdbbfa70a6eb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
