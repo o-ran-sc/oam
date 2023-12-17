@@ -39,8 +39,17 @@
   },
   "outputFolder": "output",
   "generationTasks": {
-    "topology": true,
-    "svg": true,
-    "kml": true
+    "topology": {
+      "enabled": true,
+      "compressed": true
+    },
+    "svg": {
+      "enabled": true,
+      "compressed": true
+    },
+    "kml": {
+      "enabled": true,
+      "compressed": true
+    }
   }
 }
