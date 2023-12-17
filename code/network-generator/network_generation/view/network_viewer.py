@@ -17,7 +17,10 @@
 Provides functions to convert the Network into different formats
 """
 
+import gzip
 import json
+from typing_extensions import Buffer
+import zipfile
 import xml.etree.ElementTree as ET
 from typing import Any
 
@@ -55,16 +58,24 @@ class NetworkViewer:
         """
         print(self.__network)
 
-    def save(self, filename: str) -> None:
+    def save(self, filename: str, compressed: bool = True) -> None:
         """
         Method saving the class content to a file in json format.
         :param filename: A valid path to a file on the system.
+        :param compressed: if True, svg is stored as svgz format.
         :type filename: string
         """
-        with open(filename, "w", encoding="utf-8") as json_file:
-            output: dict[str, Any] = self.__network.to_topology()
-            json.dump(output, json_file, ensure_ascii=False, indent=2)
-            print("File '" + filename + "' saved!")
+        output: dict[str, Any] = self.__network.to_topology()
+        if compressed is True:
+            with gzip.open(f'{filename}-operational.json.gz', 'wb') as zf:
+                zf.write(json.dumps(output, indent=2).encode('utf-8'))
+            print(f'File "{filename}-operational.json.gz" saved!')
+        else:
+            with open(
+                f'{filename}-operational.json', "w", encoding="utf-8"
+            ) as jf:
+                json.dump(output, jf, ensure_ascii=False, indent=2)
+            print(f'File "{filename}-operational.json" saved!')
 
     def readStylesFromFile(self) -> str:
         """
@@ -75,27 +86,37 @@ class NetworkViewer:
             content = styles.read()
             return content
 
-    def svg(self, filename: str) -> None:
+    def svg(self, filename: str, compressed: bool = True) -> None:
         """
         Method saving the class content to a file in xml/svg format.
 
         :param filename: A valid path to a file on the system.
+        :param compressed: if True, svg is stored as svgz format.
         :type filename: string
         """
         root = self.__network.toSvg()
         style = ET.Element("style")
         style.text = self.readStylesFromFile()
         root.findall(".//desc")[0].append(style)
-        ET.ElementTree(root).write(
-            filename, encoding="utf-8", xml_declaration=True
-        )
-        print("File '" + filename + "' saved!")
 
-    def kml(self, filename: str) -> None:
+        if compressed is True:
+            svg_output: Buffer = ET.tostring(
+                root, encoding="utf-8", xml_declaration=True)
+            with gzip.open(f'{filename}.svgz', 'wb') as zf:
+                zf.write(svg_output)
+            print(f'File "{filename}.svgz" saved!')
+        else:
+            ET.ElementTree(root).write(
+                f'{filename}.svg', encoding="utf-8", xml_declaration=True
+            )
+            print(f'File "{filename}.svg" saved!')
+
+    def kml(self, filename: str, compressed: bool = True) -> None:
         """
         Method saving the class content to a file in xml/kml format.
 
         :param filename: A valid path to a file on the system.
+        :param compressed: if True, kml is stored as kmz format.
         :type filename: string
         """
         root = self.__network.toKml()
@@ -114,7 +135,16 @@ class NetworkViewer:
                 fill.text = str(value["fill"]["color"])
                 root.findall(".//Document")[0].append(style)
 
-        ET.ElementTree(root).write(
-            filename, encoding="utf-8", xml_declaration=True
-        )
-        print("File '" + filename + "' saved!")
+        kml: str = ET.tostring(
+            root, encoding="utf-8", xml_declaration=True)
+        if compressed is True:
+            with zipfile.ZipFile(
+                f'{filename}.kmz', 'w', zipfile.ZIP_DEFLATED
+            ) as zf:
+                zf.writestr(f'{filename.split("/")[1]}.kml', data=kml)
+            print(f'File "{filename}.kmz" saved!')
+        else:
+            kml_file = open(f'{filename}.kml', 'w')
+            kml_file.write(kml)
+            kml_file.close()
+            print(f'File "{filename}.kml" saved!')

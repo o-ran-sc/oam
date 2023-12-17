@@ -50,22 +50,28 @@ def main() -> None:  # pragma: no cover
             os.makedirs(output_folder)
 
         name: str = str(configuration["network"]["name"]).lower()
-        filename: str = ""
+        filename: str = "/".join([output_folder, name])
 
         # topology json
-        if configuration["generationTasks"]["topology"] is True:
-            filename = output_folder + "/" + name + "-operational.json"
-            viewer.json().save(filename)
+        if configuration["generationTasks"]["topology"]["enabled"] is True:
+            viewer.json().save(
+                filename,
+                configuration["generationTasks"]["topology"]["compressed"]
+            )
 
         # svg xml
-        if configuration["generationTasks"]["svg"] is True:
-            filename = output_folder + "/" + name + ".svg"
-            viewer.svg(filename)
+        if configuration["generationTasks"]["svg"]["enabled"] is True:
+            viewer.svg(
+                filename,
+                configuration["generationTasks"]["svg"]["compressed"]
+            )
 
-        # kml xml
-        if configuration["generationTasks"]["kml"] is True:
-            filename = output_folder + "/" + name + ".kml"
-            viewer.kml(filename)
+        # kml/kmz xml
+        if configuration["generationTasks"]["kml"]["enabled"] is True:
+            viewer.kml(
+                filename,
+                configuration["generationTasks"]["kml"]["compressed"]
+            )
 
     else:
         print(validator.error_message())
