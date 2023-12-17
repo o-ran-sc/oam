@@ -273,6 +273,25 @@
         }
       }
     },
+    "export": {
+      "title": "export",
+      "type": "object",
+      "required": [
+        "enabled",
+        "compressed"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "description": "If true, an export file is created.",
+          "type": "boolean"
+        },
+        "compressed": {
+          "description": "If true, the export file is stored in a compressed format.",
+          "type": "boolean"
+        }
+      }
+    },
     "generationTasks": {
       "title": "generationTasks",
       "type": "object",
@@ -284,16 +303,16 @@
       "additionalProperties": false,
       "properties": {
         "topology": {
-          "description": "If true, an ietf-network-topology file will be generated.",
-          "type": "boolean"
+          "description": "If enabled, an ietf-network-topology file will be generated.",
+          "$ref": "#/$defs/export"
         },
         "svg": {
-          "description": "If true, a kml file will be generated.",
-          "type": "boolean"
+          "description": "If enabled, a svg file will be generated.",
+          "$ref": "#/$defs/export"
         },
         "kml": {
-          "description": "If true, a svg file will be generated.",
-          "type": "boolean"
+          "description": "If enabled, a kml file will be generated.",
+          "$ref": "#/$defs/export"
         }
       }
     }
