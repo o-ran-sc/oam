@@ -15,14 +15,14 @@
 #
 
 # no more versions needed! Compose spec supports all features w/o a version
+version: "3.8"
 services:
-
   odlux:
     image: ${SDNC_WEB_IMAGE}
     container_name: odlux
     hostname: odlux
     environment:
-      ENABLE_OAUTH: ${SDNC_ENABLE_OAUTH}
+      ENABLE_OAUTH: true
       WEBPROTOCOL: HTTP
       WEBPORT: ${SDNC_WEB_PORT}
       SDNRPROTOCOL: http
@@ -55,7 +55,8 @@ services:
       retries: 5
     environment:
       ENABLE_ODL_CLUSTER: false
-      ENABLE_OAUTH: ${SDNC_ENABLE_OAUTH}
+      ENABLE_OAUTH: true
+      ENABLE_ODLUX_RBAC: false
       ODL_CERT_DIR: ${SDNC_CERT_DIR}
       ODL_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       SDNC_CONFIG_DIR: /opt/onap/ccsdk/data/properties
@@ -66,10 +67,14 @@ services:
       SDNRONLY: true
       SDNRINIT: true
       SDNRDM: true
-      SDNRDBURL: http://persistence:9200
+      SDNRDBTYPE: MARIADB
+      SDNRDBURL: jdbc:mysql://persistence:3306/sdnrdb
+      SDNRDBUSERNAME: sdnrdb
+      SDNRDBPASSWORD: sdnrdb
       SDNR_NETCONF_CALLHOME_ENABLED: true
       A1_ADAPTER_NORTHBOUND: false
       JAVA_OPTS: -Xms256m -Xmx4g
+      SDNR_WEBSOCKET_PORT: ${SDNR_WEBSOCKET_PORT}
       IDENTITY_PROVIDER_URL: ${IDENTITY_PROVIDER_URL}
       SDNC_WEB_URL: https://odlux.oam.${HTTP_DOMAIN}
       SDNR_VES_COLLECTOR_ENABLED: true

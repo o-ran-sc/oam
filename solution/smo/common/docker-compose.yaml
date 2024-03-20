@@ -14,27 +14,29 @@
 # limitations under the License.
 #
 # no more versions needed! Compose spec supports all features w/o a version
+version: "3.8"
 services:
-
   gateway:
     image: ${TRAEFIK_IMAGE}
     container_name: gateway
     hostname: gateway
     healthcheck:
       test:
-        - CMD
-        - traefik
-        - healthcheck
-        - --ping
+        [
+          "CMD",
+          "traefik",
+          "healthcheck",
+          "--ping"
+        ]
       interval: 10s
       timeout: 5s
       retries: 3
     restart: always
     ports:
-      - 80:80
-      - 443:443
-      - 4334:4334
-      - 4335:4335
+      - "80:80"
+      - "443:443"
+      - "4334:4334"
+      - "4335:4335"
     command:
       - --serverstransport.insecureskipverify=true
       - --log.level=${TRAEFIK_LOG_LEVEL}
@@ -81,38 +83,40 @@ services:
     container_name: identitydb
     hostname: identitydb
     environment:
-      - ALLOW_EMPTY_PASSWORD=no
-      - POSTGRESQL_USERNAME=keycloak
-      - POSTGRESQL_DATABASE=keycloak
-      - POSTGRESQL_PASSWORD=keycloak
+      ALLOW_EMPTY_PASSWORD: no
+      POSTGRESQL_USERNAME: keycloak
+      POSTGRESQL_DATABASE: keycloak
+      POSTGRESQL_PASSWORD: keycloak
 
   identity:
     image: ${IDENTITY_IMAGE}
     container_name: identity
     hostname: identity
     environment:
-      - KEYCLOAK_CREATE_ADMIN_USER=true
-      - KEYCLOAK_ADMIN_USER=${ADMIN_USERNAME}
-      - KEYCLOAK_ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      - KEYCLOAK_MANAGEMENT_USER=${IDENTITY_MGMT_USERNAME}
-      - KEYCLOAK_MANAGEMENT_PASSWORD=${IDENTITY_MGMT_PASSWORD}
-      - KEYCLOAK_DATABASE_HOST=identitydb
-      - KEYCLOAK_DATABASE_NAME=keycloak
-      - KEYCLOAK_DATABASE_USER=keycloak
-      - KEYCLOAK_DATABASE_PASSWORD=keycloak
-      - KEYCLOAK_JDBC_PARAMS=sslmode=disable&connectTimeout=30000
-      - KEYCLOAK_PRODUCTION=false
-      - KEYCLOAK_ENABLE_TLS=true
-      - KEYCLOAK_TLS_KEYSTORE_FILE=/opt/bitnami/keycloak/certs/keystore.jks
-      - KEYCLOAK_TLS_TRUSTSTORE_FILE=/opt/bitnami/keycloak/certs/truststore.jks
-      - KEYCLOAK_TLS_KEYSTORE_PASSWORD=password
-      - KEYCLOAK_TLS_TRUSTSTORE_PASSWORD=changeit
+      KEYCLOAK_CREATE_ADMIN_USER: true
+      KEYCLOAK_ADMIN_USER: ${ADMIN_USERNAME}
+      KEYCLOAK_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      KEYCLOAK_MANAGEMENT_USER: ${IDENTITY_MGMT_USERNAME}
+      KEYCLOAK_MANAGEMENT_PASSWORD: ${IDENTITY_MGMT_PASSWORD}
+      KEYCLOAK_DATABASE_HOST: identitydb
+      KEYCLOAK_DATABASE_NAME: keycloak
+      KEYCLOAK_DATABASE_USER: keycloak
+      KEYCLOAK_DATABASE_PASSWORD: keycloak
+      KEYCLOAK_JDBC_PARAMS=sslmode: disable&connectTimeout=30000
+      KEYCLOAK_PRODUCTION: false
+      KEYCLOAK_ENABLE_TLS: true
+      KEYCLOAK_TLS_KEYSTORE_FILE: /opt/bitnami/keycloak/certs/keystore.jks
+      KEYCLOAK_TLS_TRUSTSTORE_FILE: /opt/bitnami/keycloak/certs/truststore.jks
+      KEYCLOAK_TLS_KEYSTORE_PASSWORD: password
+      KEYCLOAK_TLS_TRUSTSTORE_PASSWORD: changeit
+      KEYCLOAK_EXTRA_ARGS: "--spi-theme-default=oam"
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./identity/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
       - ./identity/keystore.jks:/opt/bitnami/keycloak/certs/keystore.jks
       - ./identity/truststoreONAPall.jks:/opt/bitnami/keycloak/certs/truststore.jks
+      - ./identity/themes/oam:/opt/bitnami/keycloak/themes/oam
     labels:
       traefik.enable: true
       traefik.http.routers.identity.entrypoints: websecure
@@ -132,7 +136,27 @@ services:
     image: ${PERSISTENCE_IMAGE}
     container_name: persistence
     environment:
-      - discovery.type=single-node
+      MARIADB_ROOT_PASSWORD: admin
+      MARIADB_DATABASE: sdnrdb
+      MARIADB_USER: sdnrdb
+      MARIADB_PASSWORD: sdnrdb
+      MARIADB_EXTRA_FLAGS: --bind-address=* --max_connections=400
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: sdnrdb
+      MYSQL_USER: sdnrdb
+      MYSQL_PASSWORD: sdnrdb
+    healthcheck:
+      interval: 30s
+      retries: 3
+      test:
+        [
+          "CMD",
+          "healthcheck.sh",
+          "--su-mysql",
+          "--connect",
+          "--innodb_initialized"
+        ]
+      timeout: 30s
 
   zookeeper:
     image: ${ZOOKEEPER_IMAGE}

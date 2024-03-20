@@ -1,0 +1,12 @@
+.login-pf body {
+    background: DimGrey none;
+}
+.login-pf body {
+    background: url("../img/login-bg.png") no-repeat center center fixed;
+    background-size: cover;
+    height: 100%;
+}
+.card-pf {
+    background: #bbb;
+    opacity: 0.9;
+}
