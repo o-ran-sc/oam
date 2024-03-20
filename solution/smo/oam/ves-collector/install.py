@@ -26,17 +26,20 @@ class Installer:
     def __init__(self, url, branch, dstFolder) -> None:
         self.downloadUrl = url
         self.publicUrlFormat = self.createPublicUrlFormat(url, branch)
-        print(f'fmt={self.publicUrlFormat}')
+        for key,value in self.publicUrlFormat.items():
+            print(f'fmt={key}->{value}')
         self.branch = branch
         self.baseFolder = dstFolder
         self.subfolder = self.createSubFolder(url, branch)
 
-    def createPublicUrlFormat(self, url:str, branch:str)->str:
+    def createPublicUrlFormat(self, url:str, branch:str)->dict:
+        fmt: dict = {}
         if url.endswith('.git'):
             url = url[:-4]
         if url.startswith('git@'):
             url = 'https://'+url[4:]
-        fmt=url+'/raw/'+branch+'/{}'
+        fmt["raw"]=url+'/raw/'+branch+'/{}'
+        fmt["blob"]=url+'/blob/'+branch+'/{}'
         return fmt
     def createSubFolder(self, gitUrl:str, branch:str) -> str:
         regex = r"^[^\/]+\/\/(.*)$"
@@ -115,14 +118,15 @@ class Installer:
         files = self.getFilesFiltered()
         for file in files:
             print(file)
-            pubUrl = self.publicUrlFormat.format(file)
-            if self.urlAlreadyInData(data,pubUrl):
-                print(f'entry with url {pubUrl} already exists. ignoring')
-                continue
-            data.append({
-                'publicURL': pubUrl,
-                'localURL': f'{self.subfolder}/{file}'
-            })
+            for key,value in self.publicUrlFormat.items():
+                pubUrl = value.format(file)
+                if self.urlAlreadyInData(data,pubUrl):
+                    print(f'entry with url {pubUrl} already exists. ignoring')
+                    continue
+                data.append({
+                    'publicURL': pubUrl,
+                    'localURL': f'{self.subfolder}/{file}'
+                })
         with open(schemaMapFile,'w') as fp:
             json.dump(data,fp)
 
