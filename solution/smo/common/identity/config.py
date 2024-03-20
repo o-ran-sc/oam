@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-#############################################################################
-# Copyright 2023 highstreet technologies GmbH
+################################################################################
+# Copyright 2021 highstreet technologies GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -16,26 +16,27 @@
 #
 
 # importing the sys, json, requests library
+from sqlite3 import TimeFromTicks
+from jproperties import Properties
 import os
-import pathlib
 import sys
 import json
 import time
-import getpass
-import requests
 import re
+import requests
+import getpass
 import warnings
-from jproperties import Properties
 from typing import List
+
 warnings.filterwarnings('ignore', message='Unverified HTTPS request')
+
+
 # global configurations
-
-
-def get_environment_variable(name):
+def get_env(name):
     configs = Properties()
-    path = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
-    env_file = str(path.parent.absolute()) + '/.env'
-    with open(env_file, "rb") as read_prop:
+    envFile = os.path.dirname(os.path.abspath(__file__)) + '/' + '../' + '.env'
+
+    with open(envFile, "rb") as read_prop:
         configs.load(read_prop)
     value = configs.get(name).data
 
@@ -45,54 +46,61 @@ def get_environment_variable(name):
         match = next(matches, None)
         if match is None:
             break
-        inner = get_environment_variable(match.group(1))
-        value = value.replace("${" + match.group(1) + "}", inner )
+        inner = get_env(match.group(1))
+        value = value.replace("${" + match.group(1) + "}", inner)
     return value
 
 
-def load_arguments(args: List[str]) -> tuple:
-    realm_file = os.path.dirname(os.path.abspath(
-        __file__)) + '/o-ran-sc-realm.json'
-    auth_file = os.path.dirname(os.path.abspath(
-        __file__)) + '/authentication.json'
-    ready_timeout = 180
+def loadArgs(args: List[str]) -> tuple:
+    realmFile = os.path.dirname(os.path.abspath(__file__)) + '/o-ran-sc-realm.json'
+    authFile = os.path.dirname(os.path.abspath(__file__)) + '/authentication.json'
+    readyTimeout = 180
     args.pop(0)
     while len(args) > 0:
         arg = args.pop(0)
         if arg == '--auth' and len(args) > 0:
-            auth_file = args.pop(0)
-            print('overwriting auth file: {}'.format(auth_file))
+            authFile = args.pop(0)
+            print('overwriting auth file: {}'.format(authFile))
         elif arg == '--realm' and len(args) > 0:
-            realm_file = args.pop(0)
-            print('overwriting realm file: {}'.format(realm_file))
+            realmFile = args.pop(0)
+            print('overwriting realm file: {}'.format(realmFile))
         elif arg == '--timeout' and len(args) > 0:
-            ready_timeout = int(args.pop(0))
-            print('waiting for ready {} seconds'.format(ready_timeout))
+            readyTimeout = int(args.pop(0))
+            print('waiting for ready {} seconds'.format(readyTimeout))
 
-    return (realm_file, auth_file, ready_timeout)
+    return (realmFile, authFile, readyTimeout)
 
 
 def isReady(timeoutSeconds=180):
     url = getBaseUrl()
-    print(f'url={url}')
+    print(url)
+    response = None
+    print("waiting for ready state", end='')
     while timeoutSeconds > 0:
         try:
             response = requests.get(url, verify=False, headers={})
+            print(response)
         except:
-            response = None
+            pass
         if response is not None and response.status_code == 200:
+            print('succeeded')
             return True
         time.sleep(1)
         timeoutSeconds -= 1
+        print('.', end='', flush=True)
     return False
 
 
 def getBaseUrl():
-    return get_environment_variable("IDENTITY_PROVIDER_URL")
+    try:
+        if get_env("USE_LOCAL_HOST_FOR_IDENTITY_CONFIG").strip("'\"") == "true":
+            return get_env("IDENTITY_PROVIDER_URL_LOCAL_HOST")
+    except AttributeError:
+        print("Using IDENTITY_PROVIDER_URL")
+    return get_env("IDENTITY_PROVIDER_URL")
 
-# Request a token for further communication
 
-
+# Request a token for futher communication
 def getToken():
     url = base + '/realms/master/protocol/openid-connect/token'
     headers = {
@@ -106,8 +114,7 @@ def getToken():
         'password': password
     }
     try:
-        response = requests.post(url, verify=False, auth=(
-            username, password), data=body, headers=headers)
+        response = requests.post(url, verify=False, auth=(username, password), data=body, headers=headers)
     except requests.exceptions.Timeout:
         sys.exit('HTTP request failed, please check you internet connection.')
     except requests.exceptions.TooManyRedirects:
@@ -122,9 +129,8 @@ def getToken():
     else:
         sys.exit('Getting token failed.')
 
+
 # create the default realm from file
-
-
 def createRealm(token, realm):
     url = base + '/admin/realms'
     auth = 'bearer ' + token
@@ -134,8 +140,7 @@ def createRealm(token, realm):
         'authorization': auth
     }
     try:
-        response = requests.post(
-            url, verify=False, json=realm, headers=headers)
+        response = requests.post(url, verify=False, json=realm, headers=headers)
     except requests.exceptions.Timeout:
         sys.exit('HTTP request failed, please check you internet connection.')
     except requests.exceptions.TooManyRedirects:
@@ -146,9 +151,8 @@ def createRealm(token, realm):
 
     return response.status_code >= 200 and response.status_code < 300
 
+
 # Check if default realm exists
-
-
 def checkRealmExists(token, realmId):
     url = base + '/admin/realms/' + realmId
     auth = 'bearer ' + token
@@ -172,9 +176,8 @@ def checkRealmExists(token, realmId):
         # sys.exit('Getting realm failed.')
         return False
 
+
 # create a user in default realm
-
-
 def createUser(token, realmConfig, user):
     realmId = realmConfig['id']
     url = base + '/admin/realms/' + realmId + '/users'
@@ -198,9 +201,8 @@ def createUser(token, realmConfig, user):
     else:
         print('User creation', user['username'], 'failed!\n', response.text)
 
+
 # creates User accounts in realm based a file
-
-
 def createUsers(token, realmConfig, authConfig):
     for user in authConfig['users']:
         createUser(token, realmConfig, user)
@@ -216,24 +218,24 @@ def createUsers(token, realmConfig, authConfig):
             {
                 "type": "password",
                 "value": password,
-                "temporary": True
+                "temporary": False
             }
-        ],
-        "requiredActions": [
-            "UPDATE_PASSWORD"
         ]
     }
     createUser(token, realmConfig, systemUser)
 
+
 # Grants a role to a user
-
-
-def addUserRole(user: dict, role: dict, options: dict):
+def addUserRole(user: dict, role: list, options: dict):
     url = options['url'] + '/' + user['id'] + '/role-mappings/realm'
     try:
-        response = requests.post(url, verify=False, json=[
-                                 {'id': role['id'], 'name':role['name']}],
-                                 headers=options['headers'])
+        for irole in role:
+            response = requests.post(url, verify=False, json=[{'id': irole['id'], 'name': irole['name']}],
+                                     headers=options['headers'])
+            if response.status_code >= 200 and response.status_code < 300:
+                print('User role', user['username'], irole['name'], 'created!')
+            else:
+                print('Creation of user role', user['username'], irole['name'], 'failed!\n', response.text)
     except requests.exceptions.Timeout:
         sys.exit('HTTP request failed, please check you internet connection.')
     except requests.exceptions.TooManyRedirects:
@@ -242,28 +244,24 @@ def addUserRole(user: dict, role: dict, options: dict):
         # catastrophic error. bail.
         raise SystemExit(e)
 
-    if response.status_code >= 200 and response.status_code < 300:
-        print('User role', user['username'], role['name'], 'created!')
-    else:
-        print('Creation of user role',
-              user['username'], role['name'], 'failed!\n', response.text)
 
 # searches for the role of a given user
-
-
 def findRole(username: str, authConfig: dict, realmConfig: dict) -> dict:
+    roleList = []
+    roleNames = []
     roleName = 'administration'
     for grant in authConfig['grants']:
         if grant['username'] == username:
             roleName = grant['role']
-    for role in realmConfig['roles']['realm']:
-        if role['name'] == roleName:
-            return role
-    return None
+            roleNames = roleName.split(",")  # A user can have multiple roles, comma separated
+    for iroleName in roleNames:
+        for role in realmConfig['roles']['realm']:
+            if role['name'] == iroleName:
+                roleList.append(role)
+    return roleList
+
 
 # adds roles to users
-
-
 def addUserRoles(token, realmConfig, authConfig):
     realmId = realmConfig['id']
     url = base + '/admin/realms/' + realmId + '/users'
@@ -296,12 +294,12 @@ def addUserRoles(token, realmConfig, authConfig):
     else:
         sys.exit('Getting users failed.')
 
+
 # main
 
-
-(realmFile, authFile, readyTimeout) = load_arguments(sys.argv)
-username = get_environment_variable('ADMIN_USERNAME')
-password = get_environment_variable('ADMIN_PASSWORD')
+(realmFile, authFile, readyTimeout) = loadArgs(sys.argv)
+username = get_env('ADMIN_USERNAME')
+password = get_env('ADMIN_PASSWORD')
 base = getBaseUrl()
 isReady(readyTimeout)
 token = getToken()

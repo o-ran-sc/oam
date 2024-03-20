@@ -1,0 +1,19 @@
+.login-pf body {
+    background: DimGrey none;
+}
+.login-pf body {
+    background: url("../img/o-ran-sc-smo-oam-keyclock-background.png") no-repeat center center fixed;
+    background-size: cover;
+    height: 100%;
+}
+div.kc-logo-text {
+    background-image: url(../img/o-ran-sc-logo.png);
+    background-repeat: no-repeat;
+    height: 63px;
+    width: 300px;
+    margin: 0 auto;
+}
+.card-pf {
+    background: #bbb;
+    opacity: 0.8;
+}
