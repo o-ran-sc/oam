@@ -111,7 +111,7 @@ For development purposes <your-system> and <deployment-system> may reference the
 ```
 $ cat /etc/hosts
 127.0.0.1	               localhost
-127.0.1.1	               <your-system>
+127.0.1.1	               10.20.35.165
 
 # SMO OAM development system
 <deployment-system-ipv4>                   smo.o-ran-sc.org
@@ -136,8 +136,14 @@ $ cat /etc/hosts
 The following commands should be invoked. More detailed can be found in the
 next chapters.
 
-```
-docker compose -f smo/common/docker-compose.yaml up -d
+```bash
+docker compose -f smo/common/docker-compose.yaml up -d  --wait
+
+# optionally adjust the users.csv file to create new users
+vim users.csv
+# override authentication.json with the new users
+python3 create_users.py users.csv -o smo/common/identity/authentication.json
+
 python smo/common/identity/config.py
 
 docker compose -f smo/oam/docker-compose.yaml up -d
