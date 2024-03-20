@@ -1,111 +1,111 @@
 {
-  "users": [
-    {
-      "firstName": "Leia",
-      "lastName": "Organa",
-      "email": "leia.organa@sdnr.onap.org",
-      "enabled": "true",
-      "username": "leia.organa",
-      "credentials": [
+    "users": [
         {
-          "type": "password",
-          "value": "Default4SDN!",
-          "temporary": true
-        }
-      ],
-      "requiredActions": [
-        "UPDATE_PASSWORD"
-      ]
-    },
-    {
-      "firstName": "R2",
-      "lastName": "D2",
-      "email": "r2.d2@sdnr.onap.org",
-      "enabled": "true",
-      "username": "r2.d2",
-      "credentials": [
+            "firstName": "Leia",
+            "lastName": "Organa",
+            "email": "leia.organa@sdnr.onap.org",
+            "enabled": "",
+            "username": "leia.organa",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "Default4SDN!",
+                    "temporary": "true"
+                }
+            ],
+            "requiredActions": [
+                "UPDATE_PASSWORD"
+            ]
+        },
         {
-          "type": "password",
-          "value": "Default4SDN!",
-          "temporary": true
-        }
-      ],
-      "requiredActions": [
-        "UPDATE_PASSWORD"
-      ]
-    },
-    {
-      "firstName": "Luke",
-      "lastName": "Skywalker",
-      "email": "luke.skywalker@sdnr.onap.org",
-      "enabled": "true",
-      "username": "luke.skywalker",
-      "credentials": [
+            "firstName": "R2",
+            "lastName": "D2",
+            "email": "r2.d2@sdnr.onap.org",
+            "enabled": "",
+            "username": "r2.d2",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "Default4SDN!",
+                    "temporary": "true"
+                }
+            ],
+            "requiredActions": [
+                "UPDATE_PASSWORD"
+            ]
+        },
         {
-          "type": "password",
-          "value": "Default4SDN!",
-          "temporary": true
-        }
-      ],
-      "requiredActions": [
-        "UPDATE_PASSWORD"
-      ]
-    },
-    {
-      "firstName": "Jargo",
-      "lastName": "Fett",
-      "email": "jargo.fett@sdnr.onap.org",
-      "enabled": "true",
-      "username": "jargo.fett",
-      "credentials": [
+            "firstName": "Luke",
+            "lastName": "Skywalker",
+            "email": "luke.skywalker@sdnr.onap.org",
+            "enabled": "",
+            "username": "luke.skywalker",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "Default4SDN!",
+                    "temporary": "true"
+                }
+            ],
+            "requiredActions": [
+                "UPDATE_PASSWORD"
+            ]
+        },
         {
-          "type": "password",
-          "value": "Default4SDN!",
-          "temporary": true
-        }
-      ],
-      "requiredActions": [
-        "UPDATE_PASSWORD"
-      ]
-    },
-    {
-      "firstName": "Martin",
-      "lastName": "Skorupski",
-      "email": "martin.skorupski@highstreet-technologies.com",
-      "enabled": "true",
-      "username": "martin.skorupski",
-      "credentials": [
+            "firstName": "Jargo",
+            "lastName": "Fett",
+            "email": "jargo.fett@sdnr.onap.org",
+            "enabled": "",
+            "username": "jargo.fett",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "Default4SDN!",
+                    "temporary": "true"
+                }
+            ],
+            "requiredActions": [
+                "UPDATE_PASSWORD"
+            ]
+        },
         {
-          "type": "password",
-          "value": "Default4SDN!",
-          "temporary": true
+            "firstName": "Martin",
+            "lastName": "Skorupski",
+            "email": "martin.skorupski@highstreet-technologies.com",
+            "enabled": "",
+            "username": "martin.skorupski",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "Default4SDN!",
+                    "temporary": "true"
+                }
+            ],
+            "requiredActions": [
+                "UPDATE_PASSWORD"
+            ]
         }
-      ],
-      "requiredActions": [
-        "UPDATE_PASSWORD"
-      ]
-    }
-  ],
-  "grants": [
-    {
-      "username": "leia.organa",
-      "role": "administration"
-    },
-    {
-      "username": "r2.d2",
-      "role": "administration"
-    },
-    {
-      "username": "luke.skywalker",
-      "role": "provision"
-    },
-    {
-      "username": "jargo.fett",
-      "role": "supervision"
-    },
-    {
-      "username": "martin.skorupski",
-      "role": "administration"
-    }
-  ]
+    ],
+    "grants": [
+        {
+            "username": "leia.organa",
+            "role": "administration"
+        },
+        {
+            "username": "r2.d2",
+            "role": "administration"
+        },
+        {
+            "username": "luke.skywalker",
+            "role": "provision"
+        },
+        {
+            "username": "jargo.fett",
+            "role": "supervision"
+        },
+        {
+            "username": "martin.skorupski",
+            "role": "administration"
+        }
+    ]
 }
