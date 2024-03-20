@@ -15,25 +15,29 @@
 #
 
 # no more versions needed! Compose spec supports all features w/o a version
+version: "3.8"
 services:
-
   odlux:
     image: ${SDNC_WEB_IMAGE}
     container_name: odlux
     hostname: odlux
     environment:
-      ENABLE_OAUTH: ${SDNC_ENABLE_OAUTH}
+      ENABLE_OAUTH: true
       WEBPROTOCOL: HTTP
       WEBPORT: ${SDNC_WEB_PORT}
       SDNRPROTOCOL: http
       SDNRHOST: controller
       SDNRPORT: ${SDNC_REST_PORT}
+      SDNRWEBSOCKETPORT: ${SDNR_WEBSOCKET_PORT}
     labels:
       traefik.enable: true
       traefik.http.routers.sdnc-web.entrypoints: websecure
       traefik.http.routers.sdnc-web.rule: Host(`odlux.oam.${HTTP_DOMAIN}`)
       traefik.http.routers.sdnc-web.tls: true
       traefik.http.services.sdnc-web.loadbalancer.server.port: ${SDNC_WEB_PORT}
+      app: "odlux"
+      deploy: "o-ran-sc-smo-oam"
+      solution: "o-ran-sc-smo"
     depends_on:
       controller:
         condition: service_healthy
@@ -55,7 +59,8 @@ services:
       retries: 5
     environment:
       ENABLE_ODL_CLUSTER: false
-      ENABLE_OAUTH: ${SDNC_ENABLE_OAUTH}
+      ENABLE_OAUTH: true
+      ENABLE_ODLUX_RBAC: false
       ODL_CERT_DIR: ${SDNC_CERT_DIR}
       ODL_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       SDNC_CONFIG_DIR: /opt/onap/ccsdk/data/properties
@@ -66,10 +71,14 @@ services:
       SDNRONLY: true
       SDNRINIT: true
       SDNRDM: true
-      SDNRDBURL: http://persistence:9200
+      SDNRDBTYPE: MARIADB
+      SDNRDBURL: jdbc:mysql://persistence:3306/sdnrdb
+      SDNRDBUSERNAME: sdnrdb
+      SDNRDBPASSWORD: sdnrdb
       SDNR_NETCONF_CALLHOME_ENABLED: true
       A1_ADAPTER_NORTHBOUND: false
       JAVA_OPTS: -Xms256m -Xmx4g
+      SDNR_WEBSOCKET_PORT: ${SDNR_WEBSOCKET_PORT}
       IDENTITY_PROVIDER_URL: ${IDENTITY_PROVIDER_URL}
       SDNC_WEB_URL: https://odlux.oam.${HTTP_DOMAIN}
       SDNR_VES_COLLECTOR_ENABLED: true
@@ -107,6 +116,9 @@ services:
       traefik.tcp.routers.controller-tls.tls: false
       traefik.tcp.routers.controller-tls.service: controller-tls
       traefik.tcp.services.controller-tls.loadbalancer.server.port: 4335
+      app: "controller"
+      deploy: "o-ran-sc-smo-oam"
+      solution: "o-ran-sc-smo"
     networks:
       smo:
       dcn:
@@ -138,6 +150,9 @@ services:
       traefik.http.routers.ves.rule: Host(`ves-collector.dcn.${HTTP_DOMAIN}`)
       traefik.http.routers.ves.tls: true
       traefik.http.services.ves.loadbalancer.server.port: ${VES_ENDPOINT_PORT}
+      app: "ves-collector"
+      deploy: "o-ran-sc-smo-oam"
+      solution: "o-ran-sc-smo"
     networks:
       smo:
       dcn:
