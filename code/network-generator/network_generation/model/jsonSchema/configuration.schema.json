@@ -306,6 +306,10 @@
           "description": "If enabled, an ietf-network-topology file will be generated.",
           "$ref": "#/$defs/export"
         },
+        "network_dir": {
+          "description": "If enabled, an ietf-network-topology network subdirectory file structure is generated.",
+          "$ref": "#/$defs/export"
+        },
         "svg": {
           "description": "If enabled, a svg file will be generated.",
           "$ref": "#/$defs/export"
