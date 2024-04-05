@@ -240,3 +240,6 @@ class NrCellDu(ORanNode):
 
     def toSvg(self) -> ET.Element:
         return ET.Element("to-be-implemented")
+
+    def to_directory(self, parent_dir: str) -> None:
+        pass

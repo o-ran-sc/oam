@@ -153,3 +153,7 @@ class ORanSmo(ORanNode):
 
     def toSvg(self) -> ET.Element:
         return ET.Element("not-implemented-yet-TODO")
+
+    def to_directory(self, parent_dir: str) -> None:
+        for ric in self.o_ran_near_rt_rics:
+            ric.to_directory(parent_dir)

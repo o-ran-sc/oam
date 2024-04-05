@@ -216,3 +216,7 @@ class ORanNode(ORanObject):
     @abstractmethod
     def toSvg(self) -> ET.Element:
         pass
+
+    @abstractmethod
+    def to_directory(self, parent_dir: str) -> None:
+        pass

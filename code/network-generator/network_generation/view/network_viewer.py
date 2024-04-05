@@ -58,6 +58,13 @@ class NetworkViewer:
         """
         print(self.__network)
 
+    def to_directory(self, parent_dir: str) -> None:
+        """
+        Method converting the network to a subdirectory file structure
+        """
+        self.__network.to_directory(parent_dir)
+        print(f'Directory structure saved to "{parent_dir}"')
+
     def save(self, filename: str, compressed: bool = True) -> None:
         """
         Method saving the class content to a file in json format.

@@ -145,3 +145,7 @@ class ORanNearRtRic(ORanNode):
 
     def toSvg(self) -> ET.Element:
         return ET.Element("to-be-implemented")
+
+    def to_directory(self, parent_dir: str) -> None:
+        for o_ran_cu in self.o_ran_cus:
+            o_ran_cu.to_directory(parent_dir)

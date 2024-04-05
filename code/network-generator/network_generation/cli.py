@@ -59,6 +59,13 @@ def main() -> None:  # pragma: no cover
                 configuration["generationTasks"]["topology"]["compressed"]
             )
 
+        # dir structure for day0 configuration
+        # Note: compressed option ignored
+        if configuration["generationTasks"]["network_dir"]["enabled"] is True:
+            viewer.to_directory(
+                output_folder
+            )
+
         # svg xml
         if configuration["generationTasks"]["svg"]["enabled"] is True:
             viewer.svg(

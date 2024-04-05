@@ -17,6 +17,7 @@
 Module for a class representing a O-RAN Network
 """
 import xml.etree.ElementTree as ET
+import os
 from typing import Any, cast
 
 import network_generation.model.python.hexagon as Hexagon
@@ -147,6 +148,9 @@ class ORanNetwork(ORanObject):
                 ],
             }
         }
+
+    def to_directory(self, parent_dir: str) -> None:
+        self._o_ran_smo.to_directory(os.path.join(parent_dir, self.id))
 
     def toKml(self) -> ET.Element:
         root: ET.Element = ET.Element(

@@ -18,6 +18,7 @@
 A Class representing an O-RAN distributed unit (ORanDu)
 """
 import xml.etree.ElementTree as ET
+import os
 from typing import Any, cast
 
 from network_generation.model.python.o_ran_node import IORanNode, ORanNode
@@ -54,6 +55,7 @@ class ORanDu(ORanNode):
             if o_ran_du_data and "oRanRuCount" in o_ran_du_data
             else 1
         )
+        self.type = "ntsim-ng-o-du"
 
     def _to_o_ran_du_data(self, data: dict[str, Any]) -> IORanDu:
         result: IORanDu = default_value
@@ -114,3 +116,11 @@ class ORanDu(ORanNode):
 
     def toSvg(self) -> ET.Element:
         return ET.Element("to-be-implemented")
+
+    def to_directory(self, parent_dir: str) -> None:
+        parent_path = os.path.join(parent_dir, self.type)
+        path = os.path.join(parent_path, self.name)
+        if not os.path.exists(parent_path):
+            os.makedirs(parent_path, exist_ok=True)
+        if not os.path.exists(path):
+            os.mkdir(path)

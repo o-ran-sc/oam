@@ -143,3 +143,7 @@ class ORanCu(ORanNode):
 
     def toSvg(self) -> ET.Element:
         return ET.Element("to-be-implemented")
+
+    def to_directory(self, parent_dir: str) -> None:
+        for o_ran_cloud_du in self.o_ran_cloud_dus:
+            o_ran_cloud_du.to_directory(parent_dir)

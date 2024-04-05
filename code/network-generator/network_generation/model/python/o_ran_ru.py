@@ -18,6 +18,7 @@
 A Class representing an O-RAN radio unit (ORanRu)
 """
 import xml.etree.ElementTree as ET
+import os
 from typing import Any, cast
 
 from network_generation.model.python.nr_cell_du import NrCellDu
@@ -70,6 +71,7 @@ class ORanRu(ORanNode):
         )
         self._cells: list[NrCellDu] = self._create_cells()
         name: str = self.name.replace("RU", "DU")
+        self.type = "ntsim-ng-o-ru"
 
         o_ran_du_data: dict[str, Any] = {
             "name": name,
@@ -185,3 +187,12 @@ class ORanRu(ORanNode):
 
     def toSvg(self) -> ET.Element:
         return ET.Element("to-be-implemented")
+
+    def to_directory(self, parent_dir: str) -> None:
+        self.oRanDu.to_directory(parent_dir)
+        parent_path = os.path.join(parent_dir, self.type)
+        path = os.path.join(parent_path, self.name)
+        if not os.path.exists(parent_path):
+            os.makedirs(parent_path, exist_ok=True)
+        if not os.path.exists(path):
+            os.mkdir(path)
