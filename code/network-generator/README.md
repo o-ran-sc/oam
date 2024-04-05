@@ -28,6 +28,8 @@ Please follow the libyang [installation instructions](https://github.com/CESNET/
 ## Usage 
 
 ```
+make virtual_env_4_oam
+source .oam/bin/activate
 python3 -m network_generation config.json
 ```
 

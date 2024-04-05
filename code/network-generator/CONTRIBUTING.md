@@ -22,7 +22,7 @@ sudo apt install python3.10-venv
 
 ## Setting up your own virtual environment
 
-Run `make virtualenv` to create a virtual environment.
+Run `make virtual_env_4_oam` to create a virtual environment.
 then activate it with `source .venv/bin/activate`.
 
 ## Install the project in develop mode
@@ -85,18 +85,18 @@ This project comes with a `Makefile` that contains a number of useful utility.
 Usage: make <target>
 
 Targets:
-help:             ## Show the help.
-install:          ## Install the project in dev mode.
-fmt:              ## Format code using black & isort.
-lint:             ## Run pep8, black, mypy linters.
-test: lint        ## Run tests and generate coverage report.
-watch:            ## Run tests on every change.
-clean:            ## Clean unused files.
-virtualenv:       ## Create a virtual environment.
-release:          ## Create a new tag for release.
-docs:             ## Build the documentation.
-switch-to-poetry: ## Switch to poetry package manager.
-init:             ## Initialize the project based on an application template.
+help:              ## Show the help.
+install:           ## Install the project in dev mode.
+fmt:               ## Format code using black & isort.
+lint:              ## Run pep8, black, mypy linters.
+test: lint         ## Run tests and generate coverage report.
+watch:             ## Run tests on every change.
+clean:             ## Clean unused files.
+virtual_env_4_oam: ## Create a virtual environment.
+release:           ## Create a new tag for release.
+docs:              ## Build the documentation.
+switch-to-poetry:  ## Switch to poetry package manager.
+init:              ## Initialize the project based on an application template.
 ```
 
 ## Making a new release

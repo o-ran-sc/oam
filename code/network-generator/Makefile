@@ -1,5 +1,5 @@
 .ONESHELL:
-ENV_PREFIX=$(shell python -c "if __import__('pathlib').Path('.venv/bin/pip').exists(): print('.venv/bin/')")
+ENV_PREFIX=$(shell python -c "if __import__('pathlib').Path('.oam/bin/pip').exists(): print('.oam/bin/')")
 USING_POETRY=$(shell grep "tool.poetry" pyproject.toml && echo "yes")
 
 .PHONY: help
@@ -21,7 +21,7 @@ show:             ## Show the current environment.
 .PHONY: install
 install:          ## Install the project in dev mode.
 	@if [ "$(USING_POETRY)" ]; then poetry install && exit; fi
-	@echo "Don't forget to run 'make virtualenv' if you got errors."
+	@echo "Don't forget to run 'make virtual_env_4_oam' if you got errors."
 	$(ENV_PREFIX)pip install -e .[test]
 
 .PHONY: format
@@ -64,16 +64,19 @@ clean:            ## Clean unused files.
 	@rm -rf .tox/
 	@rm -rf docs/_build
 
-.PHONY: virtualenv
-virtualenv:       ## Create a virtual environment.
+.PHONY: virtual_env_4_oam
+virtual_env_4_oam:       ## Create a virtual environment for O-RAN-SC OAM project.
 	@if [ "$(USING_POETRY)" ]; then poetry install && exit; fi
-	@echo "creating virtualenv ..."
-	@rm -rf .venv
-	@python3 -m venv .venv
-	@./.venv/bin/pip install -U pip
-	@./.venv/bin/pip install -e .[test]
+	@echo "Creating a virtual environment for O-RAN-SC OAM project ..."
+	@rm -rf .oam
+	@python3 -m venv .oam
+	@./.oam/bin/pip install -U pip
+	@./.oam/bin/pip install -e .[test]
+	@./.oam/bin/pip install -r requirements.txt
+	@./.oam/bin/pip install -r requirements-test.txt
+
 	@echo
-	@echo "!!! Please run 'source .venv/bin/activate' to enable the environment !!!"
+	@echo "!!! Please run 'source .oam/bin/activate' to enable the OAM environment !!!"
 
 .PHONY: release
 release:          ## Create a new tag for release.
@@ -98,7 +101,7 @@ docs:             ## Build the documentation.
 switch-to-poetry: ## Switch to poetry package manager.
 	@echo "Switching to poetry ..."
 	@if ! poetry --version > /dev/null; then echo 'poetry is required, install from https://python-poetry.org/'; exit 1; fi
-	@rm -rf .venv
+	@rm -rf .oam
 	@poetry init --no-interaction --name=a_flask_test --author=rochacbruno
 	@echo "" >> pyproject.toml
 	@echo "[tool.poetry.scripts]" >> pyproject.toml
