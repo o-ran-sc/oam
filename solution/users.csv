@@ -1,0 +1,6 @@
+firstName,lastName,email,username,password,role,enabled,force_pwd_change
+Leia,Organa,leia.organa@sdnr.onap.org,leia.organa,Default4SDN!,administration,true,false
+R2,D2,r2.d2@sdnr.onap.org,r2.d2,Default4SDN!,administration,true,false
+Luke,Skywalker,luke.skywalker@sdnr.onap.org,luke.skywalker,Default4SDN!,provision,true,false
+Jargo,Fett,jargo.fett@sdnr.onap.org,jargo.fett,Default4SDN!,supervision,true,false
+Martin,Skorupski,martin.skorupski@highstreet-technologies.com,martin.skorupski,Default4SDN!,administration,true,false
