@@ -1,7 +1,7 @@
 {
     "node-red": {
         "name": "node-red",
-        "version": "3.0.2",
+        "version": "4.0.2",
         "local": false,
         "user": false,
         "nodes": {
@@ -94,6 +94,17 @@
                 "user": false,
                 "module": "node-red",
                 "file": "/usr/src/node-red/node_modules/@node-red/nodes/core/common/90-comment.js"
+            },
+            "global-config": {
+                "name": "global-config",
+                "types": [
+                    "global-config"
+                ],
+                "enabled": true,
+                "local": false,
+                "user": false,
+                "module": "node-red",
+                "file": "/usr/src/node-red/node_modules/@node-red/nodes/core/common/91-global-config.js"
             },
             "unknown": {
                 "name": "unknown",
@@ -413,25 +424,6 @@
                 "user": false,
                 "module": "node-red",
                 "file": "/usr/src/node-red/node_modules/@node-red/nodes/core/storage/23-watch.js"
-            }
-        }
-    },
-    "node-red-contrib-loop": {
-        "name": "node-red-contrib-loop",
-        "version": "1.0.1",
-        "local": true,
-        "user": true,
-        "nodes": {
-            "loop": {
-                "name": "loop",
-                "types": [
-                    "loop"
-                ],
-                "enabled": true,
-                "local": true,
-                "user": false,
-                "module": "node-red-contrib-loop",
-                "file": "/data/node_modules/node-red-contrib-loop/loop.js"
             }
         }
     }

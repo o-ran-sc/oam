@@ -4,7 +4,7 @@
             "firstName": "Leia",
             "lastName": "Organa",
             "email": "leia.organa@sdnr.onap.org",
-            "enabled": "",
+            "enabled": "true",
             "username": "leia.organa",
             "credentials": [
                 {
@@ -21,7 +21,7 @@
             "firstName": "R2",
             "lastName": "D2",
             "email": "r2.d2@sdnr.onap.org",
-            "enabled": "",
+            "enabled": "true",
             "username": "r2.d2",
             "credentials": [
                 {
@@ -38,7 +38,7 @@
             "firstName": "Luke",
             "lastName": "Skywalker",
             "email": "luke.skywalker@sdnr.onap.org",
-            "enabled": "",
+            "enabled": "true",
             "username": "luke.skywalker",
             "credentials": [
                 {
@@ -55,7 +55,7 @@
             "firstName": "Jargo",
             "lastName": "Fett",
             "email": "jargo.fett@sdnr.onap.org",
-            "enabled": "",
+            "enabled": "true",
             "username": "jargo.fett",
             "credentials": [
                 {
@@ -72,7 +72,7 @@
             "firstName": "Martin",
             "lastName": "Skorupski",
             "email": "martin.skorupski@highstreet-technologies.com",
-            "enabled": "",
+            "enabled": "true",
             "username": "martin.skorupski",
             "credentials": [
                 {
