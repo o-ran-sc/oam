@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dcfd07d_c21aa118",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2024-09-21T12:10:55Z",
+      "side": 1,
+      "message": "Manual verification at Rutgers University - OpenWirelessLab OWL featuring OSFG Reference Implemeneation",
+      "revId": "be8aac90593629faf3ed4e78438fdb5489a0cd90",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
