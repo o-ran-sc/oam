@@ -296,17 +296,17 @@
       "title": "generationTasks",
       "type": "object",
       "required": [
-        "topology",
+        "rfc8345",
         "svg",
         "kml"
       ],
       "additionalProperties": false,
       "properties": {
-        "topology": {
+        "rfc8345": {
           "description": "If enabled, an ietf-network-topology file will be generated.",
           "$ref": "#/$defs/export"
         },
-        "network_dir": {
+        "day0Config": {
           "description": "If enabled, an ietf-network-topology network subdirectory file structure is generated.",
           "$ref": "#/$defs/export"
         },
