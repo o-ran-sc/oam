@@ -77,7 +77,7 @@ git version 2.34.1
 
 ```
 $ python3 --version
-Python 3.10.6
+Python 3.10.12
 ```
 
 A python parser package is required.
@@ -160,7 +160,7 @@ docker compose -f smo/apps/docker-compose.yaml up -d
 # wait until the cpu load is low again
 
 docker compose -f network/docker-compose.yaml up -d
-docker compose -f network/docker-compose.yaml restart ntsim-ng-o-du-1122 ntsim-ng-o-du-1123
+docker compose -f network/docker-compose.yaml restart ntsim-ng-o-du-1122
 python network/config.py
 ```
 
