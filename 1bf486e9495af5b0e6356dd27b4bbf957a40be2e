@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "838cf7ff_9b15d7b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2024-09-21T15:17:17Z",
+      "side": 1,
+      "message": "Manual validation at Rutgers University - OpenWirelessLab (OWL) featured by OSFG Reference Implementation",
+      "revId": "1bf486e9495af5b0e6356dd27b4bbf957a40be2e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
