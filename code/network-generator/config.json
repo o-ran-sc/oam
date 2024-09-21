@@ -39,17 +39,17 @@
   },
   "outputFolder": "output",
   "generationTasks": {
-    "network_dir": {
+    "day0Config": {
+      "enabled": false,
+      "compressed": false
+    },
+    "rfc8345": {
       "enabled": true,
       "compressed": false
     },
-    "topology": {
-      "enabled": true,
-      "compressed": true
-    },
     "svg": {
-      "enabled": true,
-      "compressed": true
+      "enabled": false,
+      "compressed": false
     },
     "kml": {
       "enabled": true,
