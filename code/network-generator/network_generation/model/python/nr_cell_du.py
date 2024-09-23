@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# !/usr/bin/python
+# !/usr/bin/python3
 
 """
 A Class representing a 3GPP new radio cell du (NrCellDu)
