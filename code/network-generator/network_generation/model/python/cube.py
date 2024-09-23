@@ -1,4 +1,4 @@
-# Copyright 2023 highstreet technologies GmbH
+# Copyright 2024 highstreet technologies
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 #
 # inspired by http://www.redblobgames.com/grids/hexagons/
 
-# !/usr/bin/python
+# !/usr/bin/python3
 from network_generation.model.python.hexagon import Hex
 
 
