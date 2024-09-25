@@ -41,11 +41,16 @@ By default the generated files can be found in the 'output' folder:
 - [o-ran-network.svg](output/o-ran-network.svg)
 - [o-ran-network.kml](output/o-ran-network.kml)
 
-
 ## Output validation
 
 ```
-yanglint -f json model/yang/ietf-network-topology.yang output/o-ran-network-operational.json
+yanglint \
+network_generation/model/yang/ietf-network.yang \
+network_generation/model/yang/ietf-network-topology.yang \
+network_generation/model/yang/o-ran-common-identity-refs.yang \
+network_generation/model/yang/o-ran-sc-network.yang \
+\
+output/o-ran-network-operational.json 
 ```
 
 ## Development
