@@ -52,6 +52,7 @@ class ORanNearRtRic(ORanNode):
         super().__init__(
             cast(dict[str, Any], o_ran_near_rt_ric_data), **kwargs
         )
+        self.type = "o-ran-sc-network:near-rt-ric"
         self._o_ran_cus: list[ORanCu] = self._calculate_o_ran_cus()
 
     def _to_o_ran_near_rt_ric_data(
@@ -65,13 +66,13 @@ class ORanNearRtRic(ORanNode):
 
     def _calculate_o_ran_cus(self) -> list[ORanCu]:
         hex_ring_radius: int = (
-            self.parent.parent
-            .spiral_radius_profile.oRanNearRtRicSpiralRadiusOfOCus
+            self.parent.parent.spiral_radius_profile
+                .oRanNearRtRicSpiralRadiusOfOCus
         )
-        hex_list: list[
-            Hex
-        ] = self.parent.parent.spiral_radius_profile.oRanCuSpiral(
-            self.position, hex_ring_radius
+        hex_list: list[Hex] = (
+            self.parent.parent.spiral_radius_profile.oRanCuSpiral(
+                self.position, hex_ring_radius
+            )
         )
         result: list[ORanCu] = []
         for index, hex in enumerate(hex_list):
@@ -91,6 +92,7 @@ class ORanNearRtRic(ORanNode):
                         "position": hex,
                         "layout": self.layout,
                         "parent": self,
+                        "network": self.network,
                     }
                 )
             )
@@ -111,26 +113,18 @@ class ORanNearRtRic(ORanNode):
     def termination_points(self) -> list[ORanTerminationPoint]:
         result: list[ORanTerminationPoint] = super().termination_points()
         phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append(ORanTerminationPoint({"tp-id": phy_tp, "name": phy_tp}))
+        result.append(ORanTerminationPoint({
+            "name": phy_tp,
+            "type": "o-ran-sc-network:phy"
+        }))
         for interface in ["a1", "o1", "o2", "e2"]:
             id: str = "-".join([self.name, interface.upper()])
-            result.append(
-                ORanTerminationPoint(
-                    {"id": id, "name": id, "supporter": phy_tp, "parent": self}
-                )
-            )
-        return result
-
-    def to_topology_nodes(self) -> list[dict[str, Any]]:
-        result: list[dict[str, Any]] = super().to_topology_nodes()
-        for o_ran_cu in self.o_ran_cus:
-            result.extend(o_ran_cu.to_topology_nodes())
-        return result
-
-    def to_topology_links(self) -> list[dict[str, Any]]:
-        result: list[dict[str, Any]] = super().to_topology_links()
-        for o_ran_cu in self.o_ran_cus:
-            result.extend(o_ran_cu.to_topology_links())
+            result.append(ORanTerminationPoint({
+                     "name": id,
+                     "type": ":".join(["o-ran-sc-network", interface]),
+                     "supporter": phy_tp,
+                     "parent": self
+            }))
         return result
 
     def toKml(self) -> ET.Element:
@@ -149,3 +143,31 @@ class ORanNearRtRic(ORanNode):
     def to_directory(self, parent_dir: str) -> None:
         for o_ran_cu in self.o_ran_cus:
             o_ran_cu.to_directory(parent_dir)
+
+    def _extend_with_o_ran_cu_references(
+        self: Any, super_method: Any, o_ran_cu_method_name: str
+    ) -> list[dict[str, Any]]:
+        """
+        Helper method to extend results with references from o_ran_cus.
+
+        :param super_method: The superclass method to call for the initial
+                             result.
+        :param o_ran_cu_method_name: The method name to call on each o_ran_cu.
+        :return: A list of dictionaries with the combined results.
+        """
+        result = super_method()
+        for o_ran_cu in self.o_ran_cus:
+            result.extend(
+                self.flatten_list(getattr(o_ran_cu, o_ran_cu_method_name)())
+            )
+        return result
+
+    def to_topology_nodes(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_topology_nodes, "to_topology_nodes"
+        )
+
+    def to_topology_links(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_topology_links, "to_topology_links"
+        )
