@@ -1,4 +1,4 @@
-# Copyright 2024 highstreet technologies
+# Copyright 2024 highstreet technologies GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 """
 Module for a class representing a O-RAN Network
 """
-import xml.etree.ElementTree as ET
 import os
+import uuid
+import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 from typing import Any, cast
 
 import network_generation.model.python.hexagon as Hexagon
@@ -36,8 +38,10 @@ from network_generation.model.python.o_ran_spiral_radius_profile import (
 )
 from network_generation.model.python.point import Point
 
+
 # Define the "IORanNetwork" interface
-IORanNetwork = IORanObject
+class IORanNetwork(IORanObject):
+    network: Any
 
 
 class ORanNetwork(ORanObject):
@@ -47,12 +51,23 @@ class ORanNetwork(ORanObject):
 
     __my_default_value: IORanNetwork = cast(IORanNetwork, ORanObject.default())
 
+    __my_network_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, "Operator A"))
+
+    # Get the current date and time in UTC
+    __current_time = datetime.now(timezone.utc)
+    # Format the time string as required
+    __time_string = __current_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    __my_valid_for = {
+        "startDateTime": f'{__current_time.strftime("%Y")}-01-01T00:00:00Z',
+        "endDateTime": f'{__current_time.strftime("%Y")}-12-31T23:59:59Z',
+    }
+
     # constructor
     def __init__(
         self,
         configuration: dict[str, dict],
         data: dict[str, Any] = cast(dict[str, Any], __my_default_value),
-        **kwargs: dict[str, Any]
+        **kwargs: dict[str, Any],
     ) -> None:
         o_ran_network_data: IORanNetwork = self._to_o_ran_network_data(data)
         super().__init__(cast(dict[str, Any], o_ran_network_data), **kwargs)
@@ -86,9 +101,9 @@ class ORanNetwork(ORanObject):
                 "oRanNearRtRicSpiralRadiusOfOCus": configuration["pattern"][
                     "nearRtRic"
                 ]["oRanCuSpiralRadius"],
-                "oRanCuSpiralRadiusOfODus": configuration["pattern"][
-                    "oRanCu"
-                ]["oRanDuSpiralRadius"],
+                "oRanCuSpiralRadiusOfODus": configuration["pattern"]["oRanCu"][
+                    "oRanDuSpiralRadius"
+                ],
                 "oRanDuSpiralRadiusOfTowers": configuration["pattern"][
                     "oRanDu"
                 ]["towerSpiralRadius"],
@@ -100,6 +115,7 @@ class ORanNetwork(ORanObject):
                 "geoLocation": self.center,
                 "layout": layout,
                 "parent": self,
+                "network": self,
             }
         )
 
@@ -142,6 +158,7 @@ class ORanNetwork(ORanObject):
                 "network": [
                     {
                         "network-id": self.id,
+                        "o-ran-sc-network:name": self.name,
                         "node": nodes,
                         "ietf-network-topology:link": links,
                     }
