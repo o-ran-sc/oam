@@ -17,8 +17,8 @@
 """
 A Class representing an O-RAN radio unit (ORanRu)
 """
-import xml.etree.ElementTree as ET
 import os
+import xml.etree.ElementTree as ET
 from typing import Any, cast
 
 from network_generation.model.python.nr_cell_du import NrCellDu
@@ -50,10 +50,11 @@ class ORanRu(ORanNode):
     def __init__(
         self,
         data: dict[str, Any] = cast(dict[str, Any], default_value),
-        **kwargs: dict[str, Any]
+        **kwargs: dict[str, Any],
     ) -> None:
         o_ran_ru_data: IORanRu = self._to_o_ran_ru_data(data)
         super().__init__(cast(dict[str, Any], o_ran_ru_data), **kwargs)
+        self.type = "o-ran-common-identity-refs:o-ru-function"
         self._cell_count: int = (
             int(str(o_ran_ru_data["cellCount"]))
             if o_ran_ru_data and "cellCount" in o_ran_ru_data
@@ -71,7 +72,6 @@ class ORanRu(ORanNode):
         )
         self._cells: list[NrCellDu] = self._create_cells()
         name: str = self.name.replace("RU", "DU")
-        self.type = "ntsim-ng-o-ru"
 
         o_ran_du_data: dict[str, Any] = {
             "name": name,
@@ -79,6 +79,7 @@ class ORanRu(ORanNode):
             "position": self.parent.position,
             "layout": self.layout,
             "parent": self.parent.parent.parent,
+            "network": self.network,
         }
         self._oRanDu: ORanDu = ORanDu(o_ran_du_data)
 
@@ -92,13 +93,12 @@ class ORanRu(ORanNode):
     def _create_cells(self) -> list[NrCellDu]:
         result: list[NrCellDu] = []
         cell_config: dict = (
-            self.parent.parent.parent.parent.parent.parent
-            .configuration["pattern"]["nrCellDu"]
+            self.parent.parent.parent.parent.parent.parent.configuration[
+                "pattern"
+            ]["nrCellDu"]
         )
         cell_angle: int = cell_config["cellAngle"]
-        cell_scale_factor: int = (
-            cell_config["cellScaleFactorForHandoverArea"]
-        )
+        cell_scale_factor: int = cell_config["cellScaleFactorForHandoverArea"]
         maxReach: int = cell_config["maxReach"]
         for index in range(self._cell_count):
             s: str = "00" + str(index)
@@ -114,6 +114,7 @@ class ORanRu(ORanNode):
                         "position": self.position,
                         "layout": self.layout,
                         "parent": self,
+                        "network": self.network,
                         "cellAngle": cell_angle,
                         "cellScaleFactorForHandoverArea": cell_scale_factor,
                         "maxReach": maxReach,
@@ -134,14 +135,18 @@ class ORanRu(ORanNode):
     def termination_points(self) -> list[ORanTerminationPoint]:
         result: list[ORanTerminationPoint] = super().termination_points()
         phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append(ORanTerminationPoint({"id": phy_tp, "name": phy_tp}))
+        result.append(ORanTerminationPoint({
+            "name": phy_tp,
+            "type": "o-ran-sc-network:phy"
+        }))
         for interface in ["ofhm", "ofhc", "ofhu", "ofhs"]:
             id: str = "-".join([self.name, interface.upper()])
-            result.append(
-                ORanTerminationPoint(
-                    {"id": id, "name": id, "supporter": phy_tp, "parent": self}
-                )
-            )
+            result.append(ORanTerminationPoint({
+                "name": id,
+                "type": ":".join(["o-ran-sc-network", interface]),
+                "supporter": phy_tp,
+                "parent": self
+            }))
         for cell in self.cells:
             result.extend(cell.termination_points())
         return result
@@ -196,3 +201,20 @@ class ORanRu(ORanNode):
             os.makedirs(parent_path, exist_ok=True)
         if not os.path.exists(path):
             os.mkdir(path)
+
+    def _extend_with_cell_references(
+        self: Any, super_method: Any, cell_method_name: str
+    ) -> list[dict[str, Any]]:
+        """
+        Helper method to extend results with references from cells.
+
+        :param super_method: The superclass method to call for the initial
+                             result.
+        :param cell_method_name: The method name to call on each cell.
+        :return: A list of dictionaries with the combined results.
+        """
+        result = super_method()
+        result.extend(getattr(self.oRanDu, cell_method_name)())
+        for cell in self.cells:
+            result.extend(self.flatten_list(getattr(cell, cell_method_name)()))
+        return result
