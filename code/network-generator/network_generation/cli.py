@@ -18,7 +18,6 @@ import os
 import sys
 
 from network_generation.base import NetworkGenerator
-from network_generation.model.python.o_ran_network import ORanNetwork
 from network_generation.parameter_validator import ParameterValidator
 from network_generation.view.network_viewer import NetworkViewer
 
@@ -28,57 +27,55 @@ Module as entry point to generate an ietf topology json
 """
 
 
+def save_viewer_output(
+    viewer: NetworkViewer,
+    filename: str,
+    task: dict[str, str] | dict[str, int],
+    method_name: str,
+) -> None:
+    """
+    Save the output using the specified method of NetworkViewer.
+    """
+    if task["enabled"]:
+        method = getattr(viewer, method_name, None)
+        if callable(method):
+            method(filename, task["compressed"])
+
+
 def main() -> None:  # pragma: no cover
     """
     The main function executes on commands:
     `python -m network_generation`.
-
     """
-    validator: ParameterValidator = ParameterValidator(sys.argv)
+    validator = ParameterValidator(sys.argv)
 
-    if validator.is_valid():
-        configuration: dict = validator.configuration()
-        generator: NetworkGenerator = NetworkGenerator(
-            configuration["network"]
-        )
-        network: ORanNetwork = generator.generate()
-        viewer: NetworkViewer = NetworkViewer(network)
-
-        output_folder: str = configuration["outputFolder"]
-        # If folder doesn't exist, then create it.
-        if not os.path.isdir(output_folder):
-            os.makedirs(output_folder)
-
-        name: str = str(configuration["network"]["name"]).lower()
-        filename: str = "/".join([output_folder, name])
-
-        # topology json
-        if configuration["generationTasks"]["topology"]["enabled"] is True:
-            viewer.json().save(
-                filename,
-                configuration["generationTasks"]["topology"]["compressed"]
-            )
-
-        # dir structure for day0 configuration
-        # Note: compressed option ignored
-        if configuration["generationTasks"]["network_dir"]["enabled"] is True:
-            viewer.to_directory(
-                output_folder
-            )
-
-        # svg xml
-        if configuration["generationTasks"]["svg"]["enabled"] is True:
-            viewer.svg(
-                filename,
-                configuration["generationTasks"]["svg"]["compressed"]
-            )
-
-        # kml/kmz xml
-        if configuration["generationTasks"]["kml"]["enabled"] is True:
-            viewer.kml(
-                filename,
-                configuration["generationTasks"]["kml"]["compressed"]
-            )
-
-    else:
+    if not validator.is_valid():
         print(validator.error_message())
+        return
+
+    configuration = validator.configuration()
+    generator = NetworkGenerator(configuration["network"])
+    network = generator.generate()
+    viewer = NetworkViewer(network)
+
+    output_folder = str(configuration["outputFolder"])
+    if not os.path.isdir(output_folder):
+        os.makedirs(output_folder)
+
+    name = str(configuration["network"]["name"]).lower()
+    filename = os.path.join(output_folder, name)
+
+    generation_tasks = configuration["generationTasks"]
+
+    # Dictionary mapping task keys to viewer method names
+    task_to_method = {
+        "rfc8345": "rfc8345",
+        "day0Config": "to_directory",
+        "svg": "svg",
+        "kml": "kml",
+    }
+
+    for task_key, method_name in task_to_method.items():
+        save_viewer_output(
+            viewer, filename, generation_tasks.get(task_key, {}), method_name
+        )
