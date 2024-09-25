@@ -42,6 +42,7 @@ class ORanObject(Top):
             **super().json(),
             "id": self.id,
             "name": self.name,
+            "type": self.type,
             "administrativeState": self.administrativeState,
             "operationalState": self.operationalState,
             "lifeCycleState": self.lifeCycleState,
@@ -49,3 +50,12 @@ class ORanObject(Top):
             "usageState": self.usageState,
             "utilization": self.utilization,
         }
+
+    def flatten_list(self, nested_list: list) -> list:
+        flat_list = []
+        for item in nested_list:
+            if isinstance(item, list):
+                flat_list.extend(self.flatten_list(item))
+            else:
+                flat_list.append(item)
+        return flat_list
