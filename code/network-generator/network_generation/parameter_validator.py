@@ -67,7 +67,7 @@ class ParameterValidator:
         """
         return self.__config_file
 
-    def configuration(self) -> dict[str, str | dict[str, int]]:
+    def configuration(self) -> dict:
         """
         Getter for the configuration as input parameter.
         :return Init configuration as dict.
