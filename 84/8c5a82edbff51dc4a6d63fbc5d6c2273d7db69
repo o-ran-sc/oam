@@ -1,0 +1,8 @@
+Verified+1: ORAN Required GHA <releng+oran.required.gha@linuxfoundation.org>
+Verified+1: Martin Skorupski <martin.skorupski@highstreet-technologies.com>
+Code-Review+2: Martin Skorupski <martin.skorupski@highstreet-technologies.com>
+Submitted-by: Martin Skorupski <martin.skorupski@highstreet-technologies.com>
+Submitted-at: Wed, 25 Sep 2024 11:47:41 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/oam/+/13406
+Project: oam
+Branch: refs/heads/master
