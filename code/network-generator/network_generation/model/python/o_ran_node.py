@@ -17,13 +17,17 @@
 """
 An abstract Class for O-RAN Node
 """
+import uuid
 import xml.etree.ElementTree as ET
 from abc import abstractmethod
+from datetime import datetime, timezone
 from typing import Any, cast
 
 import network_generation.model.python.hexagon as Hexagon
 from network_generation.model.python.countries import Country
-from network_generation.model.python.geo_location import GeoLocation
+from network_generation.model.python.geo_location import (
+    GeoLocation,
+)
 from network_generation.model.python.hexagon import Hex, Layout
 from network_generation.model.python.o_ran_object import (
     IORanObject,
@@ -48,6 +52,7 @@ class IORanNode(IORanObject):
     layout: Layout
     spiralRadiusProfile: SpiralRadiusProfile
     parent: Any
+    network: Any
 
 
 default_address: AddressType = {
@@ -71,6 +76,7 @@ default_value: IORanNode = cast(
             "layout": Layout(Hexagon.layout_flat, Point(1, 1), Point(0, 0)),
             "spiralRadiusProfile": SpiralRadiusProfile(),
             "parent": None,
+            "network": None,
         },
     },
 )
@@ -78,6 +84,12 @@ default_value: IORanNode = cast(
 
 # Define an abstract O-RAN Node class
 class ORanNode(ORanObject):
+
+    # Get the current date and time in UTC
+    __current_time = datetime.now(timezone.utc)
+    # Format the time string as required
+    __time_string = __current_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+
     @staticmethod
     def default() -> dict[str, Any]:
         return cast(dict[str, Any], default_value)
@@ -85,7 +97,7 @@ class ORanNode(ORanObject):
     def __init__(
         self,
         data: dict[str, Any] = cast(dict[str, Any], default_value),
-        **kwargs: dict[str, Any]
+        **kwargs: dict[str, Any],
     ) -> None:
         o_ran_node_data: IORanNode = self._to_o_ran_node_data(data)
         super().__init__(cast(dict[str, Any], data), **kwargs)
@@ -102,6 +114,7 @@ class ORanNode(ORanObject):
             SpiralRadiusProfile, o_ran_node_data["spiralRadiusProfile"]
         )
         self._parent: Any = o_ran_node_data["parent"]
+        self._network: Any = o_ran_node_data["network"]
         self._termination_points: list[ORanTerminationPoint] = []
 
     def _to_o_ran_node_data(self, data: dict[str, Any]) -> IORanNode:
@@ -169,6 +182,16 @@ class ORanNode(ORanObject):
     def parent(self, value: Any) -> None:
         self._parent = value
 
+    @property
+    def network(
+        self,
+    ) -> Any:  # expected is ORanNetwork
+        return self._network
+
+    @network.setter
+    def network(self, value: Any) -> None:
+        self._network = value
+
     # @property
     # @abstractmethod
     def termination_points(self) -> list[ORanTerminationPoint]:
@@ -178,12 +201,25 @@ class ORanNode(ORanObject):
     def to_topology_nodes(self) -> list[dict[str, Any]]:
         tps: list[dict[str, Any]] = []
         for tp in self.termination_points():
-            tps.append(tp.to_topology())
+            new_tp = tp.to_topology()
+            if any(
+                existing_tp["tp-id"] == new_tp["tp-id"] for existing_tp in tps
+            ):
+                pass
+            else:
+                tps.append(new_tp)
 
         result: list[dict[str, Any]] = []
         result.append(
             {
                 "node-id": self.name,
+                "o-ran-sc-network:uuid": str(
+                    uuid.uuid5(
+                        uuid.NAMESPACE_DNS,
+                        "-".join([self.network.name, self.name]),
+                    )
+                ),
+                "o-ran-sc-network:type": self.type,
                 "ietf-network-topology:termination-point": tps,
             }
         )
