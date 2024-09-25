@@ -1,0 +1,186 @@
+module o-ran-common-identity-refs {
+  yang-version 1.1;
+  namespace "urn:o-ran:wg1identityref:1.0";
+  prefix o-ran-iref;
+
+  import iana-hardware {
+    prefix ianahw;
+  }
+
+  organization
+    "O-RAN Alliance";
+  contact
+    "www.o-ran.org";
+  description
+    "This module defines a set of re-usable identity references, that can be
+     re-used across O-RAN working groups.
+
+     Copyright 2020 the O-RAN Alliance.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'
+     AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+     IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+     ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+     LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+     CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+     SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+     INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+     POSSIBILITY OF SUCH DAMAGE.
+
+     Redistribution and use in source and binary forms, with or without
+     modification, are permitted provided that the following conditions are met:
+
+     * Redistributions of source code must retain the above copyright notice,
+     this list of conditions and the above disclaimer.
+     * Redistributions in binary form must reproduce the above copyright notice,
+     this list of conditions and the above disclaimer in the documentation
+     and/or other materials provided with the distribution.
+     * Neither the Members of the O-RAN Alliance nor the names of its
+     contributors may be used to endorse or promote products derived from
+     this software without specific prior written permission.";
+
+  revision 2020-11-01 {
+    description
+      "version 1.0.0
+
+       1) initial version.";
+    reference
+      "ORAN-WG1.IM.0-v01.00";
+  }
+
+  // O-RAN functional identity types
+
+  identity o-ran-function-base {
+    description
+      "Base identity from which all O-RAN defined functions are derived.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity o-ru-function {
+    base o-ran-function-base;
+    description
+      "an identity corresponding to an O-RAN O-RU Function.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity o-du-function {
+    base o-ran-function-base;
+    description
+      "an identity corresponding to all O-RAN O-DU Functions.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity o-cu-function {
+    base o-ran-function-base;
+    description
+      "an identity corresponding to all O-RAN O-CU Functions.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity o-cu-up-function {
+    base o-cu-function;
+    description
+      "an identity corresponding to an O-RAN O-CU UP Function.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity o-cu-cp-function {
+    base o-cu-function;
+    description
+      "an identity corresponding to an O-RAN O-CU CP Function.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  // O-RAN radio technology identity types
+
+  identity o-ran-radio-technology-base {
+    description
+      "Base identity for O-RAN defined radio technology types.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity new-radio-technology {
+    base o-ran-radio-technology-base;
+    description
+      "An identity corresponding to new radio technology.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity lte-technology {
+    base o-ran-radio-technology-base;
+    description
+      "An identity corresponding to lte technology.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity nb-iot {
+    base lte-technology;
+    description
+      "An identity corresponding to nb-iot technology.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  // O-RAN Transport technology identity types
+
+  identity o-ran-transport-technology-base {
+    description
+      "Base identity from which all O-RAN defined transport technology identities are derived.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  // O-RAN Fronthaul transport identity types
+
+  identity o-ran-fronthaul-transport-base {
+    description
+      "Base identity from which all O-RAN defined fronthaul transports are derived.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity ethernet-fronthaul-transport {
+    base o-ran-fronthaul-transport-base;
+    description
+      "an identity corresponding to fronthaul transport using ethernet based flows.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  // Hardware component identity types
+
+  identity o-ran-module {
+    base ianahw:module;
+    description
+      "Any O-RAN module that represents a self-contained sub-system.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity o-ran-hardware-class {
+    base ianahw:hardware-class;
+    description
+      "This identity corresponding to a generic O-RAN hardware class.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity fpga {
+    base o-ran-hardware-class;
+    description
+      "Represent an FPGA.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+}
