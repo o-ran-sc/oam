@@ -17,8 +17,8 @@
 """
 A Class representing an O-RAN distributed unit (ORanDu)
 """
-import xml.etree.ElementTree as ET
 import os
+import xml.etree.ElementTree as ET
 from typing import Any, cast
 
 from network_generation.model.python.o_ran_node import IORanNode, ORanNode
@@ -46,16 +46,16 @@ class ORanDu(ORanNode):
     def __init__(
         self,
         data: dict[str, Any] = cast(dict[str, Any], default_value),
-        **kwargs: dict[str, Any]
+        **kwargs: dict[str, Any],
     ) -> None:
         o_ran_du_data: IORanDu = self._to_o_ran_du_data(data)
         super().__init__(cast(dict[str, Any], o_ran_du_data), **kwargs)
+        self.type = "o-ran-common-identity-refs:o-du-function"
         self._o_ran_ru_count = (
             o_ran_du_data["oRanRuCount"]
             if o_ran_du_data and "oRanRuCount" in o_ran_du_data
             else 1
         )
-        self.type = "ntsim-ng-o-du"
 
     def _to_o_ran_du_data(self, data: dict[str, Any]) -> IORanDu:
         result: IORanDu = default_value
@@ -65,16 +65,21 @@ class ORanDu(ORanNode):
         return result
 
     def termination_points(self) -> list[ORanTerminationPoint]:
-        result: list[ORanTerminationPoint] = super().termination_points()
+        result: list[ORanTerminationPoint] = super(
+            ).termination_points()
         phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append(ORanTerminationPoint({"id": phy_tp, "name": phy_tp}))
+        result.append(ORanTerminationPoint({
+            "name": phy_tp,
+            "type": "o-ran-sc-network:phy"
+        }))
         for interface in ["e2", "o1", "ofhm", "ofhc", "ofhu", "ofhs"]:
             id: str = "-".join([self.name, interface.upper()])
-            result.append(
-                ORanTerminationPoint(
-                    {"id": id, "name": id, "supporter": phy_tp, "parent": self}
-                )
-            )
+            result.append(ORanTerminationPoint({
+                     "name": id,
+                     "type": ":".join(["o-ran-sc-network", interface]),
+                     "supporter": phy_tp,
+                     "parent": self
+            }))
         return result
 
     def to_topology_nodes(self) -> list[dict[str, Any]]:
@@ -84,11 +89,14 @@ class ORanDu(ORanNode):
     def to_topology_links(self) -> list[dict[str, Any]]:
         result: list[dict[str, Any]] = super().to_topology_links()
         for interface in ["e2", "o1"]:
+            destination_node = self.parent.parent
+            if interface == "o1":
+                destination_node = self.parent.parent.parent
             link_id: str = "".join(
-                [interface, ":", self.name, "<->", self.parent.name]
+                [interface, ":", self.name, "<->", destination_node.name]
             )
             source_tp: str = "-".join([self.name, interface.upper()])
-            dest_tp: str = "-".join([self.parent.name, interface.upper()])
+            dest_tp: str = "-".join([destination_node.name, interface.upper()])
             result.append(
                 {
                     "link-id": link_id,
@@ -97,7 +105,7 @@ class ORanDu(ORanNode):
                         "source-tp": source_tp,
                     },
                     "destination": {
-                        "dest-node": self.parent.name,
+                        "dest-node": destination_node.name,
                         "dest-tp": dest_tp,
                     },
                 }
