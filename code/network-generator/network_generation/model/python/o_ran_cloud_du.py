@@ -52,6 +52,7 @@ class ORanCloudDu(ORanNode):
         o_ran_cloud_du_data: IORanCloudDu = self._to_o_ran_cloud_du_data(data)
 
         super().__init__(cast(dict[str, Any], o_ran_cloud_du_data), **kwargs)
+        self.type = "o-ran-sc-network:o-cloud"
         self._towers: list[Tower] = self._calculate_towers()
 
     def _to_o_ran_cloud_du_data(self, data: dict[str, Any]) -> IORanCloudDu:
@@ -63,10 +64,11 @@ class ORanCloudDu(ORanNode):
 
     def _calculate_towers(self) -> list[Tower]:
         hex_ring_radius: int = (
-            self.parent.parent.parent.parent
-            .spiral_radius_profile.oRanDuSpiralRadiusOfTowers
+            self.parent.parent.parent.parent.spiral_radius_profile
+                .oRanDuSpiralRadiusOfTowers
         )
-        hex_list: list[Hex] = Cube.spiral(self.position, hex_ring_radius)
+        hex_list: list[Hex] = Cube.spiral(
+            self.position, hex_ring_radius)
         result: list[Tower] = []
         for index, hex in enumerate(hex_list):
             s: str = "00" + str(index)
@@ -90,6 +92,7 @@ class ORanCloudDu(ORanNode):
                         "position": hex,
                         "layout": self.layout,
                         "parent": self,
+                        "network": self.network,
                     }
                 )
             )
@@ -102,26 +105,18 @@ class ORanCloudDu(ORanNode):
     def termination_points(self) -> list[ORanTerminationPoint]:
         result: list[ORanTerminationPoint] = super().termination_points()
         phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append(ORanTerminationPoint({"id": phy_tp, "name": phy_tp}))
+        result.append(ORanTerminationPoint({
+            "name": phy_tp,
+            "type": "o-ran-sc-network:phy"
+        }))
         for interface in ["o2"]:
             id: str = "-".join([self.name, interface.upper()])
-            result.append(
-                ORanTerminationPoint(
-                    {"id": id, "name": id, "supporter": phy_tp, "parent": self}
-                )
-            )
-        return result
-
-    def to_topology_nodes(self) -> list[dict[str, Any]]:
-        result: list[dict[str, Any]] = super().to_topology_nodes()
-        for tower in self.towers:
-            result.extend(tower.to_topology_nodes())
-        return result
-
-    def to_topology_links(self) -> list[dict[str, Any]]:
-        result: list[dict[str, Any]] = super().to_topology_links()
-        for tower in self.towers:
-            result.extend(tower.to_topology_links())
+            result.append(ORanTerminationPoint({
+                    "name": id,
+                    "type": ":".join(["o-ran-sc-network", interface]),
+                    "supporter": phy_tp,
+                    "parent": self
+                }))
         return result
 
     def toKml(self) -> ET.Element:
@@ -140,3 +135,33 @@ class ORanCloudDu(ORanNode):
     def to_directory(self, parent_dir: str) -> None:
         for tower in self.towers:
             tower.to_directory(parent_dir)
+
+    def _extend_with_tower_references(
+        self: Any, super_method: Any, tower_method_name: str
+    ) -> list[dict[str, Any]]:
+        """
+        Helper method to extend results with references from towers.
+
+        :param super_method: The superclass method to call for the initial
+               result.
+        :param tower_method_name: The method name to call on each tower.
+        :return: A list of dictionaries with the combined results.
+        """
+        result = super_method()
+        for tower in self.towers:
+            result.extend(
+                self.flatten_list(getattr(tower, tower_method_name)())
+            )
+        return result
+
+    def to_topology_nodes(self) -> list[dict[str, Any]]:
+        return self._extend_with_tower_references(
+            super().to_topology_nodes,
+            "to_topology_nodes",
+        )
+
+    def to_topology_links(self) -> list[dict[str, Any]]:
+        return self._extend_with_tower_references(
+            super().to_topology_links,
+            "to_topology_links",
+        )
