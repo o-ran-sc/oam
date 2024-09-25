@@ -17,6 +17,7 @@
 """
 An abstract Class for all classes
 """
+import uuid
 from abc import ABC, abstractmethod
 from typing import Any, TypedDict, cast
 
@@ -34,6 +35,7 @@ from network_generation.model.python.type_definitions import (
 class ITop(TypedDict):
     id: str
     name: str
+    type: str
     administrativeState: AdministrativeState
     operationalState: OperationalState
     lifeCycleState: LifeCycleState
@@ -46,6 +48,7 @@ class ITop(TypedDict):
 default_value: ITop = {
     "id": "be5229af-2660-4bae-8f2c-b9d0f788fad1",
     "name": "NoName",
+    "type": "NoType",
     "administrativeState": AdministrativeState.LOCKED,
     "operationalState": OperationalState.DISABLED,
     "lifeCycleState": LifeCycleState.PLANNED,
@@ -68,6 +71,7 @@ class Top(ABC):
         itop: ITop = self._to_itop_data(data)
         self._id: str = itop["id"]
         self._name: str = itop["name"]
+        self._type: str = itop["type"]
         self._administrativeState: AdministrativeState = itop[
             "administrativeState"
         ]
@@ -86,7 +90,7 @@ class Top(ABC):
 
     @property
     def id(self) -> str:
-        return self._id
+        return str(uuid.uuid5(uuid.NAMESPACE_DNS, self.name))
 
     @id.setter
     def id(self, value: str) -> None:
@@ -99,6 +103,14 @@ class Top(ABC):
     @name.setter
     def name(self, value: str) -> None:
         self._name = value
+
+    @property
+    def type(self) -> str:
+        return self._type
+
+    @type.setter
+    def type(self, value: str) -> None:
+        self._type = value
 
     @property
     def administrativeState(self) -> AdministrativeState:
