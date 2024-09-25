@@ -54,6 +54,7 @@ class Tower(ORanNode):
     ) -> None:
         tower_data: ITower = self._to_tower_data(data)
         super().__init__(cast(dict[str, Any], tower_data), **kwargs)
+        self.type = "o-ran-sc-network:tower"
         self._o_ran_ru_count: int = (
             int(str(tower_data["oRanRuCount"]))
             if tower_data and "oRanRuCount" in tower_data
@@ -95,6 +96,7 @@ class Tower(ORanNode):
                         "position": self.position,
                         "layout": self.layout,
                         "parent": self,
+                        "network": self.network,
                         "cellCount": cell_count,
                         "ruAngle": ru_angle,
                         "ruAzimuth": ru_azimuth,
@@ -110,12 +112,15 @@ class Tower(ORanNode):
     def termination_points(self) -> list[ORanTerminationPoint]:
         result: list[ORanTerminationPoint] = super().termination_points()
         phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append(ORanTerminationPoint({"tp-id": phy_tp}))
+        result.append(ORanTerminationPoint({
+            "name": phy_tp,
+            "type": "o-ran-sc-network:phy"
+        }))
         for interface in ["e2", "o1", "ofhm", "ofhc", "ofhu", "ofhs"]:
-            result.append(
-                ORanTerminationPoint(
-                    {
-                        "tp-id": "-".join([self.name, interface.upper()]),
+            id: str = "-".join([self.name, interface.upper()])
+            result.append(ORanTerminationPoint({
+                        "name": id,
+                        "type": ":".join(["o-ran-sc-network", interface]),
                         "supporting-termination-point": [
                             {
                                 "network-ref": type(
@@ -125,21 +130,7 @@ class Tower(ORanNode):
                                 "tp-ref": phy_tp,
                             }
                         ],
-                    }
-                )
-            )
-        return result
-
-    def to_topology_nodes(self) -> list[dict[str, Any]]:
-        result: list[dict[str, Any]] = super().to_topology_nodes()
-        for o_ran_ru in self.o_ran_rus:
-            result.extend(o_ran_ru.to_topology_nodes())
-        return result
-
-    def to_topology_links(self) -> list[dict[str, Any]]:
-        result: list[dict[str, Any]] = super().to_topology_links()
-        for o_ran_ru in self.o_ran_rus:
-            result.extend(o_ran_ru.to_topology_links())
+                    }))
         return result
 
     def toKml(self) -> ET.Element:
@@ -158,3 +149,33 @@ class Tower(ORanNode):
     def to_directory(self, parent_dir: str) -> None:
         for o_ran_ru in self.o_ran_rus:
             o_ran_ru.to_directory(parent_dir)
+
+    def _extend_with_o_ran_ru_references(
+        self: Any, super_method: Any, o_ran_ru_method_name: str
+    ) -> list[dict[str, Any]]:
+        """
+        Helper method to extend results with references from o_ran_rus.
+
+        :param super_method: The superclass method to call for the initial
+                             result.
+        :param o_ran_ru_method_name: The method name to call on each o_ran_ru.
+        :return: A list of dictionaries with the combined results.
+        """
+        result = super_method()
+        for o_ran_ru in self.o_ran_rus:
+            result.extend(
+                self.flatten_list(getattr(o_ran_ru, o_ran_ru_method_name)())
+            )
+        return result
+
+    def to_topology_nodes(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_topology_nodes,
+            "to_topology_nodes",
+        )
+
+    def to_topology_links(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_topology_links,
+            "to_topology_links",
+        )
