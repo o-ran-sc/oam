@@ -1,4 +1,4 @@
-# Copyright 2024 highstreet technologies
+# Copyright 2024 highstreet technologies GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@ Provides functions to convert the Network into different formats
 
 import gzip
 import json
-from typing_extensions import Buffer
-import zipfile
 import xml.etree.ElementTree as ET
+import zipfile
 from typing import Any
+
+from typing_extensions import Buffer
 
 from network_generation.model.python.o_ran_network import ORanNetwork
 
@@ -65,24 +66,28 @@ class NetworkViewer:
         self.__network.to_directory(parent_dir)
         print(f'Directory structure saved to "{parent_dir}"')
 
-    def save(self, filename: str, compressed: bool = True) -> None:
+    def __save_on_disc(
+        self, filename: str, compressed: bool, content: Any
+    ) -> None:
+        if compressed is True:
+            with gzip.open(f"{filename}.gz", "wb") as zf:
+                zf.write(json.dumps(content, indent=2).encode("utf-8"))
+            print(f'File "{filename}.gz" saved!')
+        else:
+            with open(f"{filename}", "w", encoding="utf-8") as jf:
+                json.dump(content, jf, ensure_ascii=False, indent=2)
+            print(f'File "{filename}" saved!')
+
+    def rfc8345(self, filename: str, compressed: bool = True) -> None:
         """
         Method saving the class content to a file in json format.
         :param filename: A valid path to a file on the system.
-        :param compressed: if True, svg is stored as svgz format.
+        :param compressed: if True, svg is stored as json format.
         :type filename: string
         """
         output: dict[str, Any] = self.__network.to_topology()
-        if compressed is True:
-            with gzip.open(f'{filename}-operational.json.gz', 'wb') as zf:
-                zf.write(json.dumps(output, indent=2).encode('utf-8'))
-            print(f'File "{filename}-operational.json.gz" saved!')
-        else:
-            with open(
-                f'{filename}-operational.json', "w", encoding="utf-8"
-            ) as jf:
-                json.dump(output, jf, ensure_ascii=False, indent=2)
-            print(f'File "{filename}-operational.json" saved!')
+        file_extension: str = "-operational.json"
+        self.__save_on_disc(f"{filename}{file_extension}", compressed, output)
 
     def readStylesFromFile(self) -> str:
         """
@@ -108,13 +113,14 @@ class NetworkViewer:
 
         if compressed is True:
             svg_output: Buffer = ET.tostring(
-                root, encoding="utf-8", xml_declaration=True)
-            with gzip.open(f'{filename}.svgz', 'wb') as zf:
+                root, encoding="utf-8", xml_declaration=True
+            )
+            with gzip.open(f"{filename}.svgz", "wb") as zf:
                 zf.write(svg_output)
             print(f'File "{filename}.svgz" saved!')
         else:
             ET.ElementTree(root).write(
-                f'{filename}.svg', encoding="utf-8", xml_declaration=True
+                f"{filename}.svg", encoding="utf-8", xml_declaration=True
             )
             print(f'File "{filename}.svg" saved!')
 
@@ -142,16 +148,15 @@ class NetworkViewer:
                 fill.text = str(value["fill"]["color"])
                 root.findall(".//Document")[0].append(style)
 
-        kml: str = ET.tostring(
-            root, encoding="utf-8", xml_declaration=True)
+        kml: str = ET.tostring(root, encoding="utf-8", xml_declaration=True)
         if compressed is True:
             with zipfile.ZipFile(
-                f'{filename}.kmz', 'w', zipfile.ZIP_DEFLATED
+                f"{filename}.kmz", "w", zipfile.ZIP_DEFLATED
             ) as zf:
                 zf.writestr(f'{filename.split("/")[1]}.kml', data=kml)
             print(f'File "{filename}.kmz" saved!')
         else:
-            kml_file = open(f'{filename}.kml', 'w')
-            kml_file.write(kml)
+            kml_file = open(f"{filename}.kml", "wb")
+            kml_file.write(kml.encode('utf-8'))
             kml_file.close()
             print(f'File "{filename}.kml" saved!')
