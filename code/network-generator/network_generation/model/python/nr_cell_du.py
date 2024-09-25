@@ -112,9 +112,10 @@ class NrCellDu(ORanNode):
 
     def termination_points(self) -> list[ORanTerminationPoint]:
         result: list[ORanTerminationPoint] = super().termination_points()
-        result.append(ORanTerminationPoint(
-            {"id": self.name, "name": self.name}
-        ))
+        result.append(ORanTerminationPoint({
+            "name": self.name,
+            "type": "o-ran-sc-network:cell"
+        }))
         return result
 
     def to_topology_nodes(self) -> list[dict[str, Any]]:
@@ -127,28 +128,16 @@ class NrCellDu(ORanNode):
         result: list[dict[str, Any]] = []  # super().to_topology_links()
         return result
 
-    def toKml(self) -> ET.Element:
-        placemark: ET.Element = ET.Element("Placemark")
-        name: ET.Element = ET.SubElement(placemark, "name")
-        name.text = self.name
-        style: ET.Element = ET.SubElement(placemark, "styleUrl")
-        style.text = "#" + self.__class__.__name__
-        multi_geometry: ET.Element = ET.SubElement(placemark, "MultiGeometry")
-        polygon: ET.Element = ET.SubElement(multi_geometry, "Polygon")
-        outer_boundary: ET.Element = ET.SubElement(polygon, "outerBoundaryIs")
-        linear_ring: ET.Element = ET.SubElement(outer_boundary, "LinearRing")
-        coordinates: ET.Element = ET.SubElement(linear_ring, "coordinates")
-
+    # returns a list of geo-locations as cell polygon
+    def get_cell_polygons(self) -> list[GeoLocation]:
         points: list[Point] = Hexagon.polygon_corners(
             self.layout, self.position
         )
         method = (
             self.parent.parent.parent.parent.parent.parent
-            .geo_location.point_to_geo_location
+                .geo_location.point_to_geo_location
         )
         geo_locations: list[GeoLocation] = list(map(method, points))
-        text: list[str] = []
-
         index: int = 1 + int(self._azimuth / self._cell_angle)
         network_center: GeoLocation = (
             self.parent.parent.parent.parent.parent.parent.geo_location
@@ -186,24 +175,8 @@ class NrCellDu(ORanNode):
         # close polygon
         cell_polygon.append(tower)
 
-        for gl in cell_polygon:
-            strs: list[str] = [
-                str("%.6f" % float(gl.longitude)),
-                str("%.6f" % float(gl.latitude)),
-                str("%.6f" % float(gl.aboveMeanSeaLevel)),
-            ]
-            text.append(",".join(strs))
-        coordinates.text = " ".join(text)
-
         if self.cell_scale_factor > 0:
-            scaled_polygon: ET.Element = ET.SubElement(
-                multi_geometry, "Polygon")
-            scaled_outer_boundary: ET.Element = ET.SubElement(
-                scaled_polygon, "outerBoundaryIs")
-            scaled_linear_ring: ET.Element = ET.SubElement(
-                scaled_outer_boundary, "LinearRing")
-            scaled_coordinates: ET.Element = ET.SubElement(
-                scaled_linear_ring, "coordinates")
+            scaled_cell_polygon: list[GeoLocation] = []
 
             arc: float = self.azimuth * math.pi / 180
             meterToDegree: float = (
@@ -219,23 +192,48 @@ class NrCellDu(ORanNode):
                 }
             )
             point_index: int = 0
-            text = []
+            scale: float = 1 + self.cell_scale_factor / 100
             for gl in cell_polygon:
-                scale: float = 1 + self.cell_scale_factor / 100
                 lng_new: float = (
                     1 * scale * (gl.longitude - cell_center.longitude)
                 ) + cell_center.longitude
                 lat_new: float = (
                     1 * scale * (gl.latitude - cell_center.latitude)
                 ) + cell_center.latitude
-                scaled_strs: list[str] = [
-                    str("%.6f" % float(lng_new)),
-                    str("%.6f" % float(lat_new)),
-                    str("%.6f" % float(gl.aboveMeanSeaLevel)),
-                ]
-                text.append(",".join(scaled_strs))
+
+                data: IGeoLocation = {
+                    "latitude": lat_new,
+                    "longitude": lng_new,
+                    "aboveMeanSeaLevel": gl.aboveMeanSeaLevel,
+                }
+
+                scaled_cell_polygon.append(GeoLocation(data))
                 point_index += 1
-            scaled_coordinates.text = " ".join(text)
+            cell_polygon = scaled_cell_polygon
+        return cell_polygon
+
+    def toKml(self) -> ET.Element:
+        placemark: ET.Element = ET.Element("Placemark")
+        name: ET.Element = ET.SubElement(placemark, "name")
+        name.text = self.name
+        style: ET.Element = ET.SubElement(placemark, "styleUrl")
+        style.text = "#" + self.__class__.__name__
+        multi_geometry: ET.Element = ET.SubElement(placemark, "MultiGeometry")
+        polygon: ET.Element = ET.SubElement(multi_geometry, "Polygon")
+        outer_boundary: ET.Element = ET.SubElement(polygon, "outerBoundaryIs")
+        linear_ring: ET.Element = ET.SubElement(outer_boundary, "LinearRing")
+        coordinates: ET.Element = ET.SubElement(linear_ring, "coordinates")
+
+        cell_polygon: list[GeoLocation] = self.get_cell_polygons()
+        text: list[str] = []
+        for gl in cell_polygon:
+            strs: list[str] = [
+                str("%.6f" % float(gl.longitude)),
+                str("%.6f" % float(gl.latitude)),
+                str("%.6f" % float(gl.aboveMeanSeaLevel)),
+            ]
+            text.append(",".join(strs))
+        coordinates.text = " ".join(text)
         return placemark
 
     def toSvg(self) -> ET.Element:
