@@ -48,6 +48,7 @@ class ORanCu(ORanNode):
     ) -> None:
         o_ran_cu_data: IORanCu = self._to_o_ran_cu_data(data)
         super().__init__(cast(dict[str, Any], o_ran_cu_data), **kwargs)
+        self.type = "o-ran-common-identity-refs:o-cu-function"
         self._o_ran_cloud_dus: list[ORanCloudDu] = self._calculate_o_ran_dus()
 
     def _to_o_ran_cu_data(self, data: dict[str, Any]) -> IORanCu:
@@ -59,13 +60,13 @@ class ORanCu(ORanNode):
 
     def _calculate_o_ran_dus(self) -> list[ORanCloudDu]:
         hex_ring_radius: int = (
-            self.parent.parent.parent
-            .spiral_radius_profile.oRanCuSpiralRadiusOfODus
+            self.parent.parent.parent.spiral_radius_profile
+                .oRanCuSpiralRadiusOfODus
         )
-        hex_list: list[
-            Hex
-        ] = self.parent.parent.parent.spiral_radius_profile.oRanDuSpiral(
-            self.position, hex_ring_radius
+        hex_list: list[Hex] = (
+            self.parent.parent.parent.spiral_radius_profile.oRanDuSpiral(
+                self.position, hex_ring_radius
+            )
         )
         result: list[ORanCloudDu] = []
         for index, hex in enumerate(hex_list):
@@ -85,6 +86,7 @@ class ORanCu(ORanNode):
                         "position": hex,
                         "layout": self.layout,
                         "parent": self,
+                        "network": self.network,
                     }
                 )
             )
@@ -105,30 +107,17 @@ class ORanCu(ORanNode):
     def termination_points(self) -> list[ORanTerminationPoint]:
         result: list[ORanTerminationPoint] = super().termination_points()
         phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append(ORanTerminationPoint({"tp-id": phy_tp, "name": phy_tp}))
+        result.append(ORanTerminationPoint({
+            "name": phy_tp,
+            "type": "o-ran-sc-network:phy"
+        }))
         for interface in ["e2", "o1"]:
             id: str = "-".join([self.name, interface.upper()])
-            result.append(
-                ORanTerminationPoint(
-                    {"id": id, "name": id, "supporter": phy_tp, "parent": self}
-                )
-            )
-        return result
-
-    def to_topology_nodes(self) -> list[dict[str, Any]]:
-        result: list[dict[str, Any]] = super().to_topology_nodes()
-        # for o_ran_du in self.o_ran_dus: # TODO
-        #     result.extend(o_ran_du.to_topology_nodes())
-        for o_ran_cloud_du in self.o_ran_cloud_dus:
-            result.extend(o_ran_cloud_du.to_topology_nodes())
-        return result
-
-    def to_topology_links(self) -> list[dict[str, Any]]:
-        result: list[dict[str, Any]] = super().to_topology_links()
-        # for o_ran_du in self.o_ran_dus:
-        # result.extend(o_ran_du.to_topology_links())
-        for o_ran_cloud_du in self.o_ran_cloud_dus:
-            result.extend(o_ran_cloud_du.to_topology_links())
+            result.append(ORanTerminationPoint({
+                "name": id,
+                "supporter": phy_tp,
+                "parent": self
+            }))
         return result
 
     def toKml(self) -> ET.Element:
@@ -147,3 +136,36 @@ class ORanCu(ORanNode):
     def to_directory(self, parent_dir: str) -> None:
         for o_ran_cloud_du in self.o_ran_cloud_dus:
             o_ran_cloud_du.to_directory(parent_dir)
+
+    def _extend_with_o_ran_cloud_du_references(
+        self: Any, super_method: Any, o_ran_cloud_du_method_name: str
+    ) -> list[dict[str, Any]]:
+        """
+        Helper method to extend results with references from o_ran_cloud_dus.
+
+        :param super_method: The superclass method to call for the initial
+                             result.
+        :param o_ran_cloud_du_method_name: The method name to call on each
+                                           o_ran_cloud_du.
+        :return: A list of dictionaries with the combined results.
+        """
+        result = super_method()
+        for o_ran_cloud_du in self.o_ran_cloud_dus:
+            result.extend(
+                self.flatten_list(
+                    getattr(o_ran_cloud_du, o_ran_cloud_du_method_name)()
+                )
+            )
+        return result
+
+    def to_topology_nodes(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cloud_du_references(
+            super().to_topology_nodes,
+            "to_topology_nodes",
+        )
+
+    def to_topology_links(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cloud_du_references(
+            super().to_topology_links,
+            "to_topology_links",
+        )
