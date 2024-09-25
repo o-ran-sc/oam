@@ -22,12 +22,15 @@ from network_generation.model.python.type_definitions import (
 
 
 def test_o_ran_termination_point() -> None:
-    o_ran_termination_point: ORanTerminationPoint = ORanTerminationPoint()
-    assert o_ran_termination_point.id == "O-RAN-DU-00-00-00-00-02-OFHS"
+    o_ran_termination_point: ORanTerminationPoint = ORanTerminationPoint({
+        "name": "my-name",
+        "supporter": "my-supporter"
+    })
+    assert o_ran_termination_point.name == "my-name"
     assert o_ran_termination_point.administrativeState.value == "locked"
-    assert o_ran_termination_point.supporter == "O-RAN-DU-00-00-00-00-02-PHY"
+    assert o_ran_termination_point.supporter == "my-supporter"
     assert o_ran_termination_point.parent == 0
-    assert len(str(o_ran_termination_point)) == 337
+    assert len(str(o_ran_termination_point)) == 357
 
     o_ran_termination_point = ORanTerminationPoint(
         {
@@ -38,9 +41,9 @@ def test_o_ran_termination_point() -> None:
             "parent": ORanTerminationPoint(),
         }
     )
-    assert len(o_ran_termination_point.id) == 5
+    assert len(o_ran_termination_point.id) == 36
     assert o_ran_termination_point.administrativeState.value == "unlocked"
     assert o_ran_termination_point.operationalState.value == "enabled"
     assert o_ran_termination_point.supporter == "my_personal_fan"
     assert type(o_ran_termination_point.parent) is int
-    assert len(str(o_ran_termination_point)) == 316
+    assert len(str(o_ran_termination_point)) == 359
