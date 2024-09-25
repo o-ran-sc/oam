@@ -39,9 +39,13 @@
   },
   "outputFolder": "output",
   "generationTasks": {
-    "topology": {
+    "day0Config": {
+      "enabled": false,
+      "compressed": false
+    },
+    "rfc8345": {
       "enabled": true,
-      "compressed": true
+      "compressed": false
     },
     "svg": {
       "enabled": true,
