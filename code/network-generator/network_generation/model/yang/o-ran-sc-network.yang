@@ -1,0 +1,265 @@
+module o-ran-sc-network {
+  yang-version 1.1;
+  namespace "urn:o-ran-sc:yang:o-ran-sc-network";
+  prefix onw;
+
+  import ietf-yang-types {
+    prefix yang;
+    reference
+      "RFC 6991: Common YANG Data Types";
+  }
+  import ietf-interfaces {
+    prefix if;
+    reference
+      "RFC 8343: A YANG Data Model for Interface Management";
+  }
+  import ietf-network {
+    prefix nw;
+    reference
+      "RFC 8345: A YANG Data Model for Network Topologies";
+  }
+  import ietf-network-topology {
+    prefix nt;
+    reference
+      "RFC 8345: A YANG Data Model for Network Topologies";
+  }
+  import o-ran-common-identity-refs {
+    prefix o-ran-iref;
+    reference
+      "O-RAN Information Model and Data Models";
+  }
+
+  organization
+    "O-RAN Software Community";
+  contact
+    "www.o-ran-sc.org";
+  description
+    "This module adds a type and an uuid parameter to the node object
+     class.
+
+     Copyright 2024 the O-RAN Software Community.
+
+     Licensed under the Apache License, Version 2.0 (the 'License');
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an 'AS IS' BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.";
+
+  revision 2024-09-13 {
+    description
+      "Initial version";
+    reference
+      "https://lf-o-ran-sc.atlassian.net/wiki/spaces/OAM/pages/29491658/Hybrid+and+Hierarchical+OAM+Architecture";
+  }
+
+  identity o-ran-sc-network-base {
+    base o-ran-iref:o-ran-function-base;
+    description
+      "Base identity from which extend the o-ran-function-base
+       The identities are used to define the value of a topological
+       type of the abstract topological node from ietf-network.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity smo {
+    base o-ran-sc-network-base;
+    description
+      "An identity corresponding to a Service, Maintenance and
+       Orchestration Framework (SMO) topology node.";
+  }
+
+  identity near-rt-ric {
+    base o-ran-sc-network-base;
+    description
+      "An identity corresponding to a near real-time radio access
+       network intelligent controller (NearRtRic) topology node.";
+  }
+
+  identity o-cloud {
+    base o-ran-sc-network-base;
+    description
+      "An identity corresponding to a near real-time O-RAN cloud
+       resource pool instance (O-Cloud) topology node.";
+  }
+
+  identity tower {
+    base o-ran-sc-network-base;
+    description
+      "An identity corresponding to a telecommunication network tower
+       offering mount points for network elements.";
+  }
+
+  identity o-ran-sc-interface-type {
+    base if:interface-type;
+    description
+      "This identity is used as a base for all interface types
+       defined in the context of O-RAN-SC.
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity phy {
+    base o-ran-sc-interface-type;
+    description
+      "An identity corresponding to an physical interface";
+  }
+
+  identity a1 {
+    base o-ran-sc-interface-type;
+    description
+      "An identity corresponding to an O-RAN A1 interface";
+  }
+
+  identity e2 {
+    base o-ran-sc-interface-type;
+    description
+      "An identity corresponding to an O-RAN A1 interface";
+  }
+
+  identity o1 {
+    base o-ran-sc-interface-type;
+    description
+      "An identity corresponding to an O-RAN O1 interface";
+  }
+
+  identity o2 {
+    base o-ran-sc-interface-type;
+    description
+      "An identity corresponding to an O-RAN O2 interface";
+  }
+
+  identity ofhm {
+    base o-ran-sc-interface-type;
+    description
+      "An identity corresponding to an O-RAN WG4 OpenFronthaul Management Plane
+       interface";
+  }
+
+  identity ofhc {
+    base o-ran-sc-interface-type;
+    description
+      "An identity corresponding to an O-RAN WG4 OpenFronthaul Control Plane
+       interface";
+  }
+
+  identity ofhu {
+    base o-ran-sc-interface-type;
+    description
+      "An identity corresponding to an O-RAN WG4 OpenFronthaul User Plane
+       interface";
+  }
+
+  identity ofhs {
+    base o-ran-sc-interface-type;
+    description
+      "An identity corresponding to an O-RAN WG4 OpenFronthaul Synchronization
+       Plane interface";
+  }
+
+  identity cell {
+    base o-ran-sc-interface-type;
+    description
+      "An identity corresponding to a 3GPP NRCellDu.";
+    reference 
+      "3GPP TS 28.541 5G Network Resource Model (NRM)";
+  }
+
+  typedef o-ran-sc-node-type {
+    type identityref {
+      base o-ran-iref:o-ran-function-base;
+    }
+    description
+      "Type reference to a node type identity.";
+  }
+
+  
+  typedef o-ran-sc-interface-type {
+    type identityref {
+      base o-ran-sc-interface-type;
+    }
+    description
+      "Type reference to a termination point type identity.";
+  }
+
+  grouping o-ran-sc-network {
+    description
+      "An abstract object call hosting O-RAN-SC specific extension
+       to an ietf-network network object class.";
+    leaf name {
+      type string {
+        length "1..255";
+      }
+      description
+        "A human readable name for the network of the
+         O-RAN-SC OAM topology.";
+    }
+  }
+
+  grouping o-ran-sc-network-node {
+    description
+      "An abstract object call hosting O-RAN-SC specific extension
+       to an ietf-network node object class.";
+    leaf uuid {
+      type yang:uuid;
+      description
+        "A Universally Unique IDentifier identifying a topological
+         ietf-network node type in the context of an
+         O-RAN-SC OAM topology.";
+      reference
+        "RFC 4122
+         A Universally Unique IDentifier (UUID) URN Namespace";
+    }
+    leaf type {
+      type o-ran-sc-node-type;
+      description
+        "A parameter which defines the topological ietf-network
+         node type in the context of an O-RAN-SC OAM topology.";
+    }
+  }
+
+  grouping o-ran-sc-network-tp {
+    description
+      "An abstract object call hosting O-RAN-SC specific extension
+       to an ietf-network node object class.";
+    leaf uuid {
+      type yang:uuid;
+      description
+        "A Universally Unique IDentifier identifying a topological
+         ietf-network node type in the context of an
+         O-RAN-SC OAM topology.";
+      reference
+        "RFC 4122
+         A Universally Unique IDentifier (UUID) URN Namespace";
+    }
+    leaf type {
+      type o-ran-sc-interface-type;
+      description
+        "A parameter which defines the topological ietf-network
+         termination point type in the context of an O-RAN-SC OAM topology.";
+    }
+  }
+
+  augment "/nw:networks/nw:network" {
+    description
+      "Augments ietf-network node with a name parameter.";
+    uses o-ran-sc-network;
+  }
+
+  augment "/nw:networks/nw:network/nw:node" {
+    description
+      "Augments ietf-network node with type and uuid parameters.";
+    uses o-ran-sc-network-node;
+  }
+
+  augment "/nw:networks/nw:network/nw:node/nt:termination-point" {
+    description
+      "Augments ietf-network node with type and uuid parameters.";
+    uses o-ran-sc-network-tp;
+  }
+}
