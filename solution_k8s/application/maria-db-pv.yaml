@@ -1,0 +1,21 @@
+# Source: robot/templates/pv.yaml
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: onap-mariadb
+  namespace: onap
+  # labels:
+  #   app: robot
+  #   chart: "robot-13.0.0"
+  #   release: onap
+  #   heritage: "Helm"
+  #   name: onap-robot
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "onap-mariadb-data"
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /dockerdata-nfs/onap/mariadb
