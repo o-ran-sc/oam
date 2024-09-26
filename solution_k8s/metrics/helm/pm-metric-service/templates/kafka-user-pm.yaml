@@ -1,0 +1,33 @@
+# kafka user for performance management microsservice
+#
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  labels:
+    strimzi.io/cluster: onap-strimzi
+  name: pm-ms-kafka-user
+spec:
+  authentication:
+    type: scram-sha-512
+  authorization:
+    acls:
+    - operations:
+      - Read
+      resource:
+        name: unauthenticated.SEC_3GPP_PERFORMANCEASSURANCE_OUTPUT
+        patternType: literal
+        type: topic
+    - operations:
+      - Read
+      resource:
+        name: unauthenticated.PERFORMANCE_MEASUREMENTS
+        patternType: literal
+        type: topic
+    - operations:
+      - Read
+      resource:
+        name: pm
+        patternType: prefix
+        type: group
+   
+    type: simple
