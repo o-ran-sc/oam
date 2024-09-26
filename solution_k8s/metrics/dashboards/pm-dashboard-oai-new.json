@@ -1,0 +1,232 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 1,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "P50784FC4335D5442"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "__systemRef": "hideSeriesFrom",
+              "matcher": {
+                "id": "byNames",
+                "options": {
+                  "mode": "exclude",
+                  "names": [
+                    "DRB.MeanActiveUeUl {measObjInstId=\"DuFunction=0,CellId=0\", measuredEntityDn=\"ManagedElement=gNB-Eurecom-5GNRBox-00001\"}"
+                  ],
+                  "prefix": "All except:",
+                  "readOnly": true
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 12,
+          "w": 22,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "P50784FC4335D5442"
+            },
+            "query": "from(bucket: \"default\")\r\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\r\n  |> filter(fn: (r) =>\r\n    contains(value: r._field, set: ${Fields:json}) and\r\n    r._measurement == \"pm measurement\" and\r\n    r.measObjInstId == \"${measObjInstId}\" and \r\n    r.measuredEntityDn == \"${measuredEntity}\"\r\n  )\r\n  |> toInt()",
+            "refId": "A"
+          }
+        ],
+        "title": "Boston PM data",
+        "type": "timeseries"
+      }
+    ],
+    "refresh": "5s",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "ManagedElement=gNB-Eurecom-5GNRBox-00001",
+            "value": "ManagedElement=gNB-Eurecom-5GNRBox-00001"
+          },
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P50784FC4335D5442"
+          },
+          "definition": "import \"influxdata/influxdb/v1\"\r\nv1.tagValues(\r\n    bucket: v.bucket,\r\n    tag: \"measuredEntityDn\",\r\n    predicate: (r) => true,\r\n    start: -1d\r\n)",
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "measuredEntity",
+          "options": [],
+          "query": "import \"influxdata/influxdb/v1\"\r\nv1.tagValues(\r\n    bucket: v.bucket,\r\n    tag: \"measuredEntityDn\",\r\n    predicate: (r) => true,\r\n    start: -1d\r\n)",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "DuFunction=0,CellId=0",
+            "value": "DuFunction=0,CellId=0"
+          },
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P50784FC4335D5442"
+          },
+          "definition": "import \"influxdata/influxdb/schema\"\r\nschema.tagValues(\r\n    bucket: v.bucket,\r\n    tag: \"measObjInstId\",\r\n    predicate: (r) => r.measuredEntityDn == ${measuredEntity:doublequote},\r\n    start: v.timeRangeStart,\r\n    stop: v.timeRangeStop\r\n)",
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "measObjInstId",
+          "options": [],
+          "query": "import \"influxdata/influxdb/schema\"\r\nschema.tagValues(\r\n    bucket: v.bucket,\r\n    tag: \"measObjInstId\",\r\n    predicate: (r) => r.measuredEntityDn == ${measuredEntity:doublequote},\r\n    start: v.timeRangeStart,\r\n    stop: v.timeRangeStop\r\n)",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P50784FC4335D5442"
+          },
+          "definition": "import \"influxdata/influxdb/schema\"\r\nschema.tagValues(\r\n    bucket: v.bucket,\r\n    tag: \"_field\",\r\n    predicate: (r) => r.measuredEntityDn == ${measuredEntity:doublequote} and r.measObjInstId == ${measObjInstId:doublequote},\r\n    start: v.timeRangeStart,\r\n    stop: v.timeRangeStop\r\n)",
+          "hide": 0,
+          "includeAll": true,
+          "multi": true,
+          "name": "Fields",
+          "options": [],
+          "query": "import \"influxdata/influxdb/schema\"\r\nschema.tagValues(\r\n    bucket: v.bucket,\r\n    tag: \"_field\",\r\n    predicate: (r) => r.measuredEntityDn == ${measuredEntity:doublequote} and r.measObjInstId == ${measObjInstId:doublequote},\r\n    start: v.timeRangeStart,\r\n    stop: v.timeRangeStop\r\n)",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-30m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "new OAI PM dashboard",
+    "uid": "abe23260-932a-4060-97ad-80cc030e9300",
+    "version": 1,
+    "weekStart": ""
+  }
