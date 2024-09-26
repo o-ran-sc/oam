@@ -1,0 +1,114 @@
+# Default values for pm-metric-service.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository:  hightec/pm-kafka2influxdb
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.9-oaidemo"
+  # tag: "v0.9.1"
+# imagePullSecrets:
+#   - name: htreg
+config:
+  dmaapKafka:
+    bootstrapServers: onap-strimzi-kafka-bootstrap.onap
+    port: 9092 
+    securityProtocol: SASL_PLAINTEXT
+    saslMechanism: SCRAM-SHA-512
+    saslPlainCredentials:
+      key: password
+      name: pm-ms-kafka-user
+    groupID: pm-unauthenticated.SEC_3GPP_PERFORMANCEASSURANCE_OUTPUT
+    clientID: unauthenticated.SEC_3GPP_PERFORMANCEASSURANCE_OUTPUT-PM1
+    pollInterval: 15 # in seconds
+  dcaeVesCollector:
+    tlsEnabled: false
+    trustAllCerts: false
+    service: dcae-ves-collector.onap 
+    port: 8080
+    version: v7
+    username: sample1
+    password: sample1
+  # secrets as defined in metrics influxdb deployment
+  # 
+  influxDB:
+    url: http://onap-influxdb2.metric:80
+    username: admin
+    password: bFapG3k7H4OaBfqgcuL2szLhwMN4BnAL
+    token: my6XXjo491v95pgF5ic3vNPMFNMb6SYSja
+    org: influxdata
+    verfiySSL: False
+    bucket: default
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
