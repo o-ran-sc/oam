@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pm-metric-service.fullname" . }}
+  labels:
+    {{- include "pm-metric-service.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pm-metric-service.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pm-metric-service.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "pm-metric-service.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: "DMAAP_KAFKA_BOOTSTRAP_SERVERS"
+              value: "{{ .Values.config.dmaapKafka.bootstrapServers }}"
+            - name: "DMAAP_KAFKA_PORT"
+              value: "{{ .Values.config.dmaapKafka.port }}"
+            - name: "DMAAP_KAFKA_SECURITY_PROTOCOL"
+              value: "{{ .Values.config.dmaapKafka.securityProtocol }}"
+            - name: "DMAAP_KAFKA_SASL_MECHANISM"
+              value: "{{ .Values.config.dmaapKafka.saslMechanism }}"
+            - name: "DMAAP_KAFKA_SASL_PLAIN_USERNAME"
+              value: "{{ .Values.config.dmaapKafka.saslPlainCredentials.name }}"
+            - name: "DMAAP_KAFKA_SASL_PLAIN_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.config.dmaapKafka.saslPlainCredentials.name }}"
+                  key: "{{ .Values.config.dmaapKafka.saslPlainCredentials.key }}"
+            - name: "DMAAP_KAFKA_GROUP_ID"
+              value: "{{ .Values.config.dmaapKafka.groupID }}"
+            - name: "DMAAP_KAFKA_CLIENT_ID"
+              value: "{{ .Values.config.dmaapKafka.clientID }}"
+            - name: "DMAAP_KAFKA_POLL_INTERVAL"
+              value: "{{ .Values.config.dmaapKafka.pollInterval }}"
+            - name: "DCAE_VES_COLLECTOR_TLS_ENABLED"
+              value: "{{ .Values.config.dcaeVesCollector.tlsEnabled }}"
+            - name: "DCAE_VES_COLLECTOR_TRUST_ALL_CERTS"
+              value: "{{ .Values.config.dcaeVesCollector.trustAllCerts }}"
+            - name: "DCAE_VES_COLLECTOR_IP"
+              value: "{{ .Values.config.dcaeVesCollector.service }}"
+            - name: "DCAE_VES_COLLECTOR_PORT"
+              value: "{{ .Values.config.dcaeVesCollector.port }}"
+            - name: "DCAE_VES_COLLECTOR_VERSION"
+              value: "{{ .Values.config.dcaeVesCollector.version }}"
+            - name: "DCAE_VES_COLLECTOR_USERNAME"
+              value: "{{ .Values.config.dcaeVesCollector.username }}"
+            - name: "DCAE_VES_COLLECTOR_PASSWORD"
+              value: "{{ .Values.config.dcaeVesCollector.password }}"
+            - name: "INFLUXDB_URL"
+              value: "{{ .Values.config.influxDB.url }}"
+            - name: "INFLUXDB_USERNAME"
+              value: "{{ .Values.config.influxDB.username }}"
+            - name: "INFLUXDB_PASSWORD"
+              value: "{{ .Values.config.influxDB.password }}"
+            - name: "INFLUXDB_TOKEN"
+              value: "{{ .Values.config.influxDB.token }}"
+            - name: "INFLUXDB_ORG"
+              value: "{{ .Values.config.influxDB.org }}"
+            - name: "INFLUXDB_BUCKET"
+              value: "{{ .Values.config.influxDB.bucket }}"
+
+            
+
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          #livenessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          #readinessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
