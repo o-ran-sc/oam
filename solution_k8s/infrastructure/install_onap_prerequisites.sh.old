@@ -1,0 +1,37 @@
+#!/bin/bash
+
+### Recommended Versions
+SCRIPT_DIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+export $(grep -v '^#' $SCRIPT_DIR/../../.env | xargs)
+MARIADB_OPERATOR_VERSION=${MARIADB_OPERATOR_VERSION:-0.28.1}
+STRIMZI_VERSION=0.41.0
+CERTMANAGER_VERSION=1.14.4
+OOM_DIR=$HOME/workspace/oom
+
+helm repo remove stable
+helm repo add onap-release https://nexus3.onap.org/repository/onap-helm-release/
+git clone http://gerrit.onap.org/r/oom $OOM_DIR
+helm plugin install ~/workspace/oom/kubernetes/helm/plugins/undeploy/
+helm plugin install ~/workspace/oom/kubernetes/helm/plugins/deploy/
+helm plugin list
+### Install strimzi-operator
+helm repo add strimzi https://strimzi.io/charts/
+helm install strimzi-kafka-operator strimzi/strimzi-kafka-operator --namespace strimzi-system --version $STRIMZI_VERSION --set watchAnyNamespace=true --create-namespace
+kubectl get pod -n strimzi-system
+
+
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v$CERTMANAGER_VERSION/cert-manager.yaml
+kubectl get pod -n cert-manager
+kubectl apply -f $OOM_DIR/kubernetes/contrib/ingress-nginx-post-inst/nginx_ingress_cluster_config.yaml
+kubectl apply -f $OOM_DIR/kubernetes/contrib/ingress-nginx-post-inst/nginx_ingress_enable_optional_load_balacer_service.yaml
+
+# mariadb-operator
+kubectl create namespace mariadb-operator
+kubectl label namespace mariadb-operator istio-injection=enabled
+helm repo add mariadb-operator https://mariadb-operator.github.io/mariadb-operator
+helm repo update mariadb-operator
+helm install mariadb-operator --namespace mariadb-operator \
+  mariadb-operator/mariadb-operator --set ha.enabled=true  \
+  --set metrics.enabled=true --set webhook.certificate.certManager=true \
+  --version=$MARIADB_OPERATOR_VERSION
+
