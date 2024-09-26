@@ -1,0 +1,27 @@
+apiVersion: kubeone.k8c.io/v1beta2
+kind: KubeOneCluster
+name: o-ran-sc-test-cluster
+versions:
+  kubernetes: '${K8S_VERSION}'
+cloudProvider:
+  none: {}
+
+controlPlane:
+  hosts:
+    - publicAddress: '${PUBLIC_IP}'
+      privateAddress: '${PRIVATE_IP}'
+      sshUsername: ${USER}
+      taints: []
+
+
+apiEndpoint:
+  host: ''
+  port: 6443
+
+machineController:
+  deploy: false
+
+addons:
+  enable: true
+  path: "./addons"
+  
