@@ -22,9 +22,6 @@ import xml.etree.ElementTree as ET
 from typing import Any, cast
 
 from network_generation.model.python.o_ran_node import IORanNode, ORanNode
-from network_generation.model.python.o_ran_termination_point import (
-    ORanTerminationPoint,
-)
 
 
 # Define the "IORanDu" interface
@@ -43,6 +40,10 @@ default_value: IORanDu = cast(
 
 # Define an abstract O-RAN Node class
 class ORanDu(ORanNode):
+
+    _interfaces: list[str] = ["e2", "o1",
+                              "ofhm", "ofhc", "ofhu", "ofhs"]
+
     def __init__(
         self,
         data: dict[str, Any] = cast(dict[str, Any], default_value),
@@ -62,24 +63,6 @@ class ORanDu(ORanNode):
         for key, key_type in IORanDu.__annotations__.items():
             if key in data:
                 result[key] = data[key]  # type: ignore
-        return result
-
-    def termination_points(self) -> list[ORanTerminationPoint]:
-        result: list[ORanTerminationPoint] = super(
-            ).termination_points()
-        phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append(ORanTerminationPoint({
-            "name": phy_tp,
-            "type": "o-ran-sc-network:phy"
-        }))
-        for interface in ["e2", "o1", "ofhm", "ofhc", "ofhu", "ofhs"]:
-            id: str = "-".join([self.name, interface.upper()])
-            result.append(ORanTerminationPoint({
-                     "name": id,
-                     "type": ":".join(["o-ran-sc-network", interface]),
-                     "supporter": phy_tp,
-                     "parent": self
-            }))
         return result
 
     def to_topology_nodes(self) -> list[dict[str, Any]]:
