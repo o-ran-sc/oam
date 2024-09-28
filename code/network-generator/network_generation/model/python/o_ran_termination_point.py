@@ -21,14 +21,13 @@ from typing import Any, cast
 
 from network_generation.model.python.o_ran_object import (
     IORanObject,
-    ORanObject,
+    ORanObject
 )
 
 
 # Define the "IORanObject" interface
 class IORanTerminationPoint(IORanObject):
-    supporter: str
-    parent: Any
+    supporter: dict[str, str]
 
 
 default_value: IORanTerminationPoint = cast(
@@ -36,8 +35,7 @@ default_value: IORanTerminationPoint = cast(
     {
         **ORanObject.default(),
         **{
-            "supporter": "TerminationPointLayer",
-            "parent": None,
+            "supporter": {}
         },
     },
 )
@@ -55,8 +53,7 @@ class ORanTerminationPoint(ORanObject):
     ) -> None:
         itp: IORanTerminationPoint = self._to_itp_data(data)
         super().__init__(cast(dict[str, Any], itp), **kwargs)
-        self._supporter: str = str(itp["supporter"])
-        self._parent: Any = itp["parent"]
+        self._supporter = cast(dict[str, str], itp["supporter"])
 
     def _to_itp_data(self, data: dict[str, Any]) -> IORanTerminationPoint:
         result: IORanTerminationPoint = default_value
@@ -66,20 +63,12 @@ class ORanTerminationPoint(ORanObject):
         return result
 
     @property
-    def supporter(self) -> str:
+    def supporter(self) -> dict[str, str]:
         return self._supporter
 
     @supporter.setter
-    def supporter(self, value: str) -> None:
+    def supporter(self, value: dict[str, str]) -> None:
         self._supporter = value
-
-    @property
-    def parent(self) -> Any:
-        return self._utilization
-
-    @parent.setter
-    def parent(self, value: Any) -> None:
-        self._parent = value
 
     def to_topology(self) -> dict[str, Any]:
         result: dict[str, Any] = {
@@ -87,12 +76,6 @@ class ORanTerminationPoint(ORanObject):
             "o-ran-sc-network:uuid": self.id,
             "o-ran-sc-network:type": self.type,
         }
-        if self.supporter and type(self.parent) is not int:
-            result["supporting-termination-point"] = [
-                {
-                    "network-ref": self.parent.network.id,
-                    "node-ref": self.parent.name,
-                    "tp-ref": self.supporter,
-                }
-            ]
+        if self.supporter:
+            result["supporting-termination-point"] = [self.supporter]
         return result
