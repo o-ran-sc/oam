@@ -41,8 +41,7 @@ default_value: IORanDu = cast(
 # Define an abstract O-RAN Node class
 class ORanDu(ORanNode):
 
-    _interfaces: list[str] = ["e2", "o1",
-                              "ofhm", "ofhc", "ofhu", "ofhs"]
+    _interfaces = ["e2", "o1", "ofhm", "ofhc", "ofhu", "ofhs"]
 
     def __init__(
         self,
