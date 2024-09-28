@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee1fe602_0dd8efb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2024-09-28T14:30:54Z",
+      "side": 1,
+      "message": "make lint -\u003e acceptable\nmake test -\u003e ok\ncreation -\u003e ok\nyanglint -\u003e \n\n--\u003e all good",
+      "revId": "5c587639eef7c3f18adf188e85bbc4621e381877",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
