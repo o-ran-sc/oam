@@ -33,9 +33,6 @@ from network_generation.model.python.o_ran_node import (
     ORanNode,
     default_value,
 )
-from network_generation.model.python.o_ran_termination_point import (
-    ORanTerminationPoint,
-)
 from network_generation.model.python.tower import Tower
 
 # Define the "IORanDu" interface
@@ -44,6 +41,9 @@ IORanCloudDu = IORanNode
 
 # Implements a concrete O-RAN Node class
 class ORanCloudDu(ORanNode):
+
+    _interfaces = ["o2"]
+
     def __init__(
         self,
         data: dict[str, Any] = cast(dict[str, Any], default_value),
@@ -101,23 +101,6 @@ class ORanCloudDu(ORanNode):
     @property
     def towers(self) -> list[Tower]:
         return self._towers
-
-    def termination_points(self) -> list[ORanTerminationPoint]:
-        result: list[ORanTerminationPoint] = super().termination_points()
-        phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append(ORanTerminationPoint({
-            "name": phy_tp,
-            "type": "o-ran-sc-network:phy"
-        }))
-        for interface in ["o2"]:
-            id: str = "-".join([self.name, interface.upper()])
-            result.append(ORanTerminationPoint({
-                    "name": id,
-                    "type": ":".join(["o-ran-sc-network", interface]),
-                    "supporter": phy_tp,
-                    "parent": self
-                }))
-        return result
 
     def toKml(self) -> ET.Element:
         o_ran_cloud_du: ET.Element = ET.Element("Folder")
