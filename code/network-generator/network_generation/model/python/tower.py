@@ -24,9 +24,6 @@ from typing import Any, cast
 
 from network_generation.model.python.o_ran_node import IORanNode, ORanNode
 from network_generation.model.python.o_ran_ru import ORanRu
-from network_generation.model.python.o_ran_termination_point import (
-    ORanTerminationPoint,
-)
 
 
 # Define the "IoRanDu" interface
@@ -47,6 +44,9 @@ default_value: ITower = cast(
 
 # Implement a concrete O-RAN Node class
 class Tower(ORanNode):
+
+    _interfaces = ["o2"]
+
     def __init__(
         self,
         data: dict[str, Any] = cast(dict[str, Any], default_value),
@@ -108,30 +108,6 @@ class Tower(ORanNode):
     @property
     def o_ran_rus(self) -> list[ORanRu]:
         return self._o_ran_rus
-
-    def termination_points(self) -> list[ORanTerminationPoint]:
-        result: list[ORanTerminationPoint] = super().termination_points()
-        phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append(ORanTerminationPoint({
-            "name": phy_tp,
-            "type": "o-ran-sc-network:phy"
-        }))
-        for interface in ["e2", "o1", "ofhm", "ofhc", "ofhu", "ofhs"]:
-            id: str = "-".join([self.name, interface.upper()])
-            result.append(ORanTerminationPoint({
-                        "name": id,
-                        "type": ":".join(["o-ran-sc-network", interface]),
-                        "supporting-termination-point": [
-                            {
-                                "network-ref": type(
-                                    self.parent.parent.parent.parent
-                                ),
-                                "node-ref": self.name,
-                                "tp-ref": phy_tp,
-                            }
-                        ],
-                    }))
-        return result
 
     def toKml(self) -> ET.Element:
         tower: ET.Element = ET.Element("Folder")
