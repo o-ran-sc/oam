@@ -30,9 +30,6 @@ from network_generation.model.python.o_ran_node import (
     ORanNode,
     default_value,
 )
-from network_generation.model.python.o_ran_termination_point import (
-    ORanTerminationPoint,
-)
 from network_generation.model.python.tower import Tower
 
 # Define the "IORanSmo" interface
@@ -44,6 +41,7 @@ class ORanSmo(ORanNode):
     """
     Class representing an O-RAN Service Management and Operation object.
     """
+    _interfaces = ["a1", "o1", "o2"]
 
     def __init__(
         self,
@@ -110,24 +108,6 @@ class ORanSmo(ORanNode):
         for ric in self.o_ran_near_rt_rics:
             for tower in ric.towers:
                 result.append(tower)
-        return result
-
-    # @property
-    def termination_points(self) -> list[ORanTerminationPoint]:
-        result: list[ORanTerminationPoint] = super().termination_points()
-        phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append(ORanTerminationPoint({
-            "name": phy_tp,
-            "type": "o-ran-sc-network:phy"
-        }))
-        for interface in ["a1", "o1", "o2"]:
-            id: str = "-".join([self.name, interface.upper()])
-            result.append(ORanTerminationPoint({
-                     "name": id,
-                     "type": ":".join(["o-ran-sc-network", interface]),
-                     "supporter": phy_tp,
-                     "parent": self
-            }))
         return result
 
     def toKml(self) -> ET.Element:
