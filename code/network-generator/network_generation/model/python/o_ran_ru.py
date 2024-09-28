@@ -24,9 +24,6 @@ from typing import Any, cast
 from network_generation.model.python.nr_cell_du import NrCellDu
 from network_generation.model.python.o_ran_du import ORanDu
 from network_generation.model.python.o_ran_node import IORanNode, ORanNode
-from network_generation.model.python.o_ran_termination_point import (
-    ORanTerminationPoint,
-)
 
 
 # Define the "IORanRu" interface
@@ -47,6 +44,9 @@ default_value: IORanRu = cast(
 
 # Define an abstract O-RAN Node class
 class ORanRu(ORanNode):
+
+    _interfaces = ["ofhc", "ofhu", "ofhs", "ofhm"]
+
     def __init__(
         self,
         data: dict[str, Any] = cast(dict[str, Any], default_value),
@@ -131,25 +131,6 @@ class ORanRu(ORanNode):
     @property
     def oRanDu(self) -> ORanDu:
         return self._oRanDu
-
-    def termination_points(self) -> list[ORanTerminationPoint]:
-        result: list[ORanTerminationPoint] = super().termination_points()
-        phy_tp: str = "-".join([self.name, "phy".upper()])
-        result.append(ORanTerminationPoint({
-            "name": phy_tp,
-            "type": "o-ran-sc-network:phy"
-        }))
-        for interface in ["ofhm", "ofhc", "ofhu", "ofhs"]:
-            id: str = "-".join([self.name, interface.upper()])
-            result.append(ORanTerminationPoint({
-                "name": id,
-                "type": ":".join(["o-ran-sc-network", interface]),
-                "supporter": phy_tp,
-                "parent": self
-            }))
-        for cell in self.cells:
-            result.extend(cell.termination_points())
-        return result
 
     def to_topology_nodes(self) -> list[dict[str, Any]]:
         result: list[dict[str, Any]] = super().to_topology_nodes()
