@@ -157,6 +157,10 @@ class NetworkViewer:
             print(f'File "{filename}.kmz" saved!')
         else:
             kml_file = open(f"{filename}.kml", "wb")
-            kml_file.write(kml.encode('utf-8'))
+            # TODO make lint issue
+            # network_generation/view/network_viewer.py:160: error: 
+            # Argument 1 to "write" of "BufcqferedWriter" has incompatible 
+            # type "str"; expected "Buffer"
+            kml_file.write(kml)
             kml_file.close()
             print(f'File "{filename}.kml" saved!')
