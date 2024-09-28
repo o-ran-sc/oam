@@ -89,6 +89,8 @@ class ORanNode(ORanObject):
     __current_time = datetime.now(timezone.utc)
     # Format the time string as required
     __time_string = __current_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    # List of logical TerminationPoint labels
+    _interfaces: list[str] = []
 
     @staticmethod
     def default() -> dict[str, Any]:
@@ -115,7 +117,8 @@ class ORanNode(ORanObject):
         )
         self._parent: Any = o_ran_node_data["parent"]
         self._network: Any = o_ran_node_data["network"]
-        self._termination_points: list[ORanTerminationPoint] = []
+        self._termination_points = (
+            self._add_termination_points(self._interfaces))
 
     def _to_o_ran_node_data(self, data: dict[str, Any]) -> IORanNode:
         result: IORanNode = default_value
@@ -196,6 +199,28 @@ class ORanNode(ORanObject):
     # @abstractmethod
     def termination_points(self) -> list[ORanTerminationPoint]:
         return self._termination_points
+
+    def _add_termination_points(
+        self,
+        logical_interfaces: list[str]
+    ) -> list[ORanTerminationPoint]:
+        result: list[ORanTerminationPoint] = []
+        phy_tp: str = "-".join([self.name, "phy".upper()])
+        result.append(ORanTerminationPoint({
+            "name": phy_tp,
+            "type": "o-ran-sc-network:phy"
+        }))
+        for interface in logical_interfaces:
+            id: str = "-".join([self.name, interface.upper()])
+            result.append(ORanTerminationPoint({
+                     "name": id,
+                     "type": ":".join(["o-ran-sc-network", interface]),
+                     "supporter": {
+                        "network-ref": self.network.id,
+                        "node-ref": self.name,
+                        "tp-ref": phy_tp,
+                     }}))
+        return result
 
     @abstractmethod
     def to_topology_nodes(self) -> list[dict[str, Any]]:
