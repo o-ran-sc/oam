@@ -76,6 +76,7 @@ class ORanTerminationPoint(ORanObject):
             "o-ran-sc-network:uuid": self.id,
             "o-ran-sc-network:type": self.type,
         }
-        if self.supporter:
+
+        if not (self.type == "o-ran-sc-network:phy"):
             result["supporting-termination-point"] = [self.supporter]
         return result
