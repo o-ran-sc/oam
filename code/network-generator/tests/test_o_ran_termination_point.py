@@ -29,7 +29,6 @@ def test_o_ran_termination_point() -> None:
     assert o_ran_termination_point.name == "my-name"
     assert o_ran_termination_point.administrativeState.value == "locked"
     assert o_ran_termination_point.supporter == "my-supporter"
-    assert o_ran_termination_point.parent == 0
     assert len(str(o_ran_termination_point)) == 357
 
     o_ran_termination_point = ORanTerminationPoint(
@@ -37,13 +36,11 @@ def test_o_ran_termination_point() -> None:
             "id": "my-id",
             "administrativeState": AdministrativeState.UNLOCKED,
             "operationalState": OperationalState.ENABLED,
-            "supporter": "my_personal_fan",
-            "parent": ORanTerminationPoint(),
+            "supporter": "my_personal_fan"
         }
     )
     assert len(o_ran_termination_point.id) == 36
     assert o_ran_termination_point.administrativeState.value == "unlocked"
     assert o_ran_termination_point.operationalState.value == "enabled"
     assert o_ran_termination_point.supporter == "my_personal_fan"
-    assert type(o_ran_termination_point.parent) is int
     assert len(str(o_ran_termination_point)) == 359
