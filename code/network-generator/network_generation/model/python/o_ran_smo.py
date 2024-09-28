@@ -41,7 +41,7 @@ class ORanSmo(ORanNode):
     """
     Class representing an O-RAN Service Management and Operation object.
     """
-    _interfaces = ["a1", "o1", "o2"]
+    _interfaces = ["a1", "o1", "ofhm", "o2"]
 
     def __init__(
         self,
