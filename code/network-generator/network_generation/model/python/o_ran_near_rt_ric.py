@@ -39,7 +39,7 @@ IORanNearRtRic = IORanNode
 # Define an abstract O-RAN Node class
 class ORanNearRtRic(ORanNode):
 
-    _interfaces = ["e2", "o1", "ofhm", "ofhc", "ofhu", "ofhs"]
+    _interfaces = ["a1", "e2", "o1"]
 
     def __init__(
         self,
