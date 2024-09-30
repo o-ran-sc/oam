@@ -58,7 +58,46 @@ module o-ran-sc-network {
       "https://lf-o-ran-sc.atlassian.net/wiki/spaces/OAM/pages/29491658/Hybrid+and+Hierarchical+OAM+Architecture";
   }
 
-  identity o-ran-sc-network-base {
+  // network
+  identity o-ran-sc-network-type-base {
+    description
+      "Base identity for network types.
+
+       This identity is abstract and MUST NOT be used as a value.";
+  }
+
+  identity core {
+    base o-ran-sc-network-type-base;
+    description
+      "An identity corresponding to a 5G core network.";
+  }
+
+  identity physical {
+    base o-ran-sc-network-type-base;
+    description
+      "An identity corresponding to a physical network.";
+  }
+
+  identity ran {
+    base o-ran-sc-network-type-base;
+    description
+      "An identity corresponding to a radio access network.";
+  }
+
+  identity transport {
+    base o-ran-sc-network-type-base;
+    description
+      "An identity corresponding to a transport network.";
+  }
+
+  identity cloud {
+    base o-ran-sc-network-type-base;
+    description
+      "An identity corresponding to a cloud network.";
+  }
+
+  // network function
+  identity o-ran-sc-network-function-base {
     base o-ran-iref:o-ran-function-base;
     description
       "Base identity from which extend the o-ran-function-base
@@ -69,33 +108,34 @@ module o-ran-sc-network {
   }
 
   identity smo {
-    base o-ran-sc-network-base;
+    base o-ran-sc-network-function-base;
     description
       "An identity corresponding to a Service, Maintenance and
        Orchestration Framework (SMO) topology node.";
   }
 
   identity near-rt-ric {
-    base o-ran-sc-network-base;
+    base o-ran-sc-network-function-base;
     description
       "An identity corresponding to a near real-time radio access
        network intelligent controller (NearRtRic) topology node.";
   }
 
   identity o-cloud {
-    base o-ran-sc-network-base;
+    base o-ran-sc-network-function-base;
     description
       "An identity corresponding to a near real-time O-RAN cloud
        resource pool instance (O-Cloud) topology node.";
   }
 
   identity tower {
-    base o-ran-sc-network-base;
+    base o-ran-sc-network-function-base;
     description
       "An identity corresponding to a telecommunication network tower
        offering mount points for network elements.";
   }
 
+  // termination point :== interface
   identity o-ran-sc-interface-type {
     base if:interface-type;
     description
@@ -170,6 +210,15 @@ module o-ran-sc-network {
       "3GPP TS 28.541 5G Network Resource Model (NRM)";
   }
 
+  typedef o-ran-sc-network-type {
+    type identityref {
+      base o-ran-sc-network-type-base;
+    }
+    description
+      "Type reference to a node type identity.";
+  }
+
+  // type definitions
   typedef o-ran-sc-node-type {
     type identityref {
       base o-ran-iref:o-ran-function-base;
@@ -187,10 +236,20 @@ module o-ran-sc-network {
       "Type reference to a termination point type identity.";
   }
 
-  grouping o-ran-sc-network {
+  // groupings
+  grouping o-ran-sc-network-network {
     description
       "An abstract object call hosting O-RAN-SC specific extension
        to an ietf-network network object class.";
+    leaf uuid {
+      type yang:uuid;
+      description
+        "A Universally Unique IDentifier identifying a topological
+         ietf-network in the context of an O-RAN-SC OAM topology.";
+      reference
+        "RFC 4122
+         A Universally Unique IDentifier (UUID) URN Namespace";
+    }
     leaf name {
       type string {
         length "1..255";
@@ -198,6 +257,18 @@ module o-ran-sc-network {
       description
         "A human readable name for the network of the
          O-RAN-SC OAM topology.";
+    }
+  }
+
+  grouping o-ran-sc-network-types {
+    description
+      "An abstract object call hosting O-RAN-SC specific extension
+       to an ietf-network network-types object class.";
+    leaf-list types {
+      type o-ran-sc-network-type;
+      description
+        "A parameter which defines the topological ietf-network
+         node type in the context of an O-RAN-SC OAM topology.";
     }
   }
 
@@ -245,10 +316,17 @@ module o-ran-sc-network {
     }
   }
 
+  // augmentations
   augment "/nw:networks/nw:network" {
     description
-      "Augments ietf-network node with a name parameter.";
-    uses o-ran-sc-network;
+      "Augments ietf-network node with a name and a uuid parameter.";
+    uses o-ran-sc-network-network;
+  }
+
+  augment "/nw:networks/nw:network/nw:network-types" {
+    description
+      "Augments ietf-network node with types parameter.";
+    uses o-ran-sc-network-types;
   }
 
   augment "/nw:networks/nw:network/nw:node" {
