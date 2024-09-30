@@ -45,7 +45,7 @@ default_value: IORanRu = cast(
 # Define an abstract O-RAN Node class
 class ORanRu(ORanNode):
 
-    _interfaces = ["ofhc", "ofhu", "ofhs", "ofhm"]
+    _interfaces = ["ofhc", "ofhu", "ofhs", "ofhm", "cell"]
 
     def __init__(
         self,
@@ -94,8 +94,7 @@ class ORanRu(ORanNode):
         result: list[NrCellDu] = []
         cell_config: dict = (
             self.parent.parent.parent.parent.parent.parent.configuration[
-                "pattern"
-            ]["nrCellDu"]
+                "pattern"]["nrCellDu"]
         )
         cell_angle: int = cell_config["cellAngle"]
         cell_scale_factor: int = cell_config["cellScaleFactorForHandoverArea"]
