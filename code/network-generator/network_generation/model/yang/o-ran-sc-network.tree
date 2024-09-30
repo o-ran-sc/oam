@@ -1,0 +1,37 @@
+module: ietf-network
+  +--rw networks
+     +--rw network* [network-id]
+        +--rw network-id            network-id
+        +--rw network-types
+        |  +--rw onw:types*   o-ran-sc-network-type
+        +--rw supporting-network* [network-ref]
+        |  +--rw network-ref    -> /networks/network/network-id
+        +--rw node* [node-id]
+        |  +--rw node-id                 node-id
+        |  +--rw supporting-node* [network-ref node-ref]
+        |  |  +--rw network-ref    -> ../../../supporting-network/network-ref
+        |  |  +--rw node-ref       -> /networks/network/node/node-id
+        |  +--rw nt:termination-point* [tp-id]
+        |  |  +--rw nt:tp-id                           tp-id
+        |  |  +--rw nt:supporting-termination-point* [network-ref node-ref tp-ref]
+        |  |  |  +--rw nt:network-ref    -> ../../../nw:supporting-node/network-ref
+        |  |  |  +--rw nt:node-ref       -> ../../../nw:supporting-node/node-ref
+        |  |  |  +--rw nt:tp-ref         -> /nw:networks/network[nw:network-id=current()/../network-ref]/node[nw:node-id=current()/../node-ref]/termination-point/tp-id
+        |  |  +--rw onw:uuid?                          yang:uuid
+        |  |  +--rw onw:type?                          o-ran-sc-interface-type
+        |  +--rw onw:uuid?               yang:uuid
+        |  +--rw onw:type?               o-ran-sc-node-type
+        +--rw nt:link* [link-id]
+        |  +--rw nt:link-id            link-id
+        |  +--rw nt:source
+        |  |  +--rw nt:source-node?   -> ../../../nw:node/node-id
+        |  |  +--rw nt:source-tp?     -> ../../../nw:node[nw:node-id=current()/../source-node]/termination-point/tp-id
+        |  +--rw nt:destination
+        |  |  +--rw nt:dest-node?   -> ../../../nw:node/node-id
+        |  |  +--rw nt:dest-tp?     -> ../../../nw:node[nw:node-id=current()/../dest-node]/termination-point/tp-id
+        |  +--rw nt:supporting-link* [network-ref link-ref]
+        |     +--rw nt:network-ref    -> ../../../nw:supporting-network/network-ref
+        |     +--rw nt:link-ref       -> /nw:networks/network[nw:network-id=current()/../network-ref]/link/link-id
+        +--rw onw:uuid?             yang:uuid
+        +--rw onw:name?             string
+
