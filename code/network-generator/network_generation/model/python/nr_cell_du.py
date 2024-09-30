@@ -27,9 +27,6 @@ from network_generation.model.python.geo_location import (
     IGeoLocation,
 )
 from network_generation.model.python.o_ran_node import IORanNode, ORanNode
-from network_generation.model.python.o_ran_termination_point import (
-    ORanTerminationPoint,
-)
 from network_generation.model.python.point import Point
 
 
@@ -57,6 +54,9 @@ default_value: INrCellDu = cast(
 
 # Define an abstract O-RAN Node class
 class NrCellDu(ORanNode):
+
+    _interfaces = ["cell"]
+
     def __init__(
         self,
         data: dict[str, Any] = cast(dict[str, Any], default_value),
@@ -109,14 +109,6 @@ class NrCellDu(ORanNode):
     @azimuth.setter
     def azimuth(self, value: int) -> None:
         self._azimuth = value
-
-    def termination_points(self) -> list[ORanTerminationPoint]:
-        result: list[ORanTerminationPoint] = super().termination_points()
-        result.append(ORanTerminationPoint({
-            "name": self.name,
-            "type": "o-ran-sc-network:cell"
-        }))
-        return result
 
     def to_topology_nodes(self) -> list[dict[str, Any]]:
         # a cell is not a node it is a Termination Point
