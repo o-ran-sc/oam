@@ -208,7 +208,8 @@ class ORanNode(ORanObject):
         phy_tp: str = "-".join([self.name, "phy".upper()])
         result.append(ORanTerminationPoint({
             "name": phy_tp,
-            "type": "o-ran-sc-network:phy"
+            "type": "o-ran-sc-network:phy",
+            "network": self.network
         }))
         for interface in logical_interfaces:
             id: str = "-".join([self.name, interface.upper()])
@@ -219,7 +220,9 @@ class ORanNode(ORanObject):
                         "network-ref": self.network.id,
                         "node-ref": self.name,
                         "tp-ref": phy_tp,
-                     }}))
+                     },
+                     "network": self.network
+                }))
         return result
 
     @abstractmethod
