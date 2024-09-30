@@ -28,6 +28,7 @@ from network_generation.model.python.o_ran_object import (
 # Define the "IORanObject" interface
 class IORanTerminationPoint(IORanObject):
     supporter: dict[str, str]
+    network: Any
 
 
 default_value: IORanTerminationPoint = cast(
@@ -35,7 +36,8 @@ default_value: IORanTerminationPoint = cast(
     {
         **ORanObject.default(),
         **{
-            "supporter": {}
+            "supporter": {},
+            "network": None,
         },
     },
 )
@@ -54,6 +56,7 @@ class ORanTerminationPoint(ORanObject):
         itp: IORanTerminationPoint = self._to_itp_data(data)
         super().__init__(cast(dict[str, Any], itp), **kwargs)
         self._supporter = cast(dict[str, str], itp["supporter"])
+        self._network: Any = itp["network"]
 
     def _to_itp_data(self, data: dict[str, Any]) -> IORanTerminationPoint:
         result: IORanTerminationPoint = default_value
@@ -69,6 +72,16 @@ class ORanTerminationPoint(ORanObject):
     @supporter.setter
     def supporter(self, value: dict[str, str]) -> None:
         self._supporter = value
+
+    @property
+    def network(
+        self,
+    ) -> Any:  # expected is ORanNetwork
+        return self._network
+
+    @network.setter
+    def network(self, value: Any) -> None:
+        self._network = value
 
     def to_topology(self) -> dict[str, Any]:
         result: dict[str, Any] = {
