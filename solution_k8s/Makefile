@@ -37,13 +37,11 @@ prepare-templates:
 	# for metrics and smo stack
 	(cd application; ./setup-smo-template.sh)
 
-
-
 ## create-infrastructure: Create kubernetes all-in one infrastructure
 .PHONY: create-infrastructure
 create-infrastructure:
 # TODO: create kubeone.yaml from template file
-
+    
 	(cd infrastructure; kubeone apply -m kubeone.yaml)
 	(cd infrastructure; mkdir -p ~/.kube; cp o-ran-sc-test-cluster-kubeconfig ~/.kube/config)
 	kubectl wait --for=condition=ready node -l node-role.kubernetes.io/control-plane=
@@ -69,32 +67,60 @@ deploy-smo:
 	kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sdnc-web --timeout 1800s --namespace onap
 	(cd application;  ./patch-pmbulk.sh)
 
-## undeploy-smo: Un-Deploys SMO
+## undeploy-smo: Un-Deploys SMO 
 .PHONY: undeploy-smo
 undeploy-smo:
 	helm undeploy onap -n onap
 	for topic in $$(kubectl get kafkatopic -n onap -o name); do   kubectl patch $$topic -n onap --type=json -p '[{"op": "remove", "path": "/metadata/finalizers"}]'; done
 	kubectl delete ns onap
 	sudo rm -rf /dockerdata-nfs/onap
-
+	
 ## deploy-metric: Deploys grafana and influxdb for PM data
 .PHONY: deploy-metric
 deploy-metric:
 	(cd metrics; ./deploy-metric-stack.sh )
-	(cd metrics; ./deploy-pm-ms.sh )
+	(cd application; ./deploy-pm-ms.sh )
 
 ## undeploy-metric: Deploys grafana and influxdb for PM data
 .PHONY: undeploy-metric
 undeploy-metric:
 	(cd metrics; ./undeploy-metric-stack.sh )
-	helm uninstall -n metric pm-metric-service
+	helm uninstall -n onap pm-metric-service
 
 ## deploy-test-nfs: Deploys test network functions
 .PHONY: deploy-test-nfs
 deploy-test-nfs:
 	(cd tests/network-simulation; ./start-network-simulation.sh )
 
-## undeploy-test-nfs: un-deploys test network functions
-.PHONY: undeploy-test-nfs
-undeploy-test-nfs:
-	(cd tests/network-simulation; ./stop-network-simulation.sh )
+
+## get-deploy-info: returns list of useful information
+.PHONY: get-deploy-info
+get-deploy-info:
+	@echo "FQDN and passwords for services"
+	@echo "Grafana Dashboard:"
+	@kubectl get ingress -o custom-columns="NAME:.metadata.name,HOSTS:.spec.rules[].host" -n metric |grep grafana
+	@echo "Grafana Credentials:"
+	@echo user: $$(kubectl get secret --namespace metric onap-grafana -o jsonpath="{.data.admin-user}" | base64 --decode ; echo)
+	@echo password: $$(kubectl get secret --namespace metric onap-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo)
+	@echo
+	@echo "SMO RESTCONF ODLUX:"
+	@kubectl get ingress -o custom-columns="NAME:.metadata.name,HOSTS:.spec.rules[].host" -n onap |grep sdnc
+	@echo user: $$(kubectl get secret --namespace onap onap-sdnc-odl-creds -o jsonpath="{.data.login}" | base64 --decode ; echo)
+	@echo password: $$(kubectl get secret --namespace onap onap-sdnc-odl-creds -o jsonpath="{.data.password}" | base64 --decode ; echo)
+	@echo
+	@echo "SMO O1-VES-Collector:"
+	@kubectl get ingress -o custom-columns="NAME:.metadata.name,HOSTS:.spec.rules[].host" -n onap |grep ves
+	@VES_USER=$$(kubectl get secret --namespace onap onap-sdnc-ves-collector-secret -o jsonpath="{.data.login}" | base64 --decode);\
+	VES_PASSWORD=$$(kubectl get secret --namespace onap onap-sdnc-ves-collector-secret -o jsonpath="{.data.password}" | base64 --decode ; echo);\
+	echo user: $$VES_USER; \
+	echo password: $$VES_PASSWORD;\
+	echo example for ves-collector end point: https://$$VES_USER:$$VES_PASSWORD@$$(kubectl get ingress -o custom-columns="HOSTS:.spec.rules[].host" -n onap |grep ves)/eventListener/v7 \
+
+
+
+
+
+	
+
+
+
