@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2024 highstreet technologies
+# Copyright 2023 highstreet technologies GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 # - converts stddefined file ready messages to legacy ves file readymessage and publishs to kafka
 # - get 3GPP pm data from kafka topics and publishs to influxdb
 set -x
-export METRIC_NAMESPACE=metric
+export METRIC_NAMESPACE=onap
 influxdbpass=$(kubectl get secret -n metric onap-influxdb2-auth -o jsonpath='{.data.admin-password}' | base64 -d)
 influxdbtoken=$(kubectl get secret -n metric onap-influxdb2-auth -o jsonpath='{.data.admin-token}' | base64 -d)
 cd helm
