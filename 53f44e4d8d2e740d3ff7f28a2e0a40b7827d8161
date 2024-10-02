@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d4ea838_c43a51ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2024-10-02T10:44:18Z",
+      "side": 1,
+      "message": "Hi Sridhar, my colleague did some addition changes.",
+      "revId": "53f44e4d8d2e740d3ff7f28a2e0a40b7827d8161",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
