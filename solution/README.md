@@ -296,3 +296,19 @@ The commands ...
 docker ps -a
 docker-compose ps
 docker rm -f $(docker ps -aq)
+
+### Certificates
+
+By default solution comes up with self signed certificates. These certificates are created automatically
+
+```
+./setup.sh
+```
+In case of external certifictes both key-file and certificate should be provided in PEM-format.
+`setup.sh`copies the files in the right directory and starts the solution
+```
+ls *.pem
+#cert.pem  key.pem
+./setup.sh --cert ./cert.pem --key ./key.pem
+```
+

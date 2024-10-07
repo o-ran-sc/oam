@@ -1,0 +1,50 @@
+################################################################################
+# Copyright 2024 highstreet technologies
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# no more versions needed! Compose spec supports all features w/o a version
+version: "3.8"
+services:
+  gateway:
+    command:
+      - --serverstransport.insecureskipverify=true
+      - --log.level=${TRAEFIK_LOG_LEVEL}
+      - --global.sendanonymoususage=false
+      - --global.checkNewVersion=false
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --api.debug=true
+      - --ping
+      - --accesslog=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls.domains[0].main=gateway.${HTTP_DOMAIN}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${HTTP_DOMAIN}
+      - --entrypoints.ssh-netconf-callhome.address=:4334
+      - --entrypoints.tls-netconf-callhome.address=:4335
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      - --providers.docker.network=${TRAEFIK_NETWORK_NAME}
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.watch=true
+      - --providers.file.filename=/middleware.yaml
+      - --providers.file.filename=/dynamic.yml
+      
+    volumes:
+      - ./gateway/dynamic.yml:/dynamic.yml:ro
+      - ${TRAEFIK_DOMAIN_CERT_DIR}/${TRAEFIK_DOMAIN_CERT_FILE}:/certs/domain-cert.pem:ro
+      - ${TRAEFIK_DOMAIN_CERT_DIR}/${TRAEFIK_DOMAIN_CERT_KEY_FILE}:/certs/domain-cert-key.pem:ro
+      
+    
