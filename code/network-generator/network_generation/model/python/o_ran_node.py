@@ -106,9 +106,7 @@ class ORanNode(ORanObject):
         self._address: AddressType = cast(
             AddressType, o_ran_node_data["address"]
         )
-        self._geo_location: GeoLocation = cast(
-            GeoLocation, o_ran_node_data["geoLocation"]
-        )
+        self._geo_location: GeoLocation =  o_ran_node_data["geoLocation"]
         self._url: str = str(o_ran_node_data["url"])
         self._position: Hex = cast(Hex, o_ran_node_data["position"])
         self._layout: Layout = cast(Layout, o_ran_node_data["layout"])
@@ -274,8 +272,55 @@ class ORanNode(ORanObject):
         return result
 
     @abstractmethod
-    def toKml(self) -> ET.Element | None:
-        pass
+    def toKml(self) -> ET.Element:
+        folder: ET.Element = ET.Element("Folder")
+        open: ET.Element = ET.SubElement(folder, "open")
+        open.text = "1"
+        name: ET.Element = ET.SubElement(folder, "name")
+        name.text = self.name
+        
+        placemark: ET.Element = ET.SubElement(folder, "Placemark")
+        name: ET.Element = ET.SubElement(placemark, "name")
+        name.text = self.name
+        style: ET.Element = ET.SubElement(placemark, "styleUrl")
+        style.text = f'#{self.__class__.__name__}'
+        multi_geometry: ET.Element = ET.SubElement(placemark, "MultiGeometry")
+
+        # my position as point
+        point: ET.Element = ET.SubElement(multi_geometry, "Point")
+        point_coordinates: ET.Element = ET.SubElement(point, "coordinates")
+
+        point_gl = self.geo_location
+        point_coordinates.text = ",".join([
+                str("%.6f" % float(point_gl.longitude)),
+                str("%.6f" % float(point_gl.latitude)),
+                str("%.6f" % float(point_gl.aboveMeanSeaLevel)),
+            ])
+        
+        # link to parent
+        if (getattr(self.parent, 'geo_location', None) is not None):
+            line: ET.Element = ET.SubElement(multi_geometry, "LineString")
+            extrude: ET.Element = ET.SubElement(line, "extrude")
+            extrude.text = "1"
+            tessellate: ET.Element = ET.SubElement(line, "tessellate")
+            tessellate.text = "1"
+            coordinates: ET.Element = ET.SubElement(line, "coordinates")
+
+            my_gl = self.geo_location
+            parent_gl = self.parent.geo_location
+            coordinates.text = " ".join([
+                ",".join([
+                    str("%.6f" % float(my_gl.longitude)),
+                    str("%.6f" % float(my_gl.latitude)),
+                    str("%.6f" % float(my_gl.aboveMeanSeaLevel)),
+                ]),
+                ",".join([
+                    str("%.6f" % float(parent_gl.longitude)),
+                    str("%.6f" % float(parent_gl.latitude)),
+                    str("%.6f" % float(parent_gl.aboveMeanSeaLevel)),
+                ]),
+            ])
+        return folder      
 
     @abstractmethod
     def toSvg(self) -> ET.Element:
