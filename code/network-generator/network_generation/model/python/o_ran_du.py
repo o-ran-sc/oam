@@ -95,11 +95,7 @@ class ORanDu(ORanNode):
         return result
 
     def toKml(self) -> ET.Element:
-        o_ran_du: ET.Element = ET.Element("Folder")
-        open: ET.Element = ET.SubElement(o_ran_du, "open")
-        open.text = "1"
-        name: ET.Element = ET.SubElement(o_ran_du, "name")
-        name.text = self.name
+        o_ran_du = super().toKml()
         # for tower in self.towers:
         #     o_ran_du.append(tower.toKml())
         return o_ran_du
