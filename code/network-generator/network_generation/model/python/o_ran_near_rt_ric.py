@@ -88,7 +88,7 @@ class ORanNearRtRic(ORanNode):
                 ORanCu(
                     {
                         "name": name,
-                        "geoLocation": newGeo,
+                        "geoLocation": GeoLocation(newGeo),
                         "position": hex,
                         "layout": self.layout,
                         "parent": self,
@@ -111,11 +111,7 @@ class ORanNearRtRic(ORanNode):
         return result
 
     def toKml(self) -> ET.Element:
-        ric: ET.Element = ET.Element("Folder")
-        open: ET.Element = ET.SubElement(ric, "open")
-        open.text = "1"
-        name: ET.Element = ET.SubElement(ric, "name")
-        name.text = self.name
+        ric = super().toKml()
         for o_ran_cu in self.o_ran_cus:
             ric.append(o_ran_cu.toKml())
         return ric
