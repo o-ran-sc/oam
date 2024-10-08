@@ -155,8 +155,7 @@ class NrCellDu(ORanNode):
             intersect2
         )
 
-        tower: GeoLocation = GeoLocation(cast(IGeoLocation, self.geo_location))
-        # TODO: Why a cast is required
+        tower = self.geo_location
 
         cell_polygon: list[GeoLocation] = []
         cell_polygon.append(tower)
@@ -205,12 +204,9 @@ class NrCellDu(ORanNode):
         return cell_polygon
 
     def toKml(self) -> ET.Element:
-        placemark: ET.Element = ET.Element("Placemark")
-        name: ET.Element = ET.SubElement(placemark, "name")
-        name.text = self.name
-        style: ET.Element = ET.SubElement(placemark, "styleUrl")
-        style.text = "#" + self.__class__.__name__
-        multi_geometry: ET.Element = ET.SubElement(placemark, "MultiGeometry")
+        nr_cell_du = super().toKml()
+        multi_geometry = nr_cell_du.find('Placemark/MultiGeometry')
+
         polygon: ET.Element = ET.SubElement(multi_geometry, "Polygon")
         outer_boundary: ET.Element = ET.SubElement(polygon, "outerBoundaryIs")
         linear_ring: ET.Element = ET.SubElement(outer_boundary, "LinearRing")
@@ -226,7 +222,7 @@ class NrCellDu(ORanNode):
             ]
             text.append(",".join(strs))
         coordinates.text = " ".join(text)
-        return placemark
+        return nr_cell_du
 
     def toSvg(self) -> ET.Element:
         return ET.Element("to-be-implemented")
