@@ -81,7 +81,7 @@ class ORanSmo(ORanNode):
                 ORanNearRtRic(
                     {
                         "name": name,
-                        "geoLocation": newGeo,
+                        "geoLocation": GeoLocation(newGeo),
                         "position": hex,
                         "layout": self.layout,
                         "parent": self,
@@ -111,11 +111,7 @@ class ORanSmo(ORanNode):
         return result
 
     def toKml(self) -> ET.Element:
-        smo: ET.Element = ET.Element("Folder")
-        open: ET.Element = ET.SubElement(smo, "open")
-        open.text = "1"
-        name: ET.Element = ET.SubElement(smo, "name")
-        name.text = self.name
+        smo = super().toKml()
         for ric in self.o_ran_near_rt_rics:
             smo.append(ric.toKml())
         return smo
