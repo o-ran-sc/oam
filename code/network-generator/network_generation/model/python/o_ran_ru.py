@@ -161,14 +161,14 @@ class ORanRu(ORanNode):
         return result
 
     def toKml(self) -> ET.Element:
-        o_ran_ru: ET.Element = ET.Element("Folder")
-        open: ET.Element = ET.SubElement(o_ran_ru, "open")
-        open.text = "1"
-        name: ET.Element = ET.SubElement(o_ran_ru, "name")
-        name.text = self.name
+        # The O-RU 'creates' the O-DUs
+        # therefore the O-RU returns is "wrapper" too
+        o_ran_du = self.oRanDu.toKml()
+        o_ran_ru = super().toKml()
         for cell in self.cells:
             o_ran_ru.append(cell.toKml())
-        return o_ran_ru
+        o_ran_du.append(o_ran_ru)
+        return o_ran_du     
 
     def toSvg(self) -> ET.Element:
         return ET.Element("to-be-implemented")
