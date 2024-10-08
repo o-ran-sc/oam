@@ -110,11 +110,7 @@ class Tower(ORanNode):
         return self._o_ran_rus
 
     def toKml(self) -> ET.Element:
-        tower: ET.Element = ET.Element("Folder")
-        open: ET.Element = ET.SubElement(tower, "open")
-        open.text = "1"
-        name: ET.Element = ET.SubElement(tower, "name")
-        name.text = self.name
+        tower = super().toKml()
         for o_ran_ru in self.o_ran_rus:
             tower.append(o_ran_ru.toKml())
         return tower
