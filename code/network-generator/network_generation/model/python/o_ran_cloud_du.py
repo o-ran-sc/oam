@@ -1,4 +1,4 @@
-# Copyright 2024 highstreet technologies
+# Copyright 2024 highstreet technologies USA CORP.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ class ORanCloudDu(ORanNode):
                 Tower(
                     {
                         "name": name,
-                        "geoLocation": newGeo,
+                        "geoLocation": GeoLocation(newGeo),
                         "position": hex,
                         "layout": self.layout,
                         "parent": self,
@@ -103,11 +103,7 @@ class ORanCloudDu(ORanNode):
         return self._towers
 
     def toKml(self) -> ET.Element:
-        o_ran_cloud_du: ET.Element = ET.Element("Folder")
-        open: ET.Element = ET.SubElement(o_ran_cloud_du, "open")
-        open.text = "1"
-        name: ET.Element = ET.SubElement(o_ran_cloud_du, "name")
-        name.text = self.name
+        o_ran_cloud_du = super().toKml()
         for tower in self.towers:
             o_ran_cloud_du.append(tower.toKml())
         return o_ran_cloud_du
