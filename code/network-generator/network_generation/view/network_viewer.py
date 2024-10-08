@@ -138,6 +138,20 @@ class NetworkViewer:
             for key, value in styles.items():
                 # add style
                 style = ET.Element("Style", {"id": key})
+                label_style = ET.SubElement(style, "LabelStyle")
+                label_scale = ET.SubElement(label_style, "scale")
+                label_scale.text = "0"
+                
+                icon_style = ET.SubElement(style, "IconStyle")
+                icon_color = ET.SubElement(icon_style, "color")
+                icon_color.text = str(value["stroke"]["color"])
+                scale = ET.SubElement(icon_style, "scale")
+                scale.text = "0.5"
+                icon = ET.SubElement(icon_style, "Icon")
+                href = ET.SubElement(icon, "href")
+                href.text = (
+                    "http://maps.google.com/mapfiles/kml/shapes"
+                    "/placemark_circle.png")
                 line_style = ET.SubElement(style, "LineStyle")
                 color = ET.SubElement(line_style, "color")
                 color.text = str(value["stroke"]["color"])
