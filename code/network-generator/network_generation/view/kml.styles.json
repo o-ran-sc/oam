@@ -1,4 +1,11 @@
 {
-  "Railway":{"stroke":{"color":"ff00ccff", "width":"2"},"fill":{"color":"ff00ccff"}},
-  "NrCellDu":{"stroke":{"color":"ffffcc00", "width":"2"},"fill":{"color":"22ffcc00"}}
-}        
+  "Railway":{"stroke":{"color":"ff00ccff", "width":"1"},"fill":{"color":"ff00ccff"}},
+  "ORanSmo":{"stroke":{"color":"ffffcc00", "width":"1"},"fill":{"color":"22ffcc00"}},
+  "ORanNearRtRic":{"stroke":{"color":"ffffcc00", "width":"1"},"fill":{"color":"22ffcc00"}},
+  "ORanCu":{"stroke":{"color":"ffffcc00", "width":"1"},"fill":{"color":"22ffcc00"}},
+  "ORanCloudDu":{"stroke":{"color":"ffffcc00", "width":"1"},"fill":{"color":"22ffcc00"}},
+  "Tower":{"stroke":{"color":"ffffcc00", "width":"1"},"fill":{"color":"22ffcc00"}},
+  "ORanDu":{"stroke":{"color":"ffffcc00", "width":"1"},"fill":{"color":"22ffcc00"}},
+  "ORanRu":{"stroke":{"color":"ffffcc00", "width":"1"},"fill":{"color":"22ffcc00"}},
+  "NrCellDu":{"stroke":{"color":"ffffcc00", "width":"1"},"fill":{"color":"22ffcc00"}}
+}
