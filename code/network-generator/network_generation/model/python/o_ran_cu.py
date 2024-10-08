@@ -82,7 +82,7 @@ class ORanCu(ORanNode):
                 ORanCloudDu(
                     {
                         "name": name,
-                        "geoLocation": newGeo,
+                        "geoLocation": GeoLocation(newGeo),
                         "position": hex,
                         "layout": self.layout,
                         "parent": self,
@@ -105,11 +105,7 @@ class ORanCu(ORanNode):
         return result
 
     def toKml(self) -> ET.Element:
-        o_ran_cu: ET.Element = ET.Element("Folder")
-        open: ET.Element = ET.SubElement(o_ran_cu, "open")
-        open.text = "1"
-        name: ET.Element = ET.SubElement(o_ran_cu, "name")
-        name.text = self.name
+        o_ran_cu = super().toKml()
         for o_ran_cloud_du in self.o_ran_cloud_dus:
             o_ran_cu.append(o_ran_cloud_du.toKml())
         return o_ran_cu
