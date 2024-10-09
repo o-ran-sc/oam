@@ -75,6 +75,7 @@ services:
       SDNRDBURL: jdbc:mysql://persistence:3306/sdnrdb
       SDNRDBUSERNAME: sdnrdb
       SDNRDBPASSWORD: sdnrdb
+      SDNRCONTROLLERID: c94bbd5f-d456-44bd-aa7a-47b2e4f73253
       SDNR_NETCONF_CALLHOME_ENABLED: true
       A1_ADAPTER_NORTHBOUND: false
       JAVA_OPTS: -Xms256m -Xmx4g
