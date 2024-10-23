@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9141cbc6_0e8b34fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2024-10-23T11:56:17Z",
+      "side": 1,
+      "message": "Manual verfication as no code was changed.\nMerged even before feedback from Bimo for simplification.",
+      "revId": "576a3aadb9898ae4f1f2e5243940bdc75b4ac6ad",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
