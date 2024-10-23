@@ -58,6 +58,8 @@ x-nf: &common_nf
     cap_add:
     - SYS_ADMIN
     - SYS_PTRACE
+    networks:
+      dcn:
 
 services:
   ntsim-ng-o-du-1122:
@@ -133,11 +135,6 @@ services:
         <<: [*common_env, *ru_env]
 
 networks:
-    default:
-        driver: bridge
-        name: network
-        enable_ipv6: true
-        ipam:
-            driver: default
-            config:
-            - subnet:  ${NETWORK_SUBNET_DCN_IPv6}
+  dcn:
+    external: true
+

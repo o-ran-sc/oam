@@ -4,12 +4,12 @@ This project focus on a docker-compose deployment solution for SMO/OAM Component
 
 ## Introduction
 
-With respect to OAM the SMO implements the O1-interface consumers.
+With respect to Operation and Maintenance (OAM) the SMO implements the O1-interface consumers.
 According to the O-RAN OAM Architecture and the O-RAN OAM Interface Specification,
 the SMO implements a NETCONF Client for configuration and a HTTP/REST/VES server
 for receiving all kind of events in VES format.
 
-The setup contains an OpenDaylight based NETCONF client and an ONAP VES Collector.
+The O-RAN-SC OAM deployment contains an OpenDaylight based NETCONF client and an ONAP VES Collector. Kafka is used as massage router for communication between the components. The Keycloak implementation offers and Identity service, while traefik acts as reverse proxy to terminate all incoming https traffic. For storing data in a persistence way the implementation of the mariaDB project is used.
 
 ## SMO OAM Components
 
@@ -47,14 +47,14 @@ The solution was tested on a VM with
 
 ```
 $ cat /etc/os-release | grep PRETTY_NAME
-PRETTY_NAME="Ubuntu 22.04.2 LTS"
+PRETTY_NAME="Ubuntu 24.04.1 LTS"
 ```
 
 ### Docker
 
 ```
 $ docker --version
-Docker version 27.2.0, build 3ab4256
+Docker version 27.3.1, build ce12230
 ```
 Please follow the required docker daemon configuration as documented in the following README.md:
 - [./smo/common/docker/README.md](./smo/common/docker/README.md)
@@ -63,27 +63,33 @@ Please follow the required docker daemon configuration as documented in the foll
 
 ```
 $ docker compose version
-Docker Compose version v2.29.2
+Docker Compose version v2.29.7
 ```
 
 ### GIT
 
 ```
 $ git --version
-git version 2.34.1
+git version 2.43.0
 ```
 
 ### Python
 
 ```
 $ python3 --version
-Python 3.10.12
+Python 3.12.3
 ```
 
 A python parser package is required.
 ```
-sudo apt install python3-pip
-pip install jproperties
+python3 -m venv .oam
+source .oam/bin/activate
+pip3 install jproperties
+pip3 install jinja2
+pip3 install requests
+
+# your system IP is required in .env files, please see explanations below
+python3 ./adopt_to_environment.py -i <deployment-system-ipv4> 
 ```
 
 It is beneficial (but not mandatory) adding the following line add the
@@ -123,7 +129,7 @@ $ cat /etc/hosts
 
 # SMO OAM development system
 <deployment-system-ipv4>                   smo.o-ran-sc.org
-<deployment-system-ipv4>           gateway.smo.o-ran-sc.org 
+<deployment-system-ipv4>           gateway.smo.o-ran-sc.org
 <deployment-system-ipv4>          identity.smo.o-ran-sc.org
 <deployment-system-ipv4>          messages.smo.o-ran-sc.org
 <deployment-system-ipv4>      kafka-bridge.smo.o-ran-sc.org
@@ -132,7 +138,6 @@ $ cat /etc/hosts
 <deployment-system-ipv4>         tests.oam.smo.o-ran-sc.org
 <deployment-system-ipv4>    controller.dcn.smo.o-ran-sc.org
 <deployment-system-ipv4> ves-collector.dcn.smo.o-ran-sc.org
-
 ```
 
 ## Usage
@@ -145,23 +150,24 @@ The following commands should be invoked. More detailed can be found in the
 next chapters.
 
 ```bash
-docker compose -f smo/common/docker-compose.yaml up -d  --wait
+source .oam/bin/activate
+docker compose -f smo/common/docker-compose.yaml up -d --wait
 
 # optionally adjust the users.csv file to create new users
 vim users.csv
 # override authentication.json with the new users
 python3 create_users.py users.csv -o smo/common/identity/authentication.json
 
-python smo/common/identity/config.py
+python3 smo/common/identity/config.py
 
 docker compose -f smo/oam/docker-compose.yaml up -d
 docker compose -f smo/apps/docker-compose.yaml up -d
 
-# wait until the cpu load is low again
+# the cpu load is low again, we can start a simulated network
 
 docker compose -f network/docker-compose.yaml up -d
 docker compose -f network/docker-compose.yaml restart ntsim-ng-o-du-1122
-python network/config.py
+python3 network/config.py
 ```
 
 #### Check (adjust if required) environment variables

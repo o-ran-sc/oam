@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright 2019 highstreet technologies GmbH and others...
+# Copyright 2024 highstreet technologies USA Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -47,6 +47,9 @@ archive
 __pycache__
 .pylintrc
 output
+.oam
+.venv
+venv
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
