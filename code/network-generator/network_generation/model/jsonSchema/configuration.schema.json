@@ -317,6 +317,10 @@
         "kml": {
           "description": "If enabled, a kml file will be generated.",
           "$ref": "#/$defs/export"
+        },
+        "teiv": {
+          "description": "If enabled, a teiv data file will be generated.",
+          "$ref": "#/$defs/export"
         }
       }
     }

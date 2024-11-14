@@ -229,3 +229,20 @@ class NrCellDu(ORanNode):
 
     def to_directory(self, parent_dir: str) -> None:
         pass
+
+    def add_teiv_data_entities(
+            self,
+            entity_type: str = "o-ran-smo-teiv-ran:NRCellDU",
+            attributes: dict[str, Any] = {}
+    ) -> dict[str, list[dict[str, Any]]]:
+        return super().add_teiv_data_entities(entity_type, attributes)
+
+    def add_teiv_data_relationships(
+            self,
+            id: str = "",
+            aside: str = "",
+            bside: str = "",
+            rel_type: str = ""
+    ) -> dict[str, list[dict[str, Any]]]:
+        result: dict[str, list[dict[str, Any]]] = {}
+        return result

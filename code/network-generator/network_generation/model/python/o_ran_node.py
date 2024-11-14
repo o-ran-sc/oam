@@ -106,7 +106,7 @@ class ORanNode(ORanObject):
         self._address: AddressType = cast(
             AddressType, o_ran_node_data["address"]
         )
-        self._geo_location: GeoLocation =  o_ran_node_data["geoLocation"]
+        self._geo_location: GeoLocation = o_ran_node_data["geoLocation"]
         self._url: str = str(o_ran_node_data["url"])
         self._position: Hex = cast(Hex, o_ran_node_data["position"])
         self._layout: Layout = cast(Layout, o_ran_node_data["layout"])
@@ -278,7 +278,7 @@ class ORanNode(ORanObject):
         open.text = "1"
         name: ET.Element = ET.SubElement(folder, "name")
         name.text = self.name
-        
+
         placemark: ET.Element = ET.SubElement(folder, "Placemark")
         name: ET.Element = ET.SubElement(placemark, "name")
         name.text = self.name
@@ -296,7 +296,7 @@ class ORanNode(ORanObject):
                 str("%.6f" % float(point_gl.latitude)),
                 str("%.6f" % float(point_gl.aboveMeanSeaLevel)),
             ])
-        
+
         # link to parent
         if (getattr(self.parent, 'geo_location', None) is not None):
             line: ET.Element = ET.SubElement(multi_geometry, "LineString")
@@ -320,7 +320,7 @@ class ORanNode(ORanObject):
                     str("%.6f" % float(parent_gl.aboveMeanSeaLevel)),
                 ]),
             ])
-        return folder      
+        return folder
 
     @abstractmethod
     def toSvg(self) -> ET.Element:
@@ -329,3 +329,29 @@ class ORanNode(ORanObject):
     @abstractmethod
     def to_directory(self, parent_dir: str) -> None:
         pass
+
+    @abstractmethod
+    def add_teiv_data_entities(
+        self, entity_type: str, attributes: dict[str, Any] = {}
+    ) -> dict[str, list[dict[str, Any]]]:
+        sources = []
+        for tp in self.termination_points():
+            sources.append(tp.name)
+        result: dict[str, list[dict[str, Any]]] = {}
+        entity_id = self.name
+        entity: dict[str, Any] = {"id": entity_id}
+        if attributes:
+            entity["attributes"] = attributes
+        if sources:
+            entity["sourceIds"] = sources
+        result[entity_type] = [entity]
+        return result
+
+    @abstractmethod
+    def add_teiv_data_relationships(
+        self, id: str, aside: str, bside: str, rel_type: str
+    ) -> dict[str, list[dict[str, Any]]]:
+        result: dict[str, list[dict[str, Any]]] = {}
+        relationship = {"id": id, "aSide": aside, "bSide": bside}
+        result[rel_type] = [relationship]
+        return result

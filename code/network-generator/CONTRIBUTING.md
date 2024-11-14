@@ -23,7 +23,7 @@ sudo apt install python3.10-venv
 ## Setting up your own virtual environment
 
 Run `make virtual_env_4_oam` to create a virtual environment.
-then activate it with `source .venv/bin/activate`.
+then activate it with `source .oam/bin/activate`.
 
 ## Install the project in develop mode
 

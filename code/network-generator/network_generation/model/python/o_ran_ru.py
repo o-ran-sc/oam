@@ -18,6 +18,7 @@
 A Class representing an O-RAN radio unit (ORanRu)
 """
 import os
+import re
 import xml.etree.ElementTree as ET
 from typing import Any, cast
 
@@ -168,7 +169,7 @@ class ORanRu(ORanNode):
         for cell in self.cells:
             o_ran_ru.append(cell.toKml())
         o_ran_du.append(o_ran_ru)
-        return o_ran_du     
+        return o_ran_du
 
     def toSvg(self) -> ET.Element:
         return ET.Element("to-be-implemented")
@@ -197,4 +198,52 @@ class ORanRu(ORanNode):
         result.extend(getattr(self.oRanDu, cell_method_name)())
         for cell in self.cells:
             result.extend(self.flatten_list(getattr(cell, cell_method_name)()))
+        return result
+
+    def add_teiv_data_entities(
+            self,
+            entity_type: str = "o-ran-smo-teiv-ran:ORUFunction",
+            attributes: dict[str, Any] = {}
+    ) -> dict[str, list[dict[str, Any]]]:
+        id = int(re.sub(r"\D", "", self.name))
+        attributes = {"oruId": id}
+        result = super().add_teiv_data_entities(
+            entity_type, attributes
+        )
+        o_ran_du_data = self.oRanDu.add_teiv_data_entities()
+        for key, value_list in o_ran_du_data.items():
+            if key not in result:
+                result[key] = []
+            result[key].extend(self.flatten_list(value_list))
+        for cell in self._cells:
+            cell_data = cell.add_teiv_data_entities()
+            for key, value_list in cell_data.items():
+                if key not in result:
+                    result[key] = []
+                result[key].extend(self.flatten_list(value_list))
+        return result
+
+    def add_teiv_data_relationships(
+            self,
+            id: str = "",
+            aside: str = "",
+            bside: str = "",
+            rel_type: str = "",
+    ) -> dict[str, list[dict[str, Any]]]:
+        result = {}
+        result = self.oRanDu.add_teiv_data_relationships()
+        for interface in ["OFHM", "OFHC", "OFHU", "OFHS"]:
+            aside = self.name
+            bside = self.oRanDu.name
+            id = "".join([interface, ":", aside, ":", bside])
+            rel_type = (
+                f"o-ran-smo-teiv-ran:ORUFUNCTION_{interface}LINK_ODUFUNCTION"
+            )
+            rel_data = super().add_teiv_data_relationships(
+                id, aside, bside, rel_type
+            )
+            for key, value_list in rel_data.items():
+                if key not in result:
+                    result[key] = []
+                result[key].extend(self.flatten_list(value_list))
         return result
