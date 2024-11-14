@@ -18,6 +18,7 @@
 A Class representing an O-RAN distributed unit (ORanDu)
 """
 import os
+import re
 import xml.etree.ElementTree as ET
 from typing import Any, cast
 
@@ -110,3 +111,42 @@ class ORanDu(ORanNode):
             os.makedirs(parent_path, exist_ok=True)
         if not os.path.exists(path):
             os.mkdir(path)
+
+    def add_teiv_data_entities(
+            self,
+            entity_type: str = "o-ran-smo-teiv-ran:ODUFunction",
+            attributes: dict[str, Any] = {}
+    ) -> dict[str, list[dict[str, Any]]]:
+        id = int(re.sub(r"\D", "", self.name))
+        id_len = len(str(abs(id)))
+        attributes = {"gNBDUId": id, "gNBId": id, "gNBIdLength": id_len}
+        return super().add_teiv_data_entities(
+            entity_type, attributes
+        )
+
+    def add_teiv_data_relationships(
+            self,
+            id: str = "",
+            aside: str = "",
+            bside: str = "",
+            rel_type: str = "o-ran-smo-teiv-ran:ODUFUNCTION_O1LINK_SMO"
+    ) -> dict[str, list[dict[str, Any]]]:
+        result = {}
+        aside = self.name
+        bside = self.parent.parent.parent.name
+        id = "".join(["o1", ":", aside, ":", bside])
+        result = super().add_teiv_data_relationships(
+            id, aside, bside, rel_type
+        )
+        aside = self.name
+        bside = self.parent.parent.name
+        id = "".join(["e2", ":", aside, ":", bside])
+        rel_type = "o-ran-smo-teiv-ran:ODUFUNCTION_E2LINK_NEARRTRICFUNCTION"
+        rel_data = super().add_teiv_data_relationships(
+            id, aside, bside, rel_type
+        )
+        for key, value_list in rel_data.items():
+            if key not in result:
+                result[key] = []
+            result[key].extend(self.flatten_list(value_list))
+        return result

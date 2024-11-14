@@ -213,3 +213,12 @@ class ORanNetwork(ORanObject):
 
     def json(self) -> dict[str, Any]:
         return super().json()
+
+    def to_teiv_data(self) -> dict[str, Any]:
+        entities: dict[str, list[dict[str, Any]]] = (
+            self._o_ran_smo.add_teiv_data_entities()
+        )
+        relationships: dict[str, list[dict[str, Any]]] = (
+            self._o_ran_smo.add_teiv_data_relationships()
+        )
+        return {"entities": [entities], "relationships": [relationships]}

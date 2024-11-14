@@ -53,7 +53,11 @@
     },
     "kml": {
       "enabled": true,
-      "compressed": true
+      "compressed": false
+    },
+    "teiv": {
+      "enabled": false,
+      "compressed": false
     }
   }
 }

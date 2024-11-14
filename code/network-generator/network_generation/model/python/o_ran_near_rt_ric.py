@@ -18,6 +18,7 @@
 A Class representing an O-RAN Near real-time intelligent controller
 (ORanNearRtRic)
 """
+import re
 import xml.etree.ElementTree as ET
 from typing import Any, cast
 
@@ -147,6 +148,72 @@ class ORanNearRtRic(ORanNode):
         )
 
     def to_topology_links(self) -> list[dict[str, Any]]:
-        return self._extend_with_o_ran_cu_references(
+        interface = "o1"
+        destination_node = self.parent
+        link_id: str = "".join(
+            [interface, ":", self.name, "<->", destination_node.name]
+        )
+        source_tp: str = "-".join([self.name, interface.upper()])
+        dest_tp: str = "-".join([destination_node.name, interface.upper()])
+        result = self._extend_with_o_ran_cu_references(
             super().to_topology_links, "to_topology_links"
+        )
+        result.append(
+            {
+                "link-id": link_id,
+                "source": {
+                    "source-node": self.name,
+                    "source-tp": source_tp,
+                },
+                "destination": {
+                    "dest-node": destination_node.name,
+                    "dest-tp": dest_tp,
+                },
+            }
+        )
+        return result
+
+    def _extend_teiv_data_with_o_ran_cu_references(
+        self: Any,
+        teiv_data: dict[str, list[dict[str, Any]]],
+        o_ran_cu_method_name: str,
+    ) -> dict[str, list[dict[str, Any]]]:
+        """ """
+        for o_ran_cu in self.o_ran_cus:
+            o_ran_cu_data = getattr(o_ran_cu, o_ran_cu_method_name)()
+            for key, value_list in o_ran_cu_data.items():
+                if key not in teiv_data:
+                    teiv_data[key] = []
+                teiv_data[key].extend(self.flatten_list(value_list))
+        return teiv_data
+
+    def add_teiv_data_entities(
+            self,
+            entity_type: str = "o-ran-smo-teiv-ran:NearRTRICFunction",
+            attributes: dict[str, Any] = {}
+    ) -> dict[str, list[dict[str, Any]]]:
+        id = int(re.sub(r"\D", "", self.name))
+        attributes = {
+            "nearRtRicId": id,
+        }
+        result = super().add_teiv_data_entities(
+            entity_type, attributes
+        )
+        return self._extend_teiv_data_with_o_ran_cu_references(
+            result, "add_teiv_data_entities"
+        )
+
+    def add_teiv_data_relationships(
+            self,
+            id: str = "",
+            aside: str = "",
+            bside: str = "",
+            rel_type: str = "o-ran-smo-teiv-ran:NEARRTRICFUNCTION_O1LINK_SMO"
+    ) -> dict[str, list[dict[str, Any]]]:
+        aside = self.name
+        bside = self.parent.name
+        id = "".join(["o1", ":", aside, ":", bside])
+        return self._extend_teiv_data_with_o_ran_cu_references(
+            super().add_teiv_data_relationships(id, aside, bside, rel_type),
+            "add_teiv_data_relationships",
         )

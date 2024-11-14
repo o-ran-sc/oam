@@ -73,6 +73,7 @@ def main() -> None:  # pragma: no cover
         "day0Config": "to_directory",
         "svg": "svg",
         "kml": "kml",
+        "teiv": "teiv",
     }
 
     for task_key, method_name in task_to_method.items():

@@ -151,3 +151,36 @@ class Tower(ORanNode):
             super().to_topology_links,
             "to_topology_links",
         )
+
+    def _extend_teiv_data_with_o_ran_ru_references(
+        self: Any, o_ran_ru_method_name: str
+    ) -> dict[str, list[dict[str, Any]]]:
+        """ """
+        result: dict[str, Any] = {}
+        for o_ran_ru in self.o_ran_rus:
+            o_ran_ru_data = getattr(o_ran_ru, o_ran_ru_method_name)()
+            for key, value_list in o_ran_ru_data.items():
+                if key not in result:
+                    result[key] = []
+                result[key].extend(self.flatten_list(value_list))
+        return result
+
+    def add_teiv_data_entities(
+            self,
+            entity_type: str = "",
+            attributes: dict[str, Any] = {}
+    ) -> dict[str, list[dict[str, Any]]]:
+        return self._extend_teiv_data_with_o_ran_ru_references(
+            "add_teiv_data_entities"
+        )
+
+    def add_teiv_data_relationships(
+            self,
+            id: str = "",
+            aside: str = "",
+            bside: str = "",
+            rel_type: str = "",
+    ) -> dict[str, list[dict[str, Any]]]:
+        return self._extend_teiv_data_with_o_ran_ru_references(
+            "add_teiv_data_relationships"
+        )

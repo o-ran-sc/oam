@@ -41,6 +41,7 @@ class ORanSmo(ORanNode):
     """
     Class representing an O-RAN Service Management and Operation object.
     """
+
     _interfaces = ["a1", "o1", "ofhm", "o2"]
 
     def __init__(
@@ -148,4 +149,42 @@ class ORanSmo(ORanNode):
     def to_topology_links(self) -> list[dict[str, Any]]:
         return self._extend_with_ric_references(
             super().to_topology_links, "to_topology_links"
+        )
+
+    def _extend_teiv_data_with_ric_references(
+        self: Any,
+        teiv_data: dict[str, list[dict[str, Any]]],
+        ric_method_name: str
+    ) -> dict[str, list[dict[str, Any]]]:
+        """ """
+        for ric in self.o_ran_near_rt_rics:
+            ric_data = getattr(ric, ric_method_name)()
+            for key, value_list in ric_data.items():
+                if key not in teiv_data:
+                    teiv_data[key] = []
+                teiv_data[key].extend(self.flatten_list(value_list))
+        return teiv_data
+
+    def add_teiv_data_entities(
+            self,
+            entity_type: str = "o-ran-smo-teiv-ran:SMO",
+            attributes: dict[str, Any] = {}
+    ) -> dict[str, list[dict[str, Any]]]:
+        attributes = {
+            "smoName": self.name
+        }
+        return self._extend_teiv_data_with_ric_references(
+            super().add_teiv_data_entities(entity_type, attributes),
+            "add_teiv_data_entities"
+        )
+
+    def add_teiv_data_relationships(
+            self,
+            id: str = "",
+            aside: str = "",
+            bside: str = "",
+            rel_type: str = ""
+    ) -> dict[str, list[dict[str, Any]]]:
+        return self._extend_teiv_data_with_ric_references(
+            {}, "add_teiv_data_relationships"
         )
