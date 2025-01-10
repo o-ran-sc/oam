@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "906d7587_8fec3d47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-01-10T14:21:51Z",
+      "side": 1,
+      "message": "martindev ~/workspace/o-ran-sc/k-release/oam (k-release-notes)$ tox -e docs,docs-linkcheck\ndocs: commands[0]\u003e sphinx-build -W -b html -n -d /home/demx8as6/workspace/o-ran-sc/k-release/oam/.tox/docs/tmp/doctrees ./docs/ /home/demx8as6/workspace/o-ran-sc/k-release/oam/docs/_build/html\nRunning Sphinx v5.3.0\nloading intersphinx inventory from https://docs.releng.linuxfoundation.org/projects/common-packer/en/stable/objects.inv...\n\n[...]\n\n(   abbreviations: line  349) ok        https://wiki.fd.io/view/VPP/What_is_VPP%3F\n(        overview: line   12) ok        https://www.o-ran.org/specifications\n(   abbreviations: line  185) ok        https://www.o-ran.org\nbuild succeeded.\n\nLook for any errors in the above output or in docs/_build/linkcheck/output.txt\n  docs: OK (2.18\u003dsetup[0.06]+cmd[2.12,0.00] seconds)\n  docs-linkcheck: OK (21.30\u003dsetup[0.01]+cmd[21.29] seconds)\n  congratulations :) (23.59 seconds)",
+      "revId": "68b8da00f1fc25e1f826f03b463474110f7f1fc1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
