@@ -6,7 +6,7 @@ Deployment
 ==========
 
 OAM Components are deployed in different context and for different use cases.
-Please see the Kubernetes deployment within the `it/deb <https://gerrit.o-ran-sc.org/r/gitweb?p=it/dep>`__ repository and its description in `O-RAN-SC wiki <https://wiki.o-ran-sc.org/display/IAT/Automated+deployment+and+testing+-+using+SMO+package+and+ONAP+Python+SDK>`__.
+Please see the Kubernetes deployment within the `it/deb <https://gerrit.o-ran-sc.org/r/gitweb?p=it/dep>`__ repository and its description in `O-RAN-SC wiki <https://lf-o-ran-sc.atlassian.net/wiki/spaces/IAT/pages/14516593/Automated+deployment+and+testing+-+using+SMO+package+and+ONAP+Python+SDK>`__.
 
 The main OAM Components are:
 
@@ -65,7 +65,7 @@ The O-RAN Alliance specifications target the support of IPv6.
 To support IPv6 by docker the docker configuration must be modified.
 
 Please see:
-https://docs.docker.com/config/daemon/ipv6/
+https://docs.docker.com/engine/daemon/ipv6/
 
 1. Edit /etc/docker/daemon.json, set the ipv6 key to true and the fixed-cidr-v6 key to your IPv6 subnet. In this example we are setting it to 2001:db8:1::/64.
 

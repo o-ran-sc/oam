@@ -39,7 +39,7 @@ module o-ran-sc-system-with-geo-location {
     description
       "Initial version // TODO reference";
     reference
-      "https://jira.o-ran-sc.org/browse/OAM-399";
+      "https://lf-o-ran-sc.atlassian.net/browse/OAM-399";
   }
 
   augment "/sys:system" {

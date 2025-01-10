@@ -3,7 +3,7 @@
 To support IPv6 the docker configuration must be modified. 
 
 Please see:
-https://docs.docker.com/config/daemon/ipv6/
+https://docs.docker.com/engine/daemon/ipv6/
 
 1. Edit /etc/docker/daemon.json, set the ipv6 key to true and the fixed-cidr-v6 key to your IPv6 subnet. In this example we are setting it to 2001:db8:1::/64.
 

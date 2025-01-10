@@ -8,4 +8,4 @@ OAM Developer Guide
 This document provides a quickstart for developers of the O-RAN SC OAM components.
 
 All information of development are documented in corresponding O-RAN-SC wiki:
-https://wiki.o-ran-sc.org/display/OAM/Operations+and+Maintenance
+https://lf-o-ran-sc.atlassian.net/wiki/spaces/OAM/overview

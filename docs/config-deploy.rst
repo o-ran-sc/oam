@@ -8,7 +8,7 @@ OAM Controller Configuration and Deployment
 This documents the configuration and deployment of the O-RAN SC O1 Controller as
 part of the SMO implementations by the ONAP project.
 
-The SMO deployment is described in the `O-RAN-SC wiki <https://wiki.o-ran-sc.org/display/IAT/Automated+deployment+and+testing+-+using+SMO+package+and+ONAP+Python+SDK>`_
+The SMO deployment is described in the `O-RAN-SC wiki <https://lf-o-ran-sc.atlassian.net/wiki/spaces/IAT/pages/14516593/Automated+deployment+and+testing+-+using+SMO+package+and+ONAP+Python+SDK>`_
 
 The procedure provides:
 * ONAP-DCAE

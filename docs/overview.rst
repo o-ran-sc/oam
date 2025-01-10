@@ -33,10 +33,10 @@ The project uses the following Linux Foundation resources:
     `<https://jenkins.o-ran-sc.org/view/oam/>`_
 
 * Issues are tracked in this Jira:
-    `<https://jira.o-ran-sc.org/projects/OAM/issues>`_
+    `<https://lf-o-ran-sc.atlassian.net/jira/projects/OAM/issues>`_
 
 * Project information is available in this Wiki:
-    `<https://wiki.o-ran-sc.org/display/OAM/Operations+and+Maintenance>`_
+    `<https://lf-o-ran-sc.atlassian.net/wiki/spaces/OAM/overview>`_
 
 
 Scope
