@@ -201,17 +201,17 @@ class ORanCu(ORanNode):
             "gNBIdLength": id_len,
         }
         result = super().add_teiv_data_entities(
-            entity_type, attributes
+            entity_type, attributes, nf_deployment=True
         )
         entity_type = "o-ran-smo-teiv-ran:OCUUPFunction"
         attributes = {
             "gNBId": id,
             "gNBIdLength": id_len,
         }
-        o_ran_cuip_data = super().add_teiv_data_entities(
-            entity_type, attributes
+        o_ran_cuup_data = super().add_teiv_data_entities(
+            entity_type, attributes, nf_deployment=True
         )
-        for key, value_list in o_ran_cuip_data.items():
+        for key, value_list in o_ran_cuup_data.items():
             if key not in result:
                 result[key] = []
             result[key].extend(self.flatten_list(value_list))
@@ -228,8 +228,19 @@ class ORanCu(ORanNode):
     ) -> dict[str, list[dict[str, Any]]]:
         aside = self.name
         bside = self.parent.parent.name
-        id = "".join(["o1", ":", aside, ":", bside])
+        id = "".join(["o1:", aside, ":", bside])
+        result = super().add_teiv_data_relationships(id, aside, bside, rel_type)
+        rel_data = super().build_nf_deployment_relationship("OCUCPFUNCTION", "ran")
+        for key, value_list in rel_data.items():
+            if key not in result:
+                result[key] = []
+            result[key].extend(self.flatten_list(value_list))
+        rel_data = super().build_nf_deployment_relationship("OCUUPFUNCTION", "ran")
+        for key, value_list in rel_data.items():
+            if key not in result:
+                result[key] = []
+            result[key].extend(self.flatten_list(value_list))
         return self._extend_teiv_data_with_o_ran_cloud_du_references(
-            super().add_teiv_data_relationships(id, aside, bside, rel_type),
+            result,
             "add_teiv_data_relationships",
         )

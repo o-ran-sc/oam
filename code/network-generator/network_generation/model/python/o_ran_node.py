@@ -332,11 +332,15 @@ class ORanNode(ORanObject):
 
     @abstractmethod
     def add_teiv_data_entities(
-        self, entity_type: str, attributes: dict[str, Any] = {}
+        self,
+        entity_type: str,
+        attributes: dict[str, Any] = {},
+        sources = [],
+        nf_deployment = False
     ) -> dict[str, list[dict[str, Any]]]:
-        sources = []
-        for tp in self.termination_points():
-            sources.append(tp.name)
+        if not sources:
+            for tp in self.termination_points():
+                sources.append(tp.name)
         result: dict[str, list[dict[str, Any]]] = {}
         entity_id = self.name
         entity: dict[str, Any] = {"id": entity_id}
@@ -345,13 +349,50 @@ class ORanNode(ORanObject):
         if sources:
             entity["sourceIds"] = sources
         result[entity_type] = [entity]
+        if nf_deployment:
+            nf_result = self.build_nf_deployment_entity(entity_id, entity_type)
+            result.update(nf_result)
         return result
+
+    def build_nf_deployment_entity(
+        self,
+        entity_id: str,
+        entity_type: str
+    ) -> dict[str, list[dict[str, Any]]]:
+        nf_entity_type = "o-ran-smo-teiv-cloud:NFDeployment"
+        nf_entity_id = f"NFDeployment:{entity_type}_{entity_id}"
+        nf_entity: dict[str, Any] = {"id": nf_entity_id}
+        nf_attributes = {
+            "name": nf_entity_id
+        }
+        nf_sources = [nf_entity_id]
+        nf_entity["attributes"] = nf_attributes
+        nf_entity["sourceIds"] = nf_sources
+        return {nf_entity_type: [nf_entity]}
 
     @abstractmethod
     def add_teiv_data_relationships(
-        self, id: str, aside: str, bside: str, rel_type: str
+        self,
+        id: str,
+        aside: str,
+        bside: str,
+        rel_type: str
     ) -> dict[str, list[dict[str, Any]]]:
         result: dict[str, list[dict[str, Any]]] = {}
         relationship = {"id": id, "aSide": aside, "bSide": bside}
+        relationship["sourceIds"] = [aside, bside]
         result[rel_type] = [relationship]
         return result
+
+    def build_nf_deployment_relationship(
+        self,
+        bside_entity_type: str,
+        bside_entity_domain: str
+    ) -> dict[str, list[dict[str, Any]]]:
+        bside = self.name
+        nf_rel_type: str = f"o-ran-smo-teiv-rel-cloud-ran:NFDEPLOYMENT_SERVES_{bside_entity_type.upper()}"
+        aside: str = f"NFDeployment:o-ran-smo-teiv-{bside_entity_domain}:{bside_entity_type}_{bside}"
+        id: str = f"{aside}:{bside}"
+        nf_rel = {"id": id, "aSide": aside, "bSide": bside}
+        nf_rel["sourceIds"] = [aside, bside]
+        return {nf_rel_type: [nf_rel]}

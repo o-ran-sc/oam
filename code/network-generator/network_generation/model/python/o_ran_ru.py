@@ -246,4 +246,18 @@ class ORanRu(ORanNode):
                 if key not in result:
                     result[key] = []
                 result[key].extend(self.flatten_list(value_list))
+        for interface in ["O1", "OFHM"]:
+            aside = self.name
+            bside = self.parent.parent.parent.parent.parent.name
+            id = "".join([interface, ":", aside, ":", bside])
+            rel_type = (
+                f"o-ran-smo-teiv-ran:ORUFUNCTION_{interface}LINK_SMO"
+            )
+            rel_data = super().add_teiv_data_relationships(
+                id, aside, bside, rel_type
+            )
+            for key, value_list in rel_data.items():
+                if key not in result:
+                    result[key] = []
+                result[key].extend(self.flatten_list(value_list))
         return result

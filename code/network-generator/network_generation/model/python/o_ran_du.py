@@ -121,7 +121,7 @@ class ORanDu(ORanNode):
         id_len = len(str(abs(id)))
         attributes = {"gNBDUId": id, "gNBId": id, "gNBIdLength": id_len}
         return super().add_teiv_data_entities(
-            entity_type, attributes
+            entity_type, attributes, nf_deployment=True
         )
 
     def add_teiv_data_relationships(
@@ -149,4 +149,25 @@ class ORanDu(ORanNode):
             if key not in result:
                 result[key] = []
             result[key].extend(self.flatten_list(value_list))
+        rel_data = super().build_nf_deployment_relationship(
+            "ODUFUNCTION", "ran"
+        )
+        for key, value_list in rel_data.items():
+            if key not in result:
+                result[key] = []
+            result[key].extend(self.flatten_list(value_list))
+        for interface in ["F1ULINK_OCUUPFUNCTION", "F1CLINK_OCUCPFUNCTION"]:
+            aside = self.name
+            bside = self.parent.name
+            id = "".join([interface, ":", aside, ":", bside])
+            rel_type = (
+                f"o-ran-smo-teiv-ran:ODUFUNCTION_{interface}"
+            )
+            rel_data = super().add_teiv_data_relationships(
+                id, aside, bside, rel_type
+            )
+            for key, value_list in rel_data.items():
+                if key not in result:
+                    result[key] = []
+                result[key].extend(self.flatten_list(value_list))
         return result

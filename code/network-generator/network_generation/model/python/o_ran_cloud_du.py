@@ -146,24 +146,29 @@ class ORanCloudDu(ORanNode):
         )
 
     def _extend_teiv_data_with_tower_references(
-        self: Any, tower_method_name: str
+        self: Any,
+        teiv_data: dict[str, list[dict[str, Any]]],
+        tower_method_name: str
     ) -> dict[str, list[dict[str, Any]]]:
         """ """
-        result: dict[str, Any] = {}
         for tower in self.towers:
             tower_data = getattr(tower, tower_method_name)()
             for key, value_list in tower_data.items():
-                if key not in result:
-                    result[key] = []
-                result[key].extend(self.flatten_list(value_list))
-        return result
+                if key not in teiv_data:
+                    teiv_data[key] = []
+                teiv_data[key].extend(self.flatten_list(value_list))
+        return teiv_data
 
     def add_teiv_data_entities(
             self,
-            entity_type: str = "",
+            entity_type: str = "o-ran-smo-teiv-cloud:OCloudSite",
             attributes: dict[str, Any] = {}
     ) -> dict[str, list[dict[str, Any]]]:
+        attributes = {
+            "name": self.name
+        }
         return self._extend_teiv_data_with_tower_references(
+            super().add_teiv_data_entities(entity_type, attributes),
             "add_teiv_data_entities"
         )
 
@@ -175,5 +180,5 @@ class ORanCloudDu(ORanNode):
             rel_type: str = ""
     ) -> dict[str, list[dict[str, Any]]]:
         return self._extend_teiv_data_with_tower_references(
-            "add_teiv_data_relationships"
+            {}, "add_teiv_data_relationships"
         )
