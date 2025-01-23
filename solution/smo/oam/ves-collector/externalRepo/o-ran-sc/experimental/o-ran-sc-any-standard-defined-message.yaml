@@ -1,0 +1,119 @@
+openapi: 3.0.3
+info:
+  version: 0.0.0
+  title: O-RAN-SC-GenericNotification
+  description: >-
+    The O-RAN-SC K-Release provides a generic mechanism to consume any 
+    stndDefined VES message. This OpenAPI specification can be used for
+    the schema-map json file of the ONAP VES Collector, in case a yaml for
+    the schema does not exist.
+
+    Copyright 2024 highstreet technologies USA Corp.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+
+    reference: https://jira.o-ran-sc.org/browse/OAM-403.
+
+servers:
+  - url: https://management-service-consumer:8443/v1
+    description: The url of an event stream consumer.
+paths:
+  /message:
+    post:
+      description: Posts a message.
+      summary: POST message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/message'
+        description: A message.
+      responses:
+        '201':
+          description: Posted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '405':
+          description: Method Not allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        default:
+          description: Error case.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+components:
+  schemas:
+    message:
+      description: An abstract object class of a message.
+      type: object
+    error-response:
+      description: >-
+        Used when an API throws an error with a HTTP error response-code (3xx,
+        4xx, 5xx)
+      type: object
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          description: >-
+            Explanation of the reason for the error which can be shown to a
+            human user.
+        message:
+          type: string
+          description: >-
+            More details and corrective actions related to the error which can
+            be shown to a human user.
+        documentation-reference:
+          type: string
+          format: uri
+          description: URI of describing the error.

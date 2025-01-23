@@ -1,0 +1,201 @@
+{
+    "ietf-interfaces:interfaces": {
+        "interface": [
+            {
+                "name": "x",
+                "description": "x",
+                "type": "iana-if-type:aluELP",
+                "enabled": true,
+                "ietf-ip:ipv4": {
+                    "enabled": false,
+                    "forwarding": true,
+                    "mtu": 68,
+                    "address": [
+                        {
+                            "ip": "152.132.103.50",
+                            "prefix-length": 0
+                        }
+                    ],
+                    "neighbor": [
+                        {
+                            "ip": "108.156.122.35",
+                            "link-layer-address": "81"
+                        }
+                    ],
+                    "ietf-network-instance:bind-ni-name": "x",
+                    "o-ran-interfaces:m-plane-marking": 0,
+                    "o-ran-interfaces:tcp": {
+                        "mss-adjust": 0
+                    },
+                    "o-ran-interfaces:diffserv-markings": {
+                        "u-plane-marking": 0,
+                        "c-plane-marking": 0,
+                        "s-plane-marking": 0,
+                        "other-marking": 0,
+                        "enhanced-uplane-markings": [
+                            {
+                                "up-marking-name": "x",
+                                "enhanced-marking": 0
+                            }
+                        ]
+                    }
+                },
+                "ietf-ip:ipv6": {
+                    "enabled": false,
+                    "forwarding": true,
+                    "mtu": 1280,
+                    "address": [
+                        {
+                            "ip": "::",
+                            "prefix-length": 0
+                        }
+                    ],
+                    "neighbor": [
+                        {
+                            "ip": "::",
+                            "link-layer-address": "47"
+                        }
+                    ],
+                    "dup-addr-detect-transmits": 0,
+                    "autoconf": {
+                        "create-global-addresses": true
+                    },
+                    "ietf-network-instance:bind-ni-name": "x",
+                    "o-ran-interfaces:m-plane-marking": 0,
+                    "o-ran-interfaces:tcp": {
+                        "mss-adjust": 0
+                    },
+                    "o-ran-interfaces:diffserv-markings": {
+                        "u-plane-marking": 0,
+                        "c-plane-marking": 0,
+                        "s-plane-marking": 0,
+                        "other-marking": 0,
+                        "enhanced-uplane-markings": [
+                            {
+                                "up-marking-name": "x",
+                                "enhanced-marking": 0
+                            }
+                        ]
+                    }
+                },
+                "ietf-network-instance:bind-ni-name": "x",
+                "ieee802-dot1x:pae": {
+                    "pae-system": "x",
+                    "vp-enable": false,
+                    "port-capabilities": {
+                        "supp": false,
+                        "auth": true,
+                        "mka": true,
+                        "macsec": false,
+                        "announcements": true,
+                        "listener": false,
+                        "virtual-ports": true,
+                        "in-service-upgrades": true
+                    },
+                    "port-type": "virtual-port",
+                    "supplicant": {
+                        "held-period": 0,
+                        "retry-max": 0
+                    },
+                    "authenticator": {
+                        "quiet-period": 0,
+                        "reauth-period": 0,
+                        "reauth-enable": true,
+                        "retry-max": 0
+                    },
+                    "kay": {
+                        "enable": true,
+                        "actor": {
+                            "priority": 0
+                        },
+                        "key-server": {
+                            "priority": 0
+                        },
+                        "group": {
+                            "join": true,
+                            "form": true,
+                            "new": true
+                        },
+                        "macsec": {
+                            "capable": true,
+                            "desired": false
+                        },
+                        "suspend-on-request": true,
+                        "suspend-for": 0,
+                        "participants": [
+                            {
+                                "participant": 0,
+                                "cached": false,
+                                "active": false,
+                                "retain": false,
+                                "activate": "disabled"
+                            }
+                        ]
+                    },
+                    "logon-nid": {
+                        "selected": "",
+                        "pae-nid-group": [
+                            {
+                                "nid": "",
+                                "use-eap": "immediate",
+                                "unauth-allowed": "immediate",
+                                "unsecure-allowed": "immediate",
+                                "unauthenticated-access": "fallback-access",
+                                "access-capabilities": "eap eapMkaMacSec vendorSpecific mkaMacSec mka"
+                            }
+                        ]
+                    },
+                    "announcer": {
+                        "enable": false,
+                        "announce": [
+                            {
+                                "announces": 0,
+                                "pae-nid-group": [
+                                    {
+                                        "nid": "",
+                                        "use-eap": "immediate",
+                                        "unauth-allowed": "immediate",
+                                        "unsecure-allowed": "immediate",
+                                        "unauthenticated-access": "fallback-access",
+                                        "access-capabilities": "eapMkaMacSec mkaMacSec"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "listener": {
+                        "enable": true
+                    },
+                    "logon-process": {
+                        "logon": false
+                    }
+                },
+                "o-ran-interfaces:l2-mtu": 64,
+                "o-ran-interfaces:vlan-tagging": true,
+                "o-ran-interfaces:class-of-service": {
+                    "u-plane-marking": 0,
+                    "c-plane-marking": 0,
+                    "m-plane-marking": 0,
+                    "s-plane-marking": 0,
+                    "other-marking": 0,
+                    "enhanced-uplane-markings": [
+                        {
+                            "up-marking-name": "x",
+                            "enhanced-marking": 0
+                        }
+                    ]
+                },
+                "o-ran-interfaces:base-interface": "x",
+                "o-ran-interfaces:vlan-id": 1,
+                "o-ran-interfaces:alias-macs": [
+                    "50:17:53:48:80:40"
+                ],
+                "o-ran-interfaces:mac-address": "26:13:00:15:00:71",
+                "o-ran-interfaces:port-reference": {
+                    "port-name": "x",
+                    "port-number": 0
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,49 @@
+{
+  "ietf-netconf-server:netconf-server": {
+    "call-home": {
+      "netconf-client": [
+        {
+          "name": "default-client",
+          "endpoints": {
+            "endpoint": [
+              {
+                "name": "default-ssh-callhome",
+                "ssh": {
+                  "tcp-client-parameters": {
+                    "remote-address": "192.168.10.253",
+                    "remote-port": 4334
+                  },
+                  "ssh-server-parameters": {
+                    "server-identity": {
+                      "host-key": [
+                        {
+                          "name": "melacon-key",
+                          "public-key": {
+                            "central-keystore-reference": "serverkey-ssh"
+                          }
+                        }
+                      ]
+                    },
+                    "client-authentication": {
+                      "users": {
+                        "user": [
+                          {
+                            "name": "netconf",
+                            "password": "$0$netconf!"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "connection-type": {
+            "persistent": {}
+          }
+        }
+      ]
+    }
+  }
+}

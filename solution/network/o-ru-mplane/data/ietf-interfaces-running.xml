@@ -1,0 +1,12 @@
+<interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+  <interface>
+    <name>eth2-UPlane-VLAN</name>
+    <type xmlns:ianaift="urn:ietf:params:xml:ns:yang:iana-if-type">ianaift:l2vlan</type>
+    <enabled>true</enabled>
+    <ipv4 xmlns="urn:ietf:params:xml:ns:yang:ietf-ip">
+      <enabled>false</enabled>
+    </ipv4>
+    <vlan-id xmlns="urn:o-ran:interfaces:1.0">5</vlan-id>
+    <mac-address xmlns="urn:o-ran:interfaces:1.0">00:11:22:33:44:55</mac-address>
+  </interface>
+</interfaces>

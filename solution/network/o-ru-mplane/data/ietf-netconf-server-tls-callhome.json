@@ -1,0 +1,54 @@
+{
+  "ietf-netconf-server:netconf-server": {
+    "call-home": {
+      "netconf-client": [
+        {
+          "name": "default-client",
+          "endpoints": {
+            "endpoint": [
+              {
+                "name": "tls-auth-endpt",
+                "tls": {
+                  "tcp-client-parameters": {
+                    "remote-address": "172.60.0.71",
+                    "remote-port": 4335
+                  },
+                  "tls-server-parameters": {
+                    "server-identity": {
+                      "certificate": {
+                        "central-keystore-reference": {
+                          "asymmetric-key": "serverkey-tls",
+                          "certificate": "servercert"
+                        }
+                      }
+                    },
+                    "client-authentication": {
+                      "ca-certs": {
+                        "central-truststore-reference": "cacerts"
+                      }
+                    }
+                  },
+                  "netconf-server-parameters": {
+                    "client-identity-mappings": {
+                      "cert-to-name": [
+                        {
+                          "id": 1,
+                          "fingerprint": "02:e9:38:1f:f6:8b:62:de:0a:0b:c5:03:81:a8:03:49:a0:00:7f:8b:f3",
+                          "map-type": "ietf-x509-cert-to-name:specified",
+                          "name": "netconf"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "connection-type": {
+            "persistent": {}
+          }
+        }
+      ]
+    }
+  }
+}

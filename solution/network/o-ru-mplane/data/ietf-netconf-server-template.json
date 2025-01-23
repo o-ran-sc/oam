@@ -1,0 +1,179 @@
+{
+  "ietf-netconf-server:netconf-server": {
+    "listen": {
+      "idle-timeout": 0,
+      "endpoints": {
+        "endpoint": [
+          {
+            "name": "ssh-endpoint-830",
+            "ssh": {
+              "tcp-server-parameters": {
+                "local-address": "0.0.0.0",
+                "local-port": 830
+              },
+              "ssh-server-parameters": {
+                "server-identity": {
+                  "host-key": [
+                    {
+                      "name": "melacon-key",
+                      "public-key": {
+                        "central-keystore-reference": "serverkey-ssh"
+                      }
+                    }
+                  ]
+                },
+                "client-authentication": {
+                  "users": {
+                    "user": [
+                      {
+                        "name": "netconf",
+                        "password": "$0$netconf!"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "tls-endpoint-6513",
+            "tls": {
+              "tcp-server-parameters": {
+                "local-address": "0.0.0.0",
+                "local-port": 6513
+              },
+              "tls-server-parameters": {
+                "server-identity": {
+                  "certificate": {
+                    "central-keystore-reference": {
+                      "asymmetric-key": "serverkey-tls",
+                      "certificate": "servercert"
+                    }
+                  }
+                },
+                "client-authentication": {
+                  "ca-certs": {
+                    "central-truststore-reference": "cacerts"
+                  }
+                }
+              },
+              "netconf-server-parameters": {
+                "client-identity-mappings": {
+                  "cert-to-name": [
+                    {
+                      "id": 1,
+                      "fingerprint": "02:DC:0A:65:17:7F:E7:6D:2C:9A:8B:F1:AD:64:F9:EC:56:D7:36:F4:70",
+                      "map-type": "ietf-x509-cert-to-name:specified",
+                      "name": "netconf"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "call-home": {
+      "netconf-client": [
+        {
+          "name": "default-callhome",
+          "endpoints": {
+            "endpoint": [
+              {
+                "name": "default-ssh-callhome",
+                "ssh": {
+                  "tcp-client-parameters": {
+                    "remote-address": "192.168.10.253",
+                    "remote-port": 4334
+                  },
+                  "ssh-server-parameters": {
+                    "server-identity": {
+                      "host-key": [
+                        {
+                          "name": "melacon-key",
+                          "public-key": {
+                            "central-keystore-reference": "serverkey-ssh"
+                          }
+                        }
+                      ]
+                    },
+                    "client-authentication": {
+                      "users": {
+                        "user": [
+                          {
+                            "name": "netconf",
+                            "password": "$0$netconf!"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "connection-type": {
+            "persistent": {}
+          },
+          "reconnect-strategy": {
+            "start-with": "last-connected",
+            "max-wait": 1,
+            "max-attempts": 1
+          }
+        },
+        {
+          "name": "default-callhome-tls",
+          "endpoints": {
+            "endpoint": [
+              {
+                "name": "tls-auth-endpt",
+                "tls": {
+                  "tcp-client-parameters": {
+                    "remote-address": "192.168.10.253",
+                    "remote-port": 4335
+                  },
+                  "tls-server-parameters": {
+                    "server-identity": {
+                      "certificate": {
+                        "central-keystore-reference": {
+                          "asymmetric-key": "serverkey-tls",
+                          "certificate": "servercert"
+                        }
+                      }
+                    },
+                    "client-authentication": {
+                      "ca-certs": {
+                        "central-truststore-reference": "cacerts"
+                      }
+                    }
+                  },
+                  "netconf-server-parameters": {
+                    "client-identity-mappings": {
+                      "cert-to-name": [
+                        {
+                          "id": 1,
+                          "fingerprint": "02:DC:0A:65:17:7F:E7:6D:2C:9A:8B:F1:AD:64:F9:EC:56:D7:36:F4:70",
+                          "map-type": "ietf-x509-cert-to-name:specified",
+                          "name": "netconf"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "connection-type": {
+            "persistent": {}
+          },
+          "reconnect-strategy": {
+            "start-with": "last-connected",
+            "max-wait": 1,
+            "max-attempts": 1
+          }
+        }
+      ]
+    }
+  }
+}

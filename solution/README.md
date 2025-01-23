@@ -166,8 +166,7 @@ docker compose -f smo/apps/docker-compose.yaml up -d
 # the cpu load is low again, we can start a simulated network
 
 docker compose -f network/docker-compose.yaml up -d
-docker compose -f network/docker-compose.yaml restart ntsim-ng-o-du-1122
-python3 network/config.py
+docker compose -f network/docker-compose.yaml restart pynts-o-du-o1
 ```
 
 #### Check (adjust if required) environment variables

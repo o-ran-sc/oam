@@ -1,0 +1,11 @@
+<alarm-notif xmlns="urn:o-ran:fm:1.0">
+    <fault-id>1</fault-id>
+    <fault-source>object1</fault-source>
+    <affected-objects>
+        <name>affected_object1</name>
+    </affected-objects>
+    <fault-severity>CRITICAL</fault-severity>
+    <is-cleared>false</is-cleared>
+    <fault-text>Alarm text goes here..</fault-text>
+    <event-time>2024-08-01T10:00:03.12Z</event-time>
+</alarm-notif>

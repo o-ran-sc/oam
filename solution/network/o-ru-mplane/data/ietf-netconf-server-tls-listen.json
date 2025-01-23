@@ -1,0 +1,46 @@
+{
+  "ietf-netconf-server:netconf-server": {
+    "listen": {
+      "endpoints": {
+        "endpoint": [
+          {
+            "name": "tls-endpoint-6513",
+            "tls": {
+              "tcp-server-parameters": {
+                "local-address": "0.0.0.0",
+                "local-port": 6513
+              },
+              "tls-server-parameters": {
+                "server-identity": {
+                  "certificate": {
+                    "central-keystore-reference": {
+                      "asymmetric-key": "serverkey-tls",
+                      "certificate": "servercert"
+                    }
+                  }
+                },
+                "client-authentication": {
+                  "ca-certs": {
+                    "central-truststore-reference": "cacerts"
+                  }
+                }
+              },
+              "netconf-server-parameters": {
+                "client-identity-mappings": {
+                  "cert-to-name": [
+                    {
+                      "id": 1,
+                      "fingerprint": "02:02:00:6E:31:7C:65:CB:E0:72:37:5E:32:B2:AF:86:53:48:82:EC:98:3F",
+                      "map-type": "ietf-x509-cert-to-name:specified",
+                      "name": "netconf"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

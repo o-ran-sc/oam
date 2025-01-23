@@ -1,0 +1,99 @@
+{
+  "ietf-netconf-server:netconf-server": {
+    
+    "call-home": {
+      "netconf-client": [
+        {
+          "name": "default-odu-tls",
+          "endpoints": {
+            "endpoint": [
+              {
+                "name": "tls-auth-endpt-odu",
+                "tls": {
+                  "tcp-client-parameters": {
+                    "remote-address": "172.20.0.5",
+                    "remote-port": 4335
+                  },
+                  "tls-server-parameters": {
+                    "server-identity": {
+                      "certificate": {
+                        "central-keystore-reference": {
+                          "asymmetric-key": "serverkey-tls",
+                          "certificate": "servercert-odu"
+                        }
+                      }
+                    },
+                    "client-authentication": {
+                      "ca-certs": {
+                        "central-truststore-reference": "cacerts"
+                      }
+                    }
+                  },
+                  "netconf-server-parameters": {
+                    "client-identity-mappings": {
+                      "cert-to-name": [
+                        {
+                          "id": 1,
+                          "fingerprint": "02:66:68:BD:65:1D:9B:45:54:42:1C:1D:85:33:E5:34:B4:8E:1B:95:F2",
+                          "map-type": "ietf-x509-cert-to-name:san-rfc822-name"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "connection-type": {
+            "persistent": {}
+          }
+        },
+        {
+          "name": "default-smo-tls",
+          "endpoints": {
+            "endpoint": [
+              {
+                "name": "tls-auth-endpt-smo",
+                "tls": {
+                  "tcp-client-parameters": {
+                    "remote-address": "controller.dcn.smo.o-ran-sc.org",
+                    "remote-port": 4335
+                  },
+                  "tls-server-parameters": {
+                    "server-identity": {
+                      "certificate": {
+                        "central-keystore-reference": {
+                          "asymmetric-key": "serverkey-tls",
+                          "certificate": "servercert-smo"
+                        }
+                      }
+                    },
+                    "client-authentication": {
+                      "ca-certs": {
+                        "central-truststore-reference": "cacerts"
+                      }
+                    }
+                  },
+                  "netconf-server-parameters": {
+                    "client-identity-mappings": {
+                      "cert-to-name": [
+                        {
+                          "id": 1,
+                          "fingerprint": "02:DC:CB:E3:29:E2:65:04:A8:DF:B3:63:E7:E4:1A:06:81:64:C6:DA:37",
+                          "map-type": "ietf-x509-cert-to-name:san-rfc822-name"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "connection-type": {
+            "persistent": {}
+          }
+        }
+      ]
+    }
+  }
+}

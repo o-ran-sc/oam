@@ -1,0 +1,3 @@
+<ecpri-delay-message xmlns="urn:o-ran:message5:1.0">
+  <enable-message5>false</enable-message5>
+</ecpri-delay-message>

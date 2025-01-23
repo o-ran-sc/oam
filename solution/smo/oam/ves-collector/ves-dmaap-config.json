@@ -6,6 +6,13 @@
       "topic_url": "http://messages:3904/events/DCAE-SE-COLLECTOR-EVENTS-DEV"
     }
   },
+  "ves-notification": {
+    "type": "message_router",
+    "dmaap_info": {
+      "location": "mtl5",
+      "topic_url": "http://messages:3904/events/DCAE-SE-COLLECTOR-EVENTS-DEV"
+    }
+  },
   "ves-statechange": {
     "type": "message_router",
     "dmaap_info": {
@@ -223,6 +230,7 @@
       "topic_url": "http://messages:3904/events/unauthenticated.VES_FILE_READY_OUTPUT/"
     }
   },
+  "ietf-netconf-notifications:netconf-config-change":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/ietf-netconf-notifications-netconf-config-change/"}},
   "o-ran-ald-port:dc-enabled-status-change":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-ald-port-dc-enabled-status-change/"}},
   "o-ran-ald-port:overcurrent-report":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-ald-port-overcurrent-report/"}},
   "o-ran-antenna-calibration:antenna-calibration-coordinated":{"type":"message_router","dmaap_info":{"location":"mtl5","topic_url":"http://messages:3904/events/o-ran-antenna-calibration-antenna-calibration-coordinated/"}},

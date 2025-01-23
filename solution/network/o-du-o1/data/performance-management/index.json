@@ -1,0 +1,30 @@
+{
+    "config": {
+        "log-period": 60,
+        "repetition-period": 180,
+
+        "points": [
+            "DRB.MeanActiveUeDl",
+            "DRB.MeanActiveUeUl",
+            "DRB.MaxActiveUeDl"
+        ]
+    },
+
+    "values": [
+        {
+            "DRB.MeanActiveUeDl": 0,
+            "DRB.MaxActiveUeDl": 3,
+            "DRB.MeanActiveUeUl": 17
+        },
+        {
+            "DRB.MeanActiveUeDl": 1,
+            "DRB.MaxActiveUeDl": 4,
+            "DRB.MeanActiveUeUl": 19
+        },
+        {
+            "DRB.MeanActiveUeDl": 2,
+            "DRB.MaxActiveUeDl": 9,
+            "DRB.MeanActiveUeUl": 19
+        }
+    ]
+}
