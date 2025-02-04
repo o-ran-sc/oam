@@ -15,7 +15,6 @@
 #
 
 # no more versions needed! Compose spec supports all features w/o a version
-version: "3.8"
 services:
   odlux:
     image: ${SDNC_WEB_IMAGE}
@@ -53,10 +52,10 @@ services:
       - "controller.dcn.${HTTP_DOMAIN}:${HOST_IP}"
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:${SDNC_REST_PORT}/ready || exit 1
-      start_period: 60s
+      start_period: 10s
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     environment:
       ENABLE_ODL_CLUSTER: false
       ENABLE_OAUTH: ${SDNC_ENABLE_OAUTH}

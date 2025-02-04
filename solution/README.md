@@ -151,7 +151,8 @@ next chapters.
 
 ```bash
 source .oam/bin/activate
-docker compose -f smo/common/docker-compose.yaml up -d --wait
+docker compose -f infra/docker-compose.yaml up -d
+docker compose -f smo/common/docker-compose.yaml up -d
 
 # optionally adjust the users.csv file to create new users
 vim users.csv
@@ -164,7 +165,21 @@ docker compose -f smo/oam/docker-compose.yaml up -d
 docker compose -f smo/apps/docker-compose.yaml up -d
 
 # the cpu load is low again, we can start a simulated network
+```
 
+#### Simulated network
+Before starting the simulated network, you need to locally build the docker images.
+This is because of copyright issues with the 3GPP YANG models.
+
+The build should be pretty straightforward. The repository containing the PyNTS code needs to be cloned and then a command needs to be ran for building the images. Run this from another terminal, in another folder, not in this repo.
+
+```bash
+git clone "https://gerrit.o-ran-sc.org/r/sim/o1-ofhmp-interfaces"
+cd o1-ofhmp-interfaces
+make build-all
+```
+After everything is built successfully, you can return to your solution folder here and start the network.
+```bash
 docker compose -f network/docker-compose.yaml up -d
 docker compose -f network/docker-compose.yaml restart pynts-o-du-o1
 ```
@@ -212,19 +227,15 @@ docker compose -f network/docker-compose.yaml up -d
 Usually the first ves:event gets lost. Please restart the O-DU docker container(s) to send a second ves:pnfRegistration.
 
 ```
-docker compose -f network/docker-compose.yaml restart ntsim-ng-o-du-1122
-python network/config.py
+docker compose -f network/docker-compose.yaml restart pynts-o-du-o1
 ```
 
-The python script configures the simulated O-DU and O-RU according to O-RAN hybrid architecture.
+The simulated O-DU and O-RUs are pre-configured according to O-RAN hybrid architecture.
 
 O-RU - NETCONF Call HOME and NETCONF notifications
 O-DU - ves:pnfRegistration and ves:fault, ves:heartbeat
 
 ![ves:pnfRegistration in ODLUX](docs/nstim-ng-connected-after-ves-pnf-registration-in-odlux.png "ves:pnfRegistration in ODLUX")
-
-'True' indicated that the settings through SDN-R to the NETCONF server were
-successful.
 
 SDN-R reads the fault events from DMaaP and processes them.
 Finally the fault events are visible in ODLUX.
