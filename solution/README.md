@@ -125,7 +125,7 @@ For development purposes <your-system> and <deployment-system> may reference the
 ```
 $ cat /etc/hosts
 127.0.0.1	               localhost
-127.0.1.1	               10.20.35.165
+127.0.1.1	               <your-system>
 
 # SMO OAM development system
 <deployment-system-ipv4>                   smo.o-ran-sc.org
@@ -133,6 +133,7 @@ $ cat /etc/hosts
 <deployment-system-ipv4>          identity.smo.o-ran-sc.org
 <deployment-system-ipv4>          messages.smo.o-ran-sc.org
 <deployment-system-ipv4>      kafka-bridge.smo.o-ran-sc.org
+<deployment-system-ipv4>          kafka-ui.smo.o-ran-sc.org
 <deployment-system-ipv4>         odlux.oam.smo.o-ran-sc.org
 <deployment-system-ipv4>         flows.oam.smo.o-ran-sc.org
 <deployment-system-ipv4>         tests.oam.smo.o-ran-sc.org

@@ -12,9 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# no more versions needed! Compose spec supports all features w/o a version
-version: "3.8"
+
 services:
   gateway:
     image: ${TRAEFIK_IMAGE}
@@ -252,6 +250,26 @@ services:
       dmz:
       default:
 
+  kafka-ui:
+    container_name: kafka-ui
+    image: ${KAFKA_UI_IMAGE}
+    environment:
+      KAFKA_CLUSTERS_0_NAME: kafka
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      DYNAMIC_CONFIG_ENABLED: 'true'
+    labels:
+      traefik.enable: true
+      traefik.http.routers.kafka-ui.entrypoints: websecure
+      traefik.http.routers.kafka-ui.rule: Host(`kafka-ui.${HTTP_DOMAIN}`)
+      traefik.http.routers.kafka-ui.tls: true
+      traefik.http.services.kafka-ui.loadbalancer.server.port: 8080
+      app: "kafka-ui"
+      deploy: "o-ran-sc-smo-common"
+      solution: "o-ran-sc-smo"
+    networks:
+      dmz:
+      default:
+      
   topology:
     image: "${O_RAN_SC_TOPOLOGY_IMAGE}"
     container_name: topology
