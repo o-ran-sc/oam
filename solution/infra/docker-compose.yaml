@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2025 highstreet technologies
+# Copyright 2025 highstreet technologies USA Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,10 +50,10 @@ networks:
     name: dhcp
     driver: macvlan
     driver_opts:
-      parent: ens34   # or whichever host interface you want
+      parent: ${INTERFACE_NAME}   # or whichever host interface you want
       macvlan_mode: bridge
     ipam:
       config:
-        - subnet: ${NETWORK_SUBNET_DCN_IPv4}
+        - subnet: ${NETWORK_SUBNET_DHCP_IPv4}
           gateway: ${NETWORK_GATEWAY_DHCP_IPv4}
 

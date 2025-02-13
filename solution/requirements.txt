@@ -14,13 +14,13 @@
 # limitations under the License.
 #
 
-#!/bin/bash
-
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-
-docker compose -f $SCRIPT_DIR/network/docker-compose.yaml down
-docker compose -f $SCRIPT_DIR/smo/apps/docker-compose.yaml down
-docker compose -f $SCRIPT_DIR/smo/oam/docker-compose.yaml down
-docker compose -f $SCRIPT_DIR/smo/common/docker-compose.yaml down
-docker compose -f $SCRIPT_DIR/infra/docker-compose.yaml up down
-
+certifi==2024.8.30
+charset-normalizer==3.4.0
+idna==3.10
+Jinja2==3.1.4
+jproperties==2.1.2
+MarkupSafe==3.0.2
+netifaces==0.11.0
+requests==2.32.3
+six==1.16.0
+urllib3==2.2.3

@@ -1,13 +1,13 @@
-# Service Management and Orchestration (SMO)
+# Service Management and Orchestration (SMO) for OAM
 
 This project focus on a docker-compose deployment solution for SMO/OAM Components.
 
 ## Introduction
 
-With respect to Operation and Maintenance (OAM) the SMO implements the O1-interface consumers.
-According to the O-RAN OAM Architecture and the O-RAN OAM Interface Specification,
-the SMO implements a NETCONF Client for configuration and a HTTP/REST/VES server
-for receiving all kind of events in VES format.
+With respect to Operation and Maintenance (OAM) the SMO implements the O1-interface and OpenFronthaul Management-Plane consumers.
+According to the O-RAN OAM Architecture and the O-RAN OAM Interface Specification, the SMO implements a NETCONF Client for configuration 
+and a HTTP/REST/VES server for receiving all kind of events in 
+VES format.
 
 The O-RAN-SC OAM deployment contains an OpenDaylight based NETCONF client and an ONAP VES Collector. Kafka is used as massage router for communication between the components. The Keycloak implementation offers and Identity service, while traefik acts as reverse proxy to terminate all incoming https traffic. For storing data in a persistence way the implementation of the mariaDB project is used.
 
@@ -33,6 +33,9 @@ with the following components.
   * **Messages**
     ... representing SMO MessageRouter component, includes message-router
 
+  * **Gateway**
+    ... representing a revers proxy terminating TLS traffic (https, NETCONF)
+
 ## Prerequisites
 
 ### Resources
@@ -54,7 +57,7 @@ PRETTY_NAME="Ubuntu 24.04.1 LTS"
 
 ```
 $ docker --version
-Docker version 27.3.1, build ce12230
+Docker version 27.5.1, build 9f9e405
 ```
 Please follow the required docker daemon configuration as documented in the following README.md:
 - [./smo/common/docker/README.md](./smo/common/docker/README.md)
@@ -63,7 +66,7 @@ Please follow the required docker daemon configuration as documented in the foll
 
 ```
 $ docker compose version
-Docker Compose version v2.29.7
+Docker Compose version v2.32.4
 ```
 
 ### GIT
@@ -84,13 +87,35 @@ A python parser package is required.
 ```
 python3 -m venv .oam
 source .oam/bin/activate
-pip3 install jproperties
-pip3 install jinja2
-pip3 install requests
-
-# your system IP is required in .env files, please see explanations below
-python3 ./adopt_to_environment.py -i <deployment-system-ipv4> 
+pip3 install requirements.txt
 ```
+
+### ETC Host (DNS function)
+
+Your local IP and your used interface is required. Please use the following 
+script to modify all .env and other configuration files accordingly.
+The script will find automatically the interface and its ip-address 
+to the internet.
+You can check its usage with option "-h":
+
+```
+python3 ./adopt_to_environment.py -h
+```
+
+Please run the script with your preferred fully qualified domain name,
+you like to use in your browser address bar. 
+
+```
+python3 ./adopt_to_environment.py -d <your-smo-fqdn>
+```
+
+you can revert the settings in the modified .env and configuration files 
+using the option "-r".
+
+```
+python3 ./adopt_to_environment.py -d <your-smo-fqdn> -r
+```
+
 
 It is beneficial (but not mandatory) adding the following line add the
 end of your ~/.bashrc file. I will suppress warnings when python script
@@ -100,27 +125,13 @@ do not verify self signed certificates for HTTPS communication.
 export PYTHONWARNINGS="ignore:Unverified HTTPS request"
 ```
 
-### ETC Host (DNS function)
-
-Please change in the different .env files the environment variable 'HOST_IP'
-to the IP address of the system where you deploy the solution - search for 
-'aaa.bbb.ccc.dd' and replace it. 
-
-
-```
-# replace xxx.yyy.zzz.www by your routable IP address
-grep -arl --include=*\.env 'aaa.bbb.ccc.dd' * | while read -r file; do
-    sed -i 's/aaa.bbb.ccc.dd/xxx.yyy.zzz.www/g' "$file"
-done
-``
-
-Please modify the /etc/hosts of your system.
+Please modify the /etc/hosts of your system or modify the DNS of your
+environment.
 
 * \<your-system>: is the hostname of the system, where the browser is started
 
 * \<deployment-system-ipv4>: is the IP address of the system where the solution will be deployed
 
-For development purposes <your-system> and <deployment-system> may reference the same system.
 
 ```
 $ cat /etc/hosts
@@ -152,20 +163,7 @@ next chapters.
 
 ```bash
 source .oam/bin/activate
-docker compose -f infra/docker-compose.yaml up -d
-docker compose -f smo/common/docker-compose.yaml up -d
-
-# optionally adjust the users.csv file to create new users
-vim users.csv
-# override authentication.json with the new users
-python3 create_users.py users.csv -o smo/common/identity/authentication.json
-
-python3 smo/common/identity/config.py
-
-docker compose -f smo/oam/docker-compose.yaml up -d
-docker compose -f smo/apps/docker-compose.yaml up -d
-
-# the cpu load is low again, we can start a simulated network
+./setup.sh
 ```
 
 #### Simulated network
@@ -201,13 +199,13 @@ before starting further docker images.
 The several docker-compose yaml files must be started in the right order as listed below:
 
 ```
+docker compose -f infra/docker-compose.yaml up -d
 docker compose -f smo/common/docker-compose.yaml up -d
 python smo/common/identity/config.py
 ```
 
 The python script configure the users within the identity service (keycloak).
 A system user (%USER) is also created with administration rights.
-
 
 ```
 docker compose -f smo/oam/docker-compose.yaml up -d
@@ -293,6 +291,12 @@ docker compose -f network/docker-compose.yaml down
 docker compose -f smo/apps/docker-compose.yaml down
 docker compose -f smo/oam/docker-compose.yaml down
 docker compose -f smo/common/docker-compose.yaml down
+docker compose -f infra/docker-compose.yaml down
+```
+
+alternative:
+```
+./teardown.sh
 ```
 
 ### Cleanup
@@ -311,5 +315,5 @@ Please make sure that the network settings to not overlap with other networks.
 The commands ...
 ```
 docker ps -a
-docker-compose ps
+docker compose ps
 docker rm -f $(docker ps -aq)
