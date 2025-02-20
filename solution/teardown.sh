@@ -22,5 +22,4 @@ docker compose -f $SCRIPT_DIR/network/docker-compose.yaml down
 docker compose -f $SCRIPT_DIR/smo/apps/docker-compose.yaml down
 docker compose -f $SCRIPT_DIR/smo/oam/docker-compose.yaml down
 docker compose -f $SCRIPT_DIR/smo/common/docker-compose.yaml down
-docker compose -f $SCRIPT_DIR/infra/docker-compose.yaml up down
-
+docker compose -f $SCRIPT_DIR/infra/docker-compose.yaml down

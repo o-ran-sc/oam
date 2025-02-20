@@ -28,6 +28,8 @@ services:
       SDNRHOST: controller
       SDNRPORT: ${SDNC_REST_PORT}
       SDNRWEBSOCKETPORT: ${SDNR_WEBSOCKET_PORT}
+    volumes:
+      - ./odlux/location.rules:/opt/bitnami/nginx/conf/server_blocks/location.rules
     labels:
       traefik.enable: true
       traefik.http.routers.sdnc-web.entrypoints: websecure
