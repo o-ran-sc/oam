@@ -1,0 +1,72 @@
+{
+  "tables": {
+      "network-element-table": {
+          "columns": [
+              {
+                  "displayed": true,
+                  "property": "nodeId"
+              },
+              {
+                  "displayed": true,
+                  "property": "status"
+              },
+              {
+                  "displayed": true,
+                  "property": "host"
+              },
+              {
+                  "displayed": true,
+                  "property": "port"
+              },
+              {
+                  "displayed": true,
+                  "property": "isRequired"
+              },
+              {
+                  "displayed": true,
+                  "property": "deviceType"
+              },
+              {
+                  "displayed": true,
+                  "property": "deviceFunction"
+              },
+              {
+                  "displayed": false,
+                  "property": "coreModelCapability"
+              },
+              {
+                  "displayed": true,
+                  "property": "mountMethod"
+              }
+          ]
+      },
+      "configurable-elements-table": {
+          "columns": [
+              {
+                  "displayed": true,
+                  "property": "nodeId"
+              },
+              {
+                  "displayed": true,
+                  "property": "isRequired"
+              },
+              {
+                  "displayed": true,
+                  "property": "host"
+              },
+              {
+                  "displayed": true,
+                  "property": "port"
+              },
+              {
+                  "displayed": false,
+                  "property": "coreModelCapability"
+              },
+              {
+                  "displayed": true,
+                  "property": "deviceType"
+              }
+          ]
+      }
+  }
+}

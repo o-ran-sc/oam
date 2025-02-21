@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2024 highstreet technologies
+# Copyright 2025 highstreet technologies USA Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
 # limitations under the License.
 #
 
-# no more versions needed! Compose spec supports all features w/o a version
 services:
   odlux:
     image: ${SDNC_WEB_IMAGE}
@@ -98,7 +97,8 @@ services:
       - ./controller/devicemanager.properties:/opt/opendaylight/etc/devicemanager.properties
       - ./controller/mountpoint-registrar.properties:/opt/opendaylight/etc/mountpoint-registrar.properties
       - ./controller/certs/certs.properties:${SDNC_CERT_DIR}/certs.properties
-      - ./controller/certs/keys0.zip:${SDNC_CERT_DIR}/keys0.zip    
+      - ./controller/certs/keys0.zip:${SDNC_CERT_DIR}/keys0.zip
+      - ./controller/userdata-defaults.json:/opt/opendaylight/etc/userdata-defaults.json
     labels:
       traefik.enable: true
       traefik.http.routers.controller.entrypoints: websecure
