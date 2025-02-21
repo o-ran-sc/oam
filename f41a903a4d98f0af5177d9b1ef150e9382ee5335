@@ -37,6 +37,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "17148a34_7b57c63b",
+        "filename": "solution/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-02-21T16:06:35Z",
+      "side": 1,
+      "message": "Thank you so much!",
+      "revId": "f41a903a4d98f0af5177d9b1ef150e9382ee5335",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e01ba2c_63ad258e",
+        "filename": "solution/smo/oam/.env",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-02-21T16:06:35Z",
+      "side": 1,
+      "message": "please revert back to http - all https trafic must be terminated on traefik (gateway) - traefik itself does not communicate with VES-Collecter using https and port 8443",
+      "revId": "f41a903a4d98f0af5177d9b1ef150e9382ee5335",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "636586ef_48b18aac",
         "filename": "solution/smo/oam/docker-compose.yaml",
         "patchSetId": 1
@@ -48,6 +82,30 @@
       "writtenOn": "2025-02-21T15:01:36Z",
       "side": 1,
       "message": "I think removing this will remove all the 3GPP injections, which I am guessing we don\u0027t want.",
+      "range": {
+        "startLine": 126,
+        "startChar": 4,
+        "endLine": 126,
+        "endChar": 8
+      },
+      "revId": "f41a903a4d98f0af5177d9b1ef150e9382ee5335",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8398a98c_d4420918",
+        "filename": "solution/smo/oam/docker-compose.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-02-21T16:06:35Z",
+      "side": 1,
+      "message": "Alex is correct - the build process create a \"configured\" local VES-Collector image. this is needed to inject artifacts from 3GPP which must not be redistributed by LF servers (gerrit, nexus, ...)",
+      "parentUuid": "636586ef_48b18aac",
       "range": {
         "startLine": 126,
         "startChar": 4,
@@ -77,6 +135,23 @@
         "endLine": 138,
         "endChar": 55
       },
+      "revId": "f41a903a4d98f0af5177d9b1ef150e9382ee5335",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52b36230_2787ef4e",
+        "filename": "solution/smo/oam/ves-collector/collector.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-02-21T16:06:35Z",
+      "side": 1,
+      "message": "all https is terminated at treafik - otherwise we have to deal with several keystores across the oam/solution. https-termination should be centralized at treafik",
       "revId": "f41a903a4d98f0af5177d9b1ef150e9382ee5335",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
