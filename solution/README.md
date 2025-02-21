@@ -87,7 +87,7 @@ A python parser package is required.
 ```
 python3 -m venv .oam
 source .oam/bin/activate
-pip3 install requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ### ETC Host (DNS function)

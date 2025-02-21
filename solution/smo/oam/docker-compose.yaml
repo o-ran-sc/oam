@@ -123,12 +123,7 @@ services:
       dcn:
 
   ves-collector:
-    image: ${VES_COLLECTOR_IMAGE}-configured
-    build:
-      context: ./ves-collector
-      args:
-        - BASEIMAGE=${VES_COLLECTOR_IMAGE}
-      network: host
+    image: ${VES_COLLECTOR_IMAGE}
     container_name: ves-collector
     hostname: ves-collector
     extra_hosts:
@@ -140,7 +135,7 @@ services:
       timeout: 4s
       retries: 5
     environment:
-      DMAAPHOST: messages
+      BOOTSTRAP_SERVERS: ${VES_KAFKA_BOOTSTRAP_SERVERS}
     volumes:
       - ./ves-collector/collector.properties:/opt/app/VESCollector/etc/collector.properties
       - ./ves-collector/ves-dmaap-config.json:/opt/app/VESCollector/etc/ves-dmaap-config.json
