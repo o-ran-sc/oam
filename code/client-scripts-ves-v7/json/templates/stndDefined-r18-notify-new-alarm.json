@@ -21,7 +21,7 @@
       "vesEventListenerVersion": "7.2.1"
     },
     "stndDefinedFields": {
-      "schemaReference": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_FaultMnS.yaml#components/schemas/NotifyNewAlarm",
+      "schemaReference": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28111_FaultNrm.yaml#components/schemas/NotifyNewAlarm",
       "data": {
         "href": "href1",
         "notificationId": 0,
