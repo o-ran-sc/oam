@@ -16,6 +16,23 @@
       "message": "Hello Martin, Alex, Incorporated the review comments and tested the changes. Looks good to me. Please review from your end again.\nRegards,\nRavi",
       "revId": "20c1709ef03cbdcb46a3c30db9e44a1f031dfca6",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "401370c8_5edb8eec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000124
+      },
+      "writtenOn": "2025-02-24T15:53:55Z",
+      "side": 1,
+      "message": "Looks good, I also tested this with PyNTS and there were no issues.",
+      "revId": "20c1709ef03cbdcb46a3c30db9e44a1f031dfca6",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
