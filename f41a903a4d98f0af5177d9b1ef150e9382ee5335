@@ -52,6 +52,24 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0c75f90_83b3c0cc",
+        "filename": "solution/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000376
+      },
+      "writtenOn": "2025-02-24T10:33:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17148a34_7b57c63b",
+      "revId": "f41a903a4d98f0af5177d9b1ef150e9382ee5335",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e01ba2c_63ad258e",
@@ -116,6 +134,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e07ac6e9_56d7e963",
+        "filename": "solution/smo/oam/docker-compose.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000376
+      },
+      "writtenOn": "2025-02-24T10:33:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8398a98c_d4420918",
+      "range": {
+        "startLine": 126,
+        "startChar": 4,
+        "endLine": 126,
+        "endChar": 8
+      },
+      "revId": "f41a903a4d98f0af5177d9b1ef150e9382ee5335",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b954b40_c4c21a84",
@@ -129,6 +171,30 @@
       "writtenOn": "2025-02-21T15:01:36Z",
       "side": 1,
       "message": "This looks good.",
+      "range": {
+        "startLine": 138,
+        "startChar": 6,
+        "endLine": 138,
+        "endChar": 55
+      },
+      "revId": "f41a903a4d98f0af5177d9b1ef150e9382ee5335",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b95a8406_6fdbddc1",
+        "filename": "solution/smo/oam/docker-compose.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000376
+      },
+      "writtenOn": "2025-02-24T10:33:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6b954b40_c4c21a84",
       "range": {
         "startLine": 138,
         "startChar": 6,
@@ -156,6 +222,24 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b3c4fc7_992bbd9a",
+        "filename": "solution/smo/oam/ves-collector/collector.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000376
+      },
+      "writtenOn": "2025-02-24T10:33:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "52b36230_2787ef4e",
+      "revId": "f41a903a4d98f0af5177d9b1ef150e9382ee5335",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3cbf67b3_0bde1de2",
@@ -169,6 +253,30 @@
       "writtenOn": "2025-02-21T15:01:36Z",
       "side": 1,
       "message": "Not sure it traeffik needs to be configured in any way to reflect this change? \n\nDid you test it out and it works the same as before (i.e. can PyNTS connect still via pnfRegistration etc.)?",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 25
+      },
+      "revId": "f41a903a4d98f0af5177d9b1ef150e9382ee5335",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5634d8cc_5ed2dc57",
+        "filename": "solution/smo/oam/ves-collector/collector.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000376
+      },
+      "writtenOn": "2025-02-24T10:33:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3cbf67b3_0bde1de2",
       "range": {
         "startLine": 29,
         "startChar": 0,
