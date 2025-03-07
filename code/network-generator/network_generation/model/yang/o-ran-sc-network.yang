@@ -51,6 +51,12 @@ module o-ran-sc-network {
      See the License for the specific language governing permissions and
      limitations under the License.";
 
+  revision 2025-03-04 {
+    description
+      "Initial version";
+    reference
+      "https://lf-o-ran-sc.atlassian.net/browse/OAM-441";
+  }
   revision 2024-09-13 {
     description
       "Initial version";
@@ -59,6 +65,7 @@ module o-ran-sc-network {
   }
 
   // network
+
   identity o-ran-sc-network-type-base {
     description
       "Base identity for network types.
@@ -97,6 +104,7 @@ module o-ran-sc-network {
   }
 
   // network function
+
   identity o-ran-sc-network-function-base {
     base o-ran-iref:o-ran-function-base;
     description
@@ -136,6 +144,7 @@ module o-ran-sc-network {
   }
 
   // termination point :== interface
+
   identity o-ran-sc-interface-type {
     base if:interface-type;
     description
@@ -206,7 +215,7 @@ module o-ran-sc-network {
     base o-ran-sc-interface-type;
     description
       "An identity corresponding to a 3GPP NRCellDu.";
-    reference 
+    reference
       "3GPP TS 28.541 5G Network Resource Model (NRM)";
   }
 
@@ -219,6 +228,7 @@ module o-ran-sc-network {
   }
 
   // type definitions
+
   typedef o-ran-sc-node-type {
     type identityref {
       base o-ran-iref:o-ran-function-base;
@@ -227,7 +237,6 @@ module o-ran-sc-network {
       "Type reference to a node type identity.";
   }
 
-  
   typedef o-ran-sc-interface-type {
     type identityref {
       base o-ran-sc-interface-type;
@@ -236,7 +245,26 @@ module o-ran-sc-network {
       "Type reference to a termination point type identity.";
   }
 
+  typedef operational-state {
+    type enumeration {
+      enum disabled {
+        description
+          "The resource is disabled (e.g., intentionally out-of-service).";
+      }
+      enum enabled {
+        description
+          "The resource is fully operational.";
+      }
+    }
+    description
+      "Defines enumerated operational states aligned with ITU-T usage.";
+    reference
+      "ITU-T M.3100: 'Generic Managed Entities'
+       ITU-T M.3160: 'Generic Management Information Model'";
+  }
+
   // groupings
+
   grouping o-ran-sc-network-network {
     description
       "An abstract object call hosting O-RAN-SC specific extension
@@ -257,6 +285,12 @@ module o-ran-sc-network {
       description
         "A human readable name for the network of the
          O-RAN-SC OAM topology.";
+    }
+    leaf operational-state {
+      type operational-state;
+      description
+        "A parameter which reports the operational state of the
+         network.";
     }
   }
 
@@ -292,6 +326,12 @@ module o-ran-sc-network {
         "A parameter which defines the topological ietf-network
          node type in the context of an O-RAN-SC OAM topology.";
     }
+    leaf operational-state {
+      type operational-state;
+      description
+        "A parameter which reports the operational state of the
+         topology node.";
+    }
   }
 
   grouping o-ran-sc-network-tp {
@@ -314,9 +354,16 @@ module o-ran-sc-network {
         "A parameter which defines the topological ietf-network
          termination point type in the context of an O-RAN-SC OAM topology.";
     }
+    leaf operational-state {
+      type operational-state;
+      description
+        "A parameter which reports the operational state of the
+         topology termination point.";
+    }
   }
 
   // augmentations
+
   augment "/nw:networks/nw:network" {
     description
       "Augments ietf-network node with a name and a uuid parameter.";
