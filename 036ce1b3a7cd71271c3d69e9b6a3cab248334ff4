@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a62e9126_ed56c637",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-03-07T15:36:00Z",
+      "side": 1,
+      "message": "(pyang) (.oam) demx8as6@ibit24 ~/workspace/o-ran-sc/oam/code/network-generator (OAM-440)$ make test\n.oam/bin/pytest -v --cov-config .coveragerc --cov\u003dnetwork_generation -l --tb\u003dshort --maxfail\u003d1 tests/\n.oam/bin/coverage xml\n[...]\nnetwork_generation/view/network_viewer.py                          105     84    20%\n------------------------------------------------------------------------------------\nTOTAL                                                             1964    553    72%\n\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d 28 passed in 0.42s \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nWrote XML report to coverage.xml\nWrote HTML report to htmlcov/index.html\n(pyang) (.oam) demx8as6@ibit24 ~/workspace/o-ran-sc/oam/code/network-generator (OAM-440)$",
+      "revId": "036ce1b3a7cd71271c3d69e9b6a3cab248334ff4",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
