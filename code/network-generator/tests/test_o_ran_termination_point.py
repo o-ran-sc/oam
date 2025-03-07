@@ -29,7 +29,7 @@ def test_o_ran_termination_point() -> None:
     assert o_ran_termination_point.name == "my-name"
     assert o_ran_termination_point.administrativeState.value == "locked"
     assert o_ran_termination_point.supporter == "my-supporter"
-    assert len(str(o_ran_termination_point)) == 357
+    assert len(str(o_ran_termination_point)) == 328
 
     o_ran_termination_point = ORanTerminationPoint(
         {
