@@ -25,11 +25,23 @@ Python 3.10.12
 For validation purposes libyang is recommended.
 Please follow the libyang [installation instructions](https://github.com/CESNET/libyang).
 
+## Installation
+
+```
+make virtual_env_4_oam
+source .oam/bin/activate
+
+pip install -r requirements.txt 
+pip install -r requirements-test.txt 
+```
+
+
 ## Usage 
 
 ```
 make virtual_env_4_oam
 source .oam/bin/activate
+
 python3 -m network_generation config.json
 ```
 
@@ -40,6 +52,20 @@ By default the generated files can be found in the 'output' folder:
 - [o-ran-network-operational.json](output/o-ran-network-operational.json)
 - [o-ran-network.svg](output/o-ran-network.svg)
 - [o-ran-network.kml](output/o-ran-network.kml)
+
+## yang validation
+
+```
+pyang --lint \
+-p network_generation/model/yang \
+network_generation/model/yang/o-ran-sc-*.yang
+```
+
+```
+yanglint \
+-p network_generation/model/yang \
+network_generation/model/yang/o-ran-sc-*.yang
+```
 
 ## Output validation
 

@@ -87,6 +87,7 @@ class ORanSmo(ORanNode):
                         "layout": self.layout,
                         "parent": self,
                         "network": self.network,
+                        "operationalState": self.operationalState
                     },
                 )
             )

@@ -57,6 +57,7 @@ class ORanTerminationPoint(ORanObject):
         super().__init__(cast(dict[str, Any], itp), **kwargs)
         self._supporter = cast(dict[str, str], itp["supporter"])
         self._network: Any = itp["network"]
+        self._operationalState = cast(dict[str, str], itp["operationalState"])
 
     def _to_itp_data(self, data: dict[str, Any]) -> IORanTerminationPoint:
         result: IORanTerminationPoint = default_value
@@ -88,6 +89,7 @@ class ORanTerminationPoint(ORanObject):
             "tp-id": self.name,
             "o-ran-sc-network:uuid": self.id,
             "o-ran-sc-network:type": self.type,
+            "o-ran-sc-network:operational-state": self.operationalState
         }
 
         if not (self.type == "o-ran-sc-network:phy"):

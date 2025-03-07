@@ -81,6 +81,7 @@ class ORanRu(ORanNode):
             "layout": self.layout,
             "parent": self.parent.parent.parent,
             "network": self.network,
+            "operationalState": self.operationalState,
         }
         self._oRanDu: ORanDu = ORanDu(o_ran_du_data)
 
@@ -115,6 +116,7 @@ class ORanRu(ORanNode):
                         "layout": self.layout,
                         "parent": self,
                         "network": self.network,
+                        "operationalState": self.operationalState,
                         "cellAngle": cell_angle,
                         "cellScaleFactorForHandoverArea": cell_scale_factor,
                         "maxReach": maxReach,

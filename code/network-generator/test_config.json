@@ -1,6 +1,16 @@
 {
   "network": {
     "name": "O-RAN-TEST-Network",
+    "disabledResourcesProfile": {
+      "o-ran-sc-network:smo": 0,
+      "o-ran-sc-network:o-cloud": 0,
+      "o-ran-sc-network:tower": 0,
+      "o-ran-sc-network:near-rt-ric": 0,
+      "o-ran-common-identity-refs:o-cu-function": 0,
+      "o-ran-common-identity-refs:o-du-function": 0,
+      "o-ran-common-identity-refs:o-ru-function": 0,
+      "o-ran-sc-network:cell": 0
+    },
     "center": {
       "latitude": 40.535,
       "longitude": -74.447,

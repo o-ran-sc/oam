@@ -40,6 +40,15 @@
           "type": "string",
           "pattern": "^[a-zA-Z]{1}[\\S]{0,254}$"
         },
+
+        "disabledResourcesProfile": {
+          "description": "A definition how many resource in percentage should be disabled for each network resource type (e.g. O-DU, Cell, ...). The value is network topology node type (resource type) individual per type.",
+          "$ref": "#/$defs/DisabledResourcesProfile"
+        },
+        "operationalState": {
+          "description": "Defines enumerated operational states aligned with ITU-T usage. Please see ITU-T M.3100: 'Generic Managed Entities' and ITU-T M.3160: 'Generic Management Information Model'",
+          "$ref": "#/$defs/OperationalState"
+        },
         "center": {
           "description": "Defines the geographical center of the Radio Access Network.",
           "$ref": "#/$defs/geoLocation"
@@ -292,6 +301,14 @@
         }
       }
     },
+    "Percentage": {
+      "title": "Percentage",
+      "type": "number",
+      "format": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 0
+    },
     "generationTasks": {
       "title": "generationTasks",
       "type": "object",
@@ -323,6 +340,51 @@
           "$ref": "#/$defs/export"
         }
       }
+    },
+    "DisabledResourcesProfile": {
+      "title": "DisabledResourcesProfile",
+      "type": "object",
+      "required": [],
+      "additionalProperties": false,
+      "properties": {
+        "o-ran-sc-network:smo": {
+          "description": "Defines a minimum of how many SMOs in the topology should be disabled.",
+          "$ref": "#/$defs/Percentage"
+        },
+        "o-ran-sc-network:o-cloud": {
+          "description": "Defines a minimum of how many o-cloud resource pools in the topology should be disabled.",
+          "$ref": "#/$defs/Percentage"
+        },
+        "o-ran-sc-network:tower": {
+          "description": "Defines a minimum of how many towers in the topology should be disabled.",
+          "$ref": "#/$defs/Percentage"
+        },
+        "o-ran-sc-network:near-rt-ric": {
+          "description": "Defines a minimum of how many Near-Rt-RICs in the topology should be disabled.",
+          "$ref": "#/$defs/Percentage"
+        },
+        "o-ran-common-identity-refs:o-cu-function": {
+          "description": "Defines a minimum of how many O-CUs (combining O-CU-UP and O-CU-CP) in the topology should be disabled.",
+          "$ref": "#/$defs/Percentage"
+        },
+        "o-ran-common-identity-refs:o-du-function": {
+          "description": "Defines a minimum of how many O-DUs in the topology should be disabled.",
+          "$ref": "#/$defs/Percentage"
+        },
+        "o-ran-common-identity-refs:o-ru-function": {
+          "description": "Defines a minimum of how many O-RUs in the topology should be disabled.",
+          "$ref": "#/$defs/Percentage"
+        },
+        "o-ran-sc-network:cell": {
+          "description": "Defines a minimum of how many Cells in the topology should be disabled.",
+          "$ref": "#/$defs/Percentage"
+        }
+      }
+    },
+    "OperationalState": {
+      "type": "string",
+      "description": "Enumerated operational states aligned with ITU-T usage (e.g., M.3100 and M.3160). References: ITU-T M.3100: 'Generic Managed Entities', ITU-T M.3160: 'Generic Management Information Model'",
+      "enum": ["disabled", "enabled"]
     }
   }
 }

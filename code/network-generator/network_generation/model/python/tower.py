@@ -97,6 +97,7 @@ class Tower(ORanNode):
                         "layout": self.layout,
                         "parent": self,
                         "network": self.network,
+                        "operationalState": self.operationalState,
                         "cellCount": cell_count,
                         "ruAngle": ru_angle,
                         "ruAzimuth": ru_azimuth,
