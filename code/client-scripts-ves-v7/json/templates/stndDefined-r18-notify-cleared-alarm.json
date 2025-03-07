@@ -21,39 +21,19 @@
       "vesEventListenerVersion": "7.2.1"
     },
     "stndDefinedFields": {
-      "schemaReference": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_FaultMnS.yaml#components/schemas/NotifyNewAlarm",
+      "schemaReference": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-18/OpenAPI/TS28111_FaultNrm.yaml#components/schemas/NotifyClearedAlarm",
       "data": {
         "href": "href1",
         "notificationId": 0,
-        "notificationType": "notifyNewAlarm",
+        "notificationType": "notifyClearedAlarm",
         "eventTime": "@eventTime@",
         "systemDN": "xyz",
         "alarmId": "@alarm@",
         "alarmType": "COMMUNICATIONS_ALARM",
         "probableCause": "@alarm@",
-        "specificProblem": "@alarm@",
         "perceivedSeverity": "@severity@",
-        "backedUpStatus": true,
-        "backUpObject": "xyz",
-        "trendIndication": "MORE_SEVERE",
-        "thresholdInfo": {
-          "observedMeasurement": "new",
-          "observedValue": 123.1
-        },
-        "correlatedNotifications": [],
-        "stateChangeDefinition": [{ "operational-state": "DISABLED" }],
-        "monitoredAttributes": {
-          "interface": "@interface@"
-        },
-        "proposedRepairActions": "Call the police!",
-        "additionalText": "O-RAN Software Community OAM",
-        "additionalInformation": {
-          "eventTime": "@eventTime@",
-          "equipType": "@type@",
-          "vendor": "@vendor@",
-          "model": "@model@"
-        },
-        "rootCauseIndicator": false
+        "clearUserId": "@vendor@",
+        "clearSystemId": "@vendor@"
       },
       "stndDefinedFieldsVersion": "1.0"
     }

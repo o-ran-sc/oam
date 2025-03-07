@@ -21,7 +21,7 @@
       "vesEventListenerVersion": "7.2.1"
     },
     "stndDefinedFields": {
-      "schemaReference": "https://forge.3gpp.org/rep/sa5/MnS/-/raw/Rel-16/OpenAPI/TS28532_FileDataReportingMnS.yaml#components/schemas/NotifyFileReady",
+      "schemaReference": "https://forge.3gpp.org/rep/sa5/MnS/raw/Rel-16/OpenAPI/TS28532_FileDataReportingMnS.yaml#components/schemas/NotifyFileReady",
       "data": {
         "href": "href1",
         "notificationId": 0,
