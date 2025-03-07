@@ -207,13 +207,15 @@ class ORanNode(ORanObject):
         result.append(ORanTerminationPoint({
             "name": phy_tp,
             "type": "o-ran-sc-network:phy",
-            "network": self.network
+            "operationalState": self.operationalState,
+            "network": self.network,
         }))
         for interface in logical_interfaces:
             id: str = "-".join([self.name, interface.upper()])
             result.append(ORanTerminationPoint({
                      "name": id,
                      "type": ":".join(["o-ran-sc-network", interface]),
+                     "operationalState": self.operationalState,
                      "supporter": {
                         "network-ref": self.network.id,
                         "node-ref": self.name,
@@ -246,6 +248,7 @@ class ORanNode(ORanObject):
                     )
                 ),
                 "o-ran-sc-network:type": self.type,
+                "o-ran-sc-network:operational-state": self.operationalState,
                 "ietf-network-topology:termination-point": tps,
             }
         )
