@@ -19,6 +19,7 @@ Module containing a class for parameter validation
 import json
 import os
 import os.path
+from pathlib import Path
 from typing import Any
 
 import jsonschema
@@ -29,7 +30,8 @@ class ParameterValidator:
     Class validating the configuration as input for the generator.
     """
 
-    __config_file: str = "config.json"
+    __config_file: str = "not-assigned"
+    __config_dir: str = "not-assigned"
     __configuration: dict = {}
     __configuration_schema_file: str = (
         os.path.dirname(os.path.realpath(__file__))
@@ -42,23 +44,48 @@ class ParameterValidator:
     # constructor
     def __init__(self, args: list[str]) -> None:
         self.args = args
-        if len(self.args) > 1:
-            self.__config_file = args[1]
+        # Ensure there is an argument provided
+        if len(self.args) <= 1:
+            return
 
+        target_path = Path(self.args[1])
+        if target_path.is_dir():
+            self.__config_dir = str(target_path)
+            # Iterate over all JSON files in the directory
+            self.__is_valid = True
+            for json_file in target_path.glob("*.json"):
+                self.__is_valid = self.is_valid and self.__process(str(json_file))
+        elif target_path.is_file():
+            self.__is_valid = self.__process(str(target_path))
+        
+
+    def __process(self, config_file: str) -> bool:
+        print(f'Process: {config_file}')
+        self.__config_file = config_file       
         if os.path.isfile(self.__config_file) is False:
             print("File", self.__config_file, "does not exist.")
         else:
             with open(self.__config_file) as content:
-                self.__configuration = json.load(content)
+                self.__configuration[self.__config_file] = json.load(content)
 
         if os.path.isfile(self.__configuration_schema_file) is False:
             print("File", self.__configuration_schema_file, "does not exist.")
         else:
             with open(self.__configuration_schema_file) as content:
                 self.__config_schema = json.load(content)
-        self.__is_valid = self.__is_json_valid(
-            self.__configuration, self.__config_schema
+        
+        return self.__is_json_valid(
+            self.__configuration[self.__config_file], 
+            self.__config_schema
         )
+        
+
+    def configuration_dir(self) -> str:
+        """
+        Getter for the configuration directory.
+        :return Directory for files of the init configurations.
+        """
+        return self.__config_dir
 
     def configuration_file(self) -> str:
         """
@@ -67,10 +94,10 @@ class ParameterValidator:
         """
         return self.__config_file
 
-    def configuration(self) -> dict:
+    def configuration(self) -> list:
         """
         Getter for the configuration as input parameter.
-        :return Init configuration as dict.
+        :return Init configurations as list.
         """
         return self.__configuration
 

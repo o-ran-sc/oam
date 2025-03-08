@@ -48,35 +48,36 @@ def main() -> None:  # pragma: no cover
     `python -m network_generation`.
     """
     validator = ParameterValidator(sys.argv)
-
     if not validator.is_valid():
         print(validator.error_message())
         return
 
     configuration = validator.configuration()
-    generator = NetworkGenerator(configuration["network"])
-    network = generator.generate()
-    viewer = NetworkViewer(network)
+    for key in configuration.keys():
+        
+        generator = NetworkGenerator(configuration[key]["network"])
+        network = generator.generate()
+        viewer = NetworkViewer(network)
 
-    output_folder = str(configuration["outputFolder"])
-    if not os.path.isdir(output_folder):
-        os.makedirs(output_folder)
+        output_folder = str(configuration[key]["outputFolder"])
+        if not os.path.isdir(output_folder):
+            os.makedirs(output_folder)
 
-    name = str(configuration["network"]["name"]).lower()
-    filename = os.path.join(output_folder, name)
+        name = str(configuration[key]["network"]["name"]).lower()
+        filename = os.path.join(output_folder, name)
 
-    generation_tasks = configuration["generationTasks"]
+        generation_tasks = configuration[key]["generationTasks"]
 
-    # Dictionary mapping task keys to viewer method names
-    task_to_method = {
-        "rfc8345": "rfc8345",
-        "day0Config": "to_directory",
-        "svg": "svg",
-        "kml": "kml",
-        "teiv": "teiv",
-    }
+        # Dictionary mapping task keys to viewer method names
+        task_to_method = {
+            "rfc8345": "rfc8345",
+            "day0Config": "to_directory",
+            "svg": "svg",
+            "kml": "kml",
+            "teiv": "teiv",
+        }
 
-    for task_key, method_name in task_to_method.items():
-        save_viewer_output(
-            viewer, filename, generation_tasks.get(task_key, {}), method_name
-        )
+        for task_key, method_name in task_to_method.items():
+            save_viewer_output(
+                viewer, filename, generation_tasks.get(task_key, {}), method_name
+            )

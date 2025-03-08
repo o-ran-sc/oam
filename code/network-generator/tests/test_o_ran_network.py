@@ -28,7 +28,7 @@ def test_o_ran_network(get_path_name) -> None:
     if validator.is_valid():
         configuration: dict = validator.configuration()
         generator: NetworkGenerator = NetworkGenerator(
-            configuration["network"]
+            configuration[config_file]["network"]
         )
         o_ran_network: ORanNetwork = generator.generate()
 
