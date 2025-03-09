@@ -19,11 +19,11 @@ from network_generation.parameter_validator import ParameterValidator
 
 def test_parameter_validator(get_path_name) -> None:
     config_file: str = get_path_name + "/test_config.json"
-    # assert os.path.isfile(config_file) is True
+    assert os.path.isfile(config_file) is True
     validator: ParameterValidator = ParameterValidator(
         ["command", config_file]
     )
-    # assert validator.is_valid() is True
-    # assert type(validator.configuration()[config_file]["network"]["name"]) is str
+    assert validator.is_valid() is True
+    assert type(validator.configuration()[config_file]["network"]["name"]) is str
     validator = ParameterValidator(["command", "file_not_found"])
     assert validator.is_valid() is False
