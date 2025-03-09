@@ -72,6 +72,7 @@ def main() -> None:  # pragma: no cover
             "day0Config": "to_directory",
             "svg": "svg",
             "kml": "kml",
+            "rfc7946": "rfc7946",
             "teiv": "teiv",
         }
 

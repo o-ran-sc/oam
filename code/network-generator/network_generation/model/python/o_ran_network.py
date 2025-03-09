@@ -19,7 +19,7 @@ Module for a class representing a O-RAN Network
 import uuid
 import xml.etree.ElementTree as ET
 import os
-from typing import Any, Dict, cast
+from typing import Any, Dict, List, cast
 from datetime import datetime, timezone
 
 import network_generation.model.python.hexagon as Hexagon

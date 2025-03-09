@@ -234,10 +234,6 @@ class NetworkViewer:
             print(f'File "{filename}.kmz" saved!')
         else:
             kml_file = open(f"{filename}.kml", "wb")
-            # TODO make lint issue
-            # network_generation/view/network_viewer.py:160: error:
-            # Argument 1 to "write" of "BufcqferedWriter" has incompatible
-            # type "str"; expected "Buffer"
             kml_file.write(kml)
             kml_file.close()
             print(f'File "{filename}.kml" saved!')
@@ -347,3 +343,71 @@ class NetworkViewer:
             result.extend(data)
 
         return result
+
+    def tmf686(self, filename: str, compressed: bool = True) -> None:
+        """
+        Method saving the class content to a file in json format.
+        :param filename: A valid path to a file on the system.
+        :param compressed: if True, svg is stored as tmf686 format.
+        :type filename: string
+        """
+        output: dict[str, Any] = self.__network.to_tmf686()
+        file_extension: str = ".tmf686.json"
+        self.__save_on_disc(f"{filename}{file_extension}", compressed, output)
+
+    def teiv(self, filename: str, compressed: bool = True) -> None:
+        """
+        Method for saving the class content as teiv cloud event
+        data in json format and in small chunks of cloud event text files.
+        :param filename: A valid path to a file on the system.
+        :param compressed: if True, json is stored as gz format.
+        :type filename: string
+        """
+        output: dict[str, list[dict[str, list[dict[str, Any]]]]] = (
+            self.__network.to_teiv_data()
+        )
+        chunk_size: int = 600
+        entities = output.get("entities", [])
+        relationships = output.get("relationships", [])
+        self.save_teiv_as_chunks("entities", entities, chunk_size, filename)
+        self.save_teiv_as_chunks(
+            "relationships", relationships, chunk_size, filename
+        )
+        self.__save_on_disc(f"{filename}-teiv-data.json", compressed, output)
+
+    def save_teiv_as_chunks(
+        self,
+        type: str,
+        data: list[dict[str, Any]],
+        chunk_size: int,
+        filename: str,
+    ) -> None:
+        """
+        Method for saving the class content as teiv cloud event
+        data in small chunks of cloud event text files.
+        :param type: type of node.
+        :param data: the data to be split.
+        :param chunk_size: amount of nodes per cloud event
+        :param filename: a valid path to a file on the system.
+        """
+        cloud_event_header = "ce_specversion:::1.0,ce_id:::a30e63c9-d29e" \
+            "-46ff-b99a-b63ed83fd237,ce_source:::dmi-plugin:nm-1,ce_type:::" \
+            "ran-logical-topology.merge,content-type:::application/yang-" \
+            "data+json,ce_time:::2023-11-30T09:05:00Z,ce_dataschema:::https" \
+            "://ties:8080/schemas/v1/r1-topology,,,"
+        idx = 1
+        for items in data:
+            for key, value in items.items():
+                for i in range(0, len(value), chunk_size):
+                    full_filename = f"{filename}-teiv-{type}-data-part" \
+                        f"-{idx}-{i // chunk_size + 1}.txt"
+                    chunk: dict[str, Any] = {
+                        type: [{key: value[i: i + chunk_size]}]
+                    }
+                    self.__save_on_disc_teiv_cloudevent(
+                        full_filename,
+                        chunk,
+                        cloud_event_header,
+                    )
+                idx = idx + 1
+
