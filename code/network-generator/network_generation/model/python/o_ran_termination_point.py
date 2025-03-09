@@ -1,4 +1,4 @@
-# Copyright 2024 highstreet technologies
+# Copyright 2025 highstreet technologies USA Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -67,6 +67,10 @@ class ORanTerminationPoint(ORanObject):
         return result
 
     @property
+    def host(self) -> str:
+        return self.network.host
+
+    @property
     def supporter(self) -> dict[str, str]:
         return self._supporter
 
@@ -94,4 +98,88 @@ class ORanTerminationPoint(ORanObject):
 
         if not (self.type == "o-ran-sc-network:phy"):
             result["supporting-termination-point"] = [self.supporter]
+        return result
+
+    def to_tmf686_vertex(self) -> dict[str, Any]:
+        result: dict[str, Any] = {
+            "id": self.id,
+            "name": self.name,
+            "description": f"Description of a vertex object of type {type(self)}",
+            "@type": "Vertex",
+        }
+        if (self.supporter and self.network):
+            # TODO self.network!!! network.host
+            result = {
+                "id": self.id,
+                "name": self.name,
+                "description": (
+                    f'Description of a vertex object of type {type(self)}'),
+                "href": (
+                    f'https://{self.network.host}/tmf-api/topologyDiscovery/v4/'
+                    f'graph/{self.network.id}/vertex/{self.id}'),
+                # optional "edge": [],
+                "entity": {
+                    "id": "indigo",
+                    "href": "https://indigo.cosmos-lab.org",
+                    "name": "INDIGO",
+                    "@baseType": "object",
+                    "@schemaLocation": (
+                        f'https://{self.network.host}/schema/tmf686-schema.json'
+                    ),
+                    "@type": "EntityRef",
+                    "@referredType": "Individual",
+                },
+                "graph": {
+                    "id": self.network.id,
+                    "href": f"https://{self.host}/tmf-api/topologyDiscovery/v4/graph/{self.network.id}",
+                    "name": self.network.name,
+                    "@baseType": "object",
+                    "@schemaLocation": f"https://{self.network.host}/schema/tmf686-schema.json",
+                    "@type": "GraphRef",
+                    "@referredType": "Graph",
+                },
+                "subGraph": {
+                    # "id": "string",
+                    # "href": "string",
+                    # "name": "string",
+                    # "@baseType": "string",
+                    # "@schemaLocation": f'https://{self.network.host}/schema/tmf686-schema.json',
+                    # "@type": "string",
+                    # "@referredType": "string",
+                },
+                "vertexCharacteristic": [
+                    # {
+                    #     "id": "string",
+                    #     "name": "string",
+                    #     "valueType": "string",
+                    #     "characteristicRelationship": [
+                    #         {
+                    #             "id": "string",
+                    #             "href": "string",
+                    #             "relationshipType": "string",
+                    #             "@baseType": "string",
+                    #             "@schemaLocation": "string",
+                    #             "@type": "string",
+                    #         }
+                    #     ],
+                    #     "value": "string",
+                    #     "@baseType": "string",
+                    #     "@schemaLocation": f'https://{self.network.host}/schema/tmf686-schema.json',
+                    #     "@type": "string",
+                    # }
+                ],
+                "vertexSpecification": {
+                    # "id": "string",
+                    # "href": "string",
+                    # "name": "string",
+                    # "version": "string",
+                    # "@baseType": "string",
+                    # "@schemaLocation": "string",
+                    # "@type": "string",
+                    # "@referredType": "string",
+                },
+                "@baseType": "object",
+                "@schemaLocation": f"https://{self.network.host}/schema/tmf686-schema.json",
+                "@type": "Vertex",
+            }
         return result

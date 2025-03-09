@@ -153,6 +153,65 @@ class Tower(ORanNode):
             "to_topology_links",
         )
 
+    def to_tmf686_vertex(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_tmf686_vertex,
+            "to_tmf686_vertex",
+        )
+
+    def to_tmf686_edge(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_tmf686_edge,
+            "to_tmf686_edge",
+        )
+
+    def to_geojson_feature(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_geojson_feature,
+            "to_geojson_feature",
+        )
+
+    def to_tmf633_service_candidate_references(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_tmf633_service_candidate_references,
+            "to_tmf633_service_candidate_references",
+        )
+
+    def to_tmf633_service_candidates(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_tmf633_service_candidates,
+            "to_tmf633_service_candidates",
+        )
+
+    def to_tmf633_service_specifications(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_tmf633_service_specifications,
+            "to_tmf633_service_specifications",
+        )
+
+    def to_tmf634_resource_candidate_references(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_tmf634_resource_candidate_references,
+            "to_tmf634_resource_candidate_references",
+        )
+
+    def to_tmf634_resource_specification_references(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_tmf634_resource_specification_references,
+            "to_tmf634_resource_specification_references",
+        )
+
+    def to_tmf634_resource_candidates(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_tmf634_resource_candidates, "to_tmf634_resource_candidates"
+        )
+
+    def to_tmf634_resource_specifications(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_ru_references(
+            super().to_tmf634_resource_specifications,
+            "to_tmf634_resource_specifications",
+        )
+
     def _extend_teiv_data_with_o_ran_ru_references(
         self: Any, o_ran_ru_method_name: str
     ) -> dict[str, list[dict[str, Any]]]:

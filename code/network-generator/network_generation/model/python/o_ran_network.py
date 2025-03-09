@@ -16,19 +16,27 @@
 """
 Module for a class representing a O-RAN Network
 """
-
-import os
 import uuid
 import xml.etree.ElementTree as ET
+import os
+from typing import Any, Dict, cast
 from datetime import datetime, timezone
-from typing import Any, cast, Dict, List, Union
 
 import network_generation.model.python.hexagon as Hexagon
-from network_generation.model.python.geo_location import GeoLocation, IGeoLocation
+from network_generation.model.python.geo_location import (
+    GeoLocation,
+    IGeoLocation,
+)
 from network_generation.model.python.hexagon import Layout
-from network_generation.model.python.o_ran_object import IORanObject, ORanObject
+from network_generation.model.python.o_ran_object import (
+    IORanObject,
+    ORanObject,
+)
+from network_generation.model.python.o_ran_ru import ORanRu
 from network_generation.model.python.o_ran_smo import ORanSmo
-from network_generation.model.python.o_ran_spiral_radius_profile import SpiralRadiusProfile
+from network_generation.model.python.o_ran_spiral_radius_profile import (
+    SpiralRadiusProfile,
+)
 from network_generation.model.python.point import Point
 
 
@@ -66,10 +74,13 @@ class ORanNetwork(ORanObject):
 
         self.name = str(configuration.get("name", "WhiteNetwork"))
         self.operationalState = str(configuration.get("operationalState", "disabled"))
-        self._center: IGeoLocation = cast(
-            IGeoLocation, configuration["center"]
+        self.host: str = str(configuration.get("host", "test.operator.io"))
+        self.description = (
+            f'The root service category of 5G services including RAN, core '
+            f'network and IoT services for the year '
+            f'{self.__current_time.strftime("%Y")}.'
         )
-
+        self._center: IGeoLocation = cast(IGeoLocation, configuration["center"])
         # Calculate layout size using the configuration values.
         nr_cell_du = configuration["pattern"]["nrCellDu"]
         size = int(
@@ -128,6 +139,36 @@ class ORanNetwork(ORanObject):
         :return O-RAN Network as json object.
         """
         return self.__configuration
+
+    @property
+    def version(self) -> dict[str, Any]:
+        """
+        Getter for a version value of O-RAN Network.
+        :return A string with the version.
+        """
+        return self.configuration["version"]
+
+    @property
+    def valid_for(self) -> dict[str, Any]:
+        return self.__my_valid_for
+
+    @property
+    def current_time(self) -> datetime:
+        return self.__current_time
+
+    @property
+    def time_string(self) -> str:
+        return self.__time_string
+
+    @property
+    def network(
+        self,
+    ) -> Any:  # expected is ORanNetwork
+        return self._network
+
+    @network.setter
+    def network(self, value: Any) -> None:
+        self._network = value
 
     def __update_value_by_uuid(self, data: dict[str, Any], target_uuid: str, param_name: str, new_value: str) -> bool:
         """
@@ -267,6 +308,99 @@ class ORanNetwork(ORanObject):
 
         # root.append(self.__context.svg(x, y))
         return root
+
+    def to_geojson(self) -> dict[str, Any]:
+        features: list[dict[str, Any]] = self._o_ran_smo.to_geojson_feature()
+        # links: list[dict[str, Any]] = self._o_ran_smo.to_topology_links()
+        return {
+            "type": "FeatureCollection",
+            "features": features,
+        }
+
+    def to_tmf686(self) -> dict[str, Any]:
+        vertex: list[dict[str, Any]] = self._o_ran_smo.to_tmf686_vertex()
+        edge: list[dict[str, Any]] = self._o_ran_smo.to_tmf686_edge()
+
+        return {
+            "id": self.id,
+            "type": "Graph",
+            "name": self.name,
+            "description": "A Network Topology in the context of INDIGO.",
+            "href": f"https://{self.host}/tmf-api/topologyDiscovery/v4/graph/{self.id}",
+            "dateCreated": self.__time_string,
+            "lastUpdated": self.__time_string,
+            "status": "active",
+            "graphRelationship": [],
+            "edge": edge,
+            "vertex": vertex,
+            "@base": f"https://{self.host}/tmf-api/topologyDiscovery/v4/graph",
+            "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+            "@type": "Graph",
+        }
+
+    def to_tmf632_party_organization(self) -> list[dict[str, Any]]:
+        return [self._party_organization.get_organization()]
+
+    def to_tmf633_service_candidates(self) -> list[dict[str, Any]]:
+        return self._o_ran_smo.to_tmf633_service_candidates()
+
+    def to_tmf633_service_specifications(self) -> list[dict[str, Any]]:
+        return self._o_ran_smo.to_tmf633_service_specifications()
+
+    def to_tmf634_resource_catalog(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "id": self.id,
+                "href": f"https://{self.host}/tmf-api/resourceCatalog/v5/resourceCatalog/{self.id}",
+                "name": self.name,
+                "description": f'Comprehensive catalog of 5G related resource for the year {self.__current_time.strftime("%Y")}.',
+                "lastUpdate": self.__time_string,
+                "lifecycleStatus": "Active",
+                "version": self.version,
+                "category": [
+                    {
+                        "id": self.id,
+                        "href": f"https://{self.host}/tmf-api/resourceCatalog/v5/resourceCategory/{self.id}",
+                        "name": self.name,
+                        "version": self.version,
+                        "@type": "ResourceCategoryRef",
+                    }
+                ],
+                "relatedParty": self.related_party,
+                "validFor": self.valid_for,
+                "@type": "ResourceCatalog",
+            }
+        ]
+
+    def to_tmf634_resource_category(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "id": self.id,
+                "href": f"https://{self.host}/tmf-api/resourceCatalog/v5/resourceCategory/{self.id}",
+                "name": self.name,
+                "description": f'The root resource category of 5G RAN related resources for the year {self.__current_time.strftime("%Y")}.',
+                "lastUpdate": self.__time_string,
+                "lifecycleStatus": "Active",
+                "version": self.version,
+                "isRoot": True,
+                "category": [],
+                "resourceCandidate": self._o_ran_smo.to_tmf634_resource_candidate_references(),
+                "resourceSpecification": self._o_ran_smo.to_tmf634_resource_specification_references(),
+                "validFor": self.valid_for,
+                "relatedParty": self.related_party,
+                "@type": "ResourceCategory",
+            }
+        ]
+
+    def to_tmf634_resource_candidates(self) -> list[dict[str, Any]]:
+        return self._o_ran_smo.to_tmf634_resource_candidates()
+
+    def to_tmf634_resource_specifications(self) -> list[dict[str, Any]]:
+        return self._o_ran_smo.to_tmf634_resource_specifications()
+
+    # Get from network a list of the generated cells
+    def get_list_cells(self) -> list[ORanRu]:
+        return self._o_ran_smo.rus
 
     def json(self) -> Dict[str, Any]:
         """

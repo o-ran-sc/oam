@@ -1,4 +1,4 @@
-# Copyright 2024 highstreet technologies
+# Copyright 2024 highstreet technologies USA Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -173,6 +173,64 @@ class ORanNearRtRic(ORanNode):
             }
         )
         return result
+
+    def to_tmf686_vertex(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_tmf686_vertex, "to_tmf686_vertex"
+        )
+
+
+    def to_geojson_feature(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_geojson_feature, "to_geojson_feature"
+        )
+
+    def to_tmf686_edge(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_tmf686_edge, "to_tmf686_edge"
+        )
+
+    def to_tmf633_service_candidate_references(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_tmf633_service_candidate_references,
+            "to_tmf633_service_candidate_references",
+        )
+
+    def to_tmf633_service_candidates(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_tmf633_service_candidates,
+            "to_tmf633_service_candidates"
+        )
+
+    def to_tmf633_service_specifications(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_tmf633_service_specifications,
+            "to_tmf633_service_specifications"
+        )
+
+    def to_tmf634_resource_candidate_references(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_tmf634_resource_candidate_references,
+            "to_tmf634_resource_candidate_references",
+        )
+
+    def to_tmf634_resource_specification_references(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_tmf634_resource_specification_references,
+            "to_tmf634_resource_specification_references",
+        )
+
+    def to_tmf634_resource_candidates(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_tmf634_resource_candidates,
+            "to_tmf634_resource_candidates"
+        )
+
+    def to_tmf634_resource_specifications(self) -> list[dict[str, Any]]:
+        return self._extend_with_o_ran_cu_references(
+            super().to_tmf634_resource_specifications,
+            "to_tmf634_resource_specifications",
+        )
 
     def _extend_teiv_data_with_o_ran_cu_references(
         self: Any,

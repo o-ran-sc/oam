@@ -1,4 +1,4 @@
-# Copyright 2023 highstreet technologies USA CORP.
+# Copyright 2025 highstreet technologies USA Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -122,12 +122,9 @@ class NrCellDu(ORanNode):
 
     # returns a list of geo-locations as cell polygon
     def get_cell_polygons(self) -> list[GeoLocation]:
-        points: list[Point] = Hexagon.polygon_corners(
-            self.layout, self.position
-        )
+        points: list[Point] = Hexagon.polygon_corners(self.layout, self.position)
         method = (
-            self.parent.parent.parent.parent.parent.parent
-                .geo_location.point_to_geo_location
+            self.parent.parent.parent.parent.parent.parent.geo_location.point_to_geo_location
         )
         geo_locations: list[GeoLocation] = list(map(method, points))
         index: int = 1 + int(self._azimuth / self._cell_angle)
@@ -141,9 +138,7 @@ class NrCellDu(ORanNode):
             (points[p1].x + points[p2].x) / 2,
             (points[p1].y + points[p2].y) / 2,
         )
-        intersect_gl1: GeoLocation = network_center.point_to_geo_location(
-            intersect1
-        )
+        intersect_gl1: GeoLocation = network_center.point_to_geo_location(intersect1)
 
         p3: int = (2 * index + 3) % 6
         p4: int = (2 * index + 4) % 6
@@ -151,9 +146,7 @@ class NrCellDu(ORanNode):
             (points[p3].x + points[p4].x) / 2,
             (points[p3].y + points[p4].y) / 2,
         )
-        intersect_gl2: GeoLocation = network_center.point_to_geo_location(
-            intersect2
-        )
+        intersect_gl2: GeoLocation = network_center.point_to_geo_location(intersect2)
 
         tower = self.geo_location
 
@@ -170,9 +163,7 @@ class NrCellDu(ORanNode):
             scaled_cell_polygon: list[GeoLocation] = []
 
             arc: float = self.azimuth * math.pi / 180
-            meterToDegree: float = (
-                2 * math.pi * GeoLocation().equatorialRadius / 360
-            )
+            meterToDegree: float = 2 * math.pi * GeoLocation().equatorialRadius / 360
             centerX: float = self.layout.size.x * 0.5 * math.sin(arc)
             centerY: float = self.layout.size.y * 0.5 * math.cos(arc)
             cell_center: GeoLocation = GeoLocation(
@@ -229,6 +220,66 @@ class NrCellDu(ORanNode):
 
     def to_directory(self, parent_dir: str) -> None:
         pass
+
+    def get_geojson_href(self) -> str:
+        return f"https://{self.network.host}/area/o-ran-network.geo.json/features?properties.name={self.name}"
+
+    def to_geojson_feature(self) -> list[dict[str, Any]]:
+        cell_polygon: list[GeoLocation] = self.get_cell_polygons()
+        coordinates: list = []
+        for gl in cell_polygon:
+            cord: list[float] = [gl.longitude, gl.latitude]
+            coordinates.append(cord)
+        return [
+            {
+                "type": "Feature",
+                "properties": {
+                    "type": "PropertiesOdu",
+                    "name": self.name,
+                    "uuid": self.id,
+                    "function": "o-ran-sc-network:cell",
+                    "newRadioCellGlobalIdentity": {
+                        "publicLandMobileNetworkIdentifier": "123-45",
+                        "newRadioCellIdentity": "0x0FFFFFFFFF",
+                    }
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [coordinates],
+                },
+            }
+        ]
+
+    def to_tmf686_vertex(self) -> list[dict[str, Any]]:
+        # a cell is not a node it is a Termination Point
+        result: list[dict[str, Any]] = []  # super().to_topology_nodes()
+        return result
+
+    def to_tmf686_edge(self) -> list[dict[str, Any]]:
+        # as a cell is not a node, it does not have links
+        result: list[dict[str, Any]] = []  # super().to_topology_links()
+        return result
+
+    def to_tmf633_service_candidate_references(self) -> list[dict[str, Any]]:
+        return super().to_tmf633_service_candidate_references()
+
+    def to_tmf633_service_candidates(self) -> list[dict[str, Any]]:
+        return super().to_tmf633_service_candidates()
+
+    def to_tmf633_service_specifications(self) -> list[dict[str, Any]]:
+        return super().to_tmf633_service_specifications()
+
+    def to_tmf634_resource_candidate_references(self) -> list[dict[str, Any]]:
+        return super().to_tmf634_resource_candidate_references()
+
+    def to_tmf634_resource_specification_references(self) -> list[dict[str, Any]]:
+        return super().to_tmf634_resource_specification_references()
+
+    def to_tmf634_resource_candidates(self) -> list[dict[str, Any]]:
+        return super().to_tmf634_resource_candidates()
+
+    def to_tmf634_resource_specifications(self) -> list[dict[str, Any]]:
+        return super().to_tmf634_resource_specifications()
 
     def add_teiv_data_entities(
             self,

@@ -1,4 +1,4 @@
-# Copyright 2024 highstreet technologies
+# Copyright 2025 highstreet technologies USA Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -126,6 +126,10 @@ class ORanNode(ORanObject):
         return result
 
     @property
+    def host(self) -> str:
+        return self.parent.host
+
+    @property
     def address(self) -> AddressType:
         return self._address
 
@@ -241,12 +245,7 @@ class ORanNode(ORanObject):
         result.append(
             {
                 "node-id": self.name,
-                "o-ran-sc-network:uuid": str(
-                    uuid.uuid5(
-                        uuid.NAMESPACE_DNS,
-                        "-".join([self.network.name, self.name]),
-                    )
-                ),
+                "o-ran-sc-network:uuid": str(uuid.uuid5(uuid.NAMESPACE_DNS, "-".join([self.network.name, self.name]))),
                 "o-ran-sc-network:type": self.type,
                 "o-ran-sc-network:operational-state": self.operationalState,
                 "ietf-network-topology:termination-point": tps,
@@ -332,6 +331,671 @@ class ORanNode(ORanObject):
     @abstractmethod
     def to_directory(self, parent_dir: str) -> None:
         pass
+
+    def get_coordinates(self) -> list[float]:
+        lng: float = 0.0
+        lat: float = 0.0
+
+        gl = self._geo_location
+        # TODO: Why a is gl sometimes a dict and not a GeoLoaction???
+        if isinstance(gl, GeoLocation):
+            lng = gl.longitude
+            lat = gl.latitude
+        elif isinstance(gl, dict):
+            lng = gl["longitude"]
+            lat = gl["latitude"]
+
+        return [lng, lat]
+
+    @abstractmethod
+    def to_geojson_feature(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = []
+        tps: list[dict[str, Any]] = []
+        for tp in self.termination_points():
+            new_tp = tp.to_topology()
+            if any(existing_tp['tp-id'] == new_tp['tp-id'] for existing_tp in tps):
+                pass
+            else:
+                tps.append(new_tp)
+
+        result.append(
+            {
+                "type": "Feature",
+                "properties": {
+                    "type": "PropertiesNode",
+                    "node-uuid": str(uuid.uuid5(uuid.NAMESPACE_DNS, "-".join([self.network.name, self.name]))),
+                    "node-id": self.name,
+                    "function": self.type
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": self.get_coordinates(),
+                },
+            }
+        )
+        return result
+
+    @abstractmethod
+    def to_tmf686_vertex(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = []
+        result.append(
+            {
+                "id": self.id,
+                "name": self.name,
+                "description": f"Description of a vertex object of type {type(self)}",
+                "href": f"https://{self.host}/tmf-api/topologyDiscovery/v4/graph/{self.network.id}/vertex/{self.id}",
+                # optional "edge": [],
+                "entity": {
+                    "id": "indigo",
+                    "href": "https://indigo.cosmos-lab.org",
+                    "name": "INDIGO",
+                    "@baseType": "object",
+                    "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                    "@type": "EntityRef",
+                    "@referredType": "Individual",
+                },
+                "graph": {
+                    "id": self.network.id,
+                    "href": f"https://{self.host}/tmf-api/topologyDiscovery/v4/graph/{self.network.id}",
+                    "name": self.network.name,
+                    "@baseType": "object",
+                    "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                    "@type": "GraphRef",
+                    "@referredType": "Graph",
+                },
+                "subGraph": {
+                    # "id": "string",
+                    # "href": "string",
+                    # "name": "string",
+                    # "@baseType": "string",
+                    # "@schemaLocation": F'https://{self.host}/schema/tmf686-schema.json',
+                    # "@type": "string",
+                    # "@referredType": "string",
+                },
+                "vertexCharacteristic": [
+                    # {
+                    #     "id": "string",
+                    #     "name": "string",
+                    #     "valueType": "string",
+                    #     "characteristicRelationship": [
+                    #         {
+                    #             "id": "string",
+                    #             "href": "string",
+                    #             "relationshipType": "string",
+                    #             "@baseType": "string",
+                    #             "@schemaLocation": "string",
+                    #             "@type": "string",
+                    #         }
+                    #     ],
+                    #     "value": "string",
+                    #     "@baseType": "string",
+                    #     "@schemaLocation": F'https://{self.host}/schema/tmf686-schema.json',
+                    #     "@type": "string",
+                    # }
+                ],
+                "vertexSpecification": {
+                    # "id": "string",
+                    # "href": "string",
+                    # "name": "string",
+                    # "version": "string",
+                    # "@baseType": "string",
+                    # "@schemaLocation": "string",
+                    # "@type": "string",
+                    # "@referredType": "string",
+                },
+                "@baseType": "object",
+                "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                "@type": "Vertex",
+            }
+        )
+        for tp in self.termination_points():
+            result.append(tp.to_tmf686_vertex())
+        return result
+
+    @abstractmethod
+    def to_tmf686_edge(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = []
+        source_tp: str = "-".join([self.name, "phy".upper()])
+        dest_tp: str = "-".join([self.parent.name, "phy".upper()])
+        if self.parent and "Tower" not in source_tp and "Tower" not in dest_tp:
+            link_id: str = "".join(["phy", ":", self.name, "<->", self.parent.name])
+            link: dict[str, Any] = {
+                "link-id": link_id,
+                "source": {"source-node": self.name, "source-tp": source_tp},
+                "destination": {
+                    "dest-node": self.parent.name,
+                    "dest-tp": dest_tp,
+                },
+            }
+            link = {
+                "id": link_id,
+                "href": f"https://{self.host}/tmf-api/topologyDiscovery/v4/graph/{self.network.id}/edge/{link_id}",
+                "bidirectional": True,
+                "description": "Description of an edge object",
+                "name": self.name,
+                "edgeCharacteristic": [
+                    # {
+                    #     "id": "string",
+                    #     "name": "string",
+                    #     "valueType": "string",
+                    #     "characteristicRelationship": [
+                    #         {
+                    #             "id": "string",
+                    #             "href": "string",
+                    #             "relationshipType": "string",
+                    #             "@baseType": "string",
+                    #             "@schemaLocation": "string",
+                    #             "@type": "string",
+                    #         }
+                    #     ],
+                    #     "value": "string",
+                    #     "@baseType": "string",
+                    #     "@schemaLocation": "string",
+                    #     "@type": "string",
+                    # }
+                ],
+                "edgeSpecification": {
+                    # "id": "string",
+                    # "href": "string",
+                    # "name": "string",
+                    # "version": "string",
+                    # "@baseType": "string",
+                    # "@schemaLocation": "string",
+                    # "@type": "string",
+                    # "@referredType": "string",
+                },
+                "entity": {
+                    "id": "indigo",
+                    "href": "https://indigo.cosmos-lab.org",
+                    "name": "INDIGO",
+                    "@baseType": "object",
+                    "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                    "@type": "EntityRef",
+                    "@referredType": "Individual",
+                },
+                "graph": {
+                    "id": self.network.id,
+                    "href": f"https://{self.host}/tmf-api/topologyDiscovery/v4/graph/{self.network.id}",
+                    "name": self.network.name,
+                    "@baseType": "object",
+                    "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                    "@type": "GraphRef",
+                    "@referredType": "Graph",
+                },
+                "subGraph": {
+                    # "id": "string",
+                    # "href": "string",
+                    # "name": "string",
+                    # "@baseType": "string",
+                    # "@schemaLocation": "string",
+                    # "@type": "string",
+                    # "@referredType": "string",
+                },
+                "vertex": [
+                    {
+                        "id": source_tp,
+                        "href": (
+                            f'https://{self.host}/tmf-api/topologyDiscovery/v4'
+                            f'/graph/{self.network.id}/vertex/{source_tp}'
+                        ),
+                        "name": source_tp,
+                        "@baseType": "object",
+                        "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                        "@type": "VertexRef",
+                        "@referredType": "Vertex",
+                    },
+                    {
+                        "id": dest_tp,
+                        "href": (
+                            f'https://{self.host}/tmf-api/topologyDiscovery/v4'
+                            f'/graph/{self.network.id}/vertex/{dest_tp}'
+                        ),
+                        "name": dest_tp,
+                        "@baseType": "object",
+                        "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                        "@type": "VertexRef",
+                        "@referredType": "Vertex",
+                    },
+                ],
+                "@baseType": "object",
+                "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                "@type": "Edge",
+            }
+            result.append(link)
+        return result
+
+    @abstractmethod
+    def to_tmf633_service_candidate_references(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "id": self.id,
+                "href": f"https://{self.host}/tmf-api/serviceCatalogManagement/v4/serviceCandidate/{self.id}",
+                "name": self.name,
+                "version": self.network.version,
+            }
+        ]
+
+    @abstractmethod
+    def to_tmf633_service_candidates(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "id": self.id,
+                "href": f"https://{self.host}/tmf-api/serviceCatalogManagement/v4/serviceCandidate/{self.id}",
+                "name": self.name,
+                "description": (
+                    "The service candidate of 5G services including RAN, core "
+                    "network and IoT services for the year "
+                    f'{self.__current_time.strftime("%Y")}.'),
+                "lastUpdate": self.__time_string,
+                "lifecycleStatus": "Active",
+                "version": self.network.version,
+                "category": [
+                    {
+                        "id": self.network.id,
+                        "href": (
+                            f"https://{self.host}/tmf-api/serviceCatalogManagement/v4/serviceCategory/{self.network.id}"
+                        ),
+                        "name": self.network.name,
+                        "version": self.network.version,
+                    }
+                ],
+                "serviceSpecification": {
+                    "id": self.id,
+                    "href": f"https://{self.host}/tmf-api/serviceCatalogManagement/v4/serviceSpecification/{self.id}",
+                    "name": self.name,
+                    "version": self.network.version,
+                },
+                "validFor": self.network.valid_for,
+            }
+        ]
+
+    def get_oran_network_id_property(self) -> str:
+        if self.__class__.__name__ == "NrCellDu":
+            return "properties.name"
+        else:
+            return "properties.node-id"
+
+    @abstractmethod
+    def to_tmf633_service_specifications(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = []
+        result.append(
+            {
+                "id": self.id,
+                "href": f"https://{self.host}/tmf-api/serviceCatalogManagement/v4/serviceSpecification/{self.id}",
+                "name": self.name,
+                "description": "INDIGO Service Specification PublicSafety",
+                "isBundle": False,
+                "version": self.network.version,
+                "lastUpdate": self.__time_string,
+                "lifecycleStatus": "Active",
+                "relatedParty": self.network.related_party,
+                "validFor": self.network.valid_for,
+                "attachment": [],
+                "entitySpecRelationship": [],
+                "featureSpecification": [],
+                "resourceSpecification": self.to_tmf634_resource_specification_references(),
+                "serviceLevelSpecification": [],
+                "serviceSpecRelationship": [],
+                "specCharacteristic": [
+                    {
+                        "id": "resilienceLevel",
+                        "name": "Resilience Level",
+                        "description": "The resilience level of this service.",
+                        "valueType": "integer",
+                        "configurable": False,
+                        "characteristicValueSpecification": [
+                            {"value": 0, "isDefault": True}
+                        ],
+                    },
+                    {
+                        "id": "securityLevel",
+                        "description": "The security level of this service.",
+                        "valueType": "integer",
+                        "configurable": False,
+                        "characteristicValueSpecification": [
+                            {"value": 1, "isDefault": True}
+                        ],
+                    },
+                    {
+                        "id": "sNssai",
+                        "name": "Single Network Slice Selection Assistance Information",
+                        "description": "The Single Network Slice Selection Assistance Information of this service.",
+                        "configurable": True,
+                        "valueType": "Integer32",
+                        "isUnique": True,
+                    },
+                    {
+                        "id": "maxBandwidthUE",
+                        "name": "Maximum Bandwidth UE",
+                        "description": "Maximum bandwidth in [MBps] per User Equipment (UE)",
+                        "configurable": True,
+                        "valueType": "Mbps",
+                        "minCardinality": 5,
+                        "maxCardinality": 1000,
+                    },
+                    {
+                        "id": "coverageArea",
+                        "name": "Coverage Area",
+                        "description": "The geographical area covered by this entity.",
+                        "configurable": False,
+                        "extensible": False,
+                        "isUnique": True,
+                        "characteristicValueSpecification": [
+                            {
+                                "valueType": "href",
+                                "value": (
+                                    f'https://{self.host}/area/o-ran-network.'
+                                    "geo.json/features?"
+                                    f'{self.get_oran_network_id_property()}='
+                                    f'{self.name}'),
+                            }
+                        ],
+                    },
+                    {
+                        "id": "maxLatency",
+                        "name": "Maximal Latency",
+                        "description": (
+                            "Maximum tolerable delay in milliseconds [ms]"),
+                        "configurable": False,
+                        "valueType": "time",
+                        "characteristicValueSpecification": [
+                            {"valueType": "integer", "value": 10}
+                        ],
+                    },
+                    {
+                        "name": "availability",
+                        "description": "Guaranteed service uptime",
+                        "configurable": False,
+                        "valueType": "Propability",
+                        "characteristicValueSpecification": [
+                            {"valueType": "Propability", "value": "99.9%"}
+                        ],
+                    },
+                    {
+                        "id": "mttr",
+                        "name": "Mean Time to Repair",
+                        "description": "Maximal Mean Time To Repair a failure",
+                        "configurable": False,
+                        "valueType": "time",
+                        "characteristicValueSpecification": [
+                            {"valueType": "maximum time", "value": "4 hours"}
+                        ],
+                    },
+                    {
+                        "id": "mtbf",
+                        "name": "Mean Time Between Failures",
+                        "description": "Target for Mean Time Between Failures",
+                        "configurable": False,
+                        "valueType": "time",
+                        "characteristicValueSpecification": [
+                            {"valueType": "minimum time", "value": "1 year"}
+                        ],
+                    },
+                ],
+            }
+        )
+        return result
+
+    @abstractmethod
+    def to_tmf634_resource_candidate_references(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "id": self.id,
+                "href": f"https://{self.host}/tmf-api/resourceCatalog/v5/resourceCandidate/{self.id}",
+                "name": self.name,
+                "version": self.network.version,
+                "@type": "ResourceCandidateRef",
+                "@referredType": "ResourceCandidate",
+            }
+        ]
+
+    @abstractmethod
+    def to_tmf634_resource_specification_references(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "id": self.id,
+                "href": f"https://{self.host}/tmf-api/resourceCatalog/v5/resourceSpecification/{self.id}",
+                "name": self.name,
+                "version": self.network.version,
+                "@type": "ResourceSpecificationRef",
+                "@referredType": "ResourceSpecification",
+            }
+        ]
+
+    @abstractmethod
+    def to_tmf634_resource_candidates(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "id": self.id,
+                "href": f"https://{self.host}/tmf-api/resourceCatalog/v5/resourceCandidate/{self.id}",
+                "name": self.name,
+                "description": f'The resource candidate of 5G RAN related resources for year {self.__current_time.strftime("%Y")}.',
+                "lastUpdate": self.__time_string,
+                "lifecycleStatus": "Active",
+                "version": self.network.version,
+                "category": [
+                    {
+                        "id": self.network.id,
+                        "href": f"https://{self.host}/tmf-api/resourceCatalog/v5/resourceCategory/{self.network.id}",
+                        "name": self.network.name,
+                        "version": self.network.version,
+                    }
+                ],
+                "resourceSpecification": {
+                    "id": self.id,
+                    "href": f"https://{self.host}/tmf-api/resourceCatalog/v5/resourceSpecification/{self.id}",
+                    "name": self.name,
+                    "version": self.network.version,
+                    "@type": "ResourceSpecificationRef",
+                    "@referredType": "ResourceSpecification",
+                },
+                "validFor": self.network.valid_for,
+                "@type": "ResourceCandidate",
+            }
+        ]
+
+    @abstractmethod
+    def to_tmf634_resource_specifications(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = []
+        result.append(
+            {
+                "id": self.id,
+                "href": f"https://{self.host}/tmf-api/resourceCatalog/v5/resourceSpecification/{self.id}",
+                "name": self.name,
+                "description": f"INDIGO Resource Specification for type {type(self)}",
+                "isBundle": False,
+                "version": self.network.version,
+                "lastUpdate": self.__time_string,
+                "lifecycleStatus": "Active",
+                "relatedParty": self.network.related_party,
+                "validFor": self.network.valid_for,
+                "category": "RAN resource",
+                "attachment": [],
+                "featureSpecification": [],
+                "resourceSpecCharacteristic": [
+                    {
+                        "name": "nRCellName",
+                        "description": "Cell identifier or name of the cell.",
+                        "configurable": True,
+                        "isUnique": True,
+                        "valueType": "string",
+                    },
+                    {
+                        "name": "nRCellId",
+                        "description": "Uniquely identifies a cell within a PLMN. It is often constructed from gNodeB ID + Physical Cell ID.",
+                        "valueType": "string",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "nRCellState",
+                        "description": (
+                            "Represents the active state of the cell. Takes "
+                            "one of the following values: "
+                            "IDLE ACTIVE INACTIVE UNKNOWN"),
+                        "valueType": "string",
+                        "configurable": False,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "TAI",
+                        "description": (
+                            "Tracking Area Identifier (TAI). This is a "
+                            "globally unique tracking area identifier, "
+                            "made up of the PLMN ID and the TAC."),
+                        "valueType": "string",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "channelBandwidthUl",
+                        "description": "Uplink channel bandwidth.",
+                        "valueType": "float",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "channelBandwidthDl",
+                        "description": "Downlink channel bandwidth.",
+                        "valueType": "float",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "maximumOutputPower",
+                        "description": (
+                            "Maximum power in Watts for the sum of all downlink"
+                            " channels that are allowed to be used "
+                            "simultaneously in a cell."),
+                        "valueType": "float",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "userCapacity",
+                        "description": (
+                            "Maximum number of pieces of user equipment (UEs) "
+                            "that can connect to this nrCellDU simultaneously."
+                        ),
+                        "valueType": "Integer",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "physicalCellID",
+                        "description": (
+                            "Physical cell identifier. Takes a value in the "
+                            "range 0 to 503. The physical cell id is used by "
+                            "the cell to encode and decode the data that it "
+                            "transmits. It is used in a similar way to the "
+                            "UMTS scrambling code. To avoid interference, "
+                            "neighboring cells should have different physical "
+                            "cell identifiers. The physical cell id is derived "
+                            "from the primary and secondary synchronization "
+                            "signals (PSS and SSS). The PSS takes a value from "
+                            "0 to 2, the SSS takes a value from 0 to 167, and "
+                            "the physical cell id is determined based on the "
+                            "following formula: PSS + 3*SSS. The result of "
+                            "this calculation equates to a value of between "
+                            "0 and 503."),
+                        "valueType": "Integer",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "localCellId",
+                        "description": "Local cell id unique within the nrCellDU.",
+                        "valueType": "Integer",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "arfcnDl",
+                        "description": (
+                            "Absolute Radio Frequency Channel Number "
+                            "(downlink). An integer value which identifies the "
+                            "downlink carrier frequency of the cell."),
+                        "valueType": "Integer",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "arfcnUl",
+                        "description": (
+                            "Absolute Radio Frequency Channel Number (uplink). "
+                            "An integer value which identifies the uplink "
+                            "carrier frequency of the cell."),
+                        "valueType": "Integer",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "nRPCI",
+                        "description": (
+                            "Holds the Physical Cell Identity (PCI) of the "
+                            "NR cell."),
+                        "valueType": "String",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "ssbFreq",
+                        "description": (
+                            "Indicates cell defining SSB frequency domain "
+                            "position. Frequency of the cell defining SSB "
+                            "transmission. The frequency provided in this "
+                            "attribute identifies the position of resource "
+                            "element. The frequency shall be positioned on the "
+                            "NR global frequency raster, and within "
+                            "bSChannelBwDL. Allowed values: 0..3279165"),
+                        "valueType": "Float",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "ssbPeriodicity",
+                        "description": (
+                            "Indicates cell defined SSB periodicity in number "
+                            "of subframes(ms). The SSB periodicity in msec is "
+                            "used for the rate matching purpose. "
+                            "Allowed values: 5, 10, 20, 40, 80, 160"),
+                        "valueType": "Integer",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "ssbSubCarrierSpacing",
+                        "description": "This SSB is used for synchronization. Its units are in kHz. Allowed values: {15, 30, 120, 240}",
+                        "valueType": "Integer",
+                        "configurable": True,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "operationalState",
+                        "description": (
+                            "Operational state of the nrCellDU. Takes one of "
+                            "the following values: Enabled Disabled Other "
+                            "Unknown"),
+                        "valueType": "String",
+                        "configurable": False,
+                        "isUnique": True,
+                    },
+                    {
+                        "name": "administrativeState",
+                        "description": (
+                            "Administrative state of the nrCellDU. Takes one of"
+                            " the following values: Unlocked Locked Shutting "
+                            "Down Other Unknown"),
+                        "valueType": "String",
+                        "configurable": False,
+                        "isUnique": True,
+                    },
+                ],
+                "resourceSpecRelationship": [],  # TODO self.parent.to_tmf634_resource_specifications(),
+                "@type": "ResourceSpecification",
+            }
+        )
+        return result
 
     @abstractmethod
     def add_teiv_data_entities(

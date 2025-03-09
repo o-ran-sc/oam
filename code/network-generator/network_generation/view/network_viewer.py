@@ -1,4 +1,4 @@
-# Copyright 2024 highstreet technologies GmbH
+# Copyright 2025 highstreet technologies USA Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,8 +21,7 @@ import gzip
 import json
 import xml.etree.ElementTree as ET
 import zipfile
-from typing import Any
-
+from typing import Any, Callable
 from typing_extensions import Buffer
 
 from network_generation.model.python.o_ran_network import ORanNetwork
@@ -242,3 +241,109 @@ class NetworkViewer:
             kml_file.write(kml)
             kml_file.close()
             print(f'File "{filename}.kml" saved!')
+
+    def rfc7946(self, filename: str, compressed: bool = True) -> None:
+        """
+        Method saving the class content to a file in geojson format.
+
+        :param filename: A valid path to a file on the system.
+        :param compressed: if True, kml is stored as kmz format.
+        :type filename: string
+        """
+        output: dict[str, Any] = self.__network.to_geojson()
+        file_extension: str = ".geo.json"
+        self.__save_on_disc(f"{filename}{file_extension}", compressed, output)
+
+    def tmf686(self, filename: str, compressed: bool = True) -> None:
+        """
+        Method saving the class content to a file in json format.
+        :param filename: A valid path to a file on the system.
+        :param compressed: if True, svg is stored as tmf686 format.
+        :type filename: string
+        """
+        output: dict[str, Any] = self.__network.to_tmf686()
+        file_extension: str = ".tmf686.json"
+        self.__save_on_disc(f"{filename}{file_extension}", compressed, output)
+
+
+    def tmf632(self, filename: str, compressed: bool = True) -> None:
+        """
+        Method saving the class content to a file in tmf632 format.
+        """
+
+        file_suffixes = {
+            "party-organization": self.__network.to_tmf632_party_organization,
+        }
+        for suffix, method in file_suffixes.items():
+            output: list[dict[str, Any]] = method()
+            file_extension: str = f".tmf632.{suffix}.json"
+            self.__save_on_disc(
+                f"{filename}{file_extension}", compressed, output)
+
+    def tmf633(self, filename: str, compressed: bool = True) -> None:
+        """
+        Method saving the class content to a file in tmf633 format.
+        It requires 4 json files:
+        1. service-catalog
+        2. service-category
+        3. service-definition
+        4. service-candidate
+
+        :param filename: A valid path to a file on the system.
+        :param compressed: if True, kml is stored as kmz format.
+        :type filename: string
+        """
+
+        file_suffixes = {
+            "service-catalogs": self.service_catalog.to_tmf633_service_catalog,
+            "service-categories": lambda: self.__network.to_tmf633_service_category() + self.__service2.to_tmf633_service_category() + self.__service3.to_tmf633_service_category(),
+            "service-candidates": lambda: self.__network.to_tmf633_service_candidates() + self.__service2.to_tmf633_service_candidates() + self.__service3.to_tmf633_service_candidates(),
+            "service-specifications": lambda: self.__network.to_tmf633_service_specifications() + self.__service2.to_tmf633_service_specifications() + self.__service3.to_tmf633_service_specifications(),
+        }
+        for suffix, method in file_suffixes.items():
+            output: list[dict[str, Any]] = method()
+            file_extension: str = f".tmf633.{suffix}.json"
+            self.__save_on_disc(
+                f"{filename}{file_extension}", compressed, output)
+
+    def tmf634(self, filename: str, compressed: bool = True) -> None:
+        """
+        Method saving the class content to a file in tmf634 format.
+        It requires 4 json files:
+        1. resource-catalog
+        2. resource-category
+        3. resource-definition
+        4. resource-candidate
+
+        :param filename: A valid path to a file on the system.
+        :param compressed: if True, kml is stored as kmz format.
+        :type filename: string
+        """
+
+        file_suffixes = {
+            "resource-catalogs": self.__network.to_tmf634_resource_catalog,
+            "resource-categories": self.__network.to_tmf634_resource_category,
+            "resource-candidates": self.__network.to_tmf634_resource_candidates,
+            "resource-specifications": self.__network.to_tmf634_resource_specifications,
+        }
+
+        for suffix, method in file_suffixes.items():
+            output: list[dict[str, Any]] = method()
+            file_extension: str = f".tmf634.{suffix}.json"
+            self.__save_on_disc(
+                f"{filename}{file_extension}", compressed, output)
+
+    # Extend process_data to handle a list of methods
+    @staticmethod
+    def chain(methods: list[Callable[[], list[dict[str, Any]]]]) -> list[dict[str, Any]]:
+        result = []
+
+        # Loop through each method, call it, and extend the result list
+        for method in methods:
+            data = method()  # Call the method
+            # Process the data, e.g., by adding a new field to each dictionary
+            for item in data:
+                item['processed'] = True  # Adding a new field 'processed'
+            result.extend(data)
+
+        return result

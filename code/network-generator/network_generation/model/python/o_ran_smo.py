@@ -1,4 +1,4 @@
-# Copyright 2024 highstreet technologies
+# Copyright 2025 highstreet technologies USA Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ from network_generation.model.python.o_ran_node import (
     ORanNode,
     default_value,
 )
+from network_generation.model.python.o_ran_ru import ORanRu
 from network_generation.model.python.tower import Tower
 
 # Define the "IORanSmo" interface
@@ -41,7 +42,6 @@ class ORanSmo(ORanNode):
     """
     Class representing an O-RAN Service Management and Operation object.
     """
-
     _interfaces = ["a1", "o1", "ofhm", "o2"]
 
     def __init__(
@@ -112,6 +112,14 @@ class ORanSmo(ORanNode):
                 result.append(tower)
         return result
 
+    @property
+    def rus(self) -> list[ORanRu]:
+        result: list[ORanRu] = []
+        for ric in self.o_ran_near_rt_rics:
+            for tower in ric.towers:
+                result.extend(tower.o_ran_rus)
+        return result
+
     def toKml(self) -> ET.Element:
         smo = super().toKml()
         for ric in self.o_ran_near_rt_rics:
@@ -151,6 +159,53 @@ class ORanSmo(ORanNode):
         return self._extend_with_ric_references(
             super().to_topology_links, "to_topology_links"
         )
+
+    def to_tmf686_vertex(self) -> list[dict[str, Any]]:
+        return self._extend_with_ric_references(
+            super().to_tmf686_vertex, "to_tmf686_vertex")
+
+    def to_tmf686_edge(self) -> list[dict[str, Any]]:
+        return self._extend_with_ric_references(
+            super().to_tmf686_edge, "to_tmf686_edge")
+
+    def to_geojson_feature(self) -> list[dict[str, Any]]:
+        return self._extend_with_ric_references(
+            super().to_geojson_feature, "to_geojson_feature")
+
+    def to_tmf633_service_candidate_references(self) -> list[dict[str, Any]]:
+        return self._extend_with_ric_references(
+            super().to_tmf633_service_candidate_references,
+            "to_tmf633_service_candidate_references")
+
+    def to_tmf633_service_candidates(self) -> list[dict[str, Any]]:
+        return self._extend_with_ric_references(
+            super().to_tmf633_service_candidates,
+            "to_tmf633_service_candidates")
+
+    def to_tmf633_service_specifications(self) -> list[dict[str, Any]]:
+        return self._extend_with_ric_references(
+            super().to_tmf633_service_specifications,
+            "to_tmf633_service_specifications")
+
+    def to_tmf634_resource_candidate_references(self) -> list[dict[str, Any]]:
+        return self._extend_with_ric_references(
+            super().to_tmf634_resource_candidate_references,
+            "to_tmf634_resource_candidate_references")
+
+    def to_tmf634_resource_specification_references(self) -> list[dict[str, Any]]:
+        return self._extend_with_ric_references(
+            super().to_tmf634_resource_specification_references,
+            "to_tmf634_resource_specification_references")
+
+    def to_tmf634_resource_candidates(self) -> list[dict[str, Any]]:
+        return self._extend_with_ric_references(
+            super().to_tmf634_resource_candidates,
+            "to_tmf634_resource_candidates")
+
+    def to_tmf634_resource_specifications(self) -> list[dict[str, Any]]:
+        return self._extend_with_ric_references(
+            super().to_tmf634_resource_specifications,
+            "to_tmf634_resource_specifications")
 
     def _extend_teiv_data_with_ric_references(
         self: Any,

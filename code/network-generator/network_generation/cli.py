@@ -16,7 +16,6 @@
 
 import os
 import sys
-
 from network_generation.base import NetworkGenerator
 from network_generation.parameter_validator import ParameterValidator
 from network_generation.view.network_viewer import NetworkViewer
@@ -28,11 +27,9 @@ Module as entry point to generate an ietf topology json
 
 
 def save_viewer_output(
-    viewer: NetworkViewer,
-    filename: str,
-    task: dict[str, str] | dict[str, int],
-    method_name: str,
-) -> None:
+        viewer: NetworkViewer, filename: str,
+        task: dict[str, str] | dict[str, int],
+        method_name: str) -> None:
     """
     Save the output using the specified method of NetworkViewer.
     """
@@ -48,6 +45,7 @@ def main() -> None:  # pragma: no cover
     `python -m network_generation`.
     """
     validator = ParameterValidator(sys.argv)
+
     if not validator.is_valid():
         print(validator.error_message())
         return

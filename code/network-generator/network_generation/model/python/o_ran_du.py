@@ -47,7 +47,7 @@ class ORanDu(ORanNode):
     def __init__(
         self,
         data: dict[str, Any] = cast(dict[str, Any], default_value),
-        **kwargs: dict[str, Any],
+        **kwargs: dict[str, Any]
     ) -> None:
         o_ran_du_data: IORanDu = self._to_o_ran_du_data(data)
         super().__init__(cast(dict[str, Any], o_ran_du_data), **kwargs)
@@ -111,6 +111,140 @@ class ORanDu(ORanNode):
             os.makedirs(parent_path, exist_ok=True)
         if not os.path.exists(path):
             os.mkdir(path)
+
+    def to_geojson_feature(self) -> list[dict[str, Any]]:
+        return super().to_geojson_feature()
+
+    def to_tmf686_vertex(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = super().to_tmf686_vertex()
+        return result
+
+    def to_tmf686_edge(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = super().to_tmf686_edge()
+        for interface in ["e2", "o1"]:
+            link_id: str = "".join(
+                [interface, ":", self.name, "<->", self.parent.name]
+            )
+            source_tp: str = "-".join([self.name, interface.upper()])
+            dest_tp: str = "-".join([self.parent.name, interface.upper()])
+            result.append(
+                {
+                    "id": link_id,
+                    "href": f"https://{self.host}/tmf-api/topologyDiscovery/v4/graph/{self.network.id}/edge/{link_id}",
+                    "bidirectional": True,
+                    "description": "Description of an edge object",
+                    "name": self.name,
+                    "edgeCharacteristic": [
+                        # {
+                        #     "id": "string",
+                        #     "name": "string",
+                        #     "valueType": "string",
+                        #     "characteristicRelationship": [
+                        #         {
+                        #             "id": "string",
+                        #             "href": "string",
+                        #             "relationshipType": "string",
+                        #             "@baseType": "string",
+                        #             "@schemaLocation": "string",
+                        #             "@type": "string",
+                        #         }
+                        #     ],
+                        #     "value": "string",
+                        #     "@baseType": "string",
+                        #     "@schemaLocation": "string",
+                        #     "@type": "string",
+                        # }
+                    ],
+                    "edgeSpecification": {
+                        # "id": "string",
+                        # "href": "string",
+                        # "name": "string",
+                        # "version": "string",
+                        # "@baseType": "string",
+                        # "@schemaLocation": "string",
+                        # "@type": "string",
+                        # "@referredType": "string",
+                    },
+                    "entity": {
+                        "id": "indigo",
+                        "href": "https://indigo.cosmos-lab.org",
+                        "name": "INDIGO",
+                        "@baseType": "object",
+                        "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                        "@type": "EntityRef",
+                        "@referredType": "Individual",
+                    },
+                    "graph": {
+                        "id": self.network.id,
+                        "href": f"https://{self.host}/tmf-api/topologyDiscovery/v4/graph/{self.network.id}",
+                        "name": self.network.name,
+                        "@baseType": "object",
+                        "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                        "@type": "GraphRef",
+                        "@referredType": "Graph",
+                    },
+                    "subGraph": {
+                        # "id": "string",
+                        # "href": "string",
+                        # "name": "string",
+                        # "@baseType": "string",
+                        # "@schemaLocation": "string",
+                        # "@type": "string",
+                        # "@referredType": "string",
+                    },
+                    "vertex": [
+                        {
+                            "id": source_tp,
+                            "href": (
+                                f'https://{self.host}/tmf-api/topologyDiscovery'
+                                f'/v4/graph/{self.network.id}/vertex/{source_tp}'
+                            ),
+                            "name": source_tp,
+                            "@baseType": "object",
+                            "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                            "@type": "VertexRef",
+                            "@referredType": "Vertex",
+                        },
+                        {
+                            "id": dest_tp,
+                            "href": (
+                                f'https://{self.host}/tmf-api/topologyDiscovery'
+                                f'/v4/graph/{self.network.id}/vertex/{dest_tp}'
+                            ),
+                            "name": dest_tp,
+                            "@baseType": "object",
+                            "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                            "@type": "VertexRef",
+                            "@referredType": "Vertex",
+                        },
+                    ],
+                    "@baseType": "object",
+                    "@schemaLocation": f"https://{self.host}/schema/tmf686-schema.json",
+                    "@type": "Edge",
+                }
+            )
+        return result
+
+    def to_tmf633_service_candidate_references(self) -> list[dict[str, Any]]:
+        return super().to_tmf633_service_candidate_references()
+
+    def to_tmf633_service_candidates(self) -> list[dict[str, Any]]:
+        return super().to_tmf633_service_candidates()
+
+    def to_tmf633_service_specifications(self) -> list[dict[str, Any]]:
+        return super().to_tmf633_service_specifications()
+
+    def to_tmf634_resource_candidate_references(self) -> list[dict[str, Any]]:
+        return super().to_tmf634_resource_candidate_references()
+
+    def to_tmf634_resource_specification_references(self) -> list[dict[str, Any]]:
+        return super().to_tmf634_resource_specification_references()
+
+    def to_tmf634_resource_candidates(self) -> list[dict[str, Any]]:
+        return super().to_tmf634_resource_candidates()
+
+    def to_tmf634_resource_specifications(self) -> list[dict[str, Any]]:
+        return super().to_tmf634_resource_specifications()
 
     def add_teiv_data_entities(
             self,
