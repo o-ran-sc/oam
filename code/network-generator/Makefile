@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright 2024 highstreet technologies 
+# Copyright 2025 highstreet technologies USA Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 .ONESHELL:
 ENV_PREFIX=$(shell python -c "if __import__('pathlib').Path('.oam/bin/pip').exists(): print('.oam/bin/')")
 USING_POETRY=$(shell grep "tool.poetry" pyproject.toml && echo "yes")
+LINE_LENGTH=120
 
 .PHONY: help
 help:             ## Show the help.
@@ -43,15 +44,15 @@ install:          ## Install the project in dev mode.
 .PHONY: format
 format:           ## Format code using black & isort.
 	$(ENV_PREFIX)isort network_generation/
-	$(ENV_PREFIX)black -l 79 network_generation/
-	$(ENV_PREFIX)black -l 79 tests/
+	$(ENV_PREFIX)black -l $(LINE_LENGTH) network_generation/
+	$(ENV_PREFIX)black -l $(LINE_LENGTH) tests/
 
 .PHONY: lint
 lint:             ## Run pep8, black, mypy linters.
-	$(ENV_PREFIX)flake8 network_generation/
-	$(ENV_PREFIX)flake8 tests/
-	$(ENV_PREFIX)black -l 79 --check network_generation/
-	$(ENV_PREFIX)black -l 79 --check tests/
+	$(ENV_PREFIX)flake8 --max-line-length=$(LINE_LENGTH) network_generation/
+	$(ENV_PREFIX)flake8 --max-line-length=$(LINE_LENGTH) tests/
+	$(ENV_PREFIX)black -l $(LINE_LENGTH) --check network_generation/
+	$(ENV_PREFIX)black -l $(LINE_LENGTH) --check tests/
 	$(ENV_PREFIX)mypy --ignore-missing-imports --disallow-untyped-defs --check-untyped-def network_generation/
 
 .PHONY: test
