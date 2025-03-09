@@ -40,7 +40,19 @@
           "type": "string",
           "pattern": "^[a-zA-Z]{1}[\\S]{0,254}$"
         },
-
+        "host": {
+          "description": "The host exposing a northbound REST interface.",
+          "type": "string",
+          "format": "uri"
+        },
+        "version": {
+          "description": "A version sting in format 'v0.0.0' to be used in TMF APIs.",
+          "type": "string"
+        },
+        "center": {
+          "description": "Defines the geographical center of the Radio Access Network.",
+          "$ref": "#/$defs/geoLocation"
+        },
         "disabledResourcesProfile": {
           "description": "A definition how many resource in percentage should be disabled for each network resource type (e.g. O-DU, Cell, ...). The value is network topology node type (resource type) individual per type.",
           "$ref": "#/$defs/DisabledResourcesProfile"
@@ -48,10 +60,6 @@
         "operationalState": {
           "description": "Defines enumerated operational states aligned with ITU-T usage. Please see ITU-T M.3100: 'Generic Managed Entities' and ITU-T M.3160: 'Generic Management Information Model'",
           "$ref": "#/$defs/OperationalState"
-        },
-        "center": {
-          "description": "Defines the geographical center of the Radio Access Network.",
-          "$ref": "#/$defs/geoLocation"
         },
         "pattern": {
           "description": "A description of the relations between O-RAN Objects.",
@@ -315,7 +323,8 @@
       "required": [
         "rfc8345",
         "svg",
-        "kml"
+        "kml",
+        "rfc7946"
       ],
       "additionalProperties": false,
       "properties": {
@@ -335,8 +344,28 @@
           "description": "If enabled, a kml file will be generated.",
           "$ref": "#/$defs/export"
         },
+        "rfc7946": {
+          "description": "If enabled, a geojson file will be generated.",
+          "$ref": "#/$defs/export"
+        },
         "teiv": {
           "description": "If enabled, a teiv data file will be generated.",
+          "$ref": "#/$defs/export"
+        },
+        "tmf632": {
+          "description": "If enabled, a json file will be generated according to TMF632 party.",
+          "$ref": "#/$defs/export"
+        },
+        "tmf633": {
+          "description": "If enabled, a json file will be generated according to TMF633 service catalog.",
+          "$ref": "#/$defs/export"
+        },
+        "tmf634": {
+          "description": "If enabled, a json file will be generated according to TMF634 resource catalog.",
+          "$ref": "#/$defs/export"
+        },
+        "tmf686": {
+          "description": "If enabled, a json file will be generated according to TMF686.",
           "$ref": "#/$defs/export"
         }
       }
