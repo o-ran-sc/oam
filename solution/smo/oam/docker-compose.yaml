@@ -152,6 +152,7 @@ services:
       traefik.http.routers.ves.rule: Host(`ves-collector.dcn.${HTTP_DOMAIN}`)
       traefik.http.routers.ves.tls: true
       traefik.http.services.ves.loadbalancer.server.port: ${VES_ENDPOINT_PORT}
+      traefik.docker.network: dcn
       app: "ves-collector"
       deploy: "o-ran-sc-smo-oam"
       solution: "o-ran-sc-smo"

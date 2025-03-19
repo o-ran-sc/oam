@@ -1,0 +1,23 @@
+services:  
+  influxdb2:
+    image: $INFLUXDB_IMAGE
+    container_name: $INFLUXDB2_INSTANCE
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: $INFLUXDB2_USERNAME
+      DOCKER_INFLUXDB_INIT_PASSWORD: $INFLUXDB2_PASSWORD
+      DOCKER_INFLUXDB_INIT_ORG: $INFLUXDB2_ORG
+      DOCKER_INFLUXDB_INIT_BUCKET: $INFLUXDB2_BUCKET
+    volumes:
+      - ./config/influxdb2/data:/var/lib/influxdb2:rw
+    ports:
+      - 8086:8086
+    labels:
+      - "ranpm=yes"
+      - "ranpmlog=yes"
+    networks:
+      smo:
+
+networks:
+  smo:
+    external: true

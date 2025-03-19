@@ -1,0 +1,257 @@
+#  ============LICENSE_START===============================================
+#  Copyright (C) 2023 Nordix Foundation. All rights reserved.
+#  ========================================================================
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#  ============LICENSE_END=================================================
+#
+
+services:
+  minio:
+    image: ${MINIO_IMAGE}
+    container_name: minio-server
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: adminadmin
+    ports:
+    - 9000:9000
+    - 9001:9001
+    labels:
+      traefik.enable: true
+      traefik.http.routers.minio.entrypoints: websecure
+      traefik.http.routers.minio.rule: Host(`minio.${HTTP_DOMAIN}`)
+      traefik.http.routers.minio.tls: false
+      traefik.http.services.minio.loadbalancer.server.port: 9001
+    volumes:
+    - /tmp/minio-test/0:/data
+    networks:
+      smo:
+
+  ics:
+    image: ${ICS_IMAGE}
+    container_name: ics
+    volumes:
+    - ./config/ics/application.yaml:/opt/app/information-coordinator-service/config/application.yaml
+    ports:
+    - 8083:8083
+    - 8434:8434
+    labels:
+      - "ranpm=yes"
+    networks:
+      smo:
+
+  nonrtric-gateway:
+    image: ${NONRTRIC_GATEWAY_IMAGE}
+    container_name: nonrtricgateway
+    depends_on:
+      - ics
+    ports:
+    - 9098:9090
+    volumes:
+    - ./config/ngw/application.yaml:/opt/app/nonrtric-gateway/config/application.yaml
+    labels:
+      - "ranpm=yes"
+    networks:
+      smo:
+
+  control-panel:
+    image: ${CONTROL_PANEL_IMAGE}
+    container_name: controlpanel
+    depends_on:
+      - nonrtric-gateway
+    ports:
+    - 8088:8080
+    volumes:
+    - ./config/control-panel/nginx.conf:/etc/nginx/nginx.conf
+    labels:
+      traefik.enable: true
+      traefik.http.routers.nrtcp.entrypoints: websecure
+      traefik.http.routers.nrtcp.rule: Host(`nrtcp.${HTTP_DOMAIN}`)
+      traefik.http.routers.nrtcp.tls: false
+      traefik.http.services.nrtcp.loadbalancer.server.port: 8080
+    networks:
+      smo:
+  
+  bundle-server:
+    image: ${BUNDLE_IMAGE}
+    container_name: bundle-server
+    ports:
+      - 1080:80
+    volumes:
+      - ./config/bundle-server/bundle.tar.gz:/usr/share/nginx/html/bundle.tar.gz
+    labels:
+      - "ranpm=yes"
+    networks:
+      default:
+
+  opa-kafka:
+    image: ${OPA_IMAGE}
+    container_name: opa-kafka
+    ports:
+      - 8181:8181
+    command:
+      - "run"
+      - "--server"
+      - "--log-format=json-pretty"
+      - "--set=decision_logs.console=true"
+      - "--set=services.authz.url=http://bundle-server"
+      - "--set=bundles.authz.service=authz"
+      - "--set=bundles.authz.resource=bundle.tar.gz"
+    depends_on:
+      - bundle-server
+    labels:
+      - "ranpm=yes"
+    networks:
+      default:
+
+  auth-token-file-dfc:
+    image: ${AUTH_TOKEN_IMAGE}
+    environment:
+      - CREDS_GRANT_TYPE=client_credentials
+      - CREDS_CLIENT_SECRET=GBjT7OqJrTiWiMvSbLJf9w9IZGXYEqoB
+      - CREDS_CLIENT_ID=dfc
+      - AUTH_SERVICE_URL=http://identity:8080/realms/nonrtric-realm/protocol/openid-connect/token
+      - OUTPUT_FILE=/token-cache/jwt.txt
+    volumes:
+    - ./config/dfc/token-cache:/token-cache
+    labels:
+      - "ranpm=yes"
+    networks:
+      smo:
+      oam:
+
+  dfc:
+    container_name: dfc
+    user: root
+    image: ${DFC_IMAGE}
+    ports:
+    - 8433:8433
+    volumes:
+    - ./config/dfc/application.yaml:/opt/app/datafile/config/application.yaml
+    - ./config/dfc/truststore.jks:/opt/app/datafile/config/truststore.jks
+    - ./shared-volume:/tmp/onap_datafile/
+    - ./config/dfc/token-cache:/token-cache
+    # truststore is updated in runtime
+    depends_on:
+      - auth-token-file-dfc
+    labels:
+      - "ranpm=yes"
+    networks:
+      smo:
+      oam:
+
+  kafka-producer-pm-xml2json-0:
+    image: $KPX_IMAGE
+    container_name: kafka-producer-pm-xml2json-0
+    volumes:
+    - ./config/pmfc/application_configuration_xml2json.json:/application_configuration.json
+    - ./shared-volume:$FILES_VOLUME
+    ports:
+    - 9881:80
+    labels:
+      - "ranpm=yes"
+    environment:
+      KP: kafka-producer-pm-xml2json-0
+      FILES_VOLUME: $FILES_VOLUME
+      KAFKA_SERVER: kafka:9092
+      ICS: ics:8083
+      SELF: kafka-producer-pm-xml2json-0:80
+      FILESTORE_USER: admin
+      FILESTORE_PWD: adminadmin
+      FILESTORE_SERVER: minio-server:9000
+      DATA_TYPE_FORMAT: TS28532
+      #CREDS_GRANT_TYPE: client_credentials
+      #Use Kafka PLAIN
+      CREDS_GRANT_TYPE: 
+      CREDS_CLIENT_SECRET: $XML2JSON_CLIENT_SECRET
+      CREDS_CLIENT_ID: kafka-producer-pm-xml2json
+      AUTH_SERVICE_URL: http://identity:8080/realms/nonrtric-realm/protocol/openid-connect/token
+    networks:
+      smo:
+
+  auth-token-file-pm-producer-json2kafka:
+    image: $AUTH_TOKEN_IMAGE
+    environment:
+      CREDS_GRANT_TYPE: client_credentials
+      CREDS_CLIENT_SECRET: $JSON2KAFKA_CLIENT_SECRET
+      CREDS_CLIENT_ID: pm-producer-json2kafka
+      AUTH_SERVICE_URL: http://identity:8080/realms/nonrtric-realm/protocol/openid-connect/token
+      OUTPUT_FILE: /token-cache/jwt.txt
+    volumes:
+    - ./config/pmpr/token-cache:/token-cache
+    labels:
+      - "ranpm=yes"
+    networks:
+      smo:
+
+  pm-producer-json2kafka:
+    image: $DMAAPADP_IMAGE
+    container_name: pm-producer-json2kafka
+    environment:
+      APP_PM-PRODUCER-BASE-URL: http://pm-producer-json2kafka:8084
+    depends_on:
+      - auth-token-file-pm-producer-json2kafka
+    volumes:
+    - ./config/pmpr/application_configuration.json:/opt/app/pm-producer-service/data/application_configuration.json
+    - ./config/pmpr/application.yaml:/opt/app/pm-producer-service/config/application.yaml
+    - ./config/pmpr/token-cache:/token-cache
+    - ./shared-volume:$FILES_VOLUME
+    ports:
+    - 8084:8084
+    labels:
+      - "ranpm=yes"
+    networks:
+      smo:
+
+  auth-token-file-pmlog-0:
+    image: $AUTH_TOKEN_IMAGE
+    environment:
+      CREDS_GRANT_TYPE: client_credentials
+      CREDS_CLIENT_SECRET: $PMLOG_CLIENT_SECRET
+      CREDS_CLIENT_ID: nrt-pm-log
+      AUTH_SERVICE_URL: http://keycloak:8080/realms/nonrtric-realm/protocol/openid-connect/token
+      OUTPUT_FILE: /token-cache/jwt.txt
+    volumes:
+    - ./config/pmlog/token-cache:/token-cache
+    labels:
+      - "ranpm=yes"
+      - "ranpmlog=yes"
+    networks:
+      smo:
+
+  pmlog-0:
+    image: $PMLOG_IMAGE
+    container_name: pmlog-0
+    depends_on:
+      - auth-token-file-pmlog-0
+    environment:
+      APP_INFLUX_ACCESSTOKEN: $INFLUXDB2_TOKEN
+    volumes:
+    - ./config/pmlog/jobDefinition.json:/opt/app/pmlog-service/config/jobDefinition.json
+    - ./config/pmlog/application.yaml:/opt/app/pmlog-service/config/application.yaml
+    - ./config/pmlog/token-cache:/token-cache
+    ports:
+    - 8184:8084
+    - 8436:8436
+    labels:
+      - "ranpm=yes"
+      - "ranpmlog=yes"
+    networks:
+      smo:
+
+networks:
+  smo:
+    external: true
+  oam:
+    external: true
+
