@@ -10,7 +10,7 @@
                 "name": "default-ssh-callhome",
                 "ssh": {
                   "tcp-client-parameters": {
-                    "remote-address": "aaa.bbb.ccc.ddd",
+                    "remote-address": "10.20.11.161",
                     "remote-port": 4334
                   },
                   "ssh-server-parameters": {
