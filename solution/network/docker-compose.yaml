@@ -33,7 +33,8 @@ x-nf: &common_nf
       - "controller.dcn.${HTTP_DOMAIN}:${HOST_IP}"
       - "ves-collector.dcn.${HTTP_DOMAIN}:${HOST_IP}"
     networks:
-      dcn:
+      smo:
+      oam:
 
 services:
   pynts-o-du-o1:
@@ -71,6 +72,9 @@ services:
       - ./o-ru-mplane/data/ietf-netconf-server-running-hierarchical.json:/data/ietf-netconf-server-running.json  
 
 networks:
-  dcn:
+  smo:
     external: true
+  oam:
+    external: true
+
 
