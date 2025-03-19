@@ -11,6 +11,9 @@ VES format.
 
 The O-RAN-SC OAM deployment contains an OpenDaylight based NETCONF client and an ONAP VES Collector. Kafka is used as massage router for communication between the components. The Keycloak implementation offers and Identity service, while traefik acts as reverse proxy to terminate all incoming https traffic. For storing data in a persistence way the implementation of the mariaDB project is used.
 
+Before you start please think about a nice full qualified domain name of your environment. You DNS or /etc/hosts settings needs to be updated. 
+Here an inspiration: smo.dev.o-ran-sc.<your-organization>.com
+
 ## SMO OAM Components
 
 This docker-compose file starts a pre-configured, self-contained SDN-R solution
@@ -68,6 +71,11 @@ Please follow the required docker daemon configuration as documented in the foll
 $ docker compose version
 Docker Compose version v2.32.4
 ```
+
+In case your environment acts behind a proxy, please see related docker documentations:
+
+https://docs.docker.com/engine/daemon/proxy/
+
 
 ### GIT
 

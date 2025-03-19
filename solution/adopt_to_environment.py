@@ -17,7 +17,6 @@
 #!/usr/bin/env python3
 
 import os
-import socket
 import netifaces
 import argparse
 from jinja2 import Template
