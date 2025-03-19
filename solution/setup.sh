@@ -15,10 +15,8 @@
 #
 
 #!/bin/bash
-
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-<<<<<<< PATCH SET (ec15d2 solution: provide configuration with external certificates)
 # Function to display usage information
 usage() {
     echo "Usage: "
@@ -28,24 +26,6 @@ usage() {
     echo "  --key     Path to the private key file."
     exit 1
 }
-=======
-cat /etc/os-release | grep PRETTY_NAME
-docker --version
-docker compose version
-python3 --version
-
-docker compose -f $SCRIPT_DIR/infra/docker-compose.yaml up -d
-docker compose -f $SCRIPT_DIR/smo/common/docker-compose.yaml up -d
-python3 $SCRIPT_DIR/smo/common/identity/config.py
-docker compose -f $SCRIPT_DIR/smo/oam/docker-compose.yaml up -d
-# docker compose -f $SCRIPT_DIR/smo/apps/docker-compose.yaml up -d
-
-# simulated network - once manually build
-# docker compose -f network/docker-compose.yaml up -d
-# docker compose -f network/docker-compose.yaml restart pynts-o-du-o1
-
->>>>>>> BASE      (0d0368 Generate GeoJSON for topology)
-
 deploy(){
     if [ -z "$1" ]; then
         docker compose -f $SCRIPT_DIR/smo/common/docker-compose.yaml up -d --wait
