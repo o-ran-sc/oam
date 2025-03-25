@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46732ebb_bcf796e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000124
+      },
+      "writtenOn": "2025-03-25T17:49:08Z",
+      "side": 1,
+      "message": "Two comments from my side:\n\n- the pmRapp does not seem to work - looks like a file is missing from the config/pmrapp folder:\n```",
+      "revId": "c3f95095ab0da7b1f28aeb4d3ccb49dc2ca8bb65",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
