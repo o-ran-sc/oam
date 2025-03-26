@@ -16,6 +16,23 @@
       "message": "Hi Alex, Thank you for the review and the comments. I have incorporated the comments in code. Please review and let me know if everything is OK.\nRegards,\nRavi",
       "revId": "0e688e11dd5b150d2a6d9e26cdc27625db1baa98",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c4ba494_1a1043ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-03-26T10:24:38Z",
+      "side": 1,
+      "message": "after deployments o-du, o-ru-hierarchical and o-ru-hybrid are connected (or not) to smo-odlux as expected. VES and callhome are working",
+      "revId": "0e688e11dd5b150d2a6d9e26cdc27625db1baa98",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
