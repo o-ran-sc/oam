@@ -175,6 +175,10 @@ services:
   zookeeper:
     image: ${ZOOKEEPER_IMAGE}
     container_name: zookeeper
+    command: [
+       "sh", "-c",
+       "bin/zookeeper-server-start.sh config/zookeeper.properties"
+    ]
     environment:
       ZOOKEEPER_REPLICAS: 1
       ZOOKEEPER_TICK_TIME: 2000
@@ -186,6 +190,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       KAFKA_OPTS: -Djava.security.auth.login.config=/etc/zookeeper/secrets/jaas/zk_server_jaas.conf -Dzookeeper.kerberos.removeHostFromPrincipal=true -Dzookeeper.kerberos.removeRealmFromPrincipal=true -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider -Dzookeeper.requireClientAuthScheme=sasl
       ZOOKEEPER_SERVER_ID:
+      LOG_DIR: /tmp/logs
     volumes:
       - ./zookeeper/zk_server_jaas.conf:/etc/zookeeper/secrets/jaas/zk_server_jaas.conf
     labels:
@@ -196,21 +201,31 @@ services:
   kafka:
     image: ${KAFKA_IMAGE}
     container_name: kafka
+    command: [
+        "sh", "-c",
+        "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} \
+                     --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} \
+                     --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
+    ]
     environment:
+      LOG_DIR: /tmp/logs
       enableCadi: 'false'
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS: 40000
       KAFKA_ZOOKEEPER_SESSION_TIMEOUT_MS: 40000
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL_PLAINTEXT:PLAINTEXT,EXTERNAL_PLAINTEXT:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL_PLAINTEXT://kafka:9092
-      KAFKA_LISTENERS: INTERNAL_PLAINTEXT://0.0.0.0:9092
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL_PLAINTEXT
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:SASL_PLAINTEXT,PLAIN:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
       KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/jaas/zk_client_jaas.conf
       KAFKA_ZOOKEEPER_SET_ACL: 'true'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       # Reduced the number of partitions only to avoid the timeout error for the first subscribe call in slow environment
       KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS: 1
+      KAFKA_OPA_AUTHORIZER_CACHE_EXPIRE_AFTER_SECONDS: 10
+      KAFKA_OPA_AUTHORIZER_URL: http://opa-kafka:8181/v1/data/kafka/authz/allow
+      KAFKA_AUTHORIZER_CLASS_NAME: org.openpolicyagent.kafka.OpaAuthorizer
     labels:
       app: "kafka"
       deploy: "o-ran-sc-smo-common"
