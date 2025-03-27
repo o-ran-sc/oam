@@ -46,7 +46,7 @@ default_value: IORanRu = cast(
 # Define an abstract O-RAN Node class
 class ORanRu(ORanNode):
 
-    _interfaces = ["ofhc", "ofhu", "ofhs", "ofhm", "cell"]
+    _interfaces = ["ofhc", "ofhu", "ofhs", "ofhm"]
 
     def __init__(
         self,
@@ -104,7 +104,7 @@ class ORanRu(ORanNode):
         for index in range(self._cell_count):
             s: str = "00" + str(index)
             name: str = "-".join(
-                [self.name.replace("RU", "NRCellDu"), s[len(s) - 2: len(s)]]
+                [self.name, s[len(s) - 2: len(s)], "CELL"]
             )
             azimuth: int = index * cell_angle + self._ru_azimuth
             result.append(
@@ -135,17 +135,24 @@ class ORanRu(ORanNode):
         return self._oRanDu
 
     def to_topology_nodes(self) -> list[dict[str, Any]]:
+        # cells should be interpreted as termination points
+        for cell in self.cells:
+            cell_tp = cell.to_termination_point()
+            self.termination_points().append(cell_tp)
         result: list[dict[str, Any]] = super().to_topology_nodes()
         result.extend(self.oRanDu.to_topology_nodes())
+        return result
+
+    def to_tmf686_vertex(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = super().to_tmf686_vertex()
+        result.extend(self.oRanDu.to_tmf686_vertex())
         return result
 
     def to_topology_links(self) -> list[dict[str, Any]]:
         result: list[dict[str, Any]] = super().to_topology_links()
         result.extend(self.oRanDu.to_topology_links())
         for interface in ["phy", "ofhm", "ofhc", "ofhu", "ofhs"]:
-            link_id: str = "".join(
-                [interface, ":", self.name, "<->", self.oRanDu.name]
-            )
+            link_id: str = "".join([interface, ":", self.name, "<->", self.oRanDu.name])
             source_tp: str = "-".join([self.name, interface.upper()])
             dest_tp: str = "-".join([self.oRanDu.name, interface.upper()])
             result.append(
@@ -191,8 +198,7 @@ class ORanRu(ORanNode):
         """
         Helper method to extend results with references from cells.
 
-        :param super_method: The superclass method to call for the initial
-                             result.
+        :param super_method: The superclass method to call for the initial result.
         :param cell_method_name: The method name to call on each cell.
         :return: A list of dictionaries with the combined results.
         """
@@ -311,6 +317,50 @@ class ORanRu(ORanNode):
                 }
             )
         return result
+
+    def toKml(self) -> ET.Element:
+        o_ran_ru: ET.Element = ET.Element("Folder")
+        open: ET.Element = ET.SubElement(o_ran_ru, "open")
+        open.text = "1"
+        name: ET.Element = ET.SubElement(o_ran_ru, "name")
+        name.text = self.name
+        for cell in self.cells:
+            o_ran_ru.append(cell.toKml())
+        return o_ran_ru
+
+    def toSvg(self) -> ET.Element:
+        return ET.Element("to-be-implemented")
+
+    def to_directory(self, parent_dir: str) -> None:
+        self.oRanDu.to_directory(parent_dir)
+        parent_path = os.path.join(parent_dir, self.type)
+        path = os.path.join(parent_path, self.name)
+        if not os.path.exists(parent_path):
+            os.makedirs(parent_path, exist_ok=True)
+        if not os.path.exists(path):
+            os.mkdir(path)
+
+    def _extend_with_cell_references(
+        self: Any, super_method: Any, cell_method_name: str
+    ) -> list[dict[str, Any]]:
+        """
+        Helper method to extend results with references from cells.
+
+        :param super_method: The superclass method to call for the initial result.
+        :param cell_method_name: The method name to call on each cell.
+        :return: A list of dictionaries with the combined results.
+        """
+        result = super_method()
+        result.extend(getattr(self.oRanDu, cell_method_name)())
+        for cell in self.cells:
+            result.extend(self.flatten_list(getattr(cell, cell_method_name)()))
+        return result
+
+    def to_geojson_feature(self) -> list[dict[str, Any]]:
+        return self._extend_with_cell_references(
+            super().to_geojson_feature,
+            "to_geojson_feature",
+        )
 
     def to_tmf633_service_candidate_references(self) -> list[dict[str, Any]]:
         return self._extend_with_cell_references(

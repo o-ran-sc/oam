@@ -28,6 +28,9 @@ from network_generation.model.python.geo_location import (
 )
 from network_generation.model.python.o_ran_node import IORanNode, ORanNode
 from network_generation.model.python.point import Point
+from network_generation.model.python.o_ran_termination_point import (
+    ORanTerminationPoint,
+)
 
 
 # Define the "INrCellDu" interface
@@ -55,8 +58,6 @@ default_value: INrCellDu = cast(
 # Define an abstract O-RAN Node class
 class NrCellDu(ORanNode):
 
-    _interfaces = ["cell"]
-
     def __init__(
         self,
         data: dict[str, Any] = cast(dict[str, Any], default_value),
@@ -64,6 +65,7 @@ class NrCellDu(ORanNode):
     ) -> None:
         cell_data: INrCellDu = self._to_cell_data(data)
         super().__init__(cast(dict[str, Any], cell_data), **kwargs)
+        self.type = "o-ran-sc-network:cell"
         self._cell_angle: int = int(str(cell_data["cellAngle"]))
         self._cell_scale_factor: int = int(
             str(cell_data["cellScaleFactorForHandoverArea"])
@@ -224,6 +226,15 @@ class NrCellDu(ORanNode):
     def get_geojson_href(self) -> str:
         return f"https://{self.network.host}/area/o-ran-network.geo.json/features?properties.name={self.name}"
 
+    def to_termination_point(self) -> ORanTerminationPoint:
+        tp = ORanTerminationPoint({
+            "name": self.name,
+            "type": self.type,
+            "operationalState": self.operationalState,
+            "network": self.network
+        })
+        return tp
+
     def to_geojson_feature(self) -> list[dict[str, Any]]:
         cell_polygon: list[GeoLocation] = self.get_cell_polygons()
         coordinates: list = []
@@ -237,7 +248,7 @@ class NrCellDu(ORanNode):
                     "type": "PropertiesOdu",
                     "name": self.name,
                     "uuid": self.id,
-                    "function": "o-ran-sc-network:cell",
+                    "function": self.type,
                     "newRadioCellGlobalIdentity": {
                         "publicLandMobileNetworkIdentifier": "123-45",
                         "newRadioCellIdentity": "0x0FFFFFFFFF",
