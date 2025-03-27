@@ -9,7 +9,7 @@
 Mediator
 ========
 
-A 'Mediator' provides an external -  to the physical network function - 
+A 'Mediator' provides an external -  to the physical network function -
 OAM interface.
 
 Some physical network function manufactures use the

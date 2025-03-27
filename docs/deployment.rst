@@ -39,26 +39,26 @@ SMO OAM Components
 This docker-compose file starts a pre-configured, self-contained SDN-R
 solution with the following components:
 
-- **Identity**  
+- **Identity**
   ... representing a Keycloak-based identity service for centralized
   user management. Please note that the implementation does not support
   IPv6. Therefore, its own network is required called ``DMZ``.
 
-- **Controller** single node instance  
+- **Controller** single node instance
   ... representing the NETCONF consumer on the Service Management and
   Orchestration framework (SMO) for O-RAN O1 interface and/or O-RAN
   OpenFronthaul Management Plane and/or other NETCONF/YANG schemas
   implemented by the OpenDaylight project.
 
-- **VES collector**  
+- **VES collector**
   ... representing the VES (REST) provider at SMO for all kinds of
   events.
 
-- **Messages**  
+- **Messages**
   ... representing the SMO MessageRouter component, includes
   message-router.
 
-- **Gateway**  
+- **Gateway**
   ... representing a reverse proxy terminating TLS traffic (https,
   NETCONF).
 
@@ -93,19 +93,19 @@ Docker
 Docker configuration for IPv6
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In case you prefer IPv6 support the docker configuration must be modified. 
+In case you prefer IPv6 support the docker configuration must be modified.
 
 Please see:
 https://docs.docker.com/engine/daemon/ipv6/
 
-1. Edit /etc/docker/daemon.json, set the ipv6 key to true and the 
+1. Edit /etc/docker/daemon.json, set the ipv6 key to true and the
    fixed-cidr-v6 key to your IPv6 subnet. In this example we are setting it to 2001:db8:1::/64.
 
 .. code-block:: console
 
    {
    "registry-mirrors": [
-         "https://nexus3.o-ran-sc.org:10002", 
+         "https://nexus3.o-ran-sc.org:10002",
          "https://nexus3.onap.org:10001"
    ],
    "log-driver": "json-file",
@@ -317,7 +317,7 @@ container(s) to send a second ``ves:pnfRegistration``:
 The simulated O-DU and O-RUs are pre-configured according to O-RAN hybrid
 architecture.
 
-- **O-RU** - NETCONF Call HOME and NETCONF notifications  
+- **O-RU** - NETCONF Call HOME and NETCONF notifications
 - **O-DU** - ``ves:pnfRegistration`` and ``ves:fault``, ``ves:heartbeat``
 
 .. image:: _static/nstim-ng-connected-after-ves-pnf-registration-in-odlux.png
