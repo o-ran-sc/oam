@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "388f1db1_8d7d274c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-03-27T11:15:09Z",
+      "side": 1,
+      "message": "manual validation by O-RAN-SC OWL Lab experts",
+      "revId": "0b37a38ab056b592bbe5b4060d024407cc516d6e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
