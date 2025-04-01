@@ -101,8 +101,8 @@ services:
     hostname: identity
     environment:
       KEYCLOAK_CREATE_ADMIN_USER: true
-      KEYCLOAK_ADMIN_USER: ${ADMIN_USERNAME}
-      KEYCLOAK_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       KEYCLOAK_MANAGEMENT_USER: ${IDENTITY_MGMT_USERNAME}
       KEYCLOAK_MANAGEMENT_PASSWORD: ${IDENTITY_MGMT_PASSWORD}
       KEYCLOAK_DATABASE_HOST: identitydb
@@ -116,6 +116,8 @@ services:
       KEYCLOAK_TLS_TRUSTSTORE_FILE: /opt/bitnami/keycloak/certs/truststore.jks
       KEYCLOAK_TLS_KEYSTORE_PASSWORD: password
       KEYCLOAK_TLS_TRUSTSTORE_PASSWORD: changeit
+      KC_HOSTNAME: "https://identity.${HTTP_DOMAIN}"
+      KC_HOSTNAME_ADMIN: "https://identity.${HTTP_DOMAIN}"
       KEYCLOAK_EXTRA_ARGS: "--spi-theme-default=oam"
     restart: unless-stopped
     volumes:
