@@ -1,0 +1,17 @@
+auth:
+  type: OAUTH2
+  oauth2:
+    client:
+      keycloak:
+        provider: keycloak
+        clientId: kafka-ui.app
+        #clientSecret: yyy
+        scope: openid
+        issuer-uri: https://identity.smo.o-ran-sc.org/realms/onap
+        redirect-uri: https://kafka-ui.smo.o-ran-sc.org/login/oauth2/code/keycloak
+        user-name-attribute: preferred_username
+        client-name: keycloak
+        logoutUri: https://identity.smo.o-ran-sc.org/realms/onap/protocol/openid-connect/logout
+        custom-params:
+          type: keycloak
+          logoutUrl: https://identity.smo.o-ran-sc.org/realms/onap/protocol/openid-connect/logout

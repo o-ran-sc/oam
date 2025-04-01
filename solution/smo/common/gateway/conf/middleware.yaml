@@ -10,8 +10,15 @@ http:
         stsSeconds: 315360000
         stsIncludeSubdomains: true
         stsPreload: true
+    oauth_headers:
+      headers:
+        customRequestHeaders:
+          Authorization: ""
 # tls:
 #   options:
 #     myTLSOptions:
 #        minVersion: VersionTLS12
-
+tls:
+  certificates:
+    - certFile: "/certs/dev.crt"
+      keyFile: "/certs/dev.key"

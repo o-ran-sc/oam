@@ -57,13 +57,15 @@ services:
       - --providers.docker.network=${TRAEFIK_NETWORK_NAME}
       - --providers.docker.exposedByDefault=false
       - --providers.docker.watch=true
-      - --providers.file.filename=/middleware.yaml
+      - --providers.file.filename=/etc/traefik/middleware.yaml
       
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./gateway/conf/middleware.yaml:/middleware.yaml:ro
+      - ./gateway/conf/middleware.yaml:/etc/traefik/middleware.yaml:ro
       - ./gateway/conf/.htpasswd:/.htpasswd:ro
-      
+      - ./certs-selfsigned/smo.o-ran-sc.org.crt:/certs/dev.crt
+      - ./certs-selfsigned/smo.o-ran-sc.org.key:/certs/dev.key
+      - ./letsencrypt:/letsencrypt  # ACME storage
     labels:
       traefik.enable: true
       traefik.http.middlewares.traefik-auth.basicauth.usersfile: .htpasswd
@@ -99,6 +101,11 @@ services:
     image: ${IDENTITY_IMAGE}
     container_name: identity
     hostname: identity
+    healthcheck:
+      test: curl "http://localhost:9000/health/ready" || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 45
     environment:
       KEYCLOAK_CREATE_ADMIN_USER: true
       KC_BOOTSTRAP_ADMIN_USERNAME: ${ADMIN_USERNAME}
@@ -118,10 +125,12 @@ services:
       KEYCLOAK_TLS_TRUSTSTORE_PASSWORD: changeit
       KC_HOSTNAME: "https://identity.${HTTP_DOMAIN}"
       KC_HOSTNAME_ADMIN: "https://identity.${HTTP_DOMAIN}"
-      KEYCLOAK_EXTRA_ARGS: "--spi-theme-default=oam"
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_EXTRA_ARGS: "--spi-theme-default=oam --import-realm"
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./identity/o-ran-sc-realm.json:/opt/bitnami/keycloak/data/import/o-ran-sc-realm.json
       - ./identity/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
       - ./identity/keystore.jks:/opt/bitnami/keycloak/certs/keystore.jks
       - ./identity/truststoreONAPall.jks:/opt/bitnami/keycloak/certs/truststore.jks
@@ -276,6 +285,11 @@ services:
       KAFKA_CLUSTERS_0_NAME: kafka
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
       DYNAMIC_CONFIG_ENABLED: 'true'
+      SPRING_CONFIG_ADDITIONAL-LOCATION: /config.yaml
+      JAVA_OPTS: "-Djavax.net.ssl.trustStore=/etc/certs/truststore.jks -Djavax.net.ssl.trustStorePassword=changeit -Djdk.internal.httpclient.disableHostnameVerification=true"
+    volumes:
+      - ./kafka-ui/config.yaml:/config.yaml
+      - ./certs-selfsigned/smo.o-ran-sc.org.jks:/etc/certs/truststore.jks
     labels:
       traefik.enable: true
       traefik.http.routers.kafka-ui.entrypoints: websecure
@@ -285,6 +299,9 @@ services:
       app: "kafka-ui"
       deploy: "o-ran-sc-smo-common"
       solution: "o-ran-sc-smo"
+    depends_on:
+      identity:
+         condition: service_healthy
     networks:
       dmz:
       default:

@@ -1,0 +1,13 @@
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, keyEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = smo.o-ran-sc.org
+DNS.2 = identity.smo.o-ran-sc.org
+DNS.3 = ves-collector.dcn.smo.o-ran-sc.org
+DNS.4 = kafka-ui.smo.o-ran-sc.org
+DNS.5 = gateway.smo.o-ran-sc.org
+DNS.6 = influxdb2.smo.o-ran-sc.org
+
