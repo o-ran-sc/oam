@@ -34,7 +34,7 @@ x-nf: &common_nf
       - "ves-collector.dcn.${HTTP_DOMAIN}:${HOST_IP}"
     networks:
       smo:
-      oam:
+      dcn:
 
 services:
   pynts-o-du-o1:
@@ -74,7 +74,7 @@ services:
 networks:
   smo:
     external: true
-  oam:
+  dcn:
     external: true
 
 

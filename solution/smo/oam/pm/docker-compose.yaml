@@ -128,7 +128,7 @@ services:
       - "ranpm=yes"
     networks:
       smo:
-      oam:
+      dcn:
 
   dfc:
     container_name: dfc
@@ -148,7 +148,7 @@ services:
       - "ranpm=yes"
     networks:
       smo:
-      oam:
+      dcn:
 
   kafka-producer-pm-xml2json-0:
     image: $KPX_IMAGE
@@ -252,6 +252,6 @@ services:
 networks:
   smo:
     external: true
-  oam:
+  dcn:
     external: true
 

@@ -114,7 +114,7 @@ RESET="\e[0m"
 export $(grep -v '^#' .env | xargs -d '\n')
 export KAFKA_NUM_PARTITIONS=10
 export TOPICS="file-ready collected-file json-file-ready-kp json-file-ready-kpadp pmreports"
-export DNETWORKS="oam smo dmz"
+export DNETWORKS="dcn smo dmz"
 
 create_docker_networks
 populate_keycloak
