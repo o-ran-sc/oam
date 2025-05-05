@@ -76,6 +76,11 @@ setup_influx() {
     docker compose -p influx -f docker-compose-influxdb_gen.yaml up -d
 }
 
+setup_grafana() {
+    envsubst < docker-compose-grafana.yaml > docker-compose-grafana_gen.yaml
+    docker compose -p grafana -f docker-compose-grafana.yaml up -d
+}
+
 create_topics() {
 echo "Creating topics: $TOPICS, may take a while ..."            
 for t in $TOPICS; do
@@ -101,7 +106,7 @@ for net in $DNETWORKS; do
     if [ $? -ne 0 ]; then
         docker network create $net
     else
-        echo "  Network: $net exits"
+        echo "  Network: $net exists"
     fi
 done
 }
@@ -140,5 +145,7 @@ echo $INFLUXDB2_TOKEN
 export INFLUXDB2_TOKEN
 
 setup_pm
+check_error $?
+setup_grafana
 check_error $?
             

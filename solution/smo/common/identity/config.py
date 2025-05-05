@@ -198,6 +198,9 @@ def createUser(token, realmConfig, user):
 
     if response.status_code >= 200 and response.status_code < 300:
         print('User', user['username'], 'created!')
+        for client, roles in user.get("clientRoles", {}).items():
+            #print(f"Adding Client Role(s): {roles} from Client: {client} to User: {user['username']}")
+            assignClientRoleToUser(token, realmId, user['username'], client, roles)
     else:
         print('User creation', user['username'], 'failed!\n', response.text)
 
@@ -207,7 +210,7 @@ def createUsers(token, realmConfig, authConfig):
     for user in authConfig['users']:
         createUser(token, realmConfig, user)
 
-    # create a user based on system user
+    # create a user based on unix system user
     systemUser = {
         "firstName": getpass.getuser(),
         "lastName": "",
@@ -244,6 +247,114 @@ def addUserRole(user: dict, role: list, options: dict):
         # catastrophic error. bail.
         raise SystemExit(e)
 
+# Assigns a Client Role to User
+def assignClientRoleToUser(token, realmId, userName, clientName, roles):
+    url =  base + '/admin/realms/' + realmId + '/users'
+    auth = 'bearer ' + token
+    headers = {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'authorization': auth
+    }
+    # 1. Query userId by userName
+    userId = getUserIdbyName(token, realmId, userName)
+    # 2. Query clientId by clientName
+    clientId = getClientIdByName(token, realmId, clientName)
+    # 3. Iterate through roles and Query roleId for each role as follows - https://identity.smo.o-ran-sc.org/admin/realms/onap/clients/5543ba76-c3bc-42e8-ae79-63a82d6dc2ee/roles?search=grafanaadmin
+    for roleName in roles:
+        roleId = getRoleIdByName(token, realmId, clientId, roleName)
+        # 4. Form a JSON body as - {"id": <roleId>, "name": <roleName>}
+        data = [
+            {
+                "id": roleId,
+                "name": roleName
+            }
+        ]
+        # 5. Form URL as - <url>/<userId>/role-mappings/clients/<clientId>
+        roleAssignUrl = url + '/' + userId + '/role-mappings/clients/' + clientId
+        # 6. Send POST request to assign role to user
+        try:
+            response = requests.post(roleAssignUrl, verify=False, json=data, headers=headers)
+            if response.status_code >= 200 and response.status_code < 300:
+                print('Successfully Assigned role', roleName, 'to user', userName)
+            else:
+                print('Failed to Assign role', roleName, 'to user', userName, response.text)
+        except requests.exceptions.Timeout:
+            sys.exit('HTTP request failed, please check you internet connection.')
+        except requests.exceptions.TooManyRedirects:
+            sys.exit('HTTP request failed, please check your proxy settings.')
+        except requests.exceptions.RequestException as e:
+            # catastrophic error. bail.
+            raise SystemExit(e)
+
+def getRoleIdByName(token, realmId, clientId, roleName) -> str:
+    url =  base + '/admin/realms/' + realmId + '/clients/' +clientId + '/roles?search=' + roleName
+    auth = 'bearer ' + token
+    headers = {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'authorization': auth
+    }
+    try:
+        response = requests.get(url, verify=False, headers=headers)
+    except requests.exceptions.Timeout:
+        sys.exit('HTTP request failed, please check you internet connection.')
+    except requests.exceptions.TooManyRedirects:
+        sys.exit('HTTP request failed, please check your proxy settings.')
+    except requests.exceptions.RequestException as e:
+        # catastrophic error. bail.
+        raise SystemExit(e)
+    
+    if response.status_code >= 200 and response.status_code < 300:
+        role = response.json()
+        roleId = role[0]["id"]
+        return roleId
+    
+def getClientIdByName(token, realmId, clientName) -> str:
+    url =  base + '/admin/realms/' + realmId + '/clients?clientId=' + clientName
+    auth = 'bearer ' + token
+    headers = {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'authorization': auth
+    }
+    try:
+        response = requests.get(url, verify=False, headers=headers)
+    except requests.exceptions.Timeout:
+        sys.exit('HTTP request failed, please check you internet connection.')
+    except requests.exceptions.TooManyRedirects:
+        sys.exit('HTTP request failed, please check your proxy settings.')
+    except requests.exceptions.RequestException as e:
+        # catastrophic error. bail.
+        raise SystemExit(e)
+    
+    if response.status_code >= 200 and response.status_code < 300:
+        client = response.json()
+        clientId = client[0]["id"]
+        return clientId
+    
+def getUserIdbyName(token, realmId, userName) -> str:
+    url =  base + '/admin/realms/' + realmId + '/users?username=' + userName
+    auth = 'bearer ' + token
+    headers = {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'authorization': auth
+    }
+    try:
+        response = requests.get(url, verify=False, headers=headers)
+    except requests.exceptions.Timeout:
+        sys.exit('HTTP request failed, please check you internet connection.')
+    except requests.exceptions.TooManyRedirects:
+        sys.exit('HTTP request failed, please check your proxy settings.')
+    except requests.exceptions.RequestException as e:
+        # catastrophic error. bail.
+        raise SystemExit(e)
+    
+    if response.status_code >= 200 and response.status_code < 300:
+        user = response.json()
+        userId = user[0]["id"]
+        return userId
 
 # searches for the role of a given user
 def findRole(username: str, authConfig: dict, realmConfig: dict) -> dict:

@@ -305,6 +305,33 @@
       ],
       "odlux.app": [],
       "kafka-ui.app": [],
+      "grafana-ui.app": [
+        {
+          "id" : "b072ad1a-818e-4ff9-b98c-3179bd7f4228",
+          "name" : "editor",
+          "description" : "Grafana Read Write Role",
+          "composite" : false,
+          "clientRole" : true,
+          "containerId" : "9fc6cecf-f3a8-48a8-8065-b2fc80b8b2f5",
+          "attributes" : { }
+        }, {
+          "id" : "09436bef-901c-44a5-b38d-508273d730ba",
+          "name" : "viewer",
+          "description" : "Read only access Role",
+          "composite" : false,
+          "clientRole" : true,
+          "containerId" : "9fc6cecf-f3a8-48a8-8065-b2fc80b8b2f5",
+          "attributes" : { }
+        }, {
+          "id" : "37e3d5fc-41d6-4926-a9c9-e3d96f7f4d6a",
+          "name" : "grafanaadmin",
+          "description" : "Grafana Administrator Role",
+          "composite" : false,
+          "clientRole" : true,
+          "containerId" : "9fc6cecf-f3a8-48a8-8065-b2fc80b8b2f5",
+          "attributes" : { }
+        }
+      ],
       "security-admin-console": [],
       "admin-cli": [],
       "account-console": [],
@@ -809,6 +836,67 @@
           "view": true,
           "configure": true,
           "manage": true
+      }
+    },
+    {
+      "clientId": "grafana-ui.app",
+      "name": "Grafana UI",
+      "description": "",
+      "rootUrl": "https://grafana.smo.o-ran-sc.org",
+      "adminUrl": "https://grafana.smo.o-ran-sc.org",
+      "baseUrl": "",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "lVPuFWZlOV7yAbV1FIuaM0FOodD7cLTm",
+      "redirectUris": [
+        "https://grafana.smo.o-ran-sc.org/login/generic_oauth"
+      ],
+      "webOrigins": [
+        "https://grafana.smo.o-ran-sc.org"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "client.secret.creation.time": "1745992471",
+        "backchannel.logout.session.required": "true",
+        "frontchannel.logout.session.required": "true",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "display.on.consent.screen": "false",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ],
+      "access": {
+        "view": true,
+        "configure": true,
+        "manage": true
       }
     },
     {
@@ -1348,6 +1436,9 @@
           "protocolMapper": "oidc-usermodel-client-role-mapper",
           "consentRequired": false,
           "config": {
+            "introspection.token.claim" : "true",
+            "userinfo.token.claim" : "true",
+            "id.token.claim" : "true",
             "user.attribute": "foo",
             "access.token.claim": "true",
             "claim.name": "resource_access.${client_id}.roles",
@@ -1362,6 +1453,10 @@
           "protocolMapper": "oidc-usermodel-realm-role-mapper",
           "consentRequired": false,
           "config": {
+            "introspection.token.claim" : "true",
+            "userinfo.token.claim" : "true",
+            "id.token.claim" : "true",
+            "lightweight.claim" : "true",
             "user.attribute": "foo",
             "access.token.claim": "true",
             "claim.name": "realm_access.roles",
