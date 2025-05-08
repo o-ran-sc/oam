@@ -78,7 +78,7 @@ setup_influx() {
 
 setup_grafana() {
     envsubst < docker-compose-grafana.yaml > docker-compose-grafana_gen.yaml
-    docker compose -p grafana -f docker-compose-grafana.yaml up -d
+    docker compose -p grafana -f docker-compose-grafana_gen.yaml up -d
 }
 
 create_topics() {

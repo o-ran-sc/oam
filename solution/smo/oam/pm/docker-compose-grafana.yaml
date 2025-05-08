@@ -21,6 +21,11 @@ services:
         GF_AUTH_GENERIC_OAUTH_ALLOW_ASSIGN_GRAFANA_ADMIN: true
         GF_AUTH_GENERIC_OAUTH_TLS_SKIP_VERIFY_INSECURE: true
         GF_LOG_LEVEL: debug
+        INFLUX_ORG: $INFLUXDB2_ORG
+        INFLUX_BUCKET: $INFLUXDB2_BUCKET
+        INFLUX_TOKEN: $INFLUXDB2_TOKEN
+      volumes:
+        - ./config/grafana/provisioning:/etc/grafana/provisioning
       labels:
         traefik.enable: true
         traefik.http.routers.grafana.entrypoints: websecure
@@ -32,7 +37,10 @@ services:
         solution: "o-ran-sc-smo"
       networks:
         - dmz
+        - smo
 
 networks:
   dmz:
+    external: true
+  smo:
     external: true
