@@ -29,6 +29,16 @@ location /websocket {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
 }
+location /apidoc/ {
+    proxy_pass http://controller:8181;
+
+    # Inject Authorization header
+    proxy_set_header Authorization "Bearer $cookie_token";
+    #
+    # Optional CORS settings
+    #add_header Access-Control-Allow-Origin *;
+    add_header Access-Control-Allow-Headers Authorization,Content-Type;
+}
 location @backend {
     proxy_pass http://controller:8181;
 }
