@@ -72,6 +72,32 @@
         "attributes": {}
       },
       {
+        "id" : "92ba139a-ef35-4468-805a-49bd7d101a28",
+        "name" : "GrafanaAdmin",
+        "description" : "",
+        "composite" : false,
+        "clientRole" : false,
+        "containerId" : "onap",
+        "attributes" : { }
+      },
+      {
+        "id" : "83487680-381b-4d9e-a1eb-22700db49542",
+        "name" : "GrafanaViewer",
+        "description" : "",
+        "composite" : false,
+        "clientRole" : false,
+        "containerId" : "onap",
+        "attributes" : { }
+      }, {
+        "id" : "4ac3ada6-f147-48e9-a66a-caa8f2d4e235",
+        "name" : "GrafanaEditor",
+        "description" : "",
+        "composite" : false,
+        "clientRole" : false,
+        "containerId" : "onap",
+        "attributes" : { }
+      },
+      {
         "id": "e344eb3a-8efe-4346-b5d4-93b9262cf0ec",
         "name": "offline_access",
         "description": "${role_offline-access}",
@@ -305,33 +331,7 @@
       ],
       "odlux.app": [],
       "kafka-ui.app": [],
-      "grafana-ui.app": [
-        {
-          "id" : "b072ad1a-818e-4ff9-b98c-3179bd7f4228",
-          "name" : "editor",
-          "description" : "Grafana Read Write Role",
-          "composite" : false,
-          "clientRole" : true,
-          "containerId" : "9fc6cecf-f3a8-48a8-8065-b2fc80b8b2f5",
-          "attributes" : { }
-        }, {
-          "id" : "09436bef-901c-44a5-b38d-508273d730ba",
-          "name" : "viewer",
-          "description" : "Read only access Role",
-          "composite" : false,
-          "clientRole" : true,
-          "containerId" : "9fc6cecf-f3a8-48a8-8065-b2fc80b8b2f5",
-          "attributes" : { }
-        }, {
-          "id" : "37e3d5fc-41d6-4926-a9c9-e3d96f7f4d6a",
-          "name" : "grafanaadmin",
-          "description" : "Grafana Administrator Role",
-          "composite" : false,
-          "clientRole" : true,
-          "containerId" : "9fc6cecf-f3a8-48a8-8065-b2fc80b8b2f5",
-          "attributes" : { }
-        }
-      ],
+      "grafana-ui.app": [],
       "security-admin-console": [],
       "admin-cli": [],
       "account-console": [],

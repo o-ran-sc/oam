@@ -32,10 +32,7 @@
             ],
             "requiredActions": [
                 "UPDATE_PASSWORD"
-            ],
-            "clientRoles" : {
-                "grafana-ui.app" : [ "grafanaadmin" ]
-            }
+            ]
         },
         {
             "firstName": "Luke",
@@ -52,10 +49,7 @@
             ],
             "requiredActions": [
                 "UPDATE_PASSWORD"
-            ],
-            "clientRoles" : {
-                "grafana-ui.app" : [ "editor" ]
-            }
+            ]
         },
         {
             "firstName": "Jargo",
@@ -72,10 +66,7 @@
             ],
             "requiredActions": [
                 "UPDATE_PASSWORD"
-            ],
-            "clientRoles" : {
-                "grafana-ui.app" : [ "viewer" ]
-            }
+            ]
         },
         {
             "firstName": "Martin",
@@ -92,32 +83,29 @@
             ],
             "requiredActions": [
                 "UPDATE_PASSWORD"
-            ],
-            "clientRoles" : {
-                "grafana-ui.app" : [ "grafanaadmin" ]
-            }
+            ]
         }
     ],
     "grants": [
         {
             "username": "leia.organa",
-            "role": "administration"
+            "role": "administration,GrafanaAdmin"
         },
         {
             "username": "r2.d2",
-            "role": "administration"
+            "role": "administration,GrafanaAdmin"
         },
         {
             "username": "luke.skywalker",
-            "role": "provision"
+            "role": "administration,GrafanaEditor"
         },
         {
             "username": "jargo.fett",
-            "role": "supervision"
+            "role": "administration,GrafanaViewer"
         },
         {
             "username": "martin.skorupski",
-            "role": "administration"
+            "role": "administration,GrafanaAdmin"
         }
     ]
 }
