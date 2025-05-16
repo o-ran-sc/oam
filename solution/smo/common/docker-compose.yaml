@@ -332,34 +332,6 @@ services:
       dmz:
       default:
 
-  messages:
-    image: ${DMAAP_IMAGE}
-    container_name: messages
-    hostname: messages
-    environment:
-      enableCadi: 'false'
-    volumes:
-      - ./messages/MsgRtrApi.properties:/appl/dmaapMR1/bundleconfig/etc/appprops/MsgRtrApi.properties
-      - ./messages/logback.xml:/appl/dmaapMR1/bundleconfig/etc/logback.xml
-      - ./messages/cadi.properties:/appl/dmaapMR1/etc/cadi.properties
-    labels:
-      traefik.enable: true
-      traefik.http.routers.messages.entrypoints: websecure
-      traefik.http.routers.messages.rule: Host(`messages.${HTTP_DOMAIN}`)
-      traefik.http.routers.messages.tls: true
-      traefik.http.services.messages.loadbalancer.server.port: 3904
-      app: "messages"
-      deploy: "o-ran-sc-smo-common"
-      solution: "o-ran-sc-smo"
-    depends_on:
-      kafka:
-        condition: service_started
-      gateway:
-        condition: service_healthy
-    networks:
-      dmz:
-      default:
-
 networks:
   dmz:
     name: dmz
