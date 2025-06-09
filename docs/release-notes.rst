@@ -6,7 +6,78 @@
 Operation and Maintenance Release Notes
 =======================================
 
-This document provides the release notes for O-RAN-SC K-Release of the Operation and Maintenance (OAM) project.
+This document provides the release notes for O-RAN-SC L-Release of the Operation and Maintenance (OAM) project.
+
+L-Release, 2025-06-10
+---------------------
+
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| Issue                                                           | Summary                                                                                     |
++=================================================================+=============================================================================================+
+| `OAM-464  <https://lf-o-ran-sc.atlassian.net/browse/OAM-464>`__ | Update release notes for L-Release in documentation                                         |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-458  <https://lf-o-ran-sc.atlassian.net/browse/OAM-458>`__ | Remove DMaaP from the solution                                                              |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-456  <https://lf-o-ran-sc.atlassian.net/browse/OAM-456>`__ | Roles in keycloak client - causing SDNR Oauth authentication to fail                        |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-455  <https://lf-o-ran-sc.atlassian.net/browse/OAM-455>`__ | Provision grafana resources automatically during grafana startup                            |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-454  <https://lf-o-ran-sc.atlassian.net/browse/OAM-454>`__ | Accessing /apidoc in SDNR fails with 401 Unauthorized error                                 |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-453  <https://lf-o-ran-sc.atlassian.net/browse/OAM-453>`__ | Use grafana for dashboards and integrate with keycloak for authentication and authorization |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-451  <https://lf-o-ran-sc.atlassian.net/browse/OAM-451>`__ | kafka-ui logout not working                                                                 |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-450  <https://lf-o-ran-sc.atlassian.net/browse/OAM-450>`__ | kafka-ui should use keycloak for authentication                                             |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-449  <https://lf-o-ran-sc.atlassian.net/browse/OAM-449>`__ | Upgrade identity server (keycloak) to a recent stable version                               |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-448  <https://lf-o-ran-sc.atlassian.net/browse/OAM-448>`__ | Fix docs build process                                                                      |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-447  <https://lf-o-ran-sc.atlassian.net/browse/OAM-447>`__ | Align Cell generation in ietf-topo with geo.json                                            |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-446  <https://lf-o-ran-sc.atlassian.net/browse/OAM-446>`__ | Clean-up Docker-Compose Network                                                             |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-445  <https://lf-o-ran-sc.atlassian.net/browse/OAM-445>`__ | Update docker images of Kafka and Zookeeper services                                        |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-444  <https://lf-o-ran-sc.atlassian.net/browse/OAM-444>`__ | Generate GeoJSON for topology                                                               |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-443  <https://lf-o-ran-sc.atlassian.net/browse/OAM-443>`__ | Allow creation of several instances.                                                        |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-442  <https://lf-o-ran-sc.atlassian.net/browse/OAM-442>`__ | Add a disabledREsourcesProfile to the configuration schema and configurations.              |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-441  <https://lf-o-ran-sc.atlassian.net/browse/OAM-441>`__ | Modify the o-ran-sc topology augmentation                                                   |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-440  <https://lf-o-ran-sc.atlassian.net/browse/OAM-440>`__ | Make topo-generation more flexible                                                          |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-439  <https://lf-o-ran-sc.atlassian.net/browse/OAM-439>`__ | fix ves stndDefined schema references according to VES-image-configured                     |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-438  <https://lf-o-ran-sc.atlassian.net/browse/OAM-438>`__ | Hide "CoreModel" columns in ODLUX                                                           |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-437  <https://lf-o-ran-sc.atlassian.net/browse/OAM-437>`__ | Use project docker images                                                                   |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-436  <https://lf-o-ran-sc.atlassian.net/browse/OAM-436>`__ |  Create topics on kafka with solution                                                       |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-435  <https://lf-o-ran-sc.atlassian.net/browse/OAM-435>`__ |  Inject RANPM function into solution                                                        |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-434  <https://lf-o-ran-sc.atlassian.net/browse/OAM-434>`__ |  Remove DMaaP from solution                                                                 |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-433  <https://lf-o-ran-sc.atlassian.net/browse/OAM-433>`__ |  Fix About issue in ODLUX                                                                   |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-431  <https://lf-o-ran-sc.atlassian.net/browse/OAM-431>`__ |  Integrate PM flow into docker-compose solution                                             |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-430  <https://lf-o-ran-sc.atlassian.net/browse/OAM-430>`__ |  Update docs for solution deployment                                                        |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-428  <https://lf-o-ran-sc.atlassian.net/browse/OAM-428>`__ |  Clean-up solution                                                                          |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-422  <https://lf-o-ran-sc.atlassian.net/browse/OAM-422>`__ |  Solution: add new parameter to controller                                                  |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+| `OAM-404  <https://lf-o-ran-sc.atlassian.net/browse/OAM-404>`__ |  Generate day0 configuration for deployment of the topology.                                |
++-----------------------------------------------------------------+---------------------------------------------------------------------------------------------+
+
+Please see related release notes in `O-RAN-SC OAM <https://lf-o-ran-sc.atlassian.net/wiki/spaces/OAM/pages/451248134/L-Release+-+Release+Notes>`__ , `ONAP SDNC <https://docs.onap.org/en/latest/release/index.html>`__
+and `OpenDaylight <https://docs.opendaylight.org/en/stable-potassium/release-notes/>`__ .
+
 
 K-Release, 2024-12-28
 ---------------------
