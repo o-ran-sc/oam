@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99dc6cbf_2031aef5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-06-13T12:19:02Z",
+      "side": 1,
+      "message": "On branch OAM-470\nChanges not staged for commit:\n  (use \"git add/rm \u003cfile\u003e...\" to update what will be committed)\n  (use \"git restore \u003cfile\u003e...\" to discard changes in working directory)\n        modified:   .gitignore\n        deleted:    code/network-generator/network_generation/model/jsonSchema/geojson.oas.yaml\n\nUntracked files:\n  (use \"git add \u003cfile\u003e...\" to include in what will be committed)\n        code/network-generator/network_generation/model/jsonSchema/README.md",
+      "revId": "64c58c90094f594fab7b8705a0772b2901993ab4",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
