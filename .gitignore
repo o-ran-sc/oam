@@ -27,6 +27,8 @@ append_to_etc_hosts.txt
 
 */**/bin/
 
+geojson.oas.yaml
+
 # Maven
 target/
 *.tar.gz
