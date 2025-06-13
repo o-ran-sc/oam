@@ -49,6 +49,8 @@ services:
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.websecure.address=:443
+      # OAM-471: This command is necessary to ensure that traefik does not replace the semicolon in the RFC8040 filter query with a '&'.
+      - --entrypoints.websecure.http.encodequerysemicolons=true
       - --entrypoints.websecure.http.tls.domains[0].main=gateway.${HTTP_DOMAIN}
       - --entrypoints.websecure.http.tls.domains[0].sans=*.${HTTP_DOMAIN}
       - --entrypoints.ssh-netconf-callhome.address=:4334
@@ -58,7 +60,7 @@ services:
       - --providers.docker.exposedByDefault=false
       - --providers.docker.watch=true
       - --providers.file.filename=/etc/traefik/middleware.yaml
-      
+
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./gateway/conf/middleware.yaml:/etc/traefik/middleware.yaml:ro
