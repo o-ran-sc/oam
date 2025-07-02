@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d5ee5a3_26e20cf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-07-02T09:43:45Z",
+      "side": 1,
+      "message": "(.oam) 2025-07-02T09:42:28Z demx8as6@ibit24 ~/workspace/o-ran-sc/temp/oam/solution (master)$ ./setup.sh \n[+] Running 8/9\n ✔ Container zookeeper     Running                                                                                                                                                                                                                       0.0s \n ✔ Container identitydb    Running                                                                                                                                                                                                                       0.0s \n ✔ Container persistence   Running                                                                                                                                                                                                                       0.0s \n ✔ Container kafka         Running                                                                                                                                                                                                                       0.0s \n ✔ Container topology      Started                                                                                                                                                                                                                       2.0s \n ✔ Container gateway       Healthy                                                                                                                                                                                                                      12.6s \n ✔ Container kafka-bridge  Started",
+      "revId": "08c7887b5c2520296f28444618c32b6d573219ae",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
