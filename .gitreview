@@ -3,3 +3,5 @@ host=gerrit.o-ran-sc.org
 port=29418
 project=oam
 defaultbranch=master
+
+# ⚠️ The directory ./solutions_k8s of this repository is pre-spec and not intended for production use.

@@ -1,0 +1,27 @@
+# Metadata for O-RAN-SC Experimental Repository
+
+repo:
+  name: o-ran-sc/<your-repo-name>
+  status: experimental
+  production_ready: false
+  pre_spec: true
+  description: >
+    This repository contains prototype code developed under the O-RAN Software Community (O-RAN-SC)
+    for exploring features described in early O-RAN Alliance drafts. It is not intended for production use.
+
+compliance:
+  cve_handling: false
+  license: Apache-2.0
+  support_committee: RSAC
+  maintainer_policy: community-driven
+  security_contact: none
+
+tags:
+  - pre-spec
+  - not-for-production
+  - experimental
+  - no-cve-support
+
+visibility:
+  warning_banner: true
+  NOT_DESIGNED_FOR_PRODUCTION.md: present

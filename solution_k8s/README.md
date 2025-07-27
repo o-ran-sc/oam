@@ -140,3 +140,11 @@ make undeploy-test-nfs
 ## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+# Experimental O-RAN-SC Module
+
+![Status: Not for Production](https://img.shields.io/badge/status-not--for--production-red)
+![Status: Experimental](https://img.shields.io/badge/CVE%20Support-none-lightgrey)
+
+> This repository is pre-spec and not intended for production use. No CVE remediation or production guarantees apply.
+
