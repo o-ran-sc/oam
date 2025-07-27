@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c60cb11e_8802aabf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-07-27T14:00:27Z",
+      "side": 1,
+      "message": "What do you think? is this enough or too much to indicated \"not intended to be used for production, please dont CVE.",
+      "revId": "31f9e2d649fc1ee77ee06e2896f2c89bcb87ee35",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
