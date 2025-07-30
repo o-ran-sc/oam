@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d93b876f_09df2124",
+        "filename": ".gitreview",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2025-07-30T10:34:31Z",
+      "side": 1,
+      "message": "Not sure this line is needed. But no harm I guess.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 1
+      },
+      "revId": "31f9e2d649fc1ee77ee06e2896f2c89bcb87ee35",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c60cb11e_8802aabf",
@@ -14,6 +37,69 @@
       "writtenOn": "2025-07-27T14:00:27Z",
       "side": 1,
       "message": "What do you think? is this enough or too much to indicated \"not intended to be used for production, please dont CVE.",
+      "revId": "31f9e2d649fc1ee77ee06e2896f2c89bcb87ee35",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "976f60ad_7df0de79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2025-07-30T10:34:31Z",
+      "side": 1,
+      "message": "Looks good. \n\nWhat would/should happen if we have one configuration/files for the entire repo and a more specific one for an individual directory? Would the sub directory override the parent one? \n(I guess this depends to the implementation of the tool reading the machine-interpreted part ... ? )",
+      "revId": "31f9e2d649fc1ee77ee06e2896f2c89bcb87ee35",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38379309_e34b7106",
+        "filename": "solution_k8s/NOT_DESIGNED_FOR_PRODUCTION.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2025-07-30T10:34:31Z",
+      "side": 1,
+      "message": "Suggest avoid complex unicode characters",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 4
+      },
+      "revId": "31f9e2d649fc1ee77ee06e2896f2c89bcb87ee35",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef6fde16_94f8fad3",
+        "filename": "solution_k8s/NOT_DESIGNED_FOR_PRODUCTION.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2025-07-30T10:34:31Z",
+      "side": 1,
+      "message": "Same comment about the unicode char.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 2
+      },
       "revId": "31f9e2d649fc1ee77ee06e2896f2c89bcb87ee35",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
