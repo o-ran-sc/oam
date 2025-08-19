@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4f076db1_55c5d6f8",
+        "filename": ".gitreview",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-08-19T17:08:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d93b876f_09df2124",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 1
+      },
+      "revId": "31f9e2d649fc1ee77ee06e2896f2c89bcb87ee35",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c60cb11e_8802aabf",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -81,6 +105,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dea27426_1a146f55",
+        "filename": "solution_k8s/NOT_DESIGNED_FOR_PRODUCTION.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-08-19T17:08:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38379309_e34b7106",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 4
+      },
+      "revId": "31f9e2d649fc1ee77ee06e2896f2c89bcb87ee35",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef6fde16_94f8fad3",
@@ -94,6 +142,30 @@
       "writtenOn": "2025-07-30T10:34:31Z",
       "side": 1,
       "message": "Same comment about the unicode char.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 2
+      },
+      "revId": "31f9e2d649fc1ee77ee06e2896f2c89bcb87ee35",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbffd42e_d8f1463d",
+        "filename": "solution_k8s/NOT_DESIGNED_FOR_PRODUCTION.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-08-19T17:08:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef6fde16_94f8fad3",
       "range": {
         "startLine": 26,
         "startChar": 0,
