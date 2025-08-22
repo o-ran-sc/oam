@@ -27,7 +27,7 @@ from network_generation.model.python.geo_location import (
     GeoLocation,
     IGeoLocation,
 )
-from network_generation.model.python.hexagon import Layout
+from network_generation.model.python.hexagon import Hex, Layout
 from network_generation.model.python.o_ran_object import (
     IORanObject,
     ORanObject,
@@ -80,6 +80,7 @@ class ORanNetwork(ORanObject):
             f'network and IoT services for the year '
             f'{self.__current_time.strftime("%Y")}.'
         )
+        self.type = "o-ran-sc-network:network"
         self._center: IGeoLocation = cast(IGeoLocation, configuration["center"])
         # Calculate layout size using the configuration values.
         nr_cell_du = configuration["pattern"]["nrCellDu"]
@@ -103,6 +104,7 @@ class ORanNetwork(ORanObject):
         self._o_ran_smo = ORanSmo({
             "name": "O-RAN-SMO",
             "geoLocation": self.center,
+            "position": Hex(0, 0, 0),
             "layout": layout,
             "parent": self,
             "network": self,
@@ -200,6 +202,14 @@ class ORanNetwork(ORanObject):
 
         return False  # UUID not found
 
+    def __remove_duplicates(self, data, identifier_name = 'id'):
+        seen = {}
+        for item in data:
+            uuid = item.get(identifier_name)
+            if uuid not in seen:
+                seen[uuid] = item
+        return list(seen.values())
+
     def to_topology(self) -> Dict[str, Any]:
         """
         Generate and return the network topology as a dictionary.
@@ -207,6 +217,7 @@ class ORanNetwork(ORanObject):
         profile = self.configuration.get("disabledResourcesProfile", {})
         resource_types = profile.keys()
         nodes: List[Dict[str, Any]] = self._o_ran_smo.to_topology_nodes()
+        nodes = self.__remove_duplicates(nodes, "o-ran-sc-network:uuid")
 
         # Initialize identifier lists for each resource type.
         identifier_lists: Dict[str, List[str]] = {identifier: [] for identifier in resource_types}
@@ -244,6 +255,7 @@ class ORanNetwork(ORanObject):
                 )
 
         links: List[Dict[str, Any]] = self._o_ran_smo.to_topology_links()
+        links = self.__remove_duplicates(links, "link-id")
         return {
             "ietf-network:networks": {
                 "network": [
@@ -311,7 +323,15 @@ class ORanNetwork(ORanObject):
 
     def to_geojson(self) -> dict[str, Any]:
         features: list[dict[str, Any]] = self._o_ran_smo.to_geojson_feature()
-        # links: list[dict[str, Any]] = self._o_ran_smo.to_topology_links()
+        # remove duplicates
+        seen = {}
+        for feature in features:
+            uuid = feature.get('properties').get('node-uuid')
+            if uuid is None:
+                uuid = feature.get('properties').get('uuid')
+            if uuid not in seen:
+                seen[uuid] = feature
+        features = list(seen.values())
         return {
             "type": "FeatureCollection",
             "features": features,
