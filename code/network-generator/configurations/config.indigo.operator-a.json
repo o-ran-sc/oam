@@ -1,13 +1,13 @@
 {
   "network": {
-    "name": "O-RAN-Network-Operator-B-small",
+    "name": "Operator-A",
     "host": "to-be-replaced-by-host-fqdn",
-    "version":"v0.0.2",
+    "version": "v0.0.2",
     "operationalState": "enabled",
     "center": {
       "latitude": 40.535,
-      "longitude": -74.457,
-      "aboveMeanSeaLevel": 52
+      "longitude": -74.451464,
+      "aboveMeanSeaLevel": 50
     },
     "disabledResourcesProfile": {
       "o-ran-sc-network:smo": 0,
@@ -29,7 +29,7 @@
         "oCloudResourcePoolCount": 1
       },
       "nearRtRic": {
-        "oRanCuSpiralRadius":0
+        "oRanCuSpiralRadius": 0
       },
       "oRanCu": {
         "oRanDuSpiralRadius": 0
@@ -46,7 +46,7 @@
         "sectorCount": 1,
         "cellAngle": 120,
         "cellScaleFactorForHandoverArea": 20,
-        "maxReach": 400
+        "maxReach": 2000
       }
     }
   },
@@ -66,9 +66,25 @@
     },
     "kml": {
       "enabled": true,
-      "compressed": true
+      "compressed": false
+    },
+    "tmf632": {
+      "enabled": true,
+      "compressed": false
+    },
+    "tmf633": {
+      "enabled": true,
+      "compressed": false
+    },
+    "tmf634": {
+      "enabled": true,
+      "compressed": false
     },
     "rfc7946": {
+      "enabled": true,
+      "compressed": false
+    },
+    "tmf686": {
       "enabled": true,
       "compressed": false
     },

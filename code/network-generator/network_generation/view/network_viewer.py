@@ -19,6 +19,7 @@ Provides functions to convert the Network into different formats
 
 import gzip
 import json
+import math
 import xml.etree.ElementTree as ET
 import zipfile
 from typing import Any, Callable
@@ -85,6 +86,38 @@ class NetworkViewer:
             json.dump(content, jf, ensure_ascii=False, indent=2)
         print(f'File "{filename}" saved!')
 
+    def process_keys(self, input: dict[str, Any]):
+        for key, value in input.items() :
+            if key == "o-ran-sc-network:type":
+                if value in self.summary:
+                    self.summary[value] = self.summary[value] + 1
+                else:
+                    self.summary[value] = 1
+
+            if (type(value) is list):
+                for index, item in enumerate(value):
+                    if type(item) is dict:
+                        self.process_keys(item)
+            else:
+                if type(value) is dict:
+                    self.process_keys(value)
+
+
+    def __hexagon_area(self, side_length: float) -> float:
+        """
+        Calculate the area of a regular hexagon given its side length.
+
+        Formula:
+            A = (3 * sqrt(3) / 2) * a^2
+
+        Args:
+            a (float): side length of the hexagon
+
+        Returns:
+            float: area of the hexagon
+        """
+        return (3 * math.sqrt(3) / 2) * side_length * side_length
+
     def rfc8345(self, filename: str, compressed: bool = True) -> None:
         """
         Method saving the class content to a file in json format.
@@ -95,6 +128,42 @@ class NetworkViewer:
         output: dict[str, Any] = self.__network.to_topology()
         file_extension: str = "-operational.json"
         self.__save_on_disc(f"{filename}{file_extension}", compressed, output)
+
+        # print summary
+        self.summary = {}
+        self.process_keys(output)
+        cfg = self.__network.configuration
+        radius :int = (
+            cfg.get("pattern", {}).get("nrCellDu", {}).get("maxReach", 0)
+        )
+        angle :int = (
+            cfg.get("pattern", {}).get("nrCellDu", {}).get("cellAngle", 360)
+        )
+
+        tower_area = self.__hexagon_area(radius/1000)
+        cell_area = tower_area * angle / 360
+        network_area = tower_area * self.summary.get("o-ran-sc-network:tower", 0)
+        result = {
+            "count": self.summary,
+            "size": {
+                "max-distance-ue-tower": {
+                    "unit": "m",
+                    "value": radius
+                },
+                "cell-area": {
+                    "unit": "km²",
+                    "value": round(cell_area, 3)
+                },
+                "tower-area": {
+                    "unit": "km²",
+                    "value": round(tower_area, 3)
+                },
+                "network-area": {
+                    "unit": "km²",
+                    "value": round(network_area, 3)                }
+            }
+        }
+        print(json.dumps(result, sort_keys=False, indent=2).encode("utf-8").decode("unicode_escape"))
 
     def teiv(self, filename: str, compressed: bool = True) -> None:
         """

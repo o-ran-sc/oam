@@ -29,6 +29,7 @@ from network_generation.model.python.o_ran_node import IORanNode, ORanNode
 
 # Define the "IORanRu" interface
 class IORanRu(IORanNode):
+    index: int
     cellCount: int
     ruAngle: int
     ruAzimuth: int
@@ -38,7 +39,7 @@ default_value: IORanRu = cast(
     IORanRu,
     {
         **ORanNode.default(),
-        **{"cellCount": 1, "ruAngle": 120, "ruAzimuth": 0},
+        **{"cellCount": 1, "ruAngle": 120, "ruAzimuth": 0, "index": 0},
     },
 )
 
@@ -71,11 +72,27 @@ class ORanRu(ORanNode):
             if o_ran_ru_data and "ruAzimuth" in o_ran_ru_data
             else 0
         )
+        self._index: int = (
+            int(str(o_ran_ru_data["index"]))
+            if o_ran_ru_data and "index" in o_ran_ru_data
+            else 0
+        )
         self._cells: list[NrCellDu] = self._create_cells()
-        name: str = self.name.replace("RU", "DU")
+
+        oRuCountByDu: int = self.network.configuration['pattern']['oRanDu']['oRanRuCount']
+        oDuName: str = "00"
+        if (self._index % oRuCountByDu == 0):
+            oDuIndex: int = self._index
+            oDuName: str = "00" + str(oDuIndex)
+            oDuName = oDuName[len(oDuName) - 2: len(oDuName)]
+        oDuName = self.parent.parent.name.replace("Cloud-", "") + "-" +  oDuName
+
+        # exception for a 1:1 relation between O-RU and O-DU
+        if (oRuCountByDu == 1):
+            oDuName = self.name.replace("RU", "DU")
 
         o_ran_du_data: dict[str, Any] = {
-            "name": name,
+            "name": oDuName,
             "geoLocation": self.parent.geo_location,
             "position": self.parent.position,
             "layout": self.layout,

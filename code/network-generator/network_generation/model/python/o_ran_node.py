@@ -299,29 +299,42 @@ class ORanNode(ORanObject):
                 str("%.6f" % float(point_gl.aboveMeanSeaLevel)),
             ])
 
-        # link to parent
-        if (getattr(self.parent, 'geo_location', None) is not None):
-            line: ET.Element = ET.SubElement(multi_geometry, "LineString")
-            extrude: ET.Element = ET.SubElement(line, "extrude")
-            extrude.text = "1"
-            tessellate: ET.Element = ET.SubElement(line, "tessellate")
-            tessellate.text = "1"
-            coordinates: ET.Element = ET.SubElement(line, "coordinates")
-
+        # link to parent only if geo_location is not None
+        if getattr(self.parent, 'geo_location', None) is not None:
             my_gl = self.geo_location
             parent_gl = self.parent.geo_location
-            coordinates.text = " ".join([
-                ",".join([
-                    str("%.6f" % float(my_gl.longitude)),
-                    str("%.6f" % float(my_gl.latitude)),
-                    str("%.6f" % float(my_gl.aboveMeanSeaLevel)),
-                ]),
-                ",".join([
-                    str("%.6f" % float(parent_gl.longitude)),
-                    str("%.6f" % float(parent_gl.latitude)),
-                    str("%.6f" % float(parent_gl.aboveMeanSeaLevel)),
-                ]),
-            ])
+
+            # Define a small tolerance for floating point comparison
+            epsilon = 1e-6
+
+            # Check if coordinates are effectively equal
+            coords_are_equal = (
+                abs(float(my_gl.longitude) - float(parent_gl.longitude)) < epsilon and
+                abs(float(my_gl.latitude) - float(parent_gl.latitude)) < epsilon and
+                abs(float(my_gl.aboveMeanSeaLevel) - float(parent_gl.aboveMeanSeaLevel)) < epsilon
+            )
+
+            # Only create the line if coordinates differ
+            if not coords_are_equal:
+                line: ET.Element = ET.SubElement(multi_geometry, "LineString")
+                extrude: ET.Element = ET.SubElement(line, "extrude")
+                extrude.text = "1"
+                tessellate: ET.Element = ET.SubElement(line, "tessellate")
+                tessellate.text = "1"
+                coordinates: ET.Element = ET.SubElement(line, "coordinates")
+
+                coordinates.text = " ".join([
+                    ",".join([
+                        str("%.6f" % float(my_gl.longitude)),
+                        str("%.6f" % float(my_gl.latitude)),
+                        str("%.6f" % float(my_gl.aboveMeanSeaLevel)),
+                    ]),
+                    ",".join([
+                        str("%.6f" % float(parent_gl.longitude)),
+                        str("%.6f" % float(parent_gl.latitude)),
+                        str("%.6f" % float(parent_gl.aboveMeanSeaLevel)),
+                    ]),
+                ])
         return folder
 
     @abstractmethod

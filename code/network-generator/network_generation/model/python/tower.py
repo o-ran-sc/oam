@@ -101,6 +101,7 @@ class Tower(ORanNode):
                         "cellCount": cell_count,
                         "ruAngle": ru_angle,
                         "ruAzimuth": ru_azimuth,
+                        "index": index,
                     }
                 )
             )
