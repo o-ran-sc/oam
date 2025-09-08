@@ -83,11 +83,23 @@ $ git --version
 git version 2.43.0
 ```
 
+### GCC
+
+```
+$ sudo apt install gcc
+```
+
 ### Python
 
 ```
 $ python3 --version
 Python 3.12.3
+```
+
+### Python3-dev
+
+```
+$ sudo apt install python3-dev
 ```
 
 A python parser package is required.
