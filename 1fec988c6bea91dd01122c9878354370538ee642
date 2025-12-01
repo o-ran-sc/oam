@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e88f1a4_7cd827a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2025-12-01T08:19:35Z",
+      "side": 1,
+      "message": "Many thanks to Ravi for verification of cryptic deployment passwords!!! .)",
+      "revId": "1fec988c6bea91dd01122c9878354370538ee642",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
