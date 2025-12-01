@@ -6,7 +6,160 @@
 Operation and Maintenance Release Notes
 =======================================
 
-This document provides the release notes for O-RAN-SC L-Release of the Operation and Maintenance (OAM) project.
+This document provides the release notes for O-RAN-SC M-Release of the Operation and Maintenance (OAM) project.
+
+M-Release, 2025-12-01
+---------------------
+
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| ID                                                             | Description                                                              |
++================================================================+==========================================================================+
+| `OAM-452 <https://lf-o-ran-sc.atlassian.net/browse/OAM-452>`__ | M-Release                                                                |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-457 <https://lf-o-ran-sc.atlassian.net/browse/OAM-457>`__ | Create oam/oam-controller repository.                                    |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-459 <https://lf-o-ran-sc.atlassian.net/browse/OAM-459>`__ | clean up requirements.txt in root dir                                    |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-460 <https://lf-o-ran-sc.atlassian.net/browse/OAM-460>`__ | Provide intial controller                                                |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-461 <https://lf-o-ran-sc.atlassian.net/browse/OAM-461>`__ | Provide parents for oam-controller                                       |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-462 <https://lf-o-ran-sc.atlassian.net/browse/OAM-462>`__ | Cleanup parents for oam-controller                                       |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-465 <https://lf-o-ran-sc.atlassian.net/browse/OAM-465>`__ | Insufficient permissions to write to github packages                     |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-467 <https://lf-o-ran-sc.atlassian.net/browse/OAM-467>`__ | Optimize dependencies bom in parents                                     |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-468 <https://lf-o-ran-sc.atlassian.net/browse/OAM-468>`__ | Provide ru-fh devicemanager and odlux                                    |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-469 <https://lf-o-ran-sc.atlassian.net/browse/OAM-469>`__ | provide oam-controller distribution to create sdnc and sdnc-web images   |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-471 <https://lf-o-ran-sc.atlassian.net/browse/OAM-471>`__ | Solution gateway encode query ; to &                                     |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-472 <https://lf-o-ran-sc.atlassian.net/browse/OAM-472>`__ | Include GHA workflow for building artifacts                              |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-473 <https://lf-o-ran-sc.atlassian.net/browse/OAM-473>`__ | Update github workflows                                                  |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-474 <https://lf-o-ran-sc.atlassian.net/browse/OAM-474>`__ | update gerrit-verify.yml                                                 |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-475 <https://lf-o-ran-sc.atlassian.net/browse/OAM-475>`__ | Include parent pom.xml                                                   |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-476 <https://lf-o-ran-sc.atlassian.net/browse/OAM-476>`__ | Override global settings with project specific settings.xml              |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-477 <https://lf-o-ran-sc.atlassian.net/browse/OAM-477>`__ | Use new github action                                                    |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-478 <https://lf-o-ran-sc.atlassian.net/browse/OAM-478>`__ | Fix github workflows                                                     |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-479 <https://lf-o-ran-sc.atlassian.net/browse/OAM-479>`__ | Add gerrit-merge.yml                                                     |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-480 <https://lf-o-ran-sc.atlassian.net/browse/OAM-480>`__ | Test Commit                                                              |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-481 <https://lf-o-ran-sc.atlassian.net/browse/OAM-481>`__ | Test commit for verifying uploading of artifacts                         |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-482 <https://lf-o-ran-sc.atlassian.net/browse/OAM-482>`__ | Test commit for verifying uploading of artifacts                         |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-483 <https://lf-o-ran-sc.atlassian.net/browse/OAM-483>`__ | Test commit for gerrit merge testing                                     |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-484 <https://lf-o-ran-sc.atlassian.net/browse/OAM-484>`__ | Create CVE tag example                                                   |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-485 <https://lf-o-ran-sc.atlassian.net/browse/OAM-485>`__ | Network generation support of 1.n O-DU:O-RU                              |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-486 <https://lf-o-ran-sc.atlassian.net/browse/OAM-486>`__ | push artifacts to nexus and nexus3                                       |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-487 <https://lf-o-ran-sc.atlassian.net/browse/OAM-487>`__ | Remove unwanted Github workflows                                         |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-488 <https://lf-o-ran-sc.atlassian.net/browse/OAM-488>`__ | Uncomment mandatory gerrit inputs                                        |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-489 <https://lf-o-ran-sc.atlassian.net/browse/OAM-489>`__ | Rename gerrit-merge.yaml to check if it gets triggered                   |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-490 <https://lf-o-ran-sc.atlassian.net/browse/OAM-490>`__ | Remove unavailable GERRIT inputs                                         |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-491 <https://lf-o-ran-sc.atlassian.net/browse/OAM-491>`__ | Test commit for verifying gerrit merge workflow trigger                  |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-492 <https://lf-o-ran-sc.atlassian.net/browse/OAM-492>`__ | Include new jobs in gerrit merge workflow                                |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-494 <https://lf-o-ran-sc.atlassian.net/browse/OAM-494>`__ | Revert stripped GERRIT inputs for gerrit-merge to work                   |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-495 <https://lf-o-ran-sc.atlassian.net/browse/OAM-495>`__ | Pass nexus secrets to github action                                      |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-496 <https://lf-o-ran-sc.atlassian.net/browse/OAM-496>`__ | Dummy commit to trigger GHA merge                                        |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-497 <https://lf-o-ran-sc.atlassian.net/browse/OAM-497>`__ | Prerequisites improvement for SMO deployment                             |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-498 <https://lf-o-ran-sc.atlassian.net/browse/OAM-498>`__ | Update groupId to use oam-oam-controller instead of oam-controller       |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-499 <https://lf-o-ran-sc.atlassian.net/browse/OAM-499>`__ | invalid groupId in oam-controller artifact                               |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-500 <https://lf-o-ran-sc.atlassian.net/browse/OAM-500>`__ | update docker image path to include repo name                            |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-501 <https://lf-o-ran-sc.atlassian.net/browse/OAM-501>`__ | update serverId in settings.xml                                          |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-502 <https://lf-o-ran-sc.atlassian.net/browse/OAM-502>`__ | sdnc-web missing from deploy                                             |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-503 <https://lf-o-ran-sc.atlassian.net/browse/OAM-503>`__ | Update workflows and versions                                            |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-505 <https://lf-o-ran-sc.atlassian.net/browse/OAM-505>`__ | Test commit to trigger GHA workflows to push artifacts to nexus repos    |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-506 <https://lf-o-ran-sc.atlassian.net/browse/OAM-506>`__ | Create release file for 13.0.0 version                                   |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-509 <https://lf-o-ran-sc.atlassian.net/browse/OAM-509>`__ | sdnr container fails to start when oauth is enabled                      |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-510 <https://lf-o-ran-sc.atlassian.net/browse/OAM-510>`__ | Build failure during creation of sdnc-web docker image                   |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-511 <https://lf-o-ran-sc.atlassian.net/browse/OAM-511>`__ | GHA workflow - gerrit-verify.yaml - not voting on successful completion  |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-512 <https://lf-o-ran-sc.atlassian.net/browse/OAM-512>`__ | github workflow (merge) commenting incorrectly when workflow fails       |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-513 <https://lf-o-ran-sc.atlassian.net/browse/OAM-513>`__ | Incorporate CICD for deploy and test                                     |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-514 <https://lf-o-ran-sc.atlassian.net/browse/OAM-514>`__ | Dummy commit to trigger GHA verify                                       |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-515 <https://lf-o-ran-sc.atlassian.net/browse/OAM-515>`__ | fix broken gerrit-verify                                                 |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-516 <https://lf-o-ran-sc.atlassian.net/browse/OAM-516>`__ | Dummy commit to trigger GHA verify                                       |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-517 <https://lf-o-ran-sc.atlassian.net/browse/OAM-517>`__ | Save docker artifacts for use by CICD                                    |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-518 <https://lf-o-ran-sc.atlassian.net/browse/OAM-518>`__ | Comma used instead of space in docker artifact list                      |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-519 <https://lf-o-ran-sc.atlassian.net/browse/OAM-519>`__ | Workflow: Create new job for running tests                               |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-520 <https://lf-o-ran-sc.atlassian.net/browse/OAM-520>`__ | Invalid repo name passed to github action checkout                       |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-521 <https://lf-o-ran-sc.atlassian.net/browse/OAM-521>`__ | pydantic module missing in environment to run tests                      |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-522 <https://lf-o-ran-sc.atlassian.net/browse/OAM-522>`__ | Fix IP Addresses of simulated devices                                    |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-523 <https://lf-o-ran-sc.atlassian.net/browse/OAM-523>`__ | Mounting a device via VES PNF Registration is not working                |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-524 <https://lf-o-ran-sc.atlassian.net/browse/OAM-524>`__ | Align gerrit-verify.yaml to use LF repos                                 |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-525 <https://lf-o-ran-sc.atlassian.net/browse/OAM-525>`__ | Upgrade gerrit merge workflow to use 1password service                   |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-526 <https://lf-o-ran-sc.atlassian.net/browse/OAM-526>`__ | Support non-default ODL ADMIN PASSWORD                                   |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-527 <https://lf-o-ran-sc.atlassian.net/browse/OAM-527>`__ | Incomplete aaa fix                                                       |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-528 <https://lf-o-ran-sc.atlassian.net/browse/OAM-528>`__ | Adapt ODLUX to changed netconf-topology yang for add mountpoint          |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-529 <https://lf-o-ran-sc.atlassian.net/browse/OAM-529>`__ | update gerrit-merge workflow to replace a deprecated action              |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-530 <https://lf-o-ran-sc.atlassian.net/browse/OAM-530>`__ | Support latest yang revision of o-ran-hardware yang model                |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-531 <https://lf-o-ran-sc.atlassian.net/browse/OAM-531>`__ | Create M Release artifacts and images                                    |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-532 <https://lf-o-ran-sc.atlassian.net/browse/OAM-532>`__ | Incorrect or missing release tag                                         |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-533 <https://lf-o-ran-sc.atlassian.net/browse/OAM-533>`__ | Create minor version for M Release                                       |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-534 <https://lf-o-ran-sc.atlassian.net/browse/OAM-534>`__ | Modify M-Release images to OAM Solution                                  |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+| `OAM-536 <https://lf-o-ran-sc.atlassian.net/browse/OAM-536>`__ | Update Release Notes                                                     |
++----------------------------------------------------------------+--------------------------------------------------------------------------+
+
+Please see related release notes in `O-RAN-SC OAM <https://lf-o-ran-sc.atlassian.net/wiki/spaces/OAM/pages/674070651/M-Release+-+Release+Notes>`__ 
+and `OpenDaylight <https://docs.opendaylight.org/en/stable-scandium/release-notes/>`__ .
+
 
 L-Release, 2025-06-10
 ---------------------
