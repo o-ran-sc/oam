@@ -2,14 +2,14 @@ apiVersion: kubeone.k8c.io/v1beta2
 kind: KubeOneCluster
 name: o-ran-sc-test-cluster
 versions:
-  kubernetes: '1.28.6'
+  kubernetes: '1.32.5'
 cloudProvider:
   none: {}
 
 controlPlane:
   hosts:
-    - publicAddress: '192.168.1.32'
-      privateAddress: '192.168.1.32'
+    - publicAddress: '10.20.34.137'
+      privateAddress: '192.168.1.133'
       sshUsername: ubuntu
       taints: []
 

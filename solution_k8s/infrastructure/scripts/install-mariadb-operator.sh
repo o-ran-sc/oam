@@ -21,10 +21,13 @@ kubectl create namespace mariadb-operator
 kubectl label namespace mariadb-operator istio-injection=enabled
 helm repo add mariadb-operator https://mariadb-operator.github.io/mariadb-operator
 helm repo update mariadb-operator
+helm install mariadb-operator-crds mariadb-operator/mariadb-operator-crds --namespace mariadb-operator --version=$MARIADB_OPERATOR_VERSION
+
 # helm install mariadb-operator --namespace mariadb-operator \
 #   mariadb-operator/mariadb-operator --set ha.enabled=true  \
 #   --set metrics.enabled=true --set webhook.certificate.certManager=true \
 #   --version=$MARIADB_OPERATOR_VERSION
+
 
 helm install mariadb-operator --namespace mariadb-operator \
   mariadb-operator/mariadb-operator   \

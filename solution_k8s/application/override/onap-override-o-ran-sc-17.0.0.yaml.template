@@ -76,9 +76,12 @@ mariadb-galera:
   enabled: true
   replicaCount: 1
   mariadbOperator:
+    #appVersion: 11.7.2
     appVersion: 11.1.2
     persistence:
-      storageClassName: onap-mariadb-data
+      ## https://github.com/rancher/local-path-provisioner
+      storageClassName: onap-local-path
+      #storageClassName: onap-mariadb-data
       size: 3Gi
     galera:
       enabled: false
@@ -203,6 +206,7 @@ robot:
 sdc:
   enabled: false
 sdnc:
+  image: onap/sdnc-image:3.2.2-STAGING-20260114T124013Z
   enabled: true
   elasticsearch:
     enabled: false
@@ -252,6 +256,8 @@ sdnc:
         # enabled: false
         enabled: true
   sdnc-web:
+    image: onap/sdnc-web-image:3.2.2-STAGING-20260115T124317Z
+    ingress:
     ingress:
       config:
         ssl: dontuse
@@ -299,7 +305,28 @@ strimzi:
       port: 9094
       exposedPort: *advertizedPortBroker2
       exposedProtocol: TLS
+  persistence:
+    enabled: &pvenabled true
+    mountPath: /dockerdata-nfs
+    broker:
+      enabled: *pvenabled
+      # default values of 2Gi for dev env.
+      # Production values should be dimensioned according to requirements. ie >= 10Gi
+      size: 2Gi
+      volumeReclaimPolicy: Retain
+      accessMode: ReadWriteOnce
+      mountPath: /dockerdata-nfs
+      mountSubPath: strimzi-kafka/broker
+      storageClass: onap-local-path
 
+    controller:
+      enabled: *pvenabled
+      size: 1Gi
+      volumeReclaimPolicy: Retain
+      accessMode: ReadWriteOnce
+      mountPath: /dockerdata-nfs
+      mountSubPath: strimzi-kafka/controller
+      storageClass: onap-local-path
 
   replicaCount: 1
   strimzi-kafka-bridge:

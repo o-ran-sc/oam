@@ -60,12 +60,18 @@ destroy-infrastructure:
 
 ## deploy-smo: Deploys SMO tailered for O-RAN-SC
 .PHONY: deploy-smo
+# deploy-smo:
+# 	(cd application; sudo mkdir -p /dockerdata-nfs/onap/mariadb/; sudo chmod 777 /dockerdata-nfs/onap/mariadb/; kubectl apply -f maria-db-pv.yaml)
+# 	kubectl patch pv onap-mariadb -p '{"spec":{"claimRef": null}}'
+# 	(cd application; ./deploy_smo_from_repo.sh)
+# 	kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sdnc-web --timeout 1800s --namespace onap
+# 	(cd application;  ./patch-pmbulk.sh)
+
 deploy-smo:
-	(cd application; sudo mkdir -p /dockerdata-nfs/onap/mariadb/; sudo chmod 777 /dockerdata-nfs/onap/mariadb/; kubectl apply -f maria-db-pv.yaml)
-	kubectl patch pv onap-mariadb -p '{"spec":{"claimRef": null}}'
+	(cd application; kubectl apply -f onap-local-path-storage-class.yaml)
 	(cd application; ./deploy_smo_from_repo.sh)
 	kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sdnc-web --timeout 1800s --namespace onap
-	(cd application;  ./patch-pmbulk.sh)
+
 
 ## undeploy-smo: Un-Deploys SMO 
 .PHONY: undeploy-smo
@@ -87,9 +93,9 @@ undeploy-metric:
 	(cd metrics; ./undeploy-metric-stack.sh )
 	helm uninstall -n onap pm-metric-service
 
-## deploy-test-nfs: Deploys test network functions
-.PHONY: deploy-test-nfs
-deploy-test-nfs:
+## deploy-test-nts: Deploys test network functions
+.PHONY: deploy-test-nts
+deploy-test-nts:
 	(cd tests/network-simulation; ./start-network-simulation.sh )
 
 

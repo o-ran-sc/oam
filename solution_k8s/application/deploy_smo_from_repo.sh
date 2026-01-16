@@ -18,8 +18,8 @@
  
 set -x
 SCRIPT_DIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-export $(grep -v '^#' $SCRIPT_DIR/../../.env | xargs)
-ONAP_VERSION=${ONAP_VERSION:-14.0.0}
+export $(grep -v '^#' $SCRIPT_DIR/../.env | xargs)
+ONAP_VERSION=${ONAP_VERSION:-17.0.0}
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 override_file=$SCRIPT_DIR/override/onap-override-o-ran-sc-$ONAP_VERSION.yaml
@@ -30,7 +30,7 @@ else
   echo "override file is set to '$1'"; override_file=$1
 fi
 
-kubectl apply -f maria-db-pv.yaml
+#kubectl apply -f maria-db-pv.yaml
 
 helm repo add onap-release https://nexus3.onap.org/repository/onap-helm-release/
 # use onap-testing as long not in release repo
